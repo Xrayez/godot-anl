@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+Import('env')
+
+module_env = env.Clone()
+
+module_env.add_source_files(env.modules_sources, "*.cpp")
+
+module_env.add_source_files(env.modules_sources, "libs/anl/VM/*.cpp")
+module_env.add_source_files(env.modules_sources, "libs/anl/Expression/*.cpp")
+module_env.add_source_files(env.modules_sources, "libs/anl/Imaging/*.cpp")
+module_env.add_source_files(env.modules_sources, "libs/anl/Processing/*.cpp")
+
+module_env.Append(CPPPATH=["libs/anl/VM", 
+                           "libs/anl/Expression", 
+                           "libs/anl/Imaging", 
+                           "libs/anl/Processing"])
+
+module_env.Append(CPPFLAGS=["-std=c++11", "-O3"])
+
+Export('module_env')
