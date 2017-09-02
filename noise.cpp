@@ -2,7 +2,27 @@
 
 AnlNoise::AnlNoise(): vm(kernel), eb(kernel) {}
 
+void AnlNoise::constant(double value) {
+
+    kernel.constant(value);
+}
+
+void AnlNoise::y() {
+
+    kernel.y();
+}
+
+double AnlNoise::evaluate_2d(double x, double y) {
+
+    return vm.evaluateScalar(x, y, kernel.lastIndex());
+}
+
 void AnlNoise::_bind_methods() {
+
+    ClassDB::bind_method(D_METHOD("constant", "value"),&AnlNoise::constant);
+    ClassDB::bind_method(D_METHOD("y"),&AnlNoise::y);
+
+    ClassDB::bind_method(D_METHOD("evaluate_2d", "x", "y"),&AnlNoise::evaluate_2d);        
 
     using namespace anl;
     BIND_ENUM_CONSTANT(INTERP_NONE);
