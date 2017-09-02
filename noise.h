@@ -21,4 +21,8 @@ anl::CExpressionBuilder eb;
 
 };
 
+VARIANT_ENUM_CAST(anl::InterpolationTypes);
+VARIANT_ENUM_CAST(anl::DistanceTypes);
+VARIANT_ENUM_CAST(anl::BasisTypes);
+
 #endif
