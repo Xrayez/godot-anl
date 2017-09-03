@@ -423,6 +423,20 @@ Index AnlNoise::radial() {
     return radial.getIndex();
 }
 
+// Patterns
+
+Index AnlNoise::hex_tile(Index seed) {
+
+    auto hex_tile = kernel.hexTile(kernel[seed]);
+    return hex_tile.getIndex();
+}
+
+Index AnlNoise::hex_bump() {
+
+    auto hex_bump = kernel.hexBump();
+    return hex_bump.getIndex();
+}
+
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
@@ -514,6 +528,9 @@ void AnlNoise::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("sigmoid", "src_index", "center_index", "ramp_index"),&AnlNoise::sigmoid);
     ClassDB::bind_method(D_METHOD("radial"),&AnlNoise::radial);
+
+    ClassDB::bind_method(D_METHOD("hex_tile", "seed_index"),&AnlNoise::hex_tile);
+    ClassDB::bind_method(D_METHOD("hex_bump"),&AnlNoise::hex_bump);
 
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
 

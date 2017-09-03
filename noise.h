@@ -106,11 +106,9 @@ Index radial();
 // Patterns
 
 Index hex_tile(Index seed);
-
 Index hex_bump();
 
 Index color(const Color& color);
-
 Index combine_rgba(Index r, Index g, Index b, Index a);
 
 Index scale_offset(Index src, Index scale, Index offset);
