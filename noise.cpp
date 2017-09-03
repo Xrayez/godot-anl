@@ -327,6 +327,18 @@ Index AnlNoise::atan(Index src) {
     return atan.getIndex();
 }
 
+Index AnlNoise::tiers(Index src, Index num_tiers) {
+
+    auto tiers = kernel.tiers(kernel[src], kernel[num_tiers]);
+    return tiers.getIndex();
+}
+
+Index AnlNoise::smooth_tiers(Index src, Index num_tiers) {
+
+    auto smooth_tiers = kernel.smoothTiers(kernel[src], kernel[num_tiers]);
+    return smooth_tiers.getIndex();
+}
+
 Index AnlNoise::y() {
 
     auto y = kernel.y();
@@ -404,6 +416,9 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("acos", "src_index"),&AnlNoise::acos);
     ClassDB::bind_method(D_METHOD("asin", "src_index"),&AnlNoise::asin);
     ClassDB::bind_method(D_METHOD("atan", "src_index"),&AnlNoise::atan);
+
+    ClassDB::bind_method(D_METHOD("tiers", "src_index", "num_tiers_index"),&AnlNoise::tiers);
+    ClassDB::bind_method(D_METHOD("smooth_tiers", "src_index", "num_tiers_index"),&AnlNoise::smooth_tiers);
 
     ClassDB::bind_method(D_METHOD("y"),&AnlNoise::y);
 
