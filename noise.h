@@ -4,131 +4,158 @@
 #include "reference.h"
 #include "libs/anl/anl.h"
 
+using Index = unsigned int;
+
 class AnlNoise : public Reference {
     GDCLASS(AnlNoise, Reference);
-    
-protected:
-static void _bind_methods();
 
+protected:
+    static void _bind_methods();
+    
 public:
-            AnlNoise();
+      AnlNoise();
 //------------------------------------------------------------------------------
 // Kernel methods
 //------------------------------------------------------------------------------
-uint32_t pi();
-uint32_t e();
-uint32_t one();
-uint32_t zero();
-uint32_t half();
-uint32_t sqrt2();
+Index pi();
+Index e();
+Index one();
+Index zero();
+Index half();
+Index sqrt2();
 
-uint32_t constant(double value);
-uint32_t seed();
-uint32_t value_basis();
-uint32_t gradient_basis();
-uint32_t simplex_basis();
-uint32_t cellular_basis();
-uint32_t add();
-uint32_t substract();
-uint32_t multiply();
-uint32_t divide();
-uint32_t maximum();
-uint32_t minimum();
-uint32_t abs();
-uint32_t pow();
-uint32_t bias();
-uint32_t gain();
+Index constant(double value);
+Index seed(Index value);
+Index value_basis(Index interp_index, Index seed);
+Index gradient_basis(Index interp_index, Index seed);
+Index simplex_basis(Index seed);
+Index cellular_basis(Index f1, Index f2, Index f3, Index f4,
+                     Index d1, Index d2, Index d3, Index d4,
+                     Index distance, Index seed);
+Index add(Index src1, Index src2);
+Index substract(Index src1, Index src2);
+Index multiply(Index src1, Index src2);
+Index divide(Index src1, Index src2);
+Index maximum(Index src1, Index src2);
+Index minimum(Index src1, Index src2);
+Index abs(Index src);
+Index pow(Index src1, Index src2);
+Index bias(Index src1, Index src2);
+Index gain(Index src1, Index src2);
 
-uint32_t scale();
-uint32_t scale_x();
-uint32_t scale_y();
-uint32_t scale_z();
-uint32_t scale_w();
-uint32_t scale_u();
-uint32_t scale_v();
+Index scale(Index src, Index scale);
 
-uint32_t translate();
-uint32_t translate_x();
-uint32_t translate_y();
-uint32_t translate_z();
-uint32_t translate_w();
-uint32_t translate_u();
-uint32_t translate_v();
+Index scale_x(Index src, Index scale);
+Index scale_y(Index src, Index scale);
+Index scale_z(Index src, Index scale);
+Index scale_w(Index src, Index scale);
+Index scale_u(Index src, Index scale);
+Index scale_v(Index src, Index scale);
 
-uint32_t rotate();
+Index translate(Index src, Index trans);
 
-uint32_t add_sequence();
-uint32_t multiply_sequence();
-uint32_t max_sequence();
-uint32_t min_sequence();
+Index translate_x(Index src, Index trans);
+Index translate_y(Index src, Index trans);
+Index translate_z(Index src, Index trans);
+Index translate_w(Index src, Index trans);
+Index translate_u(Index src, Index trans);
+Index translate_v(Index src, Index trans);
 
-uint32_t blend();
-uint32_t select(uint32_t low, uint32_t high, uint32_t control, 
-                uint32_t threshold, uint32_t falloff);
-uint32_t clamp();
+Index rotate(Index src, Index angle, 
+                Index ax, Index ay, Index az);
 
-uint32_t cos();
-uint32_t sin();
-uint32_t tan();
-uint32_t acos();
-uint32_t asin();
-uint32_t atan();
+Index add_sequence(Index base, Index number, Index stride);
+Index multiply_sequence(Index base, Index number, Index stride);
+Index max_sequence(Index base, Index number, Index stride);
+Index min_sequence(Index base, Index number, Index stride);
 
-uint32_t tiers();
-uint32_t smooth_tiers();
+Index blend(Index low, Index high, Index control);
+Index select(Index low, Index high, Index control, 
+                Index threshold, Index falloff);
+Index clamp(Index src, Index low, Index high);
 
-uint32_t x();
-uint32_t y();
-uint32_t z();
-uint32_t w();
-uint32_t u();
-uint32_t v();
+Index cos(Index src);
+Index sin(Index src);
+Index tan(Index src);
+Index acos(Index src);
+Index asin(Index src);
+Index atan(Index src);
 
-uint32_t dx();
-uint32_t dy();
-uint32_t dz();
-uint32_t dw();
-uint32_t du();
-uint32_t dv();
+Index tiers(Index src, Index num_tiers);
+Index smooth_tiers(Index src, Index num_tiers);
 
-uint32_t sigmoid();
+Index x();
+Index y();
+Index z();
+Index w();
+Index u();
+Index v();
 
-uint32_t radial();
+Index dx(Index src, Index spacing);
+Index dy(Index src, Index spacing);
+Index dz(Index src, Index spacing);
+Index dw(Index src, Index spacing);
+Index du(Index src, Index spacing);
+Index dv(Index src, Index spacing);
+
+Index sigmoid(Index src, Index center, Index ramp);
+
+Index radial();
 
 // Patterns
 
-uint32_t hex_tile();
-uint32_t hex_bump();
+Index hex_tile(Index seed);
 
-uint32_t color();
+Index hex_bump();
 
-uint32_t combine_rgba();
+Index color(const Color& color);
 
-uint32_t scale_offset();
+Index combine_rgba(Index r, Index g, Index b, Index a);
 
-uint32_t fractal_layer();
-uint32_t ridged_layer();
-uint32_t billow_layer();
+Index scale_offset(Index src, Index scale, Index offset);
 
-uint32_t fbm();
-uint32_t ridged_multifractal();
-uint32_t billow();
+Index fractal_layer(anl::BasisTypes basis, Index interp_type,
+                       double layer_scale, double layer_freq, unsigned int seed, 
+                       bool rot = true, double angle = 0.5, 
+                       double ax = 0.0, double ay = 0.0, double az = 1.0);
+
+Index ridged_layer(anl::BasisTypes basis, Index interp_type,
+                       double layer_scale, double layer_freq, unsigned int seed, 
+                       bool rot = true, double angle = 0.5, 
+                       double ax = 0.0, double ay = 0.0, double az = 1.0);
+
+Index billow_layer(anl::BasisTypes basis, Index interp_type_index,
+                       double layer_scale, double layer_freq, unsigned int seed, 
+                       bool rot = true, double angle = 0.5, 
+                       double ax = 0.0, double ay = 0.0, double az = 1.0);
+
+Index fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
+          unsigned int octaves, double frequency, unsigned int seed, 
+          bool rot = true);
+
+Index ridged_multifractal(anl::BasisTypes basis, anl::InterpolationTypes interp,
+                          unsigned int octaves, double frequency, unsigned int seed, 
+                          bool rot = true);
+
+Index billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
+             unsigned int octaves, double frequency, unsigned int seed, 
+             bool rot = true);
 
 // Kernel
-uint32_t last_index();
+Index last_index();
 
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
-double scalar_2d(double x, double y, uint32_t index);
-double scalar_3d(double x, double y, double z, uint32_t index);
-double scalar_4d(double x, double y, double z, double w, uint32_t index);
-double scalar_6d(double x, double y, double z, double w, double u, double v, uint32_t index);
+double scalar_2d(double x, double y, Index);
+double scalar_3d(double x, double y, double z, Index);
+double scalar_4d(double x, double y, double z, double w, Index);
+double scalar_6d(double x, double y, double z, double w, double u, double v, Index);
 
-double color_2d(double x, double y, uint32_t index);
-double color_3d(double x, double y, double z, uint32_t index);
-double color_4d(double x, double y, double z, double w, uint32_t index);
-double color_6d(double x, double y, double z, double w, double u, double v, uint32_t index);
+double color_2d(double x, double y, Index);
+double color_3d(double x, double y, double z, Index);
+double color_4d(double x, double y, double z, double w, Index);
+double color_6d(double x, double y, double z, double w, double u, double v, Index);
 
 private:
 
