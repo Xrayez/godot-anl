@@ -156,6 +156,11 @@ Color color_3d(double x, double y, double z, Index);
 Color color_4d(double x, double y, double z, double w, Index);
 Color color_6d(const PoolVector<real_t>& axis, Index);
 
+//------------------------------------------------------------------------------
+// ExpressionBuilder methods
+//------------------------------------------------------------------------------
+Index eval_expression(const String& expression);
+
 private:
 
 anl::CKernel kernel;

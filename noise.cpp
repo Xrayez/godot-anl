@@ -615,6 +615,14 @@ Color AnlNoise::color_6d(const PoolVector<real_t>& axis, Index index) {
                                     axis[3], axis[4], axis[5], index);
     return Color(c.r, c.g, c.b, c.a);
 }
+//------------------------------------------------------------------------------
+// ExpressionBuilder methods
+//------------------------------------------------------------------------------
+Index AnlNoise::eval_expression(const String& expression) {
+
+    auto function = eb.eval(expression.utf8().get_data());
+    return function.getIndex();
+}
 
 void AnlNoise::_bind_methods() {
 
@@ -748,6 +756,11 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("color_3d", "x", "y", "z", "index"),&AnlNoise::color_3d);
     ClassDB::bind_method(D_METHOD("color_4d", "x", "y", "z", "w", "index"),&AnlNoise::color_4d);
     ClassDB::bind_method(D_METHOD("color_6d", "6_axis", "index"),&AnlNoise::color_6d);
+
+    // ExpressionBuilder methods
+
+    ClassDB::bind_method(D_METHOD("eval_expression", "expression"),&AnlNoise::eval_expression);
+
 
     using namespace anl;
     // Use namespace declaration to avoid having
