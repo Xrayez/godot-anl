@@ -291,6 +291,42 @@ Index AnlNoise::clamp(Index src, Index low, Index high) {
     return clamp.getIndex();
 }
 
+Index AnlNoise::cos(Index src) {
+
+    auto cos = kernel.cos(kernel[src]);
+    return cos.getIndex();
+}
+
+Index AnlNoise::sin(Index src) {
+
+    auto sin = kernel.sin(kernel[src]);
+    return sin.getIndex();
+}
+
+Index AnlNoise::tan(Index src) {
+
+    auto tan = kernel.tan(kernel[src]);
+    return tan.getIndex();
+}
+
+Index AnlNoise::acos(Index src) {
+
+    auto acos = kernel.acos(kernel[src]);
+    return acos.getIndex();
+}
+
+Index AnlNoise::asin(Index src) {
+
+    auto asin = kernel.asin(kernel[src]);
+    return asin.getIndex();
+}
+
+Index AnlNoise::atan(Index src) {
+
+    auto atan = kernel.atan(kernel[src]);
+    return atan.getIndex();
+}
+
 Index AnlNoise::y() {
 
     auto y = kernel.y();
@@ -361,6 +397,13 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("blend", "low_index", "high_index", "control_index"),&AnlNoise::blend);
     ClassDB::bind_method(D_METHOD("select", "low_index", "high_index", "control_index", "threshold_index", "falloff_index"),&AnlNoise::select);
     ClassDB::bind_method(D_METHOD("clamp", "src_index", "low_index", "high_index"),&AnlNoise::clamp);
+
+    ClassDB::bind_method(D_METHOD("cos", "src_index"),&AnlNoise::cos);
+    ClassDB::bind_method(D_METHOD("sin", "src_index"),&AnlNoise::sin);
+    ClassDB::bind_method(D_METHOD("tan", "src_index"),&AnlNoise::tan);
+    ClassDB::bind_method(D_METHOD("acos", "src_index"),&AnlNoise::acos);
+    ClassDB::bind_method(D_METHOD("asin", "src_index"),&AnlNoise::asin);
+    ClassDB::bind_method(D_METHOD("atan", "src_index"),&AnlNoise::atan);
 
     ClassDB::bind_method(D_METHOD("y"),&AnlNoise::y);
 
