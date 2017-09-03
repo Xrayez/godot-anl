@@ -375,6 +375,42 @@ Index AnlNoise::v() {
     return v.getIndex();
 }
 
+Index AnlNoise::dx(Index src, Index spacing) {
+
+    auto dx = kernel.dx(kernel[src], kernel[spacing]);
+    return dx.getIndex();
+}
+
+Index AnlNoise::dy(Index src, Index spacing) {
+
+    auto dy = kernel.dy(kernel[src], kernel[spacing]);
+    return dy.getIndex();
+}
+
+Index AnlNoise::dz(Index src, Index spacing) {
+
+    auto dz = kernel.dz(kernel[src], kernel[spacing]);
+    return dz.getIndex();
+}
+
+Index AnlNoise::dw(Index src, Index spacing) {
+
+    auto dw = kernel.dw(kernel[src], kernel[spacing]);
+    return dw.getIndex();
+}
+
+Index AnlNoise::du(Index src, Index spacing) {
+
+    auto du = kernel.du(kernel[src], kernel[spacing]);
+    return du.getIndex();
+}
+
+Index AnlNoise::dv(Index src, Index spacing) {
+
+    auto dv = kernel.dv(kernel[src], kernel[spacing]);
+    return dv.getIndex();
+}
+
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
@@ -456,6 +492,13 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("w"),&AnlNoise::w);
     ClassDB::bind_method(D_METHOD("u"),&AnlNoise::u);
     ClassDB::bind_method(D_METHOD("v"),&AnlNoise::v);
+
+    ClassDB::bind_method(D_METHOD("dx", "src_index", "spacing_index"),&AnlNoise::dx);
+    ClassDB::bind_method(D_METHOD("dy", "src_index", "spacing_index"),&AnlNoise::dy);
+    ClassDB::bind_method(D_METHOD("dz", "src_index", "spacing_index"),&AnlNoise::dz);
+    ClassDB::bind_method(D_METHOD("dw", "src_index", "spacing_index"),&AnlNoise::dw);
+    ClassDB::bind_method(D_METHOD("du", "src_index", "spacing_index"),&AnlNoise::du);
+    ClassDB::bind_method(D_METHOD("dv", "src_index", "spacing_index"),&AnlNoise::dv);
 
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
 
