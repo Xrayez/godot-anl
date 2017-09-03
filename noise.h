@@ -11,7 +11,7 @@ class AnlNoise : public Reference {
 
 protected:
     static void _bind_methods();
-    
+
 public:
       AnlNoise();
 //------------------------------------------------------------------------------
@@ -25,13 +25,13 @@ Index point5();
 Index sqrt2();
 
 Index constant(double value);
-Index seed(Index seed);
+Index seed(unsigned int value);
 
-Index value_basis(Index interp_index, Index seed);
-Index gradient_basis(Index interp_index, Index seed);
+Index value_basis(Index interp, Index seed);
+Index gradient_basis(Index interp, Index seed);
 Index simplex_basis(Index seed);
-Index cellular_basis(Index f1, Index f2, Index f3, Index f4,
-                     Index d1, Index d2, Index d3, Index d4,
+Index cellular_basis(const PoolVector<int>& f,
+                     const PoolVector<int>& d,
                      Index distance, Index seed);
 
 Index add(Index src1, Index src2);
@@ -63,7 +63,7 @@ Index translate_w(Index src, Index trans);
 Index translate_u(Index src, Index trans);
 Index translate_v(Index src, Index trans);
 
-Index rotate(Index src, Index angle, 
+Index rotate(Index src, Index angle,
                 Index ax, Index ay, Index az);
 
 Index add_sequence(Index base, Index number, Index stride);
@@ -72,7 +72,7 @@ Index max_sequence(Index base, Index number, Index stride);
 Index min_sequence(Index base, Index number, Index stride);
 
 Index blend(Index low, Index high, Index control);
-Index select(Index low, Index high, Index control, 
+Index select(Index low, Index high, Index control,
                 Index threshold, Index falloff);
 Index clamp(Index src, Index low, Index high);
 
@@ -117,30 +117,30 @@ Index combine_rgba(Index r, Index g, Index b, Index a);
 Index scale_offset(Index src, Index scale, Index offset);
 
 Index fractal_layer(anl::BasisTypes basis, Index interp_type,
-                       double layer_scale, double layer_freq, unsigned int seed, 
-                       bool rot = true, double angle = 0.5, 
+                       double layer_scale, double layer_freq, unsigned int seed,
+                       bool rot = true, double angle = 0.5,
                        double ax = 0.0, double ay = 0.0, double az = 1.0);
 
 Index ridged_layer(anl::BasisTypes basis, Index interp_type,
-                       double layer_scale, double layer_freq, unsigned int seed, 
-                       bool rot = true, double angle = 0.5, 
+                       double layer_scale, double layer_freq, unsigned int seed,
+                       bool rot = true, double angle = 0.5,
                        double ax = 0.0, double ay = 0.0, double az = 1.0);
 
 Index billow_layer(anl::BasisTypes basis, Index interp_type_index,
-                       double layer_scale, double layer_freq, unsigned int seed, 
-                       bool rot = true, double angle = 0.5, 
+                       double layer_scale, double layer_freq, unsigned int seed,
+                       bool rot = true, double angle = 0.5,
                        double ax = 0.0, double ay = 0.0, double az = 1.0);
 
 Index fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
-          unsigned int octaves, double frequency, unsigned int seed, 
+          unsigned int octaves, double frequency, unsigned int seed,
           bool rot = true);
 
 Index ridged_multifractal(anl::BasisTypes basis, anl::InterpolationTypes interp,
-                          unsigned int octaves, double frequency, unsigned int seed, 
+                          unsigned int octaves, double frequency, unsigned int seed,
                           bool rot = true);
 
 Index billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
-             unsigned int octaves, double frequency, unsigned int seed, 
+             unsigned int octaves, double frequency, unsigned int seed,
              bool rot = true);
 
 // Kernel
