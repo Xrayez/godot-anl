@@ -229,6 +229,14 @@ Index AnlNoise::translate_v(Index src, Index translate) {
     return translate_v.getIndex();
 }
 
+Index AnlNoise::rotate(Index src, Index angle, Index ax, Index ay, Index az) {
+
+    auto rotate = kernel.rotateDomain(
+        kernel[src], kernel[angle], kernel[ax], kernel[ay], kernel[az]
+    );
+    return rotate.getIndex();
+}
+
 Index AnlNoise::y() {
 
     auto y = kernel.y();
@@ -297,6 +305,8 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("translate_w", "src_index", "translate_index"),&AnlNoise::translate_w);
     ClassDB::bind_method(D_METHOD("translate_u", "src_index", "translate_index"),&AnlNoise::translate_u);
     ClassDB::bind_method(D_METHOD("translate_v", "src_index", "translate_index"),&AnlNoise::translate_v);
+
+    ClassDB::bind_method(D_METHOD("rotate", "src_index", "angle_index", "ax_index", "ay_index", "az_index"),&AnlNoise::rotate);
 
     ClassDB::bind_method(D_METHOD("y"),&AnlNoise::y);
     ClassDB::bind_method(D_METHOD("select", "low_index", "high_index", "control_index", "threshold_index", "falloff_index"),&AnlNoise::select);

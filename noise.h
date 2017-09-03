@@ -63,8 +63,7 @@ Index translate_w(Index src, Index translate);
 Index translate_u(Index src, Index translate);
 Index translate_v(Index src, Index translate);
 
-Index rotate(Index src, Index angle,
-             Index ax, Index ay, Index az);
+Index rotate(Index src, Index angle, Index ax, Index ay, Index az);
 
 Index add_sequence(Index base, Index number, Index stride);
 Index multiply_sequence(Index base, Index number, Index stride);
