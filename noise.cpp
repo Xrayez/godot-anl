@@ -145,6 +145,90 @@ Index AnlNoise::gain(Index src1, Index src2) {
     return gain.getIndex();
 }
 
+Index AnlNoise::scale(Index src, Index p_scale) {
+
+    auto scale = kernel.scaleDomain(kernel[src], kernel[p_scale]);
+    return scale.getIndex();
+}
+
+Index AnlNoise::scale_x(Index src, Index scale) {
+
+    auto scale_x = kernel.scaleX(kernel[src], kernel[scale]);
+    return scale_x.getIndex();
+}
+
+Index AnlNoise::scale_y(Index src, Index scale) {
+
+    auto scale_y = kernel.scaleY(kernel[src], kernel[scale]);
+    return scale_y.getIndex();
+}
+
+Index AnlNoise::scale_z(Index src, Index scale) {
+
+    auto scale_z = kernel.scaleZ(kernel[src], kernel[scale]);
+    return scale_z.getIndex();
+}
+
+Index AnlNoise::scale_w(Index src, Index scale) {
+
+    auto scale_w = kernel.scaleW(kernel[src], kernel[scale]);
+    return scale_w.getIndex();
+}
+
+Index AnlNoise::scale_u(Index src, Index scale) {
+
+    auto scale_u = kernel.scaleU(kernel[src], kernel[scale]);
+    return scale_u.getIndex();
+}
+
+Index AnlNoise::scale_v(Index src, Index scale) {
+
+    auto scale_v = kernel.scaleV(kernel[src], kernel[scale]);
+    return scale_v.getIndex();
+}
+
+Index AnlNoise::translate(Index src, Index p_translate) {
+
+    auto translate = kernel.translateDomain(kernel[src], kernel[p_translate]);
+    return translate.getIndex();
+}
+
+Index AnlNoise::translate_x(Index src, Index translate) {
+
+    auto translate_x = kernel.translateX(kernel[src], kernel[translate]);
+    return translate_x.getIndex();
+}
+
+Index AnlNoise::translate_y(Index src, Index translate) {
+
+    auto translate_y = kernel.translateY(kernel[src], kernel[translate]);
+    return translate_y.getIndex();
+}
+
+Index AnlNoise::translate_z(Index src, Index translate) {
+
+    auto translate_z = kernel.translateZ(kernel[src], kernel[translate]);
+    return translate_z.getIndex();
+}
+
+Index AnlNoise::translate_w(Index src, Index translate) {
+
+    auto translate_w = kernel.translateW(kernel[src], kernel[translate]);
+    return translate_w.getIndex();
+}
+
+Index AnlNoise::translate_u(Index src, Index translate) {
+
+    auto translate_u = kernel.translateU(kernel[src], kernel[translate]);
+    return translate_u.getIndex();
+}
+
+Index AnlNoise::translate_v(Index src, Index translate) {
+
+    auto translate_v = kernel.translateV(kernel[src], kernel[translate]);
+    return translate_v.getIndex();
+}
+
 Index AnlNoise::y() {
 
     auto y = kernel.y();
@@ -195,6 +279,24 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("pow", "src1_index", "src2_index"),&AnlNoise::pow);
     ClassDB::bind_method(D_METHOD("bias", "src1_index", "src2_index"),&AnlNoise::bias);
     ClassDB::bind_method(D_METHOD("gain", "src1_index", "src2_index"),&AnlNoise::gain);
+
+    ClassDB::bind_method(D_METHOD("scale", "src_index", "scale_index"),&AnlNoise::scale);
+
+    ClassDB::bind_method(D_METHOD("scale_x", "src_index", "scale_index"),&AnlNoise::scale_x);
+    ClassDB::bind_method(D_METHOD("scale_y", "src_index", "scale_index"),&AnlNoise::scale_y);
+    ClassDB::bind_method(D_METHOD("scale_z", "src_index", "scale_index"),&AnlNoise::scale_z);
+    ClassDB::bind_method(D_METHOD("scale_w", "src_index", "scale_index"),&AnlNoise::scale_w);
+    ClassDB::bind_method(D_METHOD("scale_u", "src_index", "scale_index"),&AnlNoise::scale_u);
+    ClassDB::bind_method(D_METHOD("scale_v", "src_index", "scale_index"),&AnlNoise::scale_v);
+
+    ClassDB::bind_method(D_METHOD("translate", "src_index", "translate_index"),&AnlNoise::translate);
+
+    ClassDB::bind_method(D_METHOD("translate_x", "src_index", "translate_index"),&AnlNoise::translate_x);
+    ClassDB::bind_method(D_METHOD("translate_y", "src_index", "translate_index"),&AnlNoise::translate_y);
+    ClassDB::bind_method(D_METHOD("translate_z", "src_index", "translate_index"),&AnlNoise::translate_z);
+    ClassDB::bind_method(D_METHOD("translate_w", "src_index", "translate_index"),&AnlNoise::translate_w);
+    ClassDB::bind_method(D_METHOD("translate_u", "src_index", "translate_index"),&AnlNoise::translate_u);
+    ClassDB::bind_method(D_METHOD("translate_v", "src_index", "translate_index"),&AnlNoise::translate_v);
 
     ClassDB::bind_method(D_METHOD("y"),&AnlNoise::y);
     ClassDB::bind_method(D_METHOD("select", "low_index", "high_index", "control_index", "threshold_index", "falloff_index"),&AnlNoise::select);

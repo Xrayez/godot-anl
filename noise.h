@@ -54,17 +54,17 @@ Index scale_w(Index src, Index scale);
 Index scale_u(Index src, Index scale);
 Index scale_v(Index src, Index scale);
 
-Index translate(Index src, Index trans);
+Index translate(Index src, Index translate);
 
-Index translate_x(Index src, Index trans);
-Index translate_y(Index src, Index trans);
-Index translate_z(Index src, Index trans);
-Index translate_w(Index src, Index trans);
-Index translate_u(Index src, Index trans);
-Index translate_v(Index src, Index trans);
+Index translate_x(Index src, Index translate);
+Index translate_y(Index src, Index translate);
+Index translate_z(Index src, Index translate);
+Index translate_w(Index src, Index translate);
+Index translate_u(Index src, Index translate);
+Index translate_v(Index src, Index translate);
 
 Index rotate(Index src, Index angle,
-                Index ax, Index ay, Index az);
+             Index ax, Index ay, Index az);
 
 Index add_sequence(Index base, Index number, Index stride);
 Index multiply_sequence(Index base, Index number, Index stride);
@@ -73,7 +73,7 @@ Index min_sequence(Index base, Index number, Index stride);
 
 Index blend(Index low, Index high, Index control);
 Index select(Index low, Index high, Index control,
-                Index threshold, Index falloff);
+             Index threshold, Index falloff);
 Index clamp(Index src, Index low, Index high);
 
 Index cos(Index src);
@@ -117,19 +117,19 @@ Index combine_rgba(Index r, Index g, Index b, Index a);
 Index scale_offset(Index src, Index scale, Index offset);
 
 Index fractal_layer(anl::BasisTypes basis, Index interp_type,
-                       double layer_scale, double layer_freq, unsigned int seed,
-                       bool rot = true, double angle = 0.5,
-                       double ax = 0.0, double ay = 0.0, double az = 1.0);
+                    double layer_scale, double layer_freq, unsigned int seed,
+                    bool rot = true, double angle = 0.5,
+                    double ax = 0.0, double ay = 0.0, double az = 1.0);
 
 Index ridged_layer(anl::BasisTypes basis, Index interp_type,
-                       double layer_scale, double layer_freq, unsigned int seed,
-                       bool rot = true, double angle = 0.5,
-                       double ax = 0.0, double ay = 0.0, double az = 1.0);
+                   double layer_scale, double layer_freq, unsigned int seed,
+                   bool rot = true, double angle = 0.5,
+                   double ax = 0.0, double ay = 0.0, double az = 1.0);
 
 Index billow_layer(anl::BasisTypes basis, Index interp_type_index,
-                       double layer_scale, double layer_freq, unsigned int seed,
-                       bool rot = true, double angle = 0.5,
-                       double ax = 0.0, double ay = 0.0, double az = 1.0);
+                   double layer_scale, double layer_freq, unsigned int seed,
+                   bool rot = true, double angle = 0.5,
+                   double ax = 0.0, double ay = 0.0, double az = 1.0);
 
 Index fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
           unsigned int octaves, double frequency, unsigned int seed,
