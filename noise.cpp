@@ -464,6 +464,9 @@ Index AnlNoise::fractal_layer(anl::BasisTypes basis, Index interp_type,
                               const PoolVector<real_t>& axis_params,
                               bool rot) {
 
+    ERR_FAIL_COND_V(layer_params.size() < 4, 0);
+    ERR_FAIL_COND_V(axis_params.size() < 3, 0);
+
     // layer_params: scale, freq, seed, angle
     // axis_params:  ax, ay, az
 
@@ -474,6 +477,26 @@ Index AnlNoise::fractal_layer(anl::BasisTypes basis, Index interp_type,
         axis_params[0], axis_params[1], axis_params[2]
     );
     return fractal_layer.getIndex();
+}
+
+Index AnlNoise::ridged_layer(anl::BasisTypes basis, Index interp_type,
+                              const PoolVector<real_t>& layer_params,
+                              const PoolVector<real_t>& axis_params,
+                              bool rot) {
+
+    ERR_FAIL_COND_V(layer_params.size() < 4, 0);
+    ERR_FAIL_COND_V(axis_params.size() < 3, 0);
+
+    // layer_params: scale, freq, seed, angle
+    // axis_params:  ax, ay, az
+
+    auto ridged_layer = kernel.simpleRidgedLayer(
+        basis, kernel[interp_type],
+        layer_params[0], layer_params[1], layer_params[2],
+        rot, layer_params[3],
+        axis_params[0], axis_params[1], axis_params[2]
+    );
+    return ridged_layer.getIndex();
 }
 
 //------------------------------------------------------------------------------
@@ -586,6 +609,11 @@ void AnlNoise::_bind_methods() {
                                   "layer_params",
                                   "axis_params",
                                   "rot"),&AnlNoise::fractal_layer, DEFVAL(true));
+
+    ClassDB::bind_method(D_METHOD("ridged_layer", "basis_type", "interp_type_index",
+                                  "layer_params",
+                                  "axis_params",
+                                  "rot"),&AnlNoise::ridged_layer, DEFVAL(true));
 
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
 
