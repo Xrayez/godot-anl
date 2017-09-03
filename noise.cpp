@@ -551,6 +551,22 @@ Index AnlNoise::ridged_multifractal(anl::BasisTypes basis, anl::InterpolationTyp
     return ridged_multifractal.getIndex();
 }
 
+Index AnlNoise::billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
+                       const PoolVector<real_t>& params,
+                       bool rot) {
+
+    ERR_FAIL_COND_V(params.size() < 3, 0);
+
+    // params: octaves, frequency, seed
+
+    auto billow = kernel.simpleBillow(
+        basis, interp,
+        params[0], params[1], params[2],
+        rot
+    );
+    return billow.getIndex();
+}
+
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
@@ -679,6 +695,10 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("ridged_multifractal", "basis_type", "interp_type",
                                   "params",
                                   "rot"),&AnlNoise::ridged_multifractal, DEFVAL(true));
+
+    ClassDB::bind_method(D_METHOD("billow", "basis_type", "interp_type",
+                                  "params",
+                                  "rot"),&AnlNoise::billow, DEFVAL(true));
 
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
 
