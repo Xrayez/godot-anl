@@ -111,7 +111,7 @@ Index hex_bump();
 Index color(const Color& color);
 Index combine_rgba(Index r, Index g, Index b, Index a);
 
-Index scale_offset(Index src, Index scale, Index offset);
+Index scale_offset(Index src, double scale, double offset);
 
 Index fractal_layer(anl::BasisTypes basis, Index interp_type,
                     double layer_scale, double layer_freq, unsigned int seed,

@@ -451,6 +451,14 @@ Index AnlNoise::combine_rgba(Index r, Index g, Index b, Index a) {
     return combine_rgba.getIndex();
 }
 
+Index AnlNoise::scale_offset(Index src, double scale, double offset) {
+
+    auto scale_offset = kernel.scaleOffset(
+        kernel[src], scale, offset
+    );
+    return scale_offset.getIndex();
+}
+
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
@@ -555,6 +563,7 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("color", "color"),&AnlNoise::color);
     ClassDB::bind_method(D_METHOD("combine_rgba", "r_index", "g_index", "b_index", "a_index"),&AnlNoise::combine_rgba);
 
+    ClassDB::bind_method(D_METHOD("scale_offset", "src_index", "scale", "offset"),&AnlNoise::scale_offset);
 
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
 
