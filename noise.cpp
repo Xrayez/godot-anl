@@ -411,6 +411,18 @@ Index AnlNoise::dv(Index src, Index spacing) {
     return dv.getIndex();
 }
 
+Index AnlNoise::sigmoid(Index src, Index center, Index ramp) {
+
+    auto sigmoid = kernel.sigmoid(kernel[src], kernel[center], kernel[ramp]);
+    return sigmoid.getIndex();
+}
+
+Index AnlNoise::radial() {
+
+    auto radial = kernel.radial();
+    return radial.getIndex();
+}
+
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
@@ -499,6 +511,9 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("dw", "src_index", "spacing_index"),&AnlNoise::dw);
     ClassDB::bind_method(D_METHOD("du", "src_index", "spacing_index"),&AnlNoise::du);
     ClassDB::bind_method(D_METHOD("dv", "src_index", "spacing_index"),&AnlNoise::dv);
+
+    ClassDB::bind_method(D_METHOD("sigmoid", "src_index", "center_index", "ramp_index"),&AnlNoise::sigmoid);
+    ClassDB::bind_method(D_METHOD("radial"),&AnlNoise::radial);
 
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
 
