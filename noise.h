@@ -65,10 +65,10 @@ Index translate_v(Index src, Index translate);
 
 Index rotate(Index src, Index angle, Index ax, Index ay, Index az);
 
-Index add_sequence(Index base, Index number, Index stride);
-Index multiply_sequence(Index base, Index number, Index stride);
-Index max_sequence(Index base, Index number, Index stride);
-Index min_sequence(Index base, Index number, Index stride);
+Index add_sequence(Index base, unsigned int number, unsigned int stride = 1);
+Index multiply_sequence(Index base, Index number, unsigned int stride = 1);
+Index max_sequence(Index base, unsigned int number, unsigned int stride = 1);
+Index min_sequence(Index base, unsigned int number, unsigned int stride = 1);
 
 Index blend(Index low, Index high, Index control);
 Index select(Index low, Index high, Index control,

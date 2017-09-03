@@ -237,6 +237,38 @@ Index AnlNoise::rotate(Index src, Index angle, Index ax, Index ay, Index az) {
     return rotate.getIndex();
 }
 
+Index AnlNoise::add_sequence(Index base, unsigned int number, unsigned int stride) {
+
+    auto add_sequence = kernel.addSequence(
+        kernel[base], number, stride
+    );
+    return add_sequence.getIndex();
+}
+
+Index AnlNoise::multiply_sequence(Index base, unsigned int number, unsigned int stride) {
+
+    auto multiply_sequence = kernel.multiplySequence(
+        kernel[base], number, stride
+    );
+    return multiply_sequence.getIndex();
+}
+
+Index AnlNoise::max_sequence(Index base, unsigned int number, unsigned int stride) {
+
+    auto max_sequence = kernel.maxSequence(
+        kernel[base], number, stride
+    );
+    return max_sequence.getIndex();
+}
+
+Index AnlNoise::min_sequence(Index base, unsigned int number, unsigned int stride) {
+
+    auto min_sequence = kernel.minSequence(
+        kernel[base], number, stride
+    );
+    return min_sequence.getIndex();
+}
+
 Index AnlNoise::y() {
 
     auto y = kernel.y();
@@ -307,6 +339,11 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("translate_v", "src_index", "translate_index"),&AnlNoise::translate_v);
 
     ClassDB::bind_method(D_METHOD("rotate", "src_index", "angle_index", "ax_index", "ay_index", "az_index"),&AnlNoise::rotate);
+
+    ClassDB::bind_method(D_METHOD("add_sequence", "base_index", "number", "stride"),AnlNoise::add_sequence, DEFVAL(1));
+    ClassDB::bind_method(D_METHOD("multiply_sequence", "base_index", "number", "stride"),AnlNoise::multiply_sequence, DEFVAL(1));
+    ClassDB::bind_method(D_METHOD("max_sequence", "base_index", "number", "stride"),AnlNoise::max_sequence, DEFVAL(1));
+    ClassDB::bind_method(D_METHOD("min_sequence", "base_index", "number", "stride"),AnlNoise::min_sequence, DEFVAL(1));
 
     ClassDB::bind_method(D_METHOD("y"),&AnlNoise::y);
     ClassDB::bind_method(D_METHOD("select", "low_index", "high_index", "control_index", "threshold_index", "falloff_index"),&AnlNoise::select);
