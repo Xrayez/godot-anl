@@ -519,6 +519,22 @@ Index AnlNoise::billow_layer(anl::BasisTypes basis, Index interp_type,
     return billow_layer.getIndex();
 }
 
+Index AnlNoise::fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
+          const PoolVector<real_t>& params,
+          bool rot) {
+
+    ERR_FAIL_COND_V(params.size() < 3, 0);
+
+    // params: octaves, frequency, seed
+
+    auto fbm = kernel.simplefBm(
+        basis, interp,
+        params[0], params[1], params[2],
+        rot
+    );
+    return fbm.getIndex();
+}
+
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
@@ -639,6 +655,10 @@ void AnlNoise::_bind_methods() {
                                   "layer_params",
                                   "axis_params",
                                   "rot"),&AnlNoise::billow_layer, DEFVAL(true));
+
+    ClassDB::bind_method(D_METHOD("fbm", "basis_type", "interp_type",
+                                  "params",
+                                  "rot"),&AnlNoise::fbm, DEFVAL(true));
 
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
 
