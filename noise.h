@@ -114,9 +114,9 @@ Index combine_rgba(Index r, Index g, Index b, Index a);
 Index scale_offset(Index src, double scale, double offset);
 
 Index fractal_layer(anl::BasisTypes basis, Index interp_type,
-                    double layer_scale, double layer_freq, unsigned int seed,
-                    bool rot = true, double angle = 0.5,
-                    double ax = 0.0, double ay = 0.0, double az = 1.0);
+                    const PoolVector<real_t>& layer_params, // scale, freq, seed, angle
+                    const PoolVector<real_t>& axis_params,  // ax, ay, az
+                    bool rot = true);
 
 Index ridged_layer(anl::BasisTypes basis, Index interp_type,
                    double layer_scale, double layer_freq, unsigned int seed,

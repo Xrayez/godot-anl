@@ -459,6 +459,23 @@ Index AnlNoise::scale_offset(Index src, double scale, double offset) {
     return scale_offset.getIndex();
 }
 
+Index AnlNoise::fractal_layer(anl::BasisTypes basis, Index interp_type,
+                              const PoolVector<real_t>& layer_params,
+                              const PoolVector<real_t>& axis_params,
+                              bool rot) {
+
+    // layer_params: scale, freq, seed, angle
+    // axis_params:  ax, ay, az
+
+    auto fractal_layer = kernel.simpleFractalLayer(
+        basis, kernel[interp_type],
+        layer_params[0], layer_params[1], layer_params[2],
+        rot, layer_params[3],
+        axis_params[0], axis_params[1], axis_params[2]
+    );
+    return fractal_layer.getIndex();
+}
+
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
@@ -564,6 +581,11 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("combine_rgba", "r_index", "g_index", "b_index", "a_index"),&AnlNoise::combine_rgba);
 
     ClassDB::bind_method(D_METHOD("scale_offset", "src_index", "scale", "offset"),&AnlNoise::scale_offset);
+
+    ClassDB::bind_method(D_METHOD("fractal_layer", "basis_type", "interp_type_index",
+                                  "layer_params",
+                                  "axis_params",
+                                  "rot"),&AnlNoise::fractal_layer, DEFVAL(true));
 
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
 
