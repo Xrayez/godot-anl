@@ -21,17 +21,19 @@ Index pi();
 Index e();
 Index one();
 Index zero();
-Index half();
+Index point5();
 Index sqrt2();
 
 Index constant(double value);
-Index seed(Index value);
+Index seed(Index seed);
+
 Index value_basis(Index interp_index, Index seed);
 Index gradient_basis(Index interp_index, Index seed);
 Index simplex_basis(Index seed);
 Index cellular_basis(Index f1, Index f2, Index f3, Index f4,
                      Index d1, Index d2, Index d3, Index d4,
                      Index distance, Index seed);
+
 Index add(Index src1, Index src2);
 Index substract(Index src1, Index src2);
 Index multiply(Index src1, Index src2);
