@@ -575,13 +575,50 @@ double AnlNoise::scalar_2d(double x, double y, Index index) {
     return vm.evaluateScalar(x, y, index);
 }
 
+double AnlNoise::scalar_3d(double x, double y, double z, Index index) {
+
+    return vm.evaluateScalar(x, y, z, index);
+}
+
+double AnlNoise::scalar_4d(double x, double y, double z, double w, Index index) {
+
+    return vm.evaluateScalar(x, y, z, w, index);
+}
+
+double AnlNoise::scalar_6d(const PoolVector<real_t>& axis, Index index) {
+
+    return vm.evaluateScalar(axis[0], axis[1], axis[2],
+                             axis[3], axis[4], axis[5], index);
+}
+
 Color AnlNoise::color_2d(double x, double y, Index index) {
 
     anl::SRGBA c = vm.evaluateColor(x, y, index);
     return Color(c.r, c.g, c.b, c.a);
 }
 
+Color AnlNoise::color_3d(double x, double y, double z, Index index) {
+
+    anl::SRGBA c = vm.evaluateColor(x, y, z, index);
+    return Color(c.r, c.g, c.b, c.a);
+}
+
+Color AnlNoise::color_4d(double x, double y, double z, double w, Index index) {
+
+    anl::SRGBA c = vm.evaluateColor(x, y, z, w, index);
+    return Color(c.r, c.g, c.b, c.a);
+}
+
+Color AnlNoise::color_6d(const PoolVector<real_t>& axis, Index index) {
+
+    anl::SRGBA c = vm.evaluateColor(axis[0], axis[1], axis[2],
+                                    axis[3], axis[4], axis[5], index);
+    return Color(c.r, c.g, c.b, c.a);
+}
+
 void AnlNoise::_bind_methods() {
+
+    // Kernel methods
 
     ClassDB::bind_method(D_METHOD("pi"),&AnlNoise::pi);
     ClassDB::bind_method(D_METHOD("e"),&AnlNoise::e);
@@ -700,9 +737,17 @@ void AnlNoise::_bind_methods() {
                                   "params",
                                   "rot"),&AnlNoise::billow, DEFVAL(true));
 
+    // NoiseExecutor methods
+
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
+    ClassDB::bind_method(D_METHOD("scalar_3d", "x", "y", "z" "index"),&AnlNoise::scalar_3d);
+    ClassDB::bind_method(D_METHOD("scalar_4d", "x", "y", "z", "w" "index"),&AnlNoise::scalar_4d);
+    ClassDB::bind_method(D_METHOD("scalar_6d", "6_axis", "index"),&AnlNoise::scalar_6d);
 
     ClassDB::bind_method(D_METHOD("color_2d", "x", "y", "index"),&AnlNoise::color_2d);
+    ClassDB::bind_method(D_METHOD("color_3d", "x", "y", "z", "index"),&AnlNoise::color_3d);
+    ClassDB::bind_method(D_METHOD("color_4d", "x", "y", "z", "w", "index"),&AnlNoise::color_4d);
+    ClassDB::bind_method(D_METHOD("color_6d", "6_axis", "index"),&AnlNoise::color_6d);
 
     using namespace anl;
     // Use namespace declaration to avoid having

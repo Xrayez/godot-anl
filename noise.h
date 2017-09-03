@@ -149,12 +149,12 @@ Index last_index();
 double scalar_2d(double x, double y, Index);
 double scalar_3d(double x, double y, double z, Index);
 double scalar_4d(double x, double y, double z, double w, Index);
-double scalar_6d(double x, double y, double z, double w, double u, double v, Index);
+double scalar_6d(const PoolVector<real_t>& axis, Index);
 
 Color color_2d(double x, double y, Index);
 Color color_3d(double x, double y, double z, Index);
 Color color_4d(double x, double y, double z, double w, Index);
-Color color_6d(double x, double y, double z, double w, double u, double v, Index);
+Color color_6d(const PoolVector<real_t>& axis, Index);
 
 private:
 
