@@ -151,10 +151,10 @@ double scalar_3d(double x, double y, double z, Index);
 double scalar_4d(double x, double y, double z, double w, Index);
 double scalar_6d(double x, double y, double z, double w, double u, double v, Index);
 
-double color_2d(double x, double y, Index);
-double color_3d(double x, double y, double z, Index);
-double color_4d(double x, double y, double z, double w, Index);
-double color_6d(double x, double y, double z, double w, double u, double v, Index);
+Color color_2d(double x, double y, Index);
+Color color_3d(double x, double y, double z, Index);
+Color color_4d(double x, double y, double z, double w, Index);
+Color color_6d(double x, double y, double z, double w, double u, double v, Index);
 
 private:
 

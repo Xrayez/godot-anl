@@ -437,12 +437,32 @@ Index AnlNoise::hex_bump() {
     return hex_bump.getIndex();
 }
 
+Index AnlNoise::color(const Color& c) {
+
+    auto color = kernel.color(anl::SRGBA(c.r, c.g, c.b, c.a));
+    return color.getIndex();
+}
+
+Index AnlNoise::combine_rgba(Index r, Index g, Index b, Index a) {
+
+    auto combine_rgba = kernel.combineRGBA(
+        kernel[r], kernel[g], kernel[b], kernel[a]
+    );
+    return combine_rgba.getIndex();
+}
+
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
 double AnlNoise::scalar_2d(double x, double y, Index index) {
 
     return vm.evaluateScalar(x, y, index);
+}
+
+Color AnlNoise::color_2d(double x, double y, Index index) {
+
+    anl::SRGBA c = vm.evaluateColor(x, y, index);
+    return Color(c.r, c.g, c.b, c.a);
 }
 
 void AnlNoise::_bind_methods() {
@@ -532,7 +552,13 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("hex_tile", "seed_index"),&AnlNoise::hex_tile);
     ClassDB::bind_method(D_METHOD("hex_bump"),&AnlNoise::hex_bump);
 
+    ClassDB::bind_method(D_METHOD("color", "color"),&AnlNoise::color);
+    ClassDB::bind_method(D_METHOD("combine_rgba", "r_index", "g_index", "b_index", "a_index"),&AnlNoise::combine_rgba);
+
+
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
+
+    ClassDB::bind_method(D_METHOD("color_2d", "x", "y", "index"),&AnlNoise::color_2d);
 
     using namespace anl;
     // Use namespace declaration to avoid having
