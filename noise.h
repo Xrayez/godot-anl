@@ -133,7 +133,7 @@ Index fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
           bool rot = true);
 
 Index ridged_multifractal(anl::BasisTypes basis, anl::InterpolationTypes interp,
-                          unsigned int octaves, double frequency, unsigned int seed,
+                          const PoolVector<real_t>& params, // octaves, frequency, seed
                           bool rot = true);
 
 Index billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
