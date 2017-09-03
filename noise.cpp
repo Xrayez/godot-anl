@@ -339,10 +339,40 @@ Index AnlNoise::smooth_tiers(Index src, Index num_tiers) {
     return smooth_tiers.getIndex();
 }
 
+Index AnlNoise::x() {
+
+    auto x = kernel.x();
+    return x.getIndex();
+}
+
 Index AnlNoise::y() {
 
     auto y = kernel.y();
     return y.getIndex();
+}
+
+Index AnlNoise::z() {
+
+    auto z = kernel.z();
+    return z.getIndex();
+}
+
+Index AnlNoise::w() {
+
+    auto w = kernel.w();
+    return w.getIndex();
+}
+
+Index AnlNoise::u() {
+
+    auto u = kernel.u();
+    return u.getIndex();
+}
+
+Index AnlNoise::v() {
+
+    auto v = kernel.v();
+    return v.getIndex();
 }
 
 //------------------------------------------------------------------------------
@@ -420,7 +450,12 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("tiers", "src_index", "num_tiers_index"),&AnlNoise::tiers);
     ClassDB::bind_method(D_METHOD("smooth_tiers", "src_index", "num_tiers_index"),&AnlNoise::smooth_tiers);
 
+    ClassDB::bind_method(D_METHOD("x"),&AnlNoise::x);
     ClassDB::bind_method(D_METHOD("y"),&AnlNoise::y);
+    ClassDB::bind_method(D_METHOD("z"),&AnlNoise::z);
+    ClassDB::bind_method(D_METHOD("w"),&AnlNoise::w);
+    ClassDB::bind_method(D_METHOD("u"),&AnlNoise::u);
+    ClassDB::bind_method(D_METHOD("v"),&AnlNoise::v);
 
     ClassDB::bind_method(D_METHOD("scalar_2d", "x", "y", "index"),&AnlNoise::scalar_2d);
 
