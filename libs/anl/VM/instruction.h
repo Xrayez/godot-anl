@@ -113,6 +113,16 @@ class CNoiseExecutor;
 class CInstructionIndex
 {
 public:
+    CInstructionIndex()
+    {
+        index_=0;
+    }
+    
+    CInstructionIndex(unsigned int i)
+    {
+        index_=i;
+    }
+
     CInstructionIndex(const CInstructionIndex &c)
     {
         index_=c.index_;
@@ -185,18 +195,13 @@ public:
         index_=c.index_;
         return *this;
     }
-
+    
+    unsigned int getIndex() const 
+    {
+        return index_;
+    }
 
 private:
-    CInstructionIndex()
-    {
-        index_=0;
-    }
-
-    CInstructionIndex(unsigned int i)
-    {
-        index_=i;
-    }
 
     unsigned int index_;
     friend class CKernel;

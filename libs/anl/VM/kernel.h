@@ -145,6 +145,10 @@ public:
     {
         return &kernel_;
     }
+    CInstructionIndex operator[](unsigned int index)
+    {
+        return CInstructionIndex(index);
+    }
     CInstructionIndex nextIndex()
     {
         return CInstructionIndex(kernel_.size());
