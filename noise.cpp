@@ -85,6 +85,66 @@ Index AnlNoise::cellular_basis(const PoolVector<int>& f,
     return cellular_basis.getIndex();
 }
 
+Index AnlNoise::add(Index src1, Index src2) {
+
+    auto add = kernel.add(kernel[src1], kernel[src2]);
+    return add.getIndex();
+}
+
+Index AnlNoise::subtract(Index src1, Index src2) {
+
+    auto subtract = kernel.subtract(kernel[src1], kernel[src2]);
+    return subtract.getIndex();
+}
+
+Index AnlNoise::multiply(Index src1, Index src2) {
+
+    auto multiply = kernel.multiply(kernel[src1], kernel[src2]);
+    return multiply.getIndex();
+}
+
+Index AnlNoise::divide(Index src1, Index src2) {
+
+    auto divide = kernel.divide(kernel[src1], kernel[src2]);
+    return divide.getIndex();
+}
+
+Index AnlNoise::maximum(Index src1, Index src2) {
+
+    auto maximum = kernel.maximum(kernel[src1], kernel[src2]);
+    return maximum.getIndex();
+}
+
+Index AnlNoise::minimum(Index src1, Index src2) {
+
+    auto minimum = kernel.minimum(kernel[src1], kernel[src2]);
+    return minimum.getIndex();
+}
+
+Index AnlNoise::abs(Index src) {
+
+    auto abs = kernel.abs(kernel[src]);
+    return abs.getIndex();
+}
+
+Index AnlNoise::pow(Index src1, Index src2) {
+
+    auto pow = kernel.pow(kernel[src1], kernel[src2]);
+    return pow.getIndex();
+}
+
+Index AnlNoise::bias(Index src1, Index src2) {
+
+    auto bias = kernel.bias(kernel[src1], kernel[src2]);
+    return bias.getIndex();
+}
+
+Index AnlNoise::gain(Index src1, Index src2) {
+
+    auto gain = kernel.gain(kernel[src1], kernel[src2]);
+    return gain.getIndex();
+}
+
 Index AnlNoise::y() {
 
     auto y = kernel.y();
@@ -124,6 +184,17 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("gradient_basis", "interp_index", "seed_index"),&AnlNoise::gradient_basis);
     ClassDB::bind_method(D_METHOD("simplex_basis", "seed_index"),&AnlNoise::simplex_basis);
     ClassDB::bind_method(D_METHOD("cellular_basis", "f4_indexes", "d4_indexes", "distance_index", "seed_index"),&AnlNoise::cellular_basis);
+
+    ClassDB::bind_method(D_METHOD("add", "src1_index", "src2_index"),&AnlNoise::add);
+    ClassDB::bind_method(D_METHOD("subtract", "src1_index", "src2_index"),&AnlNoise::subtract);
+    ClassDB::bind_method(D_METHOD("multiply", "src1_index", "src2_index"),&AnlNoise::multiply);
+    ClassDB::bind_method(D_METHOD("divide", "src1_index", "src2_index"),&AnlNoise::divide);
+    ClassDB::bind_method(D_METHOD("maximum", "src1_index", "src2_index"),&AnlNoise::maximum);
+    ClassDB::bind_method(D_METHOD("minimum", "src1_index", "src2_index"),&AnlNoise::minimum);
+    ClassDB::bind_method(D_METHOD("abs", "src_index"),&AnlNoise::abs);
+    ClassDB::bind_method(D_METHOD("pow", "src1_index", "src2_index"),&AnlNoise::pow);
+    ClassDB::bind_method(D_METHOD("bias", "src1_index", "src2_index"),&AnlNoise::bias);
+    ClassDB::bind_method(D_METHOD("gain", "src1_index", "src2_index"),&AnlNoise::gain);
 
     ClassDB::bind_method(D_METHOD("y"),&AnlNoise::y);
     ClassDB::bind_method(D_METHOD("select", "low_index", "high_index", "control_index", "threshold_index", "falloff_index"),&AnlNoise::select);

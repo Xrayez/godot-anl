@@ -35,7 +35,7 @@ Index cellular_basis(const PoolVector<int>& f,
                      Index distance, Index seed);
 
 Index add(Index src1, Index src2);
-Index substract(Index src1, Index src2);
+Index subtract(Index src1, Index src2);
 Index multiply(Index src1, Index src2);
 Index divide(Index src1, Index src2);
 Index maximum(Index src1, Index src2);
