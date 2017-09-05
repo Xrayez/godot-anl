@@ -567,6 +567,13 @@ Index AnlNoise::billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
     return billow.getIndex();
 }
 
+// Kernel
+
+Index AnlNoise::get_last_index() {
+
+    return kernel.lastIndex().getIndex();
+}
+
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
@@ -744,6 +751,8 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("billow", "basis_type", "interp_type",
                                   "params",
                                   "rot"),&AnlNoise::billow, DEFVAL(true));
+
+    ClassDB::bind_method(D_METHOD("get_last_index"),&AnlNoise::get_last_index);
 
     // NoiseExecutor methods
 

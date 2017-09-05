@@ -141,7 +141,7 @@ Index billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
              bool rot = true);
 
 // Kernel
-Index last_index();
+Index get_last_index();
 
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
