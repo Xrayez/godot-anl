@@ -159,7 +159,7 @@ Color color_6d(const PoolVector<real_t>& axis, Index);
 //------------------------------------------------------------------------------
 // ExpressionBuilder methods
 //------------------------------------------------------------------------------
-Index eval_expression(const String& expression);
+Index evaluate(const String& expression);
 
 private:
 

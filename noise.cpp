@@ -618,7 +618,7 @@ Color AnlNoise::color_6d(const PoolVector<real_t>& axis, Index index) {
 //------------------------------------------------------------------------------
 // ExpressionBuilder methods
 //------------------------------------------------------------------------------
-Index AnlNoise::eval_expression(const String& expression) {
+Index AnlNoise::evaluate(const String& expression) {
 
     auto function = eb.eval(expression.utf8().get_data());
     return function.getIndex();
@@ -759,7 +759,7 @@ void AnlNoise::_bind_methods() {
 
     // ExpressionBuilder methods
 
-    ClassDB::bind_method(D_METHOD("eval_expression", "expression"),&AnlNoise::eval_expression);
+    ClassDB::bind_method(D_METHOD("evaluate", "expression"),&AnlNoise::evaluate);
 
 
     using namespace anl;
