@@ -45,8 +45,8 @@ var select = noise.select(noise.zero(), noise.one(),
 # Draw the chained functions
 for y in range(HEIGHT):
 	for x in range(WIDTH):
-		var value = noise.color_2d(float(x)/WIDTH * 2,
-		                           float(y)/HEIGHT, result)
+		var value = noise.get_color_2d(float(x)/WIDTH * 2,
+		                               float(y)/HEIGHT, result)
 		image.set_pixel(x, y, value)
 ```
 
@@ -58,13 +58,13 @@ functions together to one-liners, something like this:
 
 ```gdscript
 var expression = "translate(select(0, 1, (x + y), 0.5, 0), 10)"
-var function = noise.eval_expression(expression)
+var function = noise.evaluate(expression)
 var value = noise.color_2d(x, y, function)
 ```
 
 But please note that the expression builder feature is a work in progress as
 stated by original author. Some functions work, some don't and will hang the
-engine in endless loop...
+engine in the endless loop...
 
 Some more example of image generation:
 
