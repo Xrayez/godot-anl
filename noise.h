@@ -3,6 +3,7 @@
 
 #include "reference.h"
 #include "libs/anl/anl.h"
+#include "scene/resources/texture.h"
 
 using Index = unsigned int;
 
@@ -161,6 +162,12 @@ Color get_color_6d(const PoolVector<real_t>& axis, Index);
 //------------------------------------------------------------------------------
 Index evaluate(const String& expression);
 
+//------------------------------------------------------------------------------
+// Image methods
+//------------------------------------------------------------------------------
+void gen_texture(const Vector2& size, anl::EMappingModes mode,
+                 Index index, const String& filename);
+
 private:
 
 anl::CKernel kernel;
@@ -172,5 +179,6 @@ anl::CExpressionBuilder eb;
 VARIANT_ENUM_CAST(anl::InterpolationTypes);
 VARIANT_ENUM_CAST(anl::DistanceTypes);
 VARIANT_ENUM_CAST(anl::BasisTypes);
+VARIANT_ENUM_CAST(anl::EMappingModes);
 
 #endif

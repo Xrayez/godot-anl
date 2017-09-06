@@ -17,7 +17,4 @@
 
 #include "Processing/erosion.h"
 
-#include "Imaging/stb_image.h"
-#include "Imaging/stb_image_write.h"
-
 #endif

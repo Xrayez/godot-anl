@@ -631,6 +631,17 @@ Index AnlNoise::evaluate(const String& expression) {
     return function.getIndex();
 }
 
+//------------------------------------------------------------------------------
+// Image methods
+//------------------------------------------------------------------------------
+void AnlNoise::gen_texture(const Vector2& size, anl::EMappingModes mode,
+                           Index index, const String& filename) {
+
+    anl::CArray2Drgba img(size.x, size.y);
+    anl::mapRGBA2D(mode, img, kernel, anl::SMappingRanges(), 0, index);
+    anl::saveRGBAArray(filename.utf8().get_data(), &img);
+}
+
 void AnlNoise::_bind_methods() {
 
     // Kernel methods
@@ -770,6 +781,10 @@ void AnlNoise::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("evaluate", "expression"),&AnlNoise::evaluate);
 
+    // Image methods
+
+    ClassDB::bind_method(D_METHOD("gen_texture", "size", "mode", "index", "filename"),&AnlNoise::gen_texture);
+
 
     using namespace anl;
     // Use namespace declaration to avoid having
@@ -787,4 +802,13 @@ void AnlNoise::_bind_methods() {
     BIND_ENUM_CONSTANT(BASIS_VALUE);
     BIND_ENUM_CONSTANT(BASIS_GRADIENT);
     BIND_ENUM_CONSTANT(BASIS_SIMPLEX);
+
+    BIND_ENUM_CONSTANT(SEAMLESS_NONE);
+    BIND_ENUM_CONSTANT(SEAMLESS_X);
+    BIND_ENUM_CONSTANT(SEAMLESS_Y);
+    BIND_ENUM_CONSTANT(SEAMLESS_Z);
+    BIND_ENUM_CONSTANT(SEAMLESS_XY);
+    BIND_ENUM_CONSTANT(SEAMLESS_XZ);
+    BIND_ENUM_CONSTANT(SEAMLESS_YZ);
+    BIND_ENUM_CONSTANT(SEAMLESS_XYZ);
 }
