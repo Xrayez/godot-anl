@@ -31,8 +31,8 @@ Index seed(unsigned int value);
 Index value_basis(Index interp, Index seed);
 Index gradient_basis(Index interp, Index seed);
 Index simplex_basis(Index seed);
-Index cellular_basis(const PoolVector<int>& f,
-                     const PoolVector<int>& d,
+Index cellular_basis(const PoolVector<int>& f, // Indexes
+                     const PoolVector<int>& d, // Indexes
                      Index distance, Index seed);
 
 Index add(Index src1, Index src2);
@@ -165,6 +165,12 @@ Index evaluate(const String& expression);
 //------------------------------------------------------------------------------
 // Image methods
 //------------------------------------------------------------------------------
+Ref<Image> map_to_image(const Vector2& image_size,
+                        anl::EMappingModes mode,
+                        Index index,
+                        const Vector2& mapxy0 = Vector2(-1, -1),
+                        const Vector2& mapxy1 = Vector2(1, 1));
+
 void gen_texture(const Vector2& size, anl::EMappingModes mode,
                  Index index, const String& filename);
 

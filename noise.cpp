@@ -634,11 +634,38 @@ Index AnlNoise::evaluate(const String& expression) {
 //------------------------------------------------------------------------------
 // Image methods
 //------------------------------------------------------------------------------
+Ref<Image> AnlNoise::map_to_image(const Vector2& size,
+                                  anl::EMappingModes mode,
+                                  Index index,
+                                  const Vector2& map_start,
+                                  const Vector2& map_end) {
+
+    anl::CArray2Drgba img(size.x, size.y);
+    anl::SMappingRanges ranges(map_start.x, map_end.x, map_start.y, map_end.y);
+    anl::mapRGBA2DNoZ(mode, img, kernel, ranges, index);
+
+    PoolVector<uint8_t> data;
+    const int SIZE = size.x * size.y;
+    data.resize(SIZE * 4);
+    PoolVector<uint8_t>::Write w = data.write();
+    anl::SRGBA* src_data = img.getData();
+
+    for(int i = 0, j = 0; j < SIZE - 1; i += 4, ++j) {
+        w[i + 0] = static_cast<uint8_t>(src_data[j].r * 255);
+        w[i + 1] = static_cast<uint8_t>(src_data[j].g * 255);
+        w[i + 2] = static_cast<uint8_t>(src_data[j].b * 255);
+        w[i + 3] = static_cast<uint8_t>(src_data[j].a * 255);
+    }
+    Ref<Image> noise = memnew(Image);
+    noise->create(size.x, size.y, 0, Image::FORMAT_RGBA8, data);
+    return noise;
+}
+
 void AnlNoise::gen_texture(const Vector2& size, anl::EMappingModes mode,
                            Index index, const String& filename) {
 
     anl::CArray2Drgba img(size.x, size.y);
-    anl::mapRGBA2D(mode, img, kernel, anl::SMappingRanges(), 0, index);
+    anl::mapRGBA2DNoZ(mode, img, kernel, anl::SMappingRanges(), index);
     anl::saveRGBAArray(filename.utf8().get_data(), &img);
 }
 
@@ -783,6 +810,7 @@ void AnlNoise::_bind_methods() {
 
     // Image methods
 
+    ClassDB::bind_method(D_METHOD("map_to_image", "size", "mode", "index", "map_start", "map_end"),&AnlNoise::map_to_image, DEFVAL(Vector2(-1, -1)), DEFVAL(Vector2(1, 1)));
     ClassDB::bind_method(D_METHOD("gen_texture", "size", "mode", "index", "filename"),&AnlNoise::gen_texture);
 
 
