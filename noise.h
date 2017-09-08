@@ -5,6 +5,7 @@
 #include "libs/anl/anl.h"
 #include "scene/resources/texture.h"
 
+// Index of the noise function
 using Index = unsigned int;
 
 class AnlNoise : public Reference {
@@ -16,7 +17,7 @@ protected:
 public:
       AnlNoise();
 //------------------------------------------------------------------------------
-// Kernel methods
+// Kernel noise methods
 //------------------------------------------------------------------------------
 Index pi();
 Index e();
@@ -142,6 +143,7 @@ Index billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
              bool rot = true);
 
 // Kernel
+
 Index get_last_index();
 
 //------------------------------------------------------------------------------

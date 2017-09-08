@@ -650,7 +650,7 @@ Ref<Image> AnlNoise::map_to_image(const Vector2& size,
     PoolVector<uint8_t>::Write w = data.write();
     anl::SRGBA* src_data = img.getData();
 
-    for(int i = 0, j = 0; j < SIZE - 1; i += 4, ++j) {
+    for(int i = 0, j = 0; j < SIZE; i += 4, ++j) {
         w[i + 0] = static_cast<uint8_t>(src_data[j].r * 255);
         w[i + 1] = static_cast<uint8_t>(src_data[j].g * 255);
         w[i + 2] = static_cast<uint8_t>(src_data[j].b * 255);
