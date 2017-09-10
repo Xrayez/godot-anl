@@ -1,0 +1,962 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<doc version="3.0.alpha.custom_build" name="Engine Types">
+<class name="AnlNoise" inherits="Reference" category="Core">
+	<brief_description>
+        AnlNoise class used for compound noise generation
+	</brief_description>
+	<description>
+        AnlNoise is a module that can be used for generating a variety of noise types in a modular way. Noise functions can be chained together to create more complex functions out of elementary ones.
+
+        The noise generation procedure consists of the two main steps:
+
+        1. Adding elementary noise functions to Kernel by calling methods that return an index of the created function. The returned index can be then passed to other noise functions that can use it, building a pipeline.
+
+        2. Using NoiseExecutor methods (e.g get_scalar_2d) to obtain the noise at specified index, virtually at any point of the function chain.
+	</description>
+	<methods>
+		<method name="abs">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="acos">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="add">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="add_sequence">
+			<return type="int">
+			</return>
+			<argument index="0" name="base_index" type="int">
+			</argument>
+			<argument index="1" name="number" type="int">
+			</argument>
+			<argument index="2" name="stride" type="int" default="1">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="asin">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="atan">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="bias">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="billow">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type" type="int" enum="anl.InterpolationTypes">
+			</argument>
+			<argument index="2" name="params" type="PoolRealArray">
+			</argument>
+			<argument index="3" name="rot" type="bool" default="true">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="billow_layer">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type_index" type="int">
+			</argument>
+			<argument index="2" name="layer_params" type="PoolRealArray">
+			</argument>
+			<argument index="3" name="axis_params" type="PoolRealArray">
+			</argument>
+			<argument index="4" name="rot" type="bool" default="true">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="blend">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="cellular_basis">
+			<return type="int">
+			</return>
+			<argument index="0" name="f4_indexes" type="PoolIntArray">
+			</argument>
+			<argument index="1" name="d4_indexes" type="PoolIntArray">
+			</argument>
+			<argument index="2" name="distance_index" type="int">
+			</argument>
+			<argument index="3" name="seed_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="clamp">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="low_index" type="int">
+			</argument>
+			<argument index="2" name="high_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="color">
+			<return type="int">
+			</return>
+			<argument index="0" name="color" type="Color">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="combine_rgba">
+			<return type="int">
+			</return>
+			<argument index="0" name="r_index" type="int">
+			</argument>
+			<argument index="1" name="g_index" type="int">
+			</argument>
+			<argument index="2" name="b_index" type="int">
+			</argument>
+			<argument index="3" name="a_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="constant">
+			<return type="int">
+			</return>
+			<argument index="0" name="value" type="float">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="cos">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="divide">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="du">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="dv">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="dw">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="dx">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="dy">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="dz">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="e">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="evaluate">
+			<return type="int">
+			</return>
+			<argument index="0" name="expression" type="String">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="fbm">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type" type="int" enum="anl.InterpolationTypes">
+			</argument>
+			<argument index="2" name="params" type="PoolRealArray">
+			</argument>
+			<argument index="3" name="rot" type="bool" default="true">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="fractal_layer">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type_index" type="int">
+			</argument>
+			<argument index="2" name="layer_params" type="PoolRealArray">
+			</argument>
+			<argument index="3" name="axis_params" type="PoolRealArray">
+			</argument>
+			<argument index="4" name="rot" type="bool" default="true">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="gain">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="gen_texture">
+			<return type="void">
+			</return>
+			<argument index="0" name="size" type="Vector2">
+			</argument>
+			<argument index="1" name="mode" type="int" enum="anl.EMappingModes">
+			</argument>
+			<argument index="2" name="index" type="int">
+			</argument>
+			<argument index="3" name="filename" type="String">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_color_2d">
+			<return type="Color">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_color_3d">
+			<return type="Color">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<argument index="3" name="index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_color_4d">
+			<return type="Color">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<argument index="3" name="w" type="float">
+			</argument>
+			<argument index="4" name="index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_color_6d">
+			<return type="Color">
+			</return>
+			<argument index="0" name="6_axis" type="PoolRealArray">
+			</argument>
+			<argument index="1" name="index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_last_index">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="get_scalar_2d">
+			<return type="float">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_scalar_3d">
+			<return type="float">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="zindex" type="float">
+			</argument>
+			<argument index="3" name="arg3" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_scalar_4d">
+			<return type="float">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<argument index="3" name="windex" type="float">
+			</argument>
+			<argument index="4" name="arg4" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_scalar_6d">
+			<return type="float">
+			</return>
+			<argument index="0" name="6_axis" type="PoolRealArray">
+			</argument>
+			<argument index="1" name="index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="gradient_basis">
+			<return type="int">
+			</return>
+			<argument index="0" name="interp_index" type="int">
+			</argument>
+			<argument index="1" name="seed_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="hex_bump">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="hex_tile">
+			<return type="int">
+			</return>
+			<argument index="0" name="seed_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="map_to_image">
+			<return type="Image">
+			</return>
+			<argument index="0" name="size" type="Vector2">
+			</argument>
+			<argument index="1" name="mode" type="int" enum="anl.EMappingModes">
+			</argument>
+			<argument index="2" name="index" type="int">
+			</argument>
+			<argument index="3" name="map_start" type="Vector2" default="Vector2( -1, -1 )">
+			</argument>
+			<argument index="4" name="map_end" type="Vector2" default="Vector2( 1, 1 )">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="max_sequence">
+			<return type="int">
+			</return>
+			<argument index="0" name="base_index" type="int">
+			</argument>
+			<argument index="1" name="number" type="int">
+			</argument>
+			<argument index="2" name="stride" type="int" default="1">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="maximum">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="min_sequence">
+			<return type="int">
+			</return>
+			<argument index="0" name="base_index" type="int">
+			</argument>
+			<argument index="1" name="number" type="int">
+			</argument>
+			<argument index="2" name="stride" type="int" default="1">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="minimum">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="multiply">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="multiply_sequence">
+			<return type="int">
+			</return>
+			<argument index="0" name="base_index" type="int">
+			</argument>
+			<argument index="1" name="number" type="int">
+			</argument>
+			<argument index="2" name="stride" type="int" default="1">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="one">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="pi">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="point5">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="pow">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="radial">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="ridged_layer">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type_index" type="int">
+			</argument>
+			<argument index="2" name="layer_params" type="PoolRealArray">
+			</argument>
+			<argument index="3" name="axis_params" type="PoolRealArray">
+			</argument>
+			<argument index="4" name="rot" type="bool" default="true">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="ridged_multifractal">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type" type="int" enum="anl.InterpolationTypes">
+			</argument>
+			<argument index="2" name="params" type="PoolRealArray">
+			</argument>
+			<argument index="3" name="rot" type="bool" default="true">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="rotate">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="angle_index" type="int">
+			</argument>
+			<argument index="2" name="ax_index" type="int">
+			</argument>
+			<argument index="3" name="ay_index" type="int">
+			</argument>
+			<argument index="4" name="az_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="scale">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="scale_offset">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale" type="float">
+			</argument>
+			<argument index="2" name="offset" type="float">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="scale_u">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="scale_v">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="scale_w">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="scale_x">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="scale_y">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="scale_z">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="seed">
+			<return type="int">
+			</return>
+			<argument index="0" name="value" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="select">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<argument index="3" name="threshold_index" type="int">
+			</argument>
+			<argument index="4" name="falloff_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="sigmoid">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="center_index" type="int">
+			</argument>
+			<argument index="2" name="ramp_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="simplex_basis">
+			<return type="int">
+			</return>
+			<argument index="0" name="seed_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="sin">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="smooth_tiers">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="num_tiers_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="sqrt2">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="subtract">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="tan">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="tiers">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="num_tiers_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="translate">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="translate_u">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="translate_v">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="translate_w">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="translate_x">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="translate_y">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="translate_z">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="u">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="v">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="value_basis">
+			<return type="int">
+			</return>
+			<argument index="0" name="interp_index" type="int">
+			</argument>
+			<argument index="1" name="seed_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="w">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="x">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="y">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="z">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="zero">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="INTERP_NONE" value="0">
+		</constant>
+		<constant name="INTERP_LINEAR" value="1">
+		</constant>
+		<constant name="INTERP_HERMITE" value="2">
+		</constant>
+		<constant name="INTERP_QUINTIC" value="3">
+		</constant>
+		<constant name="DISTANCE_EUCLID" value="0">
+		</constant>
+		<constant name="DISTANCE_MANHATTAN" value="1">
+		</constant>
+		<constant name="DISTANCE_LEASTAXIS" value="2">
+		</constant>
+		<constant name="DISTANCE_GREATESTAXIS" value="3">
+		</constant>
+		<constant name="BASIS_VALUE" value="0">
+		</constant>
+		<constant name="BASIS_GRADIENT" value="1">
+		</constant>
+		<constant name="BASIS_SIMPLEX" value="2">
+		</constant>
+		<constant name="SEAMLESS_NONE" value="0">
+		</constant>
+		<constant name="SEAMLESS_X" value="1">
+		</constant>
+		<constant name="SEAMLESS_Y" value="2">
+		</constant>
+		<constant name="SEAMLESS_Z" value="3">
+		</constant>
+		<constant name="SEAMLESS_XY" value="4">
+		</constant>
+		<constant name="SEAMLESS_XZ" value="5">
+		</constant>
+		<constant name="SEAMLESS_YZ" value="6">
+		</constant>
+		<constant name="SEAMLESS_XYZ" value="7">
+		</constant>
+	</constants>
+</class>
