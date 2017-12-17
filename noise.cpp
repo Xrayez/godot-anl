@@ -52,6 +52,12 @@ Index AnlNoise::seed(unsigned int value) {
     return seed.getIndex();
 }
 
+Index AnlNoise::seeder(Index seed, Index src) {
+
+    auto seeder = kernel.seeder(kernel[seed], kernel[src]);
+    return seeder.getIndex();
+}
+
 Index AnlNoise::value_basis(Index interp, Index seed) {
 
     auto value_basis = kernel.valueBasis(kernel[interp], kernel[seed]);
@@ -423,6 +429,68 @@ Index AnlNoise::radial() {
     return radial.getIndex();
 }
 
+Index AnlNoise::fractal(Index seed, Index layer, const PoolVector<int>& params) {
+
+    ERR_FAIL_COND_V(params.size() < 4, 0);
+
+    Index persistence = params[0];
+    Index lacunarity = params[1];
+    Index numoctaves = params[2];
+    Index freq = params[3];
+
+    auto fractal = kernel.fractal(
+        kernel[seed], kernel[layer],
+        kernel[persistence], kernel[lacunarity], kernel[numoctaves], kernel[freq]
+    );
+    return fractal.getIndex();
+}
+
+Index AnlNoise::randomize(Index seed, Index low, Index high) {
+
+    auto randomize = kernel.randomize(kernel[seed], kernel[low], kernel[high]);
+    return randomize.getIndex();
+}
+
+Index AnlNoise::step(Index val, Index control) {
+
+    auto step = kernel.step(kernel[val], kernel[control]);
+    return step.getIndex();
+}
+
+Index AnlNoise::linear_step(Index low, Index high, Index control) {
+
+    auto linear_step = kernel.linearStep(kernel[low], kernel[high], kernel[control]);
+    return linear_step.getIndex();
+}
+
+Index AnlNoise::smooth_step(Index low, Index high, Index control) {
+
+    auto smooth_step = kernel.smoothStep(kernel[low], kernel[high], kernel[control]);
+    return smooth_step.getIndex();
+}
+
+Index AnlNoise::smoother_step(Index low, Index high, Index control) {
+
+    auto smoother_step = kernel.smootherStep(kernel[low], kernel[high], kernel[control]);
+    return smoother_step.getIndex();
+}
+
+Index AnlNoise::curve_section(Index lowv,
+                              const PoolVector<int>& t,
+                              const PoolVector<int>& v,
+                              Index control) {
+
+    ERR_FAIL_COND_V(t.size() < 2, 0);
+    ERR_FAIL_COND_V(v.size() < 2, 0);
+
+    auto curve_section = kernel.curveSection(
+        kernel[lowv],
+        kernel[ t[0] ], kernel[ t[1] ], kernel[ v[0] ] , kernel[ v[1] ],
+        kernel[control]
+    );
+    return curve_section.getIndex();
+}
+
 // Patterns
 
 Index AnlNoise::hex_tile(Index seed) {
@@ -449,6 +517,14 @@ Index AnlNoise::combine_rgba(Index r, Index g, Index b, Index a) {
         kernel[r], kernel[g], kernel[b], kernel[a]
     );
     return combine_rgba.getIndex();
+}
+
+Index AnlNoise::combine_hsva(Index h, Index s, Index v, Index a) {
+
+    auto combine_hsva = kernel.combineHSVA(
+        kernel[h], kernel[s], kernel[v], kernel[a]
+    );
+    return combine_hsva.getIndex();
 }
 
 Index AnlNoise::scale_offset(Index src, double scale, double offset) {
@@ -683,6 +759,7 @@ void AnlNoise::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("constant", "value"),&AnlNoise::constant);
     ClassDB::bind_method(D_METHOD("seed", "value"),&AnlNoise::seed);
+    ClassDB::bind_method(D_METHOD("seeder", "seed_index", "src_index"),&AnlNoise::seeder);
 
     ClassDB::bind_method(D_METHOD("value_basis", "interp_index", "seed_index"),&AnlNoise::value_basis);
     ClassDB::bind_method(D_METHOD("gradient_basis", "interp_index", "seed_index"),&AnlNoise::gradient_basis);
@@ -754,13 +831,26 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("dv", "src_index", "spacing_index"),&AnlNoise::dv);
 
     ClassDB::bind_method(D_METHOD("sigmoid", "src_index", "center_index", "ramp_index"),&AnlNoise::sigmoid);
+
     ClassDB::bind_method(D_METHOD("radial"),&AnlNoise::radial);
+
+    ClassDB::bind_method(D_METHOD("fractal", "seed_index", "layer_index", "params"),&AnlNoise::fractal);
+    ClassDB::bind_method(D_METHOD("randomize", "seed_index", "low_index", "high_index"),&AnlNoise::randomize);
+    ClassDB::bind_method(D_METHOD("step", "val_index", "control_index"),&AnlNoise::step);
+    ClassDB::bind_method(D_METHOD("linear_step", "low_index", "high_index", "control_index"),&AnlNoise::linear_step);
+    ClassDB::bind_method(D_METHOD("smooth_step", "low_index", "high_index", "control_index"),&AnlNoise::smooth_step);
+    ClassDB::bind_method(D_METHOD("smoother_step", "low_index", "high_index", "control_index"),&AnlNoise::smoother_step);
+
+    ClassDB::bind_method(D_METHOD("curve_section", "lowv_index", "t_indexes", "v_indexes", "control_index"),&AnlNoise::curve_section);
+
+    // Patterns
 
     ClassDB::bind_method(D_METHOD("hex_tile", "seed_index"),&AnlNoise::hex_tile);
     ClassDB::bind_method(D_METHOD("hex_bump"),&AnlNoise::hex_bump);
 
     ClassDB::bind_method(D_METHOD("color", "color"),&AnlNoise::color);
     ClassDB::bind_method(D_METHOD("combine_rgba", "r_index", "g_index", "b_index", "a_index"),&AnlNoise::combine_rgba);
+    ClassDB::bind_method(D_METHOD("combine_hsva", "h_index", "s_index", "v_index", "a_index"),&AnlNoise::combine_hsva);
 
     ClassDB::bind_method(D_METHOD("scale_offset", "src_index", "scale", "offset"),&AnlNoise::scale_offset);
 

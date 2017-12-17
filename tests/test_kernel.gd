@@ -13,6 +13,7 @@ func _init():
 
 	i = n.constant(10)
 	var si = n.seed(123)
+	i = n.seeder( i, n.constant(randi()) )
 
 	i = n.value_basis(n.constant(AnlNoise.INTERP_NONE), si)
 	i = n.gradient_basis(n.constant(AnlNoise.INTERP_LINEAR), si)
@@ -93,6 +94,15 @@ func _init():
 
 	i = n.radial()
 
+	i = n.fractal(n.constant(5), n.x(), [n.radial(), n.cos(i), n.one(), n.point5()])
+	i = n.randomize(ci, n.zero(), n.one())
+	i = n.step(n.point5(), n.y())
+	i = n.linear_step(n.zero(), n.one(), n.radial())
+	i = n.smooth_step(n.zero(), n.one(), n.radial())
+	i = n.smoother_step(n.zero(), n.one(), n.radial())
+
+	i = n.curve_section(n.point5(), [n.x(), n.y()], [n.z(), n.w()], n.sin(i))
+
 	# Patterns
 
 	i = n.hex_tile(si)
@@ -100,6 +110,7 @@ func _init():
 
 	i = n.color(Color(1, 0, 1))
 	i = n.combine_rgba(n.point5(), n.constant(0.2), n.one(), n.one())
+	i = n.combine_hsva(n.point5(), n.constant(0.2), n.one(), n.one())
 
 	i = n.scale_offset(i, 0.5, 0.0)
 

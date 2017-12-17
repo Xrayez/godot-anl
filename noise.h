@@ -28,6 +28,7 @@ Index sqrt2();
 
 Index constant(double value);
 Index seed(unsigned int value);
+Index seeder(Index seed, Index src);
 
 Index value_basis(Index interp, Index seed);
 Index gradient_basis(Index interp, Index seed);
@@ -105,6 +106,18 @@ Index sigmoid(Index src, Index center, Index ramp);
 
 Index radial();
 
+Index fractal(Index seed, Index layer, const PoolVector<int>& params);
+           // Index params: persistence, lacunarity, numoctaves, freq
+Index randomize(Index seed, Index low, Index high);
+Index step(Index val, Index control);
+Index linear_step(Index low, Index high, Index control);
+Index smooth_step(Index low, Index high, Index control);
+Index smoother_step(Index low, Index high, Index control);
+
+Index curve_section(Index lowv,
+                    const PoolVector<int>& t, // Index: t0, t1
+                    const PoolVector<int>& v, // Index: v0, v1
+                    Index control);
 // Patterns
 
 Index hex_tile(Index seed);
@@ -112,6 +125,7 @@ Index hex_bump();
 
 Index color(const Color& color);
 Index combine_rgba(Index r, Index g, Index b, Index a);
+Index combine_hsva(Index h, Index s, Index v, Index a);
 
 Index scale_offset(Index src, double scale, double offset);
 
