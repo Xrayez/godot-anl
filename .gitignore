@@ -27,3 +27,6 @@
 
 # Editors
 .vscode
+
+# Godot files
+*.import
