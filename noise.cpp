@@ -664,6 +664,7 @@ Ref<Image> AnlNoise::map_to_image(const Vector2& size,
 void AnlNoise::gen_texture(const Vector2& size, anl::EMappingModes mode,
                            Index index, const String& filename) {
 
+    // Experimental
     anl::CArray2Drgba img(size.x, size.y);
     anl::mapRGBA2DNoZ(mode, img, kernel, anl::SMappingRanges(), index);
     anl::saveRGBAArray(filename.utf8().get_data(), &img);
