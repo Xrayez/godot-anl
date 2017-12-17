@@ -16,6 +16,18 @@ CKernel::CKernel()
     sqrt2_=constant(sqrt(2.0));
 }
 
+CKernel::CKernel(const CKernel &rhs)
+{
+	kernel_=rhs.kernel_;
+	pi_=rhs.pi_;
+	e_=rhs.e_;
+	one_=rhs.one_;
+	zero_=rhs.zero_;
+	point5_=rhs.point5_;
+	sqrt2_=rhs.sqrt2_;
+	vars_=rhs.vars_;
+}
+
 CInstructionIndex CKernel::pi()
 {
     return pi_;
@@ -65,6 +77,16 @@ CInstructionIndex CKernel::seed(unsigned int val)
     return lastIndex();
 }
 
+CInstructionIndex CKernel::seeder(CInstructionIndex sd, CInstructionIndex src)
+{
+	anl::SInstruction i;
+	i.sources_[0]=sd.index_;
+	i.sources_[1]=src.index_;
+	i.opcode_=anl::OP_Seeder;
+	kernel_.push_back(i);
+	return lastIndex();
+}
+
 CInstructionIndex CKernel::valueBasis(CInstructionIndex interpindex, CInstructionIndex seed)
 {
     anl::SInstruction i;
@@ -96,6 +118,31 @@ CInstructionIndex CKernel::simplexBasis(CInstructionIndex seed)
     //i.seed_=seed;
     kernel_.push_back(i);
     return lastIndex();
+}
+
+CInstructionIndex CKernel::fractal(CInstructionIndex seed, CInstructionIndex layer, CInstructionIndex persistence, CInstructionIndex lacunarity, CInstructionIndex numoctaves, CInstructionIndex frequency)
+{
+	anl::SInstruction i;
+	i.opcode_=anl::OP_Fractal;
+	i.sources_[0]=seed.index_;
+	i.sources_[1]=layer.index_;
+	i.sources_[2]=persistence.index_;
+	i.sources_[3]=lacunarity.index_;
+	i.sources_[4]=numoctaves.index_;
+	i.sources_[5]=frequency.index_;
+	kernel_.push_back(i);
+	return lastIndex();
+}
+
+CInstructionIndex CKernel::randomize(CInstructionIndex seed, CInstructionIndex low, CInstructionIndex high)
+{
+	anl::SInstruction i;
+	i.opcode_=anl::OP_Randomize;
+	i.sources_[0]=seed.index_;
+	i.sources_[1]=low.index_;
+	i.sources_[2]=high.index_;
+	kernel_.push_back(i);
+	return lastIndex();
 }
 
 CInstructionIndex CKernel::cellularBasis(CInstructionIndex f1, CInstructionIndex f2, CInstructionIndex f3, CInstructionIndex f4, CInstructionIndex d1, CInstructionIndex d2, CInstructionIndex d3, CInstructionIndex d4, CInstructionIndex dist, CInstructionIndex seed)
@@ -544,7 +591,7 @@ CInstructionIndex CKernel::minSequence(CInstructionIndex baseindex, unsigned int
     return lastIndex();
 }
 
-CInstructionIndex CKernel::blend(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control)
+CInstructionIndex CKernel::mix(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control)
 {
     anl::SInstruction i;
     i.opcode_=anl::OP_Blend;
@@ -566,6 +613,60 @@ CInstructionIndex CKernel::select(CInstructionIndex low, CInstructionIndex high,
     i.sources_[4]=falloff.index_;
     kernel_.push_back(i);
     return lastIndex();
+}
+
+CInstructionIndex CKernel::step(CInstructionIndex val, CInstructionIndex control)
+{
+    anl::SInstruction i;
+    i.opcode_=anl::OP_Step;
+    i.sources_[0]=val.index_;
+    i.sources_[1]=control.index_;
+    kernel_.push_back(i);
+    return lastIndex();
+}
+CInstructionIndex CKernel::linearStep(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control)
+{
+    anl::SInstruction i;
+    i.opcode_=anl::OP_LinearStep;
+    i.sources_[0]=low.index_;
+    i.sources_[1]=high.index_;
+    i.sources_[2]=control.index_;
+    kernel_.push_back(i);
+    return lastIndex();
+}
+CInstructionIndex CKernel::smoothStep(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control)
+{
+    anl::SInstruction i;
+    i.opcode_=anl::OP_SmoothStep;
+    i.sources_[0]=low.index_;
+    i.sources_[1]=high.index_;
+    i.sources_[2]=control.index_;
+    kernel_.push_back(i);
+    return lastIndex();
+}
+CInstructionIndex CKernel::smootherStep(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control)
+{
+    anl::SInstruction i;
+    i.opcode_=anl::OP_SmootherStep;
+    i.sources_[0]=low.index_;
+    i.sources_[1]=high.index_;
+    i.sources_[2]=control.index_;
+    kernel_.push_back(i);
+    return lastIndex();
+}
+
+CInstructionIndex CKernel::curveSection(CInstructionIndex lowv, CInstructionIndex t0, CInstructionIndex t1, CInstructionIndex v0, CInstructionIndex v1, CInstructionIndex control)
+{
+	anl::SInstruction i;
+	i.opcode_=anl::OP_CurveSection;
+	i.sources_[0]=lowv.index_;
+	i.sources_[1]=t0.index_;
+	i.sources_[2]=t1.index_;
+	i.sources_[3]=v0.index_;
+	i.sources_[4]=v1.index_;
+	i.sources_[5]=control.index_;
+	kernel_.push_back(i);
+	return lastIndex();
 }
 
 CInstructionIndex CKernel::simpleFractalLayer(unsigned int basistype, CInstructionIndex interpindex, double layerscale, double layerfreq, unsigned int s, bool rot,
@@ -920,6 +1021,18 @@ CInstructionIndex CKernel::combineRGBA(CInstructionIndex r, CInstructionIndex g,
 {
     anl::SInstruction i;
     i.opcode_=anl::OP_CombineRGBA;
+    i.sources_[0]=r.index_;
+    i.sources_[1]=g.index_;
+    i.sources_[2]=b.index_;
+    i.sources_[3]=a.index_;
+    kernel_.push_back(i);
+    return lastIndex();
+}
+
+CInstructionIndex CKernel::combineHSVA(CInstructionIndex r, CInstructionIndex g, CInstructionIndex b, CInstructionIndex a)
+{
+    anl::SInstruction i;
+    i.opcode_=anl::OP_CombineHSVA;
     i.sources_[0]=r.index_;
     i.sources_[1]=g.index_;
     i.sources_[2]=b.index_;

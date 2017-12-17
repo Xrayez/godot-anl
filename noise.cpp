@@ -269,10 +269,10 @@ Index AnlNoise::min_sequence(Index base, unsigned int number, unsigned int strid
     return min_sequence.getIndex();
 }
 
-Index AnlNoise::blend(Index low, Index high, Index control) {
+Index AnlNoise::mix(Index low, Index high, Index control) {
 
-    auto blend = kernel.blend(kernel[low], kernel[high], kernel[control]);
-    return blend.getIndex();
+    auto mix = kernel.mix(kernel[low], kernel[high], kernel[control]);
+    return mix.getIndex();
 }
 
 Index AnlNoise::select(Index low, Index high, Index control,
@@ -724,7 +724,7 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("max_sequence", "base_index", "number", "stride"),AnlNoise::max_sequence, DEFVAL(1));
     ClassDB::bind_method(D_METHOD("min_sequence", "base_index", "number", "stride"),AnlNoise::min_sequence, DEFVAL(1));
 
-    ClassDB::bind_method(D_METHOD("blend", "low_index", "high_index", "control_index"),&AnlNoise::blend);
+    ClassDB::bind_method(D_METHOD("mix", "low_index", "high_index", "control_index"),&AnlNoise::mix);
     ClassDB::bind_method(D_METHOD("select", "low_index", "high_index", "control_index", "threshold_index", "falloff_index"),&AnlNoise::select);
     ClassDB::bind_method(D_METHOD("clamp", "src_index", "low_index", "high_index"),&AnlNoise::clamp);
 

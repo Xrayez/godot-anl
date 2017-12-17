@@ -1,6 +1,7 @@
 #include "vm.h"
 #include "kernel.h"
 #include "utility.h"
+#include "random_gen.h"
 #include "hashing.h"
 #include <iostream>
 
@@ -186,6 +187,100 @@ SVMOutput CNoiseExecutor::evaluateBoth(InstructionListType &kernel, EvaluatedTyp
     return cache[index];
 }
 
+void CNoiseExecutor::seedSource(InstructionListType &kernel, EvaluatedType &evaluated, unsigned int index, unsigned int &seed)
+{
+	//std::cout << "Seed: " << seed << std::endl;
+	SInstruction &i=kernel[index];
+	evaluated[index]=false;
+	if(i.opcode_==OP_Seed)
+	{
+		i.outfloat_=(float)seed++;
+		return;
+	}
+	else
+	{
+		switch(i.opcode_)
+		{
+			case OP_NOP:
+			case OP_Seed:
+			case OP_Constant: return; break;
+			case OP_Seeder: for(int c=0; c<2; ++c) seedSource(kernel, evaluated, i.sources_[c], seed); return; break;
+			case OP_ValueBasis: seedSource(kernel, evaluated, i.sources_[1], seed); return; break;
+			case OP_GradientBasis: seedSource(kernel, evaluated, i.sources_[1], seed); return; break;
+			case OP_SimplexBasis: seedSource(kernel, evaluated, i.sources_[0], seed); return; break;
+			case OP_CellularBasis: for(int c=0; c<10; ++c) seedSource(kernel, evaluated, i.sources_[c], seed); return; break;
+			case OP_Add:
+			case OP_Subtract:
+			case OP_Multiply:
+			case OP_Divide:
+			case OP_ScaleDomain:
+			case OP_ScaleX:
+			case OP_ScaleY:
+			case OP_ScaleZ:
+			case OP_ScaleW:
+			case OP_ScaleU:
+			case OP_ScaleV:
+			case OP_TranslateDomain:
+			case OP_TranslateX:
+			case OP_TranslateY:
+			case OP_TranslateZ:
+			case OP_TranslateW:
+			case OP_TranslateU:
+			case OP_TranslateV: seedSource(kernel, evaluated, i.sources_[0], seed); seedSource(kernel, evaluated, i.sources_[1], seed); return; break;
+			case OP_RotateDomain: for(int c=0; c<5; ++c) seedSource(kernel, evaluated, i.sources_[c], seed); return; break;
+			case OP_Blend: for(int c=0; c<3; ++c) seedSource(kernel, evaluated, i.sources_[c], seed); return; break;
+			case OP_Select: for(int c=0; c<5; ++c) seedSource(kernel, evaluated, i.sources_[c], seed); return; break;
+			case OP_Min:
+			case OP_Max: seedSource(kernel, evaluated, i.sources_[0], seed); seedSource(kernel, evaluated, i.sources_[1], seed); return; break;
+			case OP_Abs: seedSource(kernel, evaluated, i.sources_[0], seed); return; break;
+			case OP_Pow: seedSource(kernel, evaluated, i.sources_[0], seed); seedSource(kernel, evaluated, i.sources_[1], seed); return; break;
+			case OP_Clamp: for(int c=0; c<3; ++c) seedSource(kernel, evaluated, i.sources_[c], seed); return; break;
+			case OP_Radial: return; break;
+			case OP_Sin:
+			case OP_Cos:
+			case OP_Tan:
+			case OP_ASin:
+			case OP_ACos:
+			case OP_ATan: seedSource(kernel, evaluated, i.sources_[0], seed); return; break;
+			case OP_Bias:
+			case OP_Gain:
+			case OP_Tiers:
+			case OP_SmoothTiers: seedSource(kernel, evaluated, i.sources_[0], seed); seedSource(kernel, evaluated, i.sources_[1], seed); return; break;
+			case OP_X:
+			case OP_Y:
+			case OP_Z:
+			case OP_W:
+			case OP_U:
+			case OP_V: return; break;
+			case OP_DX:
+			case OP_DY:
+			case OP_DZ:
+			case OP_DW:
+			case OP_DU:
+			case OP_DV: seedSource(kernel, evaluated, i.sources_[0], seed); seedSource(kernel, evaluated, i.sources_[1], seed); return; break;
+			case OP_Sigmoid: for(int c=0; c<3; ++c) seedSource(kernel, evaluated, i.sources_[c], seed); return; break;
+			case OP_Fractal: for(int c=0; c<6; ++c) seedSource(kernel,evaluated,i.sources_[c],seed); return; break;//i.outfloat_=(double)seed++; return; break;
+			case OP_Randomize:
+			case OP_SmoothStep:
+			case OP_SmootherStep:
+			case OP_LinearStep: for(int c=0; c<3; ++c) seedSource(kernel,evaluated,i.sources_[c],seed); return; break;
+			case OP_Step: for(int c=0; c<2; ++c) seedSource(kernel,evaluated,i.sources_[c],seed); return; break;
+			case OP_CurveSection: for(int c=0; c<6; ++c) seedSource(kernel,evaluated,i.sources_[c],seed); return; break;
+			case OP_HexTile: seedSource(kernel, evaluated, i.sources_[0], seed); return; break;
+			case OP_HexBump: return; break;
+			case OP_Color: return; break;
+			case OP_ExtractRed:
+			case OP_ExtractGreen:
+			case OP_ExtractBlue:
+			case OP_ExtractAlpha:
+			case OP_Grayscale: return; break;
+			case OP_CombineRGBA:
+			case OP_CombineHSVA: for(int c=0; c<4; ++c) seedSource(kernel, evaluated, i.sources_[c], seed); return; break;
+			default: return; break;
+		}
+	}
+}
+
 void CNoiseExecutor::evaluateInstruction(InstructionListType &kernel, EvaluatedType &evaluated, CoordCacheType &coordcache, CacheType &cache, unsigned int index, CCoordinate &coord)
 {
     if(index>=kernel.size()) return;
@@ -204,6 +299,18 @@ void CNoiseExecutor::evaluateInstruction(InstructionListType &kernel, EvaluatedT
         cache[index].set(i.outfloat_);
         return;
         break;
+	case OP_Seeder:
+	{
+		// Need to iterate through source chain and set seeds based on current seed.
+		unsigned int seed=(unsigned int)evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[0],coord);
+		seedSource(kernel,evaluated,i.sources_[1],seed);
+		evaluated[index]=true;
+		SVMOutput s1;
+        s1=evaluateBoth(kernel,evaluated,coordcache,cache,i.sources_[1],coord);
+        cache[index].set(s1);
+		return;
+		break;
+	}
 
     case OP_ValueBasis:
     {
@@ -650,7 +757,7 @@ void CNoiseExecutor::evaluateInstruction(InstructionListType &kernel, EvaluatedT
         double val=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[0],coord);
         double Tb=std::floor(val*(double)numsteps);
         evaluated[index]=true;
-        cache[index].set(Tb);
+        cache[index].set(Tb/(double)numsteps);
     }
     break;
     case OP_SmoothTiers:
@@ -913,7 +1020,8 @@ void CNoiseExecutor::evaluateInstruction(InstructionListType &kernel, EvaluatedT
         low=evaluateBoth(kernel, evaluated, coordcache,cache, i.sources_[0], coord);
         high=evaluateBoth(kernel, evaluated, coordcache,cache, i.sources_[1], coord);
         control=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[2], coord);
-        cache[index].set(low+(high-low)*control);
+        //cache[index].set(low+(high-low)*control);
+		cache[index].set(low*(1.0-control) + high*control);
         evaluated[index]=true;
         return;
     }
@@ -1102,6 +1210,123 @@ void CNoiseExecutor::evaluateInstruction(InstructionListType &kernel, EvaluatedT
     }
     break;
 
+	case OP_Fractal:
+	{
+		//layer,pers,lac,octaves
+		unsigned int numoctaves=(unsigned int)evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[4],coord);
+		unsigned int seed=(unsigned int)evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[0],coord);
+		double val=0.0f;
+		double freq=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[5],coord);
+		double lac=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[3],coord);
+		double pers=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[2],coord);
+		double amp=1.0;
+		CCoordinate mycoord=coord;
+		mycoord=mycoord*freq;
+
+		for(unsigned int c=0; c<numoctaves; ++c)
+		{
+			seedSource(kernel,evaluated,i.sources_[1],seed);
+			double v=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[1],mycoord);
+			val+=v*amp;
+			//val=v;
+			amp*=pers;
+			mycoord=mycoord*lac;
+		}
+		cache[index].set(val);
+		evaluated[index]=true;
+		return;
+	}
+
+	case OP_Randomize:  // Randomize a value range based on seed
+	{
+		unsigned int seed=(unsigned int)evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[0],coord);
+		KISS rnd;
+		rnd.setSeed(seed);
+		double low=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[1],coord);
+		double high=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[2],coord);
+		cache[index].set(low+rnd.get01()*(high-low));
+		evaluated[index]=true;
+		return;
+	}
+
+	case OP_SmoothStep:
+	{
+		double low,high;
+        double control;
+        low=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[0], coord);
+        high=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[1], coord);
+        control=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[2], coord);
+		double t=std::min(1.0, std::max(0.0, (control-low)/(high-low)));
+		t=t*t*(3.0-2.0*t);
+        cache[index].set(t);
+		evaluated[index]=true;
+		return;
+	}
+
+	case OP_SmootherStep:
+	{
+		double low,high;
+        double control;
+        low=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[0], coord);
+        high=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[1], coord);
+        control=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[2], coord);
+		double t=std::min(1.0, std::max(0.0, (control-low)/(high-low)));
+		t=t*t*t*(t*(t*6 - 15) + 10);
+        cache[index].set(t);
+		evaluated[index]=true;
+		return;
+	}
+
+	case OP_LinearStep:
+	{
+		double low,high;
+        double control;
+        low=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[0], coord);
+        high=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[1], coord);
+        control=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[2], coord);
+		double t=(control-low)/(high-low);
+		cache[index].set(std::min(1.0, std::max(0.0, t)));
+		evaluated[index]=true;
+		return;
+	}
+
+	case OP_Step:
+	{
+		double val;
+        double control;
+        val=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[0], coord);
+        control=evaluateParameter(kernel, evaluated, coordcache,cache, i.sources_[1], coord);
+        cache[index].set(control<val ? 0.0 : 1.0);
+		evaluated[index]=true;
+		return;
+	}
+
+	case OP_CurveSection:
+	{
+		SVMOutput lowv=evaluateBoth(kernel,evaluated,coordcache,cache,i.sources_[0],coord);
+		double control=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[5],coord);
+		double t0=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[1],coord);
+		double t1=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[2],coord);
+
+		if(control<t0)
+		{
+			cache[index].set(lowv);
+			evaluated[index]=true;
+		}
+		else
+		{
+			double interp=(control-t0)/(t1-t0);
+			interp=interp*interp*interp*(interp*(interp*6.0-15.0)+10.0);
+			interp=std::min(1.0, std::max(0.0, interp));
+			SVMOutput v0=evaluateBoth(kernel,evaluated,coordcache,cache,i.sources_[3],coord);
+			SVMOutput v1=evaluateBoth(kernel,evaluated,coordcache,cache,i.sources_[4],coord);
+
+			cache[index].set(v0 + (v1-v0)*interp);
+			evaluated[index]=true;
+		}
+		return;
+	}
+
     case OP_Radial:
     {
         double len=0;
@@ -1218,7 +1443,38 @@ void CNoiseExecutor::evaluateInstruction(InstructionListType &kernel, EvaluatedT
         double g=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[1],coord);
         double b=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[2],coord);
         double a=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[3],coord);
-        cache[index].outrgba_=SRGBA(r,g,b,a);
+        cache[index].set(SRGBA(r,g,b,a));
+        evaluated[index]=true;
+        return;
+    }
+    break;
+
+	case OP_CombineHSVA:
+    {
+        double h=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[0],coord);
+        double s=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[1],coord);
+        double v=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[2],coord);
+        double a=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[3],coord);
+		SRGBA col;
+
+		double P,Q,T,fract;
+		if (h>=360.0) h=0.0;
+		else h=h/60.0;
+		fract = h - std::floor(h);
+
+		P = v*(1.0-s);
+		Q = v*(1.0-s*fract);
+		T = v*(1.0-s*(1.0-fract));
+
+		if (h>=0 and h<1) col=SRGBA(v,T,P,1);
+		else if (h>=1 and h<2) col=SRGBA(Q,v,P,a);
+		else if (h>=2 and h<3) col=SRGBA(P,v,T,a);
+		else if (h>=3 and h<4) col=SRGBA(P,Q,v,a);
+		else if (h>=4 and h<5) col=SRGBA(T,P,v,a);
+		else if (h>=5 and h<6) col=SRGBA(v,P,Q,a);
+		else col=SRGBA(0,0,0,a);
+
+        cache[index].set(col);
         evaluated[index]=true;
         return;
     }

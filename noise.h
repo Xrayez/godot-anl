@@ -72,7 +72,7 @@ Index multiply_sequence(Index base, Index number, unsigned int stride = 1);
 Index max_sequence(Index base, unsigned int number, unsigned int stride = 1);
 Index min_sequence(Index base, unsigned int number, unsigned int stride = 1);
 
-Index blend(Index low, Index high, Index control);
+Index mix(Index low, Index high, Index control);
 Index select(Index low, Index high, Index control,
              Index threshold, Index falloff);
 Index clamp(Index src, Index low, Index high);

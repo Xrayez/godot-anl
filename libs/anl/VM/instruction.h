@@ -13,6 +13,7 @@ enum EOpcodes
     OP_NOP,
     OP_Seed,
     OP_Constant,
+	OP_Seeder,
     OP_ValueBasis,
     OP_GradientBasis,
     OP_SimplexBasis,
@@ -71,6 +72,15 @@ enum EOpcodes
 
     OP_Sigmoid,
 
+	OP_Fractal,
+	OP_Randomize,
+	OP_SmoothStep,
+	OP_SmootherStep,
+	OP_LinearStep,
+	OP_Step,
+
+	OP_CurveSection,
+
     // Patterns
     OP_HexTile,
     OP_HexBump,
@@ -82,7 +92,8 @@ enum EOpcodes
     OP_ExtractBlue,
     OP_ExtractAlpha,
     OP_Grayscale,
-    OP_CombineRGBA
+    OP_CombineRGBA,
+	OP_CombineHSVA
 };
 
 struct SInstruction
@@ -117,7 +128,7 @@ public:
     {
         index_=0;
     }
-    
+
     CInstructionIndex(unsigned int i)
     {
         index_=i;
@@ -195,8 +206,8 @@ public:
         index_=c.index_;
         return *this;
     }
-    
-    unsigned int getIndex() const 
+
+    unsigned int getIndex() const
     {
         return index_;
     }

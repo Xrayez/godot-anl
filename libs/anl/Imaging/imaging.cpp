@@ -195,7 +195,7 @@ void loadRGBAArray(std::string filename, TArray2D<anl::SRGBA> *array)
 void map2DChunk(SChunk chunk)
 {
     static double pi2=3.141592*2.0;
-    CNoiseExecutor m(*(chunk.kernel));
+    CNoiseExecutor m((chunk.kernel));
     SMappingRanges ranges=chunk.ranges;
     double z=chunk.z;
 
@@ -205,8 +205,8 @@ void map2DChunk(SChunk chunk)
         {
             int realy=y+chunk.chunkyoffset;
             int index=y*chunk.awidth+x;
-            double p=(double) x/ (double)(chunk.awidth-1);
-            double q=(double) realy/(double)(chunk.aheight-1);
+            double p=(double) x/ (double)(chunk.awidth);
+            double q=(double) realy/(double)(chunk.aheight);
             double r;
             double nx,ny,nz,nw,nu,nv,val=0.0;
             double dx, dy, dz;
@@ -343,7 +343,7 @@ void map2DChunk(SChunk chunk)
 void map2DChunkNoZ(SChunk chunk)
 {
     static double pi2=3.141592*2.0;
-    CNoiseExecutor m(*(chunk.kernel));
+    CNoiseExecutor m((chunk.kernel));
     SMappingRanges ranges=chunk.ranges;
     double z=chunk.z;
 
@@ -353,8 +353,8 @@ void map2DChunkNoZ(SChunk chunk)
         {
             int realy=y+chunk.chunkyoffset;
             int index=y*chunk.awidth+x;
-            double p=(double) x/ (double)(chunk.awidth-1);
-            double q=(double) realy/(double)(chunk.aheight-1);
+            double p=(double) x/ (double)(chunk.awidth);
+            double q=(double) realy/(double)(chunk.aheight);
             double r;
             double nx,ny,nz,nw,nu,nv,val=0.0;
             double dx, dy, dz;
@@ -504,7 +504,7 @@ void map2D(int seamlessmode, CArray2Dd &a, CKernel &k, SMappingRanges ranges, do
     chunk.aheight=a.height();
     chunk.chunkheight=a.height();
     chunk.chunkyoffset=0;
-    chunk.kernel=&k;
+    chunk.kernel=k;
     chunk.ranges=ranges;
     chunk.z=z;
     chunk.at=at;
@@ -527,7 +527,7 @@ void map2D(int seamlessmode, CArray2Dd &a, CKernel &k, SMappingRanges ranges, do
         if(thread==threadcount-1) chunk.chunkheight=a.height()-(chunksize*(threadcount-1));
         else chunk.chunkheight=chunksize;
         chunk.chunkyoffset=offsety;
-        chunk.kernel=&k;
+        chunk.kernel=k;
         chunk.ranges=ranges;
         chunk.z=z;
         threads.push_back(std::thread(map2DChunk, chunk));
@@ -550,7 +550,7 @@ void map2DNoZ(int seamlessmode, CArray2Dd &a, CKernel &k, SMappingRanges ranges,
     chunk.aheight=a.height();
     chunk.chunkheight=a.height();
     chunk.chunkyoffset=0;
-    chunk.kernel=&k;
+    chunk.kernel=k;
     chunk.ranges=ranges;
     chunk.z=0;
     chunk.at=at;
@@ -573,7 +573,7 @@ void map2DNoZ(int seamlessmode, CArray2Dd &a, CKernel &k, SMappingRanges ranges,
         if(thread==threadcount-1) chunk.chunkheight=a.height()-(chunksize*(threadcount-1));
         else chunk.chunkheight=chunksize;
         chunk.chunkyoffset=offsety;
-        chunk.kernel=&k;
+        chunk.kernel=k;
         chunk.ranges=ranges;
         chunk.z=0;
         threads.push_back(std::thread(map2DChunkNoZ, chunk));
@@ -589,7 +589,7 @@ void map2DNoZ(int seamlessmode, CArray2Dd &a, CKernel &k, SMappingRanges ranges,
 void map3DChunk(SChunk3D chunk)
 {
     static double pi2=3.141592*2.0;
-    CNoiseExecutor m(*(chunk.kernel));
+    CNoiseExecutor m((chunk.kernel));
     SMappingRanges ranges=chunk.ranges;
 
     for(int x=0; x<chunk.awidth; ++x)
@@ -600,9 +600,9 @@ void map3DChunk(SChunk3D chunk)
             {
                 int realz=z+chunk.chunkzoffset;
                 int index=(z*chunk.awidth*chunk.aheight) + y*chunk.awidth+x;
-                double p=(double) x/ (double)(chunk.awidth-1);
-                double q=(double) y/(double)(chunk.aheight-1);
-                double r=(double) realz/(double)(chunk.adepth-1);
+                double p=(double) x/ (double)(chunk.awidth);
+                double q=(double) y/(double)(chunk.aheight);
+                double r=(double) realz/(double)(chunk.adepth);
                 double nx,ny,nz,nw,nu,nv,val=0.0;
                 double dx, dy, dz;
                 switch(chunk.seamlessmode)
@@ -747,7 +747,7 @@ void map3D(int seamlessmode, CArray3Dd &a, CKernel &k, SMappingRanges ranges, CI
     chunk.adepth=a.depth();
     chunk.chunkdepth=a.depth();
     chunk.chunkzoffset=0;
-    chunk.kernel=&k;
+    chunk.kernel=k;
     chunk.ranges=ranges;
     chunk.at=index;
 
@@ -772,7 +772,7 @@ void map3D(int seamlessmode, CArray3Dd &a, CKernel &k, SMappingRanges ranges, CI
         if(thread==threadcount-1) chunk.chunkdepth=a.depth()-(chunksize*(threadcount-1));
         else chunk.chunkdepth=chunksize;
         chunk.chunkzoffset=offsetz;
-        chunk.kernel=&k;
+        chunk.kernel=k;
         chunk.ranges=ranges;
         threads.push_back(std::thread(map3DChunk, chunk));
     }
@@ -784,7 +784,7 @@ void map3D(int seamlessmode, CArray3Dd &a, CKernel &k, SMappingRanges ranges, CI
 void mapRGBA2DChunk(SRGBAChunk chunk)
 {
     static double pi2=3.141592*2.0;
-    CNoiseExecutor m(*(chunk.kernel));
+    CNoiseExecutor m((chunk.kernel));
     SMappingRanges ranges=chunk.ranges;
     double z=chunk.z;
 
@@ -794,8 +794,8 @@ void mapRGBA2DChunk(SRGBAChunk chunk)
         {
             int realy=y+chunk.chunkyoffset;
             int index=y*chunk.awidth+x;
-            double p=(double) x/ (double)(chunk.awidth-1);
-            double q=(double) realy/(double)(chunk.aheight-1);
+            double p=(double) x/ (double)(chunk.awidth);
+            double q=(double) realy/(double)(chunk.aheight);
             double r;
             double nx,ny,nz,nw,nu,nv;
             SRGBA val;
@@ -933,7 +933,7 @@ void mapRGBA2DChunk(SRGBAChunk chunk)
 void mapRGBA2DChunkNoZ(SRGBAChunk chunk)
 {
     static double pi2=3.141592*2.0;
-    CNoiseExecutor m(*(chunk.kernel));
+    CNoiseExecutor m((chunk.kernel));
     SMappingRanges ranges=chunk.ranges;
     double z=chunk.z;
 
@@ -943,8 +943,8 @@ void mapRGBA2DChunkNoZ(SRGBAChunk chunk)
         {
             int realy=y+chunk.chunkyoffset;
             int index=y*chunk.awidth+x;
-            double p=(double) x/ (double)(chunk.awidth-1);
-            double q=(double) realy/(double)(chunk.aheight-1);
+            double p=(double) x/ (double)(chunk.awidth);
+            double q=(double) realy/(double)(chunk.aheight);
             double r;
             double nx,ny,nz,nw,nu,nv;
             SRGBA val;
@@ -1089,7 +1089,7 @@ void mapRGBA2D(int seamlessmode, CArray2Drgba &a, CKernel &k, SMappingRanges ran
     chunk.aheight=a.height();
     chunk.chunkheight=a.height();
     chunk.chunkyoffset=0;
-    chunk.kernel=&k;
+    chunk.kernel=k;
     chunk.ranges=ranges;
     chunk.z=z;
     chunk.at=at;
@@ -1112,7 +1112,7 @@ void mapRGBA2D(int seamlessmode, CArray2Drgba &a, CKernel &k, SMappingRanges ran
         if(thread==threadcount-1) chunk.chunkheight=a.height()-(chunksize*(threadcount-1));
         else chunk.chunkheight=chunksize;
         chunk.chunkyoffset=offsety;
-        chunk.kernel=&k;
+        chunk.kernel=k;
         chunk.ranges=ranges;
         chunk.z=z;
         threads.push_back(std::thread(mapRGBA2DChunk, chunk));
@@ -1135,7 +1135,7 @@ void mapRGBA2DNoZ(int seamlessmode, CArray2Drgba &a, CKernel &k, SMappingRanges 
     chunk.aheight=a.height();
     chunk.chunkheight=a.height();
     chunk.chunkyoffset=0;
-    chunk.kernel=&k;
+    chunk.kernel=k;
     chunk.ranges=ranges;
     chunk.z=0;
     chunk.at=at;
@@ -1158,7 +1158,7 @@ void mapRGBA2DNoZ(int seamlessmode, CArray2Drgba &a, CKernel &k, SMappingRanges 
         if(thread==threadcount-1) chunk.chunkheight=a.height()-(chunksize*(threadcount-1));
         else chunk.chunkheight=chunksize;
         chunk.chunkyoffset=offsety;
-        chunk.kernel=&k;
+        chunk.kernel=k;
         chunk.ranges=ranges;
         chunk.z=0;
         threads.push_back(std::thread(mapRGBA2DChunkNoZ, chunk));
@@ -1177,7 +1177,7 @@ struct SRGBAChunk3D
     SRGBA *a;
     int awidth, aheight, adepth;
     int chunkdepth, chunkzoffset;
-    CKernel *kernel;
+    CKernel kernel;
     SMappingRanges ranges;
     CInstructionIndex at;
 
@@ -1187,7 +1187,7 @@ struct SRGBAChunk3D
 void mapRGBA3DChunk(SRGBAChunk3D chunk)
 {
     static double pi2=3.141592*2.0;
-    CNoiseExecutor m(*(chunk.kernel));
+    CNoiseExecutor m((chunk.kernel));
     SMappingRanges ranges=chunk.ranges;
 
     for(int x=0; x<chunk.awidth; ++x)
@@ -1198,9 +1198,9 @@ void mapRGBA3DChunk(SRGBAChunk3D chunk)
             {
                 int realz=z+chunk.chunkzoffset;
                 int index=(z*chunk.awidth*chunk.aheight) + y*chunk.awidth+x;
-                double p=(double) x/ (double)(chunk.awidth-1);
-                double q=(double) y/(double)(chunk.aheight-1);
-                double r=(double) realz/(double)(chunk.adepth-1);
+                double p=(double) x/ (double)(chunk.awidth);
+                double q=(double) y/(double)(chunk.aheight);
+                double r=(double) realz/(double)(chunk.adepth);
                 double nx,ny,nz,nw,nu,nv=0.0;
                 SRGBA val;
                 double dx, dy, dz;
@@ -1346,7 +1346,7 @@ void mapRGBA3D(int seamlessmode, CArray3Drgba &a, CKernel &k, SMappingRanges ran
     chunk.adepth=a.depth();
     chunk.chunkdepth=a.depth();
     chunk.chunkzoffset=0;
-    chunk.kernel=&k;
+    chunk.kernel=k;
     chunk.ranges=ranges;
     chunk.at=index;
 
@@ -1371,7 +1371,7 @@ void mapRGBA3D(int seamlessmode, CArray3Drgba &a, CKernel &k, SMappingRanges ran
         if(thread==threadcount-1) chunk.chunkdepth=a.depth()-(chunksize*(threadcount-1));
         else chunk.chunkdepth=chunksize;
         chunk.chunkzoffset=offsetz;
-        chunk.kernel=&k;
+        chunk.kernel=k;
         chunk.ranges=ranges;
         threads.push_back(std::thread(mapRGBA3DChunk, chunk));
     }

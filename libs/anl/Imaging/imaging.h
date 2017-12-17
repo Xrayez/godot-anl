@@ -5,6 +5,7 @@
 
 #include "../templates/tarrays.h"
 #include "../VM/vm.h"
+#include "../VM/kernel.h"
 
 namespace anl
 {
@@ -94,7 +95,7 @@ struct SChunk
     double *a;
     int awidth, aheight;
     int chunkheight, chunkyoffset;
-    CKernel *kernel;
+    CKernel kernel;
     SMappingRanges ranges;
     CInstructionIndex at;
     double z;
@@ -108,7 +109,7 @@ struct SChunk3D
     double *a;
     int awidth, aheight, adepth;
     int chunkdepth, chunkzoffset;
-    CKernel *kernel;
+    CKernel kernel;
     SMappingRanges ranges;
     CInstructionIndex at;
 
@@ -121,7 +122,7 @@ struct SRGBAChunk
     SRGBA *a;
     int awidth, aheight;
     int chunkheight, chunkyoffset;
-    CKernel *kernel;
+    CKernel kernel;
     SMappingRanges ranges;
     double z;
     CInstructionIndex at;

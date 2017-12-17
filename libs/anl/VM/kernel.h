@@ -36,6 +36,9 @@ class CKernel
 {
 public:
     CKernel();
+	CKernel(const CKernel &rhs);
+
+
 
     CInstructionIndex pi();
     CInstructionIndex e();
@@ -46,6 +49,7 @@ public:
 
     CInstructionIndex constant(double val);
     CInstructionIndex seed(unsigned int val);
+	CInstructionIndex seeder(CInstructionIndex sd, CInstructionIndex src);
     CInstructionIndex valueBasis(CInstructionIndex interpindex, CInstructionIndex seed);
     CInstructionIndex gradientBasis(CInstructionIndex interpindex, CInstructionIndex seed);
     CInstructionIndex simplexBasis(CInstructionIndex seed);
@@ -86,7 +90,7 @@ public:
     CInstructionIndex maxSequence(CInstructionIndex baseindex, unsigned int number, unsigned int stride);
     CInstructionIndex minSequence(CInstructionIndex baseindex, unsigned int number, unsigned int stride);
 
-    CInstructionIndex blend(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control);
+    CInstructionIndex mix(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control);
     CInstructionIndex select(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control, CInstructionIndex threshold, CInstructionIndex falloff);
     CInstructionIndex clamp(CInstructionIndex src, CInstructionIndex low, CInstructionIndex high);
 
@@ -119,6 +123,15 @@ public:
 
     CInstructionIndex radial();
 
+	CInstructionIndex fractal(CInstructionIndex seed, CInstructionIndex layer, CInstructionIndex persistence, CInstructionIndex lacunarity, CInstructionIndex numoctaves, CInstructionIndex freq);
+	CInstructionIndex randomize(CInstructionIndex seed, CInstructionIndex low, CInstructionIndex high);
+	CInstructionIndex step(CInstructionIndex val, CInstructionIndex control);
+	CInstructionIndex linearStep(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control);
+	CInstructionIndex smoothStep(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control);
+	CInstructionIndex smootherStep(CInstructionIndex low, CInstructionIndex high, CInstructionIndex control);
+
+	CInstructionIndex curveSection(CInstructionIndex lowv, CInstructionIndex t0, CInstructionIndex t1, CInstructionIndex v0, CInstructionIndex v1, CInstructionIndex control);
+
     // Patterns
     CInstructionIndex hexTile(CInstructionIndex seed);
     CInstructionIndex hexBump();
@@ -127,6 +140,7 @@ public:
     CInstructionIndex color(float r, float g, float b, float a);
 
     CInstructionIndex combineRGBA(CInstructionIndex r, CInstructionIndex g, CInstructionIndex b, CInstructionIndex a);
+	CInstructionIndex combineHSVA(CInstructionIndex h, CInstructionIndex s, CInstructionIndex v, CInstructionIndex a);
 
     CInstructionIndex scaleOffset(CInstructionIndex src, double scale, double offset);
 
