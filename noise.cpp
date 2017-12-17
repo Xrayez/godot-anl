@@ -76,8 +76,8 @@ Index AnlNoise::simplex_basis(Index seed) {
     return simplex_basis.getIndex();
 }
 
-Index AnlNoise::cellular_basis(const PoolVector<int>& f,
-                               const PoolVector<int>& d,
+Index AnlNoise::cellular_basis(const Vector<int>& f,
+                               const Vector<int>& d,
                                Index distance, Index seed) {
 
     ERR_FAIL_COND_V(f.size() < 4, 0);
@@ -429,7 +429,7 @@ Index AnlNoise::radial() {
     return radial.getIndex();
 }
 
-Index AnlNoise::fractal(Index seed, Index layer, const PoolVector<int>& params) {
+Index AnlNoise::fractal(Index seed, Index layer, const Vector<int>& params) {
 
     ERR_FAIL_COND_V(params.size() < 4, 0);
 
@@ -476,8 +476,8 @@ Index AnlNoise::smoother_step(Index low, Index high, Index control) {
 }
 
 Index AnlNoise::curve_section(Index lowv,
-                              const PoolVector<int>& t,
-                              const PoolVector<int>& v,
+                              const Vector<int>& t,
+                              const Vector<int>& v,
                               Index control) {
 
     ERR_FAIL_COND_V(t.size() < 2, 0);
@@ -536,8 +536,8 @@ Index AnlNoise::scale_offset(Index src, double scale, double offset) {
 }
 
 Index AnlNoise::fractal_layer(anl::BasisTypes basis, Index interp_type,
-                              const PoolVector<real_t>& layer_params,
-                              const PoolVector<real_t>& axis_params,
+                              const Vector<real_t>& layer_params,
+                              const Vector<real_t>& axis_params,
                               bool rot) {
 
     ERR_FAIL_COND_V(layer_params.size() < 4, 0);
@@ -556,8 +556,8 @@ Index AnlNoise::fractal_layer(anl::BasisTypes basis, Index interp_type,
 }
 
 Index AnlNoise::ridged_layer(anl::BasisTypes basis, Index interp_type,
-                              const PoolVector<real_t>& layer_params,
-                              const PoolVector<real_t>& axis_params,
+                              const Vector<real_t>& layer_params,
+                              const Vector<real_t>& axis_params,
                               bool rot) {
 
     ERR_FAIL_COND_V(layer_params.size() < 4, 0);
@@ -576,8 +576,8 @@ Index AnlNoise::ridged_layer(anl::BasisTypes basis, Index interp_type,
 }
 
 Index AnlNoise::billow_layer(anl::BasisTypes basis, Index interp_type,
-                              const PoolVector<real_t>& layer_params,
-                              const PoolVector<real_t>& axis_params,
+                              const Vector<real_t>& layer_params,
+                              const Vector<real_t>& axis_params,
                               bool rot) {
 
     ERR_FAIL_COND_V(layer_params.size() < 4, 0);
@@ -596,7 +596,7 @@ Index AnlNoise::billow_layer(anl::BasisTypes basis, Index interp_type,
 }
 
 Index AnlNoise::fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
-          const PoolVector<real_t>& params,
+          const Vector<real_t>& params,
           bool rot) {
 
     ERR_FAIL_COND_V(params.size() < 3, 0);
@@ -612,7 +612,7 @@ Index AnlNoise::fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
 }
 
 Index AnlNoise::ridged_multifractal(anl::BasisTypes basis, anl::InterpolationTypes interp,
-                                    const PoolVector<real_t>& params,
+                                    const Vector<real_t>& params,
                                     bool rot) {
 
     ERR_FAIL_COND_V(params.size() < 3, 0);
@@ -628,7 +628,7 @@ Index AnlNoise::ridged_multifractal(anl::BasisTypes basis, anl::InterpolationTyp
 }
 
 Index AnlNoise::billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
-                       const PoolVector<real_t>& params,
+                       const Vector<real_t>& params,
                        bool rot) {
 
     ERR_FAIL_COND_V(params.size() < 3, 0);
@@ -668,7 +668,7 @@ double AnlNoise::get_scalar_4d(double x, double y, double z, double w, Index ind
     return vm.evaluateScalar(x, y, z, w, index);
 }
 
-double AnlNoise::get_scalar_6d(const PoolVector<real_t>& axis, Index index) {
+double AnlNoise::get_scalar_6d(const Vector<real_t>& axis, Index index) {
 
     return vm.evaluateScalar(axis[0], axis[1], axis[2],
                              axis[3], axis[4], axis[5], index);
@@ -692,7 +692,7 @@ Color AnlNoise::get_color_4d(double x, double y, double z, double w, Index index
     return Color(c.r, c.g, c.b, c.a);
 }
 
-Color AnlNoise::get_color_6d(const PoolVector<real_t>& axis, Index index) {
+Color AnlNoise::get_color_6d(const Vector<real_t>& axis, Index index) {
 
     anl::SRGBA c = vm.evaluateColor(axis[0], axis[1], axis[2],
                                     axis[3], axis[4], axis[5], index);
