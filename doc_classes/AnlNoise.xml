@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<doc version="3.0.alpha.custom_build" name="Engine Types">
-<class name="AnlNoise" inherits="Reference" category="Core">
+<class name="AnlNoise" inherits="Reference" category="Core" version="3.0-beta">
 	<brief_description>
-        AnlNoise class used for compound noise generation
+		AnlNoise class used for compound noise generation
 	</brief_description>
 	<description>
-        AnlNoise is a module that can be used for generating a variety of noise types in a modular way. Noise functions can be chained together to create more complex functions out of elementary ones.
-
+	    AnlNoise class can be used for generating a variety of noise types in a modular way. Noise functions can be chained together to create more complex functions out of elementary ones.
         The noise generation procedure consists of the two main steps:
-
         1. Adding elementary noise functions to Kernel by calling methods that return an index of the created function. The returned index can be then passed to other noise functions that can use it, building a pipeline.
-
         2. Using NoiseExecutor methods (e.g get_scalar_2d) to obtain the noise at specified index, virtually at any point of the function chain.
 	</description>
+	<tutorials>
+	</tutorials>
+	<demos>
+	</demos>
 	<methods>
 		<method name="abs">
 			<return type="int">
@@ -20,6 +20,7 @@
 			<argument index="0" name="src_index" type="int">
 			</argument>
 			<description>
+				Returns an index to the absolute of the [code]src_index[/code] function.
 			</description>
 		</method>
 		<method name="acos">
@@ -28,6 +29,7 @@
 			<argument index="0" name="src_index" type="int">
 			</argument>
 			<description>
+				Returns an index to the arc cosine of the [code]src_index[/code] function.
 			</description>
 		</method>
 		<method name="add">
@@ -38,6 +40,8 @@
 			<argument index="1" name="src2_index" type="int">
 			</argument>
 			<description>
+				Adds [code]src1_index[/code] and [code]src2_index[/code] functions and returns the result.
+				Similar to union operation.
 			</description>
 		</method>
 		<method name="add_sequence">
@@ -90,6 +94,7 @@
 			<argument index="3" name="rot" type="bool" default="true">
 			</argument>
 			<description>
+				params: number of octaves, frequency, seed.
 			</description>
 		</method>
 		<method name="billow_layer">
@@ -106,18 +111,8 @@
 			<argument index="4" name="rot" type="bool" default="true">
 			</argument>
 			<description>
-			</description>
-		</method>
-		<method name="blend">
-			<return type="int">
-			</return>
-			<argument index="0" name="low_index" type="int">
-			</argument>
-			<argument index="1" name="high_index" type="int">
-			</argument>
-			<argument index="2" name="control_index" type="int">
-			</argument>
-			<description>
+				layer_params: scale, frequency, seed, angle.
+				axis_params: ax, ay, az.
 			</description>
 		</method>
 		<method name="cellular_basis">
@@ -132,6 +127,8 @@
 			<argument index="3" name="seed_index" type="int">
 			</argument>
 			<description>
+				f: f0 index, f1 index, f2 index, f3 index.
+				d: d0 index, d1 index, d2 index, d3 index.
 			</description>
 		</method>
 		<method name="clamp">
@@ -154,6 +151,22 @@
 			<description>
 			</description>
 		</method>
+		<method name="combine_hsva">
+			<return type="int">
+			</return>
+			<argument index="0" name="h_index" type="int">
+			</argument>
+			<argument index="1" name="s_index" type="int">
+			</argument>
+			<argument index="2" name="v_index" type="int">
+			</argument>
+			<argument index="3" name="a_index" type="int">
+			</argument>
+			<description>
+				Treats and combines specified noise functions as hue, saturation, value and alpha channels (HSVA).
+				This can be used to create colored textures.
+			</description>
+		</method>
 		<method name="combine_rgba">
 			<return type="int">
 			</return>
@@ -166,6 +179,8 @@
 			<argument index="3" name="a_index" type="int">
 			</argument>
 			<description>
+				Treats and combines specified noise functions into red, green, blue and alpha channels (RGBA).
+				This can be used to create colored textures.
 			</description>
 		</method>
 		<method name="constant">
@@ -174,6 +189,8 @@
 			<argument index="0" name="value" type="float">
 			</argument>
 			<description>
+				Generates a noise function with constant value of [code]value[/code].
+				Perhaps the most commonly used noise function. Think of this as [code]int[/code] or [code]float[/code] variable that can be passed to other functions as an argument.
 			</description>
 		</method>
 		<method name="cos">
@@ -184,6 +201,22 @@
 			<description>
 			</description>
 		</method>
+		<method name="curve_section">
+			<return type="int">
+			</return>
+			<argument index="0" name="lowv_index" type="int">
+			</argument>
+			<argument index="1" name="t_indexes" type="PoolIntArray">
+			</argument>
+			<argument index="2" name="v_indexes" type="PoolIntArray">
+			</argument>
+			<argument index="3" name="control_index" type="int">
+			</argument>
+			<description>
+				t: t0 index, t1 index.
+				v: v0 index, v1 index.
+			</description>
+		</method>
 		<method name="divide">
 			<return type="int">
 			</return>
@@ -192,6 +225,8 @@
 			<argument index="1" name="src2_index" type="int">
 			</argument>
 			<description>
+				Divides [code]src1_index[/code] by [code]src2_index[/code] functions and returns the result.
+				Similar to symmetric difference operation.
 			</description>
 		</method>
 		<method name="du">
@@ -258,6 +293,7 @@
 			<return type="int">
 			</return>
 			<description>
+				Generates a noise function with constant value of e (Euler number).
 			</description>
 		</method>
 		<method name="evaluate">
@@ -280,6 +316,20 @@
 			<argument index="3" name="rot" type="bool" default="true">
 			</argument>
 			<description>
+				params: number of octaves, frequency, seed.
+			</description>
+		</method>
+		<method name="fractal">
+			<return type="int">
+			</return>
+			<argument index="0" name="seed_index" type="int">
+			</argument>
+			<argument index="1" name="layer_index" type="int">
+			</argument>
+			<argument index="2" name="params" type="PoolIntArray">
+			</argument>
+			<description>
+				params: persistence, lacunarity, number of octaves, frequency.
 			</description>
 		</method>
 		<method name="fractal_layer">
@@ -296,6 +346,8 @@
 			<argument index="4" name="rot" type="bool" default="true">
 			</argument>
 			<description>
+				layer_params: scale, frequency, seed, angle.
+				axis_params: ax, ay, az.
 			</description>
 		</method>
 		<method name="gain">
@@ -456,18 +508,44 @@
 			<description>
 			</description>
 		</method>
+		<method name="linear_step">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
 		<method name="map_to_image">
 			<return type="Image">
 			</return>
 			<argument index="0" name="size" type="Vector2">
 			</argument>
-			<argument index="1" name="mode" type="int" enum="anl.EMappingModes">
+			<argument index="1" name="index" type="int">
 			</argument>
-			<argument index="2" name="index" type="int">
+			<argument index="2" name="mode" type="int" enum="anl.EMappingModes" default="0">
 			</argument>
-			<argument index="3" name="map_start" type="Vector2" default="Vector2( -1, -1 )">
+			<argument index="3" name="mapping_ranges" type="Rect2" default="Rect2( -1, -1, 2, 2 )">
 			</argument>
-			<argument index="4" name="map_end" type="Vector2" default="Vector2( 1, 1 )">
+			<description>
+			</description>
+		</method>
+		<method name="map_to_texture">
+			<return type="Texture">
+			</return>
+			<argument index="0" name="size" type="Vector2">
+			</argument>
+			<argument index="1" name="index" type="int">
+			</argument>
+			<argument index="2" name="mode" type="int" enum="anl.EMappingModes" default="0">
+			</argument>
+			<argument index="3" name="mapping_ranges" type="Rect2" default="Rect2( -1, -1, 2, 2 )">
+			</argument>
+			<argument index="4" name="flags" type="int" default="7">
 			</argument>
 			<description>
 			</description>
@@ -516,6 +594,18 @@
 			<description>
 			</description>
 		</method>
+		<method name="mix">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
 		<method name="multiply">
 			<return type="int">
 			</return>
@@ -524,6 +614,8 @@
 			<argument index="1" name="src2_index" type="int">
 			</argument>
 			<description>
+				Multiplies [code]src1_index[/code] and [code]src2_index[/code] functions and returns the result.
+				Similar to intersection operation.
 			</description>
 		</method>
 		<method name="multiply_sequence">
@@ -542,18 +634,21 @@
 			<return type="int">
 			</return>
 			<description>
+				Generates a noise function with constant value of 1.
 			</description>
 		</method>
 		<method name="pi">
 			<return type="int">
 			</return>
 			<description>
+				Generates a noise function with constant value of PI.
 			</description>
 		</method>
 		<method name="point5">
 			<return type="int">
 			</return>
 			<description>
+				Generates a noise function with constant value of 0.5.
 			</description>
 		</method>
 		<method name="pow">
@@ -572,6 +667,18 @@
 			<description>
 			</description>
 		</method>
+		<method name="randomize">
+			<return type="int">
+			</return>
+			<argument index="0" name="seed_index" type="int">
+			</argument>
+			<argument index="1" name="low_index" type="int">
+			</argument>
+			<argument index="2" name="high_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
 		<method name="ridged_layer">
 			<return type="int">
 			</return>
@@ -586,6 +693,8 @@
 			<argument index="4" name="rot" type="bool" default="true">
 			</argument>
 			<description>
+				layer_params: scale, frequency, seed, angle.
+				axis_params: ax, ay, az.
 			</description>
 		</method>
 		<method name="ridged_multifractal">
@@ -600,6 +709,7 @@
 			<argument index="3" name="rot" type="bool" default="true">
 			</argument>
 			<description>
+				params: number of octaves, frequency, seed.
 			</description>
 		</method>
 		<method name="rotate">
@@ -708,6 +818,16 @@
 			<description>
 			</description>
 		</method>
+		<method name="seeder">
+			<return type="int">
+			</return>
+			<argument index="0" name="seed_index" type="int">
+			</argument>
+			<argument index="1" name="src_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
 		<method name="select">
 			<return type="int">
 			</return>
@@ -752,6 +872,18 @@
 			<description>
 			</description>
 		</method>
+		<method name="smooth_step">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
 		<method name="smooth_tiers">
 			<return type="int">
 			</return>
@@ -762,9 +894,31 @@
 			<description>
 			</description>
 		</method>
+		<method name="smoother_step">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
 		<method name="sqrt2">
 			<return type="int">
 			</return>
+			<description>
+			</description>
+		</method>
+		<method name="step">
+			<return type="int">
+			</return>
+			<argument index="0" name="val_index" type="int">
+			</argument>
+			<argument index="1" name="control_index" type="int">
+			</argument>
 			<description>
 			</description>
 		</method>
@@ -776,6 +930,8 @@
 			<argument index="1" name="src2_index" type="int">
 			</argument>
 			<description>
+				Subtracts [code]src2_index[/code] from [code]src1_index[/code] functions and returns the result.
+				Similar to difference operation.
 			</description>
 		</method>
 		<method name="tan">
@@ -916,47 +1072,52 @@
 			<return type="int">
 			</return>
 			<description>
+				Generates a noise function with constant value of zero.
 			</description>
 		</method>
 	</methods>
 	<constants>
-		<constant name="INTERP_NONE" value="0">
+		<constant name="INTERP_NONE" value="0" enum="InterpolationTypes">
+			No interpolation applied.
 		</constant>
-		<constant name="INTERP_LINEAR" value="1">
+		<constant name="INTERP_LINEAR" value="1" enum="InterpolationTypes">
+			Applies linear interpolation. Produces basic transition.
 		</constant>
-		<constant name="INTERP_HERMITE" value="2">
+		<constant name="INTERP_HERMITE" value="2" enum="InterpolationTypes">
+			Applies hermite interpolation. Produces moderate transition.
 		</constant>
-		<constant name="INTERP_QUINTIC" value="3">
+		<constant name="INTERP_QUINTIC" value="3" enum="InterpolationTypes">
+			Applies quintic interpolation. Produces the smoothest transition.
 		</constant>
-		<constant name="DISTANCE_EUCLID" value="0">
+		<constant name="DISTANCE_EUCLID" value="0" enum="DistanceTypes">
 		</constant>
-		<constant name="DISTANCE_MANHATTAN" value="1">
+		<constant name="DISTANCE_MANHATTAN" value="1" enum="DistanceTypes">
 		</constant>
-		<constant name="DISTANCE_LEASTAXIS" value="2">
+		<constant name="DISTANCE_LEASTAXIS" value="2" enum="DistanceTypes">
 		</constant>
-		<constant name="DISTANCE_GREATESTAXIS" value="3">
+		<constant name="DISTANCE_GREATESTAXIS" value="3" enum="DistanceTypes">
 		</constant>
-		<constant name="BASIS_VALUE" value="0">
+		<constant name="BASIS_VALUE" value="0" enum="BasisTypes">
 		</constant>
-		<constant name="BASIS_GRADIENT" value="1">
+		<constant name="BASIS_GRADIENT" value="1" enum="BasisTypes">
 		</constant>
-		<constant name="BASIS_SIMPLEX" value="2">
+		<constant name="BASIS_SIMPLEX" value="2" enum="BasisTypes">
 		</constant>
-		<constant name="SEAMLESS_NONE" value="0">
+		<constant name="SEAMLESS_NONE" value="0" enum="EMappingModes">
 		</constant>
-		<constant name="SEAMLESS_X" value="1">
+		<constant name="SEAMLESS_X" value="1" enum="EMappingModes">
 		</constant>
-		<constant name="SEAMLESS_Y" value="2">
+		<constant name="SEAMLESS_Y" value="2" enum="EMappingModes">
 		</constant>
-		<constant name="SEAMLESS_Z" value="3">
+		<constant name="SEAMLESS_Z" value="3" enum="EMappingModes">
 		</constant>
-		<constant name="SEAMLESS_XY" value="4">
+		<constant name="SEAMLESS_XY" value="4" enum="EMappingModes">
 		</constant>
-		<constant name="SEAMLESS_XZ" value="5">
+		<constant name="SEAMLESS_XZ" value="5" enum="EMappingModes">
 		</constant>
-		<constant name="SEAMLESS_YZ" value="6">
+		<constant name="SEAMLESS_YZ" value="6" enum="EMappingModes">
 		</constant>
-		<constant name="SEAMLESS_XYZ" value="7">
+		<constant name="SEAMLESS_XYZ" value="7" enum="EMappingModes">
 		</constant>
 	</constants>
 </class>
