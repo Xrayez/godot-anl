@@ -182,10 +182,15 @@ Index evaluate(const String& expression);
 // Image methods
 //------------------------------------------------------------------------------
 Ref<Image> map_to_image(const Vector2& image_size,
-                        anl::EMappingModes mode,
                         Index index,
-                        const Vector2& mapxy0 = Vector2(-1, -1),
-                        const Vector2& mapxy1 = Vector2(1, 1));
+                        anl::EMappingModes mode = anl::EMappingModes::SEAMLESS_NONE,
+                        const Rect2& mapping_ranges = Rect2(-1, -1, 2, 2));
+
+Ref<Texture> map_to_texture(const Vector2& texture_size,
+                            Index index,
+                            anl::EMappingModes mode = anl::EMappingModes::SEAMLESS_NONE,
+                            const Rect2& ranges = Rect2(-1, -1, 2, 2),
+                            int flags = Texture::FLAGS_DEFAULT);
 
 void gen_texture(const Vector2& size, anl::EMappingModes mode,
                  Index index, const String& filename);

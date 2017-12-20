@@ -711,13 +711,13 @@ Index AnlNoise::evaluate(const String& expression) {
 // Image methods
 //------------------------------------------------------------------------------
 Ref<Image> AnlNoise::map_to_image(const Vector2& size,
-                                  anl::EMappingModes mode,
                                   Index index,
-                                  const Vector2& map_start,
-                                  const Vector2& map_end) {
+                                  anl::EMappingModes mode,
+                                  const Rect2& map) {
 
     anl::CArray2Drgba img(size.x, size.y);
-    anl::SMappingRanges ranges(map_start.x, map_end.x, map_start.y, map_end.y);
+    anl::SMappingRanges ranges(map.position.x, map.position.x + map.size.x,
+                               map.position.y, map.position.y + map.size.y);
     anl::mapRGBA2DNoZ(mode, img, kernel, ranges, index);
 
     PoolVector<uint8_t> data;
@@ -735,6 +735,19 @@ Ref<Image> AnlNoise::map_to_image(const Vector2& size,
     Ref<Image> noise = memnew(Image);
     noise->create(size.x, size.y, 0, Image::FORMAT_RGBA8, data);
     return noise;
+}
+
+Ref<Texture> AnlNoise::map_to_texture(const Vector2& texture_size,
+                                      Index index,
+                                      anl::EMappingModes mode,
+                                      const Rect2& map,
+                                      int flags) {
+
+    const Ref<Image>& image = map_to_image(texture_size, index, mode, map);
+    Ref<ImageTexture> texture = memnew(ImageTexture);
+    texture->create_from_image(image, flags);
+
+    return texture;
 }
 
 void AnlNoise::gen_texture(const Vector2& size, anl::EMappingModes mode,
@@ -901,7 +914,9 @@ void AnlNoise::_bind_methods() {
 
     // Image methods
 
-    ClassDB::bind_method(D_METHOD("map_to_image", "size", "mode", "index", "map_start", "map_end"),&AnlNoise::map_to_image, DEFVAL(Vector2(-1, -1)), DEFVAL(Vector2(1, 1)));
+    ClassDB::bind_method(D_METHOD("map_to_image", "size", "index", "mode", "mapping_ranges"),&AnlNoise::map_to_image, DEFVAL(anl::EMappingModes::SEAMLESS_NONE), DEFVAL(Rect2(-1, -1, 2, 2)) );
+    ClassDB::bind_method(D_METHOD("map_to_texture", "size", "index", "mode", "mapping_ranges", "flags"),&AnlNoise::map_to_texture, DEFVAL(anl::EMappingModes::SEAMLESS_NONE), DEFVAL(Rect2(-1, -1, 2, 2)), DEFVAL(Texture::FLAGS_DEFAULT) );
+
     ClassDB::bind_method(D_METHOD("gen_texture", "size", "mode", "index", "filename"),&AnlNoise::gen_texture);
 
 

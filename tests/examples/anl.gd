@@ -1,7 +1,6 @@
 extends Node2D
 
 var texture = ImageTexture.new()
-var image = Image.new()
 
 var noises = [
 	"value_basis",
@@ -22,23 +21,27 @@ var y = 10
 onready var size = get_viewport().size
 onready var ratio = float(size.x) / size.y
 
-onready var map_start = Vector2()
-onready var map_end = Vector2(x * ratio, y)
+onready var mapping_ranges = Rect2(Vector2(), Vector2(x * ratio, y))
+
+func _ready():
+	value_basis()
+	for noise in noises:
+		$noise.add_item(noise)
 
 func value_basis():
 	var n = AnlNoise.new()
 	n.value_basis( n.constant(AnlNoise.INTERP_HERMITE), n.seed(randi()) )
-	map_to_image(n)
+	map_to_texture(n)
 
 func gradient_basis():
 	var n = AnlNoise.new()
 	n.gradient_basis( n.constant(AnlNoise.INTERP_QUINTIC), n.seed(randi()) )
-	map_to_image(n)
+	map_to_texture(n)
 
 func simplex_basis():
 	var n = AnlNoise.new()
 	n.simplex_basis( n.seed(randi()) )
-	map_to_image(n)
+	map_to_texture(n)
 	
 func cellular_basis():
 	var n = AnlNoise.new()
@@ -47,7 +50,7 @@ func cellular_basis():
 									[n.zero(), n.zero(), n.zero(), n.zero()], 
 									n.constant(AnlNoise.DISTANCE_MANHATTAN), n.seed(randi()) )
 	n.gain(n.constant(0.5), basis)
-	map_to_image(n)
+	map_to_texture(n)
 	
 func fractal():
 	var n = AnlNoise.new()
@@ -62,41 +65,36 @@ func fractal():
 	
 	var s = n.seed(randi())
 	n.fractal(s, layer, [persistence, lacunarity, numoctaves, freq])
-	map_to_image(n)
+	map_to_texture(n)
 	
 func hex_tile():
 	var n = AnlNoise.new()
 	n.hex_tile( n.seed(randi()) )
-	map_to_image(n)
+	map_to_texture(n)
 	
 func hex_bump():
 	var n = AnlNoise.new()
 	n.hex_bump()
-	map_to_image(n)
+	map_to_texture(n)
 	
 func x():
 	var n = AnlNoise.new()
 	n.x()
-	map_to_image(n)
+	map_to_texture(n)
 	
 func y():
 	var n = AnlNoise.new()
 	n.y()
-	map_to_image(n)
+	map_to_texture(n)
 	
 func radial():
 	var n = AnlNoise.new()
 	n.radial()
-	map_to_image(n)
+	map_to_texture(n)
 	
-func map_to_image(n):
-	image = n.map_to_image(size, AnlNoise.SEAMLESS_NONE, n.get_last_index(), map_start, map_end)
+func map_to_texture(n):
+	texture = n.map_to_texture(size, n.get_last_index(), AnlNoise.SEAMLESS_NONE, mapping_ranges)
 	
-func _ready():
-	value_basis()
-	for noise in noises:
-		$noise.add_item(noise)
-		
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_RIGHT and event.pressed:
@@ -110,5 +108,4 @@ func _on_noise_item_selected(id):
 		update()
 
 func _draw():
-	texture.create_from_image(image, 0)
 	draw_texture(texture, Vector2())
