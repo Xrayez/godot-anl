@@ -46,10 +46,10 @@ func simplex_basis():
 func cellular_basis():
 	var n = AnlNoise.new()
 	
-	var basis = n.cellular_basis( [n.constant(-1), n.one(), n.zero(), n.zero()], 
+	var basis = n.cellular_basis( [n.constant(-0.25), n.constant(-0.3), n.constant(0.8), n.constant(0)], 
 									[n.zero(), n.zero(), n.zero(), n.zero()], 
-									n.constant(AnlNoise.DISTANCE_MANHATTAN), n.seed(randi()) )
-	n.gain(n.constant(0.5), basis)
+									n.constant(AnlNoise.DISTANCE_EUCLID), n.seed(randi()) )
+	n.clamp(basis, n.zero(), n.one())
 	map_to_texture(n)
 	
 func fractal():
