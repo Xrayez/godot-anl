@@ -51,7 +51,7 @@ for y in range(HEIGHT):
 ```
 
 ### Result
-![Simple terrain](terrain.png)
+![Simple terrain](examples/images/terrain_binary.png)
 
 You can also use the expression builder to simplify the process of chaining
 functions together to one-liners, something like this:
@@ -68,16 +68,16 @@ engine in the endless loop...
 
 Some more example of image generation:
 
-![Simple texture](texture.png)
+![Simple texture](examples/images/water_smoke.png)
 
 Almost like water (or smoke)
 
 ## Legal considerations
 
 The original Accidental Noise Library uses Simplex noise for some of the noise
-generation methods, which is patented for uses of implementations in 3D and
-higher for textured image synthesis. I'm not a lawyer, but I think using only
-2D implementation of Simplex noise should be safe.
+generation methods, implementation of which might be patented for uses in 3D and
+higher for textured image synthesis. I'm not a lawyer, but I think using only 2D
+implementation of Simplex noise should be safe. I need to find that out someday.
 
 I might look into integrating OpenSimplex noise instead, someday, with enough
 skills and help from the community.
