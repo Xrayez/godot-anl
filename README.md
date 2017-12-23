@@ -66,11 +66,11 @@ But please note that the expression builder feature is a work in progress as
 stated by original author. Some functions work, some don't and will hang the
 engine in the endless loop...
 
-Some more example of image generation:
+Some more example of image/texture generation:
 
-![Simple texture](examples/images/water_smoke.png)
-
-Almost like water (or smoke)
+![Water or Smoke?](examples/images/water_smoke.png)
+![Stones with moss?](examples/images/stone_moss.png)
+![Lapis lazuli?](examples/images/stone_lapis.png)
 
 ## Legal considerations
 
