@@ -33,21 +33,38 @@ a drawback of poorer performance.
 ## Usage example
 
 ```gdscript
-var noise = AnlNoise.new()
+var n = AnlNoise.new()
 
-var gradient = noise.y()
-var fractal = noise.fbm(noise.BASIS_GRADIENT, noise.INTERP_QUINTIC, [4, 3, seed])
-var scale_offset = noise.scale_offset(fractal, 0.5, 0)
-var perturb = noise.translate(gradient, scale_offset)
-var select = noise.select(noise.zero(), noise.one(),
-             perturb, noise.constant(0.5), noise.zero())
+var gradient = n.y()
 
-# Draw the chained functions
+var fractal = n.fbm(AnlNoise.BASIS_GRADIENT, AnlNoise.INTERP_QUINTIC, [4, 3, randi()])
+var scale_offset = n.scale_offset(fractal, 0.5, 0)
+
+var perturb = n.translate(gradient, scale_offset)
+
+var select = n.select(
+	n.zero(), n.one(),
+	perturb, n.constant(0.5), n.zero()
+)
+
+var image = Image.new()
+image.lock()
+
+# Draw evaluated function
 for y in range(HEIGHT):
 	for x in range(WIDTH):
-		var value = noise.get_color_2d(float(x)/WIDTH * 2,
-		                               float(y)/HEIGHT, result)
+		var value = n.get_color_2d(x, y, n.get_last_index())
 		image.set_pixel(x, y, value)
+
+image.unlock()
+```
+You can also map the noise to an image with dedicated method instead:
+```gdscript
+image = n.map_to_image(size, noise.get_last_index())
+```
+... or even tiled texture!
+```gdscript
+texture = n.map_to_texture(size, noise.get_last_index(), AnlNoise.SEAMLESS_XY)
 ```
 
 ### Result
@@ -57,16 +74,18 @@ You can also use the expression builder to simplify the process of chaining
 functions together to one-liners, something like this:
 
 ```gdscript
+var n = AnlNoise.new()
+
 var expression = "translate(select(0, 1, (x + y), 0.5, 0), 10)"
-var function = noise.evaluate(expression)
-var value = noise.color_2d(x, y, function)
+var function = n.evaluate(expression)
+var value = n.color_2d(x, y, function)
 ```
 
 But please note that the expression builder feature is a work in progress as
 stated by original author. Some functions work, some don't and will hang the
 engine in the endless loop...
 
-Some more example of image/texture generation:
+Here's some more examples of image/texture generation:
 
 ![Water or Smoke?](examples/images/water_smoke.png)
 ![Stones with moss?](examples/images/stone_moss.png)
@@ -76,8 +95,6 @@ Some more example of image/texture generation:
 
 The original Accidental Noise Library uses Simplex noise for some of the noise
 generation methods, implementation of which might be patented for uses in 3D and
-higher for textured image synthesis. I'm not a lawyer, but I think using only 2D
+higher for textured image synthesis. I'm not a lawyer, but I think using 2D
 implementation of Simplex noise should be safe. I need to find that out someday.
-
-I might look into integrating OpenSimplex noise instead, someday, with enough
-skills and help from the community.
+I might look into integrating OpenSimplex noise instead, if this is the case.
