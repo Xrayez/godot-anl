@@ -184,7 +184,8 @@ Index evaluate(const String& expression);
 Ref<Image> map_to_image(const Vector2& image_size,
                         Index index,
                         anl::EMappingModes mode = anl::EMappingModes::SEAMLESS_NONE,
-                        const Rect2& mapping_ranges = Rect2(-1, -1, 2, 2));
+                        const Rect2& mapping_ranges = Rect2(-1, -1, 2, 2),
+                        Image::Format format = Image::Format::FORMAT_RGBA8);
 
 Ref<Texture> map_to_texture(const Vector2& texture_size,
                             Index index,

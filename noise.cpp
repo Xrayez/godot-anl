@@ -713,27 +713,48 @@ Index AnlNoise::evaluate(const String& expression) {
 Ref<Image> AnlNoise::map_to_image(const Vector2& size,
                                   Index index,
                                   anl::EMappingModes mode,
-                                  const Rect2& map) {
+                                  const Rect2& map,
+                                  Image::Format format) {
 
-    anl::CArray2Drgba img(size.x, size.y);
     anl::SMappingRanges ranges(map.position.x, map.position.x + map.size.x,
                                map.position.y, map.position.y + map.size.y);
-    anl::mapRGBA2DNoZ(mode, img, kernel, ranges, index);
 
-    PoolVector<uint8_t> data;
+    PoolVector<uint8_t> dest_data;
     const int SIZE = size.x * size.y;
-    data.resize(SIZE * 4);
-    PoolVector<uint8_t>::Write w = data.write();
-    anl::SRGBA* src_data = img.getData();
 
-    for(int i = 0, j = 0; j < SIZE; i += 4, ++j) {
-        w[i + 0] = static_cast<uint8_t>(src_data[j].r * 255);
-        w[i + 1] = static_cast<uint8_t>(src_data[j].g * 255);
-        w[i + 2] = static_cast<uint8_t>(src_data[j].b * 255);
-        w[i + 3] = static_cast<uint8_t>(src_data[j].a * 255);
+    switch(format) {
+        case Image::Format::FORMAT_RGBA8: {
+
+            anl::CArray2Drgba img(size.x, size.y);
+            anl::mapRGBA2DNoZ(mode, img, kernel, ranges, index);
+
+            dest_data.resize(SIZE * 4);
+            PoolVector<uint8_t>::Write w = dest_data.write();
+            auto src_data = img.getData();
+
+            for(int i = 0, j = 0; j < SIZE; i += 4, ++j) {
+                w[i + 0] = static_cast<uint8_t>(src_data[j].r * 255);
+                w[i + 1] = static_cast<uint8_t>(src_data[j].g * 255);
+                w[i + 2] = static_cast<uint8_t>(src_data[j].b * 255);
+                w[i + 3] = static_cast<uint8_t>(src_data[j].a * 255);
+            }
+        } break;
+
+        case Image::Format::FORMAT_L8: {
+            anl::CArray2Dd img(size.x, size.y);
+            anl::map2DNoZ(mode, img, kernel, ranges, index);
+
+            dest_data.resize(SIZE);
+            PoolVector<uint8_t>::Write w = dest_data.write();
+            auto src_data = img.getData();
+
+            for(int i = 0; i < SIZE; ++i) {
+                w[i] = static_cast<uint8_t>(src_data[i] * 255);
+            }
+        } break;
     }
     Ref<Image> noise = memnew(Image);
-    noise->create(size.x, size.y, 0, Image::FORMAT_RGBA8, data);
+    noise->create(size.x, size.y, 0, format, dest_data);
     return noise;
 }
 
@@ -914,7 +935,7 @@ void AnlNoise::_bind_methods() {
 
     // Image methods
 
-    ClassDB::bind_method(D_METHOD("map_to_image", "size", "index", "mode", "mapping_ranges"),&AnlNoise::map_to_image, DEFVAL(anl::EMappingModes::SEAMLESS_NONE), DEFVAL(Rect2(-1, -1, 2, 2)) );
+    ClassDB::bind_method(D_METHOD("map_to_image", "size", "index", "mode", "mapping_ranges", "format"),&AnlNoise::map_to_image, DEFVAL(anl::EMappingModes::SEAMLESS_NONE), DEFVAL(Rect2(-1, -1, 2, 2)), DEFVAL(Image::Format::FORMAT_RGBA8) );
     ClassDB::bind_method(D_METHOD("map_to_texture", "size", "index", "mode", "mapping_ranges", "flags"),&AnlNoise::map_to_texture, DEFVAL(anl::EMappingModes::SEAMLESS_NONE), DEFVAL(Rect2(-1, -1, 2, 2)), DEFVAL(Texture::FLAGS_DEFAULT) );
 
     ClassDB::bind_method(D_METHOD("gen_texture", "size", "mode", "index", "filename"),&AnlNoise::gen_texture);
