@@ -4,7 +4,8 @@ This is a wrapper for the new version of
 [Accidental Noise Library](https://github.com/JTippetts/accidental-noise-library)
 originally written by
 [Joshua Tippetts](https://sourceforge.net/u/tippettsj/profile/), modified
-to be properly compiled for Godot and be used freely in GDScript.
+to be properly compiled for [Godot 3.0+](https://github.com/godotengine/godot)
+and be used freely in GDScript.
 
 ## Installation
 
