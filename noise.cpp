@@ -831,10 +831,10 @@ void AnlNoise::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("rotate", "src_index", "angle_index", "ax_index", "ay_index", "az_index"),&AnlNoise::rotate);
 
-    ClassDB::bind_method(D_METHOD("add_sequence", "base_index", "number", "stride"),AnlNoise::add_sequence, DEFVAL(1));
-    ClassDB::bind_method(D_METHOD("multiply_sequence", "base_index", "number", "stride"),AnlNoise::multiply_sequence, DEFVAL(1));
-    ClassDB::bind_method(D_METHOD("max_sequence", "base_index", "number", "stride"),AnlNoise::max_sequence, DEFVAL(1));
-    ClassDB::bind_method(D_METHOD("min_sequence", "base_index", "number", "stride"),AnlNoise::min_sequence, DEFVAL(1));
+    ClassDB::bind_method(D_METHOD("add_sequence", "base_index", "number", "stride"),&AnlNoise::add_sequence, DEFVAL(1));
+    ClassDB::bind_method(D_METHOD("multiply_sequence", "base_index", "number", "stride"),&AnlNoise::multiply_sequence, DEFVAL(1));
+    ClassDB::bind_method(D_METHOD("max_sequence", "base_index", "number", "stride"),&AnlNoise::max_sequence, DEFVAL(1));
+    ClassDB::bind_method(D_METHOD("min_sequence", "base_index", "number", "stride"),&AnlNoise::min_sequence, DEFVAL(1));
 
     ClassDB::bind_method(D_METHOD("mix", "low_index", "high_index", "control_index"),&AnlNoise::mix);
     ClassDB::bind_method(D_METHOD("select", "low_index", "high_index", "control_index", "threshold_index", "falloff_index"),&AnlNoise::select);
