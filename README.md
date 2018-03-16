@@ -38,7 +38,7 @@ var n = AnlNoise.new()
 
 var gradient = n.y()
 
-var fractal = n.fbm(AnlNoise.BASIS_GRADIENT, AnlNoise.INTERP_QUINTIC, [4, 3, randi()])
+var fractal = n.fbm(AnlNoise.BASIS_GRADIENT, AnlNoise.INTERP_QUINTIC, 4, 3, randi())
 var scale_offset = n.scale_offset(fractal, 0.5, 0)
 
 var perturb = n.translate(gradient, scale_offset)
