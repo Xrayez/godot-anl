@@ -46,17 +46,16 @@ func simplex_basis():
 func cellular_basis():
 	var n = AnlNoise.new()
 	
-	var basis = n.cellular_basis( [n.constant(-0.25), n.constant(-0.3), n.constant(0.8), n.constant(0)], 
-									[n.zero(), n.zero(), n.zero(), n.zero()], 
-									n.constant(AnlNoise.DISTANCE_EUCLID), n.seed(randi()) )
+	var basis = n.cellular_basis( n.constant(-0.25), n.constant(-0.3), n.constant(0.8), n.constant(0), 
+								  n.zero(), n.zero(), n.zero(), n.zero(), 
+								  n.constant(AnlNoise.DISTANCE_EUCLID), n.seed(randi()) )
 	n.clamp(basis, n.zero(), n.one())
 	map_to_texture(n)
 	
 func fractal():
 	var n = AnlNoise.new()
 	
-	var layer = n.fractal_layer(AnlNoise.BASIS_GRADIENT, n.constant(AnlNoise.INTERP_QUINTIC),
-								[1,0.5,randf(),0], [1,1,1,1])
+	var layer = n.fractal_layer(AnlNoise.BASIS_GRADIENT, n.constant(AnlNoise.INTERP_QUINTIC), 1, 1, randi())
 	
 	var persistence = n.constant(-0.5)
 	var lacunarity = n.constant(4)
@@ -64,7 +63,7 @@ func fractal():
 	var freq = n.constant(1)
 	
 	var s = n.seed(randi())
-	n.fractal(s, layer, [persistence, lacunarity, numoctaves, freq])
+	n.fractal(s, layer, persistence, lacunarity, numoctaves, freq)
 	map_to_texture(n)
 	
 func hex_tile():

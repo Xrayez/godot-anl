@@ -18,8 +18,9 @@ func _init():
 	i = n.value_basis(n.constant(AnlNoise.INTERP_NONE), si)
 	i = n.gradient_basis(n.constant(AnlNoise.INTERP_LINEAR), si)
 	i = n.simplex_basis(si)
-	i = n.cellular_basis([0,1,2,3], [4,5,6,7],
-	                     n.constant(AnlNoise.DISTANCE_MANHATTAN), si)
+	var f = n.point5()
+	var d = n.zero()
+	i = n.cellular_basis(f,f,f,f, d,d,d,d, n.constant(AnlNoise.DISTANCE_MANHATTAN), si)
 
 	var ci = n.constant(10)
 	i = n.add(i, ci)
@@ -94,14 +95,14 @@ func _init():
 
 	i = n.radial()
 
-	i = n.fractal(n.constant(5), n.x(), [n.radial(), n.cos(i), n.one(), n.point5()])
+	i = n.fractal(n.constant(5), n.x(), n.radial(), n.cos(i), n.one(), n.point5())
 	i = n.randomize(ci, n.zero(), n.one())
 	i = n.step(n.point5(), n.y())
 	i = n.linear_step(n.zero(), n.one(), n.radial())
 	i = n.smooth_step(n.zero(), n.one(), n.radial())
 	i = n.smoother_step(n.zero(), n.one(), n.radial())
 
-	i = n.curve_section(n.point5(), [n.x(), n.y()], [n.z(), n.w()], n.sin(i))
+	i = n.curve_section(n.point5(), n.x(), n.y(), n.z(), n.w(), n.sin(i))
 
 	# Patterns
 
@@ -115,31 +116,23 @@ func _init():
 	i = n.scale_offset(i, 0.5, 0.0)
 
 	i = n.fractal_layer(AnlNoise.BASIS_GRADIENT, n.constant(AnlNoise.INTERP_QUINTIC),
-						[0, 1, 2, 3], # scale,freq,seed,angle
-						[4, 5, 6, 7], # ax, ay, az
-						true)
+					    0, 1, 2, true, # scale, frequency, seed, rotation
+					    0.8, 0.2, 0.2, 0.1) # angle, ax, ay, az
 
 	i = n.ridged_layer(AnlNoise.BASIS_SIMPLEX, n.constant(AnlNoise.INTERP_HERMITE),
-					   [0, 1, 2, 3], # scale,freq,seed,angle
-					   [4, 5, 6, 7], # ax, ay, az
-					   false)
+					   0, 1, 2, false) # scale, frequency, seed, rotation
 
 	i = n.billow_layer(AnlNoise.BASIS_VALUE, n.constant(AnlNoise.INTERP_LINEAR),
-					   [0, 1, 2, 3], # scale,freq,seed,angle
-					   [4, 5, 6, 7], # ax, ay, az
-					   true)
+					   0, 1, 2, 3, true, 0.7) # scale, frequency, seed, rotation, angle
 
 	i = n.fbm(AnlNoise.BASIS_VALUE, n.constant(AnlNoise.INTERP_LINEAR),
-			  [2, 2, ci], # octaves, frequency, seed
-			  false)
+			  2, 2, ci, true) # octaves, frequency, seed, rotation
 
 	i = n.ridged_multifractal(AnlNoise.BASIS_VALUE, n.constant(AnlNoise.INTERP_NONE),
-							  [2, 2, ci], # octaves, frequency, seed
-							  true)
+							  2, 2, ci) # octaves, frequency, seed
 
 	i = n.billow(AnlNoise.BASIS_GRADIENT, n.constant(AnlNoise.INTERP_HERMITE),
-				 [2, 2, ci], # octaves, frequency, seed
-				 true)
+				 2, 2, ci) # octaves, frequency, seed
 
 	# Kernel
 

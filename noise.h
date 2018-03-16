@@ -33,8 +33,8 @@ Index seeder(Index seed, Index src);
 Index value_basis(Index interp, Index seed);
 Index gradient_basis(Index interp, Index seed);
 Index simplex_basis(Index seed);
-Index cellular_basis(const Vector<int>& f, // Indexes
-                     const Vector<int>& d, // Indexes
+Index cellular_basis(Index f1, Index f2, Index f3, Index f4,
+                     Index d1, Index d2, Index d3, Index d4,
                      Index distance, Index seed);
 
 Index add(Index src1, Index src2);
@@ -106,8 +106,8 @@ Index sigmoid(Index src, Index center, Index ramp);
 
 Index radial();
 
-Index fractal(Index seed, Index layer, const Vector<int>& params);
-           // Index params: persistence, lacunarity, numoctaves, freq
+Index fractal(Index seed, Index layer,
+              Index persistence, Index lacunarity, Index numoctaves, Index frequency);
 Index randomize(Index seed, Index low, Index high);
 Index step(Index val, Index control);
 Index linear_step(Index low, Index high, Index control);
@@ -115,8 +115,7 @@ Index smooth_step(Index low, Index high, Index control);
 Index smoother_step(Index low, Index high, Index control);
 
 Index curve_section(Index lowv,
-                    const Vector<int>& t, // Index: t0, t1
-                    const Vector<int>& v, // Index: v0, v1
+                    Index t0, Index t1, Index v0, Index v1,
                     Index control);
 // Patterns
 
@@ -130,31 +129,25 @@ Index combine_hsva(Index h, Index s, Index v, Index a);
 Index scale_offset(Index src, double scale, double offset);
 
 Index fractal_layer(anl::BasisTypes basis, Index interp_type,
-                    const Vector<real_t>& layer_params,// scale,freq,seed,angle
-                    const Vector<real_t>& axis_params, // ax, ay, az
-                    bool rot = true);
+                    double scale, double frequency, unsigned int seed, bool rot = true,
+                    double angle = 0.5, double ax = 0.0, double ay = 0.0, double az = 1.0);
 
 Index ridged_layer(anl::BasisTypes basis, Index interp_type,
-                   const Vector<real_t>& layer_params,// scale,freq,seed,angle
-                   const Vector<real_t>& axis_params, // ax, ay, az
-                   bool rot = true);
+                   double scale, double frequency, unsigned int seed, bool rot = true,
+                   double angle = 0.5, double ax = 0.0, double ay = 0.0, double az = 1.0);
 
 Index billow_layer(anl::BasisTypes basis, Index interp_type,
-                   const Vector<real_t>& layer_params,// scale,freq,seed,angle
-                   const Vector<real_t>& axis_params, // ax, ay, az
-                   bool rot = true);
+                   double scale, double frequency, unsigned int seed, bool rot = true,
+                   double angle = 0.5, double ax = 0.0, double ay = 0.0, double az = 1.0);
 
 Index fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
-          const Vector<real_t>& params, // octaves, frequency, seed
-          bool rot = true);
+          unsigned int numoctaves, double frequency, unsigned int seed, bool rot = true);
 
 Index ridged_multifractal(anl::BasisTypes basis, anl::InterpolationTypes interp,
-                          const Vector<real_t>& params, // octaves, frequency, seed
-                          bool rot = true);
+                          unsigned int numoctaves, double frequency, unsigned int seed, bool rot = true);
 
 Index billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
-             const Vector<real_t>& params, // octaves, frequency, seed
-             bool rot = true);
+             unsigned int numoctaves, double frequency, unsigned int seed, bool rot = true);
 
 // Kernel
 
@@ -166,12 +159,12 @@ Index get_last_index();
 double get_scalar_2d(double x, double y, Index);
 double get_scalar_3d(double x, double y, double z, Index);
 double get_scalar_4d(double x, double y, double z, double w, Index);
-double get_scalar_6d(const Vector<real_t>& axis, Index);
+double get_scalar_6d(double x, double y, double z, double w, double u, double v, Index);
 
 Color get_color_2d(double x, double y, Index);
 Color get_color_3d(double x, double y, double z, Index);
 Color get_color_4d(double x, double y, double z, double w, Index);
-Color get_color_6d(const Vector<real_t>& axis, Index);
+Color get_color_6d(double x, double y, double z, double w, double u, double v, Index);
 
 //------------------------------------------------------------------------------
 // ExpressionBuilder methods

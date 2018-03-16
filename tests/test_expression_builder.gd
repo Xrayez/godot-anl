@@ -16,4 +16,4 @@ func _init():
 
     expression = "select(0, 1, sin(cos(scale(gradientBasis(select(0, 1, translateY(translateX(radial, -0.885), -0.5), 0.4, 0.0), 10), 10))), 0.841, 0)"
     n.evaluate(expression)
-    color = n.get_color_6d([15.0, 17.8, 46.35, 7.1, 65.3, 47.2], n.get_last_index())
+    color = n.get_color_6d(15.0, 17.8, 46.35, 7.1, 65.3, 47.2, n.get_last_index())

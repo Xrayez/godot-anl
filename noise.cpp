@@ -1,4 +1,5 @@
 #include "noise.h"
+#include "core/method_bind_ext.gen.inc"
 
 AnlNoise::AnlNoise(): vm(kernel), eb(kernel) {}
 //------------------------------------------------------------------------------
@@ -76,16 +77,13 @@ Index AnlNoise::simplex_basis(Index seed) {
     return simplex_basis.getIndex();
 }
 
-Index AnlNoise::cellular_basis(const Vector<int>& f,
-                               const Vector<int>& d,
+Index AnlNoise::cellular_basis(Index f1, Index f2, Index f3, Index f4,
+                               Index d1, Index d2, Index d3, Index d4,
                                Index distance, Index seed) {
 
-    ERR_FAIL_COND_V(f.size() < 4, 0);
-    ERR_FAIL_COND_V(d.size() < 4, 0);
-
     auto cellular_basis = kernel.cellularBasis(
-        kernel[ f[0] ], kernel[ f[1] ], kernel[ f[2] ], kernel[ f[3] ],
-        kernel[ d[0] ], kernel[ d[1] ], kernel[ d[2] ], kernel[ d[3] ],
+        kernel[ f1 ], kernel[ f2 ], kernel[ f3 ], kernel[ f4 ],
+        kernel[ d1 ], kernel[ d2 ], kernel[ d3 ], kernel[ d4 ],
         kernel[distance], kernel[seed]
     );
     return cellular_basis.getIndex();
@@ -429,18 +427,12 @@ Index AnlNoise::radial() {
     return radial.getIndex();
 }
 
-Index AnlNoise::fractal(Index seed, Index layer, const Vector<int>& params) {
-
-    ERR_FAIL_COND_V(params.size() < 4, 0);
-
-    Index persistence = params[0];
-    Index lacunarity = params[1];
-    Index numoctaves = params[2];
-    Index freq = params[3];
+Index AnlNoise::fractal(Index seed, Index layer,
+                        Index persistence, Index lacunarity, Index numoctaves, Index frequency) {
 
     auto fractal = kernel.fractal(
         kernel[seed], kernel[layer],
-        kernel[persistence], kernel[lacunarity], kernel[numoctaves], kernel[freq]
+        kernel[persistence], kernel[lacunarity], kernel[numoctaves], kernel[frequency]
     );
     return fractal.getIndex();
 }
@@ -476,16 +468,12 @@ Index AnlNoise::smoother_step(Index low, Index high, Index control) {
 }
 
 Index AnlNoise::curve_section(Index lowv,
-                              const Vector<int>& t,
-                              const Vector<int>& v,
+                              Index t0, Index t1, Index v0, Index v1,
                               Index control) {
-
-    ERR_FAIL_COND_V(t.size() < 2, 0);
-    ERR_FAIL_COND_V(v.size() < 2, 0);
 
     auto curve_section = kernel.curveSection(
         kernel[lowv],
-        kernel[ t[0] ], kernel[ t[1] ], kernel[ v[0] ] , kernel[ v[1] ],
+        kernel[ t0 ], kernel[ t1 ], kernel[ v0 ] , kernel[ v1 ],
         kernel[control]
     );
     return curve_section.getIndex();
@@ -536,109 +524,67 @@ Index AnlNoise::scale_offset(Index src, double scale, double offset) {
 }
 
 Index AnlNoise::fractal_layer(anl::BasisTypes basis, Index interp_type,
-                              const Vector<real_t>& layer_params,
-                              const Vector<real_t>& axis_params,
-                              bool rot) {
-
-    ERR_FAIL_COND_V(layer_params.size() < 4, 0);
-    ERR_FAIL_COND_V(axis_params.size() < 3, 0);
-
-    // layer_params: scale, freq, seed, angle
-    // axis_params:  ax, ay, az
+                              double scale, double frequency, unsigned int seed, bool rot,
+                              double angle, double ax, double ay, double az) {
 
     auto fractal_layer = kernel.simpleFractalLayer(
         basis, kernel[interp_type],
-        layer_params[0], layer_params[1], layer_params[2],
-        rot, layer_params[3],
-        axis_params[0], axis_params[1], axis_params[2]
+        scale, frequency, seed, rot,
+        angle, ax, ay, az
     );
     return fractal_layer.getIndex();
 }
 
 Index AnlNoise::ridged_layer(anl::BasisTypes basis, Index interp_type,
-                              const Vector<real_t>& layer_params,
-                              const Vector<real_t>& axis_params,
-                              bool rot) {
-
-    ERR_FAIL_COND_V(layer_params.size() < 4, 0);
-    ERR_FAIL_COND_V(axis_params.size() < 3, 0);
-
-    // layer_params: scale, freq, seed, angle
-    // axis_params:  ax, ay, az
+                             double scale, double frequency, unsigned int seed, bool rot,
+                             double angle, double ax, double ay, double az) {
 
     auto ridged_layer = kernel.simpleRidgedLayer(
         basis, kernel[interp_type],
-        layer_params[0], layer_params[1], layer_params[2],
-        rot, layer_params[3],
-        axis_params[0], axis_params[1], axis_params[2]
+        scale, frequency, seed, rot,
+        angle, ax, ay, az
     );
     return ridged_layer.getIndex();
 }
 
 Index AnlNoise::billow_layer(anl::BasisTypes basis, Index interp_type,
-                              const Vector<real_t>& layer_params,
-                              const Vector<real_t>& axis_params,
-                              bool rot) {
-
-    ERR_FAIL_COND_V(layer_params.size() < 4, 0);
-    ERR_FAIL_COND_V(axis_params.size() < 3, 0);
-
-    // layer_params: scale, freq, seed, angle
-    // axis_params:  ax, ay, az
+                             double scale, double frequency, unsigned int seed, bool rot,
+                             double angle, double ax, double ay, double az) {
 
     auto billow_layer = kernel.simpleBillowLayer(
         basis, kernel[interp_type],
-        layer_params[0], layer_params[1], layer_params[2],
-        rot, layer_params[3],
-        axis_params[0], axis_params[1], axis_params[2]
+        scale, frequency, seed, rot,
+        angle, ax, ay, az
     );
     return billow_layer.getIndex();
 }
 
 Index AnlNoise::fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
-          const Vector<real_t>& params,
-          bool rot) {
-
-    ERR_FAIL_COND_V(params.size() < 3, 0);
-
-    // params: octaves, frequency, seed
+                    unsigned int numoctaves, double frequency, unsigned int seed, bool rot) {
 
     auto fbm = kernel.simplefBm(
         basis, interp,
-        params[0], params[1], params[2],
-        rot
+        numoctaves, frequency, seed, rot
     );
     return fbm.getIndex();
 }
 
 Index AnlNoise::ridged_multifractal(anl::BasisTypes basis, anl::InterpolationTypes interp,
-                                    const Vector<real_t>& params,
-                                    bool rot) {
-
-    ERR_FAIL_COND_V(params.size() < 3, 0);
-
-    // params: octaves, frequency, seed
+                                    unsigned int numoctaves, double frequency, unsigned int seed, bool rot) {
 
     auto ridged_multifractal = kernel.simpleRidgedMultifractal(
         basis, interp,
-        params[0], params[1], params[2],
-        rot
+        numoctaves, frequency, seed, rot
     );
     return ridged_multifractal.getIndex();
 }
 
 Index AnlNoise::billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
-                       const Vector<real_t>& params,
-                       bool rot) {
-
-    ERR_FAIL_COND_V(params.size() < 3, 0);
-
-    // params: octaves, frequency, seed
+                       unsigned int numoctaves, double frequency, unsigned int seed, bool rot) {
 
     auto billow = kernel.simpleBillow(
         basis, interp,
-        params[0], params[1], params[2],
-        rot
+        numoctaves, frequency, seed, rot
     );
     return billow.getIndex();
 }
@@ -668,10 +614,9 @@ double AnlNoise::get_scalar_4d(double x, double y, double z, double w, Index ind
     return vm.evaluateScalar(x, y, z, w, index);
 }
 
-double AnlNoise::get_scalar_6d(const Vector<real_t>& axis, Index index) {
+double AnlNoise::get_scalar_6d(double x, double y, double z, double w, double u, double v, Index index) {
 
-    return vm.evaluateScalar(axis[0], axis[1], axis[2],
-                             axis[3], axis[4], axis[5], index);
+    return vm.evaluateScalar(x, y, z, w, u, v, index);
 }
 
 Color AnlNoise::get_color_2d(double x, double y, Index index) {
@@ -692,10 +637,9 @@ Color AnlNoise::get_color_4d(double x, double y, double z, double w, Index index
     return Color(c.r, c.g, c.b, c.a);
 }
 
-Color AnlNoise::get_color_6d(const Vector<real_t>& axis, Index index) {
+Color AnlNoise::get_color_6d(double x, double y, double z, double w, double u, double v, Index index) {
 
-    anl::SRGBA c = vm.evaluateColor(axis[0], axis[1], axis[2],
-                                    axis[3], axis[4], axis[5], index);
+    anl::SRGBA c = vm.evaluateColor(x, y, z, w, u, v, index);
     return Color(c.r, c.g, c.b, c.a);
 }
 //------------------------------------------------------------------------------
@@ -798,7 +742,7 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("value_basis", "interp_index", "seed_index"),&AnlNoise::value_basis);
     ClassDB::bind_method(D_METHOD("gradient_basis", "interp_index", "seed_index"),&AnlNoise::gradient_basis);
     ClassDB::bind_method(D_METHOD("simplex_basis", "seed_index"),&AnlNoise::simplex_basis);
-    ClassDB::bind_method(D_METHOD("cellular_basis", "f4_indexes", "d4_indexes", "distance_index", "seed_index"),&AnlNoise::cellular_basis);
+    ClassDB::bind_method(D_METHOD("cellular_basis", "f1", "f2", "f3", "f4", "d1", "d2", "d3", "d4", "distance_index", "seed_index"),&AnlNoise::cellular_basis);
 
     ClassDB::bind_method(D_METHOD("add", "src1_index", "src2_index"),&AnlNoise::add);
     ClassDB::bind_method(D_METHOD("subtract", "src1_index", "src2_index"),&AnlNoise::subtract);
@@ -868,14 +812,14 @@ void AnlNoise::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("radial"),&AnlNoise::radial);
 
-    ClassDB::bind_method(D_METHOD("fractal", "seed_index", "layer_index", "params"),&AnlNoise::fractal);
+    ClassDB::bind_method(D_METHOD("fractal", "seed_index", "layer_index", "persistence_index", "lacunarity_index", "numoctaves_index", "frequency_index"),&AnlNoise::fractal);
     ClassDB::bind_method(D_METHOD("randomize", "seed_index", "low_index", "high_index"),&AnlNoise::randomize);
     ClassDB::bind_method(D_METHOD("step", "val_index", "control_index"),&AnlNoise::step);
     ClassDB::bind_method(D_METHOD("linear_step", "low_index", "high_index", "control_index"),&AnlNoise::linear_step);
     ClassDB::bind_method(D_METHOD("smooth_step", "low_index", "high_index", "control_index"),&AnlNoise::smooth_step);
     ClassDB::bind_method(D_METHOD("smoother_step", "low_index", "high_index", "control_index"),&AnlNoise::smoother_step);
 
-    ClassDB::bind_method(D_METHOD("curve_section", "lowv_index", "t_indexes", "v_indexes", "control_index"),&AnlNoise::curve_section);
+    ClassDB::bind_method(D_METHOD("curve_section", "lowv_index", "t0_index", "t1_index", "v0_index", "v1_index", "control_index"),&AnlNoise::curve_section);
 
     // Patterns
 
@@ -889,31 +833,26 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("scale_offset", "src_index", "scale", "offset"),&AnlNoise::scale_offset);
 
     ClassDB::bind_method(D_METHOD("fractal_layer", "basis_type", "interp_type_index",
-                                  "layer_params",
-                                  "axis_params",
-                                  "rot"),&AnlNoise::fractal_layer, DEFVAL(true));
+                                  "scale", "frequency", "seed", "rotation",
+                                  "angle", "ax", "ay", "az"),&AnlNoise::fractal_layer, DEFVAL(true), DEFVAL(0.5), DEFVAL(0.0), DEFVAL(0.0), DEFVAL(1.0));
 
     ClassDB::bind_method(D_METHOD("ridged_layer", "basis_type", "interp_type_index",
-                                  "layer_params",
-                                  "axis_params",
-                                  "rot"),&AnlNoise::ridged_layer, DEFVAL(true));
+                                  "scale", "frequency", "seed", "rotation",
+                                  "angle", "ax", "ay", "az"),&AnlNoise::ridged_layer, DEFVAL(true), DEFVAL(0.5), DEFVAL(0.0), DEFVAL(0.0), DEFVAL(1.0));
 
     ClassDB::bind_method(D_METHOD("billow_layer", "basis_type", "interp_type_index",
-                                  "layer_params",
-                                  "axis_params",
-                                  "rot"),&AnlNoise::billow_layer, DEFVAL(true));
+                                   "scale", "frequency", "seed", "rotation",
+                                  "angle", "ax", "ay", "az"),&AnlNoise::billow_layer, DEFVAL(true), DEFVAL(0.5), DEFVAL(0.0), DEFVAL(0.0), DEFVAL(1.0));
 
     ClassDB::bind_method(D_METHOD("fbm", "basis_type", "interp_type",
-                                  "params",
-                                  "rot"),&AnlNoise::fbm, DEFVAL(true));
+                                  "numoctaves", "frequency", "seed", "rotation"),&AnlNoise::fbm, DEFVAL(true));
 
     ClassDB::bind_method(D_METHOD("ridged_multifractal", "basis_type", "interp_type",
-                                  "params",
-                                  "rot"),&AnlNoise::ridged_multifractal, DEFVAL(true));
+                                  "numoctaves", "frequency", "seed", "rotation"),&AnlNoise::ridged_multifractal, DEFVAL(true));
 
     ClassDB::bind_method(D_METHOD("billow", "basis_type", "interp_type",
-                                  "params",
-                                  "rot"),&AnlNoise::billow, DEFVAL(true));
+                                  "numoctaves", "frequency", "seed", "rotation"),&AnlNoise::billow, DEFVAL(true));
+
 
     ClassDB::bind_method(D_METHOD("get_last_index"),&AnlNoise::get_last_index);
 
@@ -922,12 +861,12 @@ void AnlNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_scalar_2d", "x", "y", "index"),&AnlNoise::get_scalar_2d);
     ClassDB::bind_method(D_METHOD("get_scalar_3d", "x", "y", "z" "index"),&AnlNoise::get_scalar_3d);
     ClassDB::bind_method(D_METHOD("get_scalar_4d", "x", "y", "z", "w" "index"),&AnlNoise::get_scalar_4d);
-    ClassDB::bind_method(D_METHOD("get_scalar_6d", "6_axis", "index"),&AnlNoise::get_scalar_6d);
+    ClassDB::bind_method(D_METHOD("get_scalar_6d", "x", "y", "z", "w", "u", "v", "index"),&AnlNoise::get_scalar_6d);
 
     ClassDB::bind_method(D_METHOD("get_color_2d", "x", "y", "index"),&AnlNoise::get_color_2d);
     ClassDB::bind_method(D_METHOD("get_color_3d", "x", "y", "z", "index"),&AnlNoise::get_color_3d);
     ClassDB::bind_method(D_METHOD("get_color_4d", "x", "y", "z", "w", "index"),&AnlNoise::get_color_4d);
-    ClassDB::bind_method(D_METHOD("get_color_6d", "6_axis", "index"),&AnlNoise::get_color_6d);
+    ClassDB::bind_method(D_METHOD("get_color_6d", "x", "y", "z", "w", "u", "v", "index"),&AnlNoise::get_color_6d);
 
     // ExpressionBuilder methods
 
