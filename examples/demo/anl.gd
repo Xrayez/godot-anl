@@ -42,58 +42,58 @@ func simplex_basis():
 	var n = AnlNoise.new()
 	n.simplex_basis( n.seed(randi()) )
 	map_to_texture(n)
-	
+
 func cellular_basis():
 	var n = AnlNoise.new()
-	
-	var basis = n.cellular_basis( n.constant(-0.25), n.constant(-0.3), n.constant(0.8), n.constant(0), 
-								  n.zero(), n.zero(), n.zero(), n.zero(), 
+
+	var basis = n.cellular_basis( n.constant(-0.25), n.constant(-0.3), n.constant(0.8), n.constant(0),
+								  n.zero(), n.zero(), n.zero(), n.zero(),
 								  n.constant(AnlNoise.DISTANCE_EUCLID), n.seed(randi()) )
 	n.clamp(basis, n.zero(), n.one())
 	map_to_texture(n)
-	
+
 func fractal():
 	var n = AnlNoise.new()
-	
+
 	var layer = n.fractal_layer(AnlNoise.BASIS_GRADIENT, n.constant(AnlNoise.INTERP_QUINTIC), 1, 1, randi())
-	
+
 	var persistence = n.constant(-0.5)
 	var lacunarity = n.constant(4)
 	var numoctaves = n.constant(2)
 	var freq = n.constant(1)
-	
+
 	var s = n.seed(randi())
 	n.fractal(s, layer, persistence, lacunarity, numoctaves, freq)
 	map_to_texture(n)
-	
+
 func hex_tile():
 	var n = AnlNoise.new()
 	n.hex_tile( n.seed(randi()) )
 	map_to_texture(n)
-	
+
 func hex_bump():
 	var n = AnlNoise.new()
 	n.hex_bump()
 	map_to_texture(n)
-	
+
 func x():
 	var n = AnlNoise.new()
 	n.x()
 	map_to_texture(n)
-	
+
 func y():
 	var n = AnlNoise.new()
 	n.y()
 	map_to_texture(n)
-	
+
 func radial():
 	var n = AnlNoise.new()
 	n.radial()
 	map_to_texture(n)
-	
+
 func map_to_texture(n):
-	texture = n.map_to_texture(size, n.get_last_index(), AnlNoise.SEAMLESS_NONE, mapping_ranges)
-	
+	texture = n.map_to_texture(size, n.index, AnlNoise.SEAMLESS_NONE, mapping_ranges)
+
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_RIGHT and event.pressed:

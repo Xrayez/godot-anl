@@ -856,6 +856,8 @@ void AnlNoise::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("get_last_index"),&AnlNoise::get_last_index);
 
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "index"), "", "get_last_index");
+
     // NoiseExecutor methods
 
     ClassDB::bind_method(D_METHOD("get_scalar_2d", "x", "y", "index"),&AnlNoise::get_scalar_2d);

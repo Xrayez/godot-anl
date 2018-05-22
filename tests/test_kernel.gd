@@ -136,4 +136,4 @@ func _init():
 
 	# Kernel
 
-	i = n.get_last_index()
+	i = n.index

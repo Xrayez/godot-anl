@@ -23,8 +23,8 @@ func _init():
 	# Image mapping
 	var tex = ImageTexture.new()
 	var img = Image.new()
-	img = n.map_to_image(Vector2(100, 100), n.get_last_index(), AnlNoise.SEAMLESS_XY)
+	img = n.map_to_image(Vector2(100, 100), n.index, AnlNoise.SEAMLESS_XY)
 	tex.create_from_image(img)
-	
+
 	# Texture mapping
-	tex = n.map_to_texture(Vector2(100, 100), n.get_last_index(), AnlNoise.SEAMLESS_NONE)
+	tex = n.map_to_texture(Vector2(100, 100), n.index, AnlNoise.SEAMLESS_NONE)
