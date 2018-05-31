@@ -1,5 +1,7 @@
 # Godot Accidental Noise Library module
 
+[![Build Status](https://travis-ci.com/Xrayez/godot-anl.svg?branch=master)](https://travis-ci.com/Xrayez/godot-anl)
+
 This is a wrapper for the new version of
 [Accidental Noise Library](https://github.com/JTippetts/accidental-noise-library)
 originally written by
