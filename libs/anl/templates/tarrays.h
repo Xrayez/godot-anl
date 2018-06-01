@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <cmath>
 #include "../vectortypes.h"
+#include "typedefs.h"
+#include "ustring.h"
 
 namespace anl
 {
@@ -833,13 +835,17 @@ public:
 
     void set(int x, int y, int z, T val)
     {
-        if(x>=m_width || y>=m_height || z>=m_depth) throw(std::out_of_range("Array index out of range"));
+        ERR_EXPLAIN("Array index out of range");
+        ERR_FAIL_COND(x>=m_width || y>=m_height || z>=m_depth);
+
         m_array[z*(m_width*m_height)+y*m_width+x]=val;
     }
 
     T get(int x, int y, int z)
     {
-        if(x>=m_width || y>=m_height || z>=m_depth) throw(std::out_of_range("Array index out of range"));
+        ERR_EXPLAIN("Array index out of range");
+        ERR_FAIL_COND(x>=m_width || y>=m_height || z>=m_depth);
+
         return m_array[z*(m_width*m_height)+y*m_width+x];
     }
 
