@@ -4,6 +4,9 @@ dist: trusty
 
 sudo: false
 
+notifications:
+  email: false
+
 env:
   global:
     - SCONS_CACHE=$HOME/.scons_cache
