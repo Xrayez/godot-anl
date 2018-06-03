@@ -4,6 +4,7 @@
 *.o
 *.obj
 *.pyc
+*.bc
 
 # Compiled Dynamic libraries
 *.so

@@ -14,12 +14,11 @@ and be used freely in GDScript.
 ## Installation
 
 ```bash
-# 1. Change directory to `modules` subfolder of Godot repository
+# Change directory to `modules` subfolder of Godot repository
 cd godot/modules/
-# 2. Clone the module under directory named `anl`
-git clone https://github.com/Xrayez/godot-anl.git anl
-cd ..
-# 3. Compile the engine manually, for instance:
+# Clone the module under directory named `anl`
+git clone https://github.com/Xrayez/godot-anl.git anl && cd ..
+# Compile the engine manually, for instance:
 scons platform=windows target=release_debug bits=64
 ```
 
