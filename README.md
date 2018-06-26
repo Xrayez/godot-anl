@@ -11,16 +11,6 @@ originally written by
 to be properly compiled for [Godot 3.0+](https://github.com/godotengine/godot)
 and be used freely in GDScript.
 
-## Installation
-
-```bash
-# Change directory to `modules` subfolder of Godot repository
-cd godot/modules/
-# Clone the module under directory named `anl`
-git clone https://github.com/Xrayez/godot-anl.git anl && cd ..
-# Compile the engine manually, for instance:
-scons platform=windows target=release_debug bits=64
-```
 
 ## Overview
 
@@ -33,6 +23,34 @@ the "pipeline"
 
 The library is full of features compared to other noise generation libraries with
 a drawback of poorer performance.
+## Installation
+
+```bash
+# Change directory to `modules` subfolder of Godot repository
+cd godot/modules/
+# Clone the module under directory named `anl`
+git clone https://github.com/Xrayez/godot-anl.git anl && cd ..
+# Compile the engine manually, for instance:
+scons platform=windows target=release_debug bits=64
+```
+
+## Building notes
+
+Noise functions will have a period of 256; with coordinates higher than that,
+the patterns will repeat. If a larger period is required, uncomment the
+following statement in `SCsub` to use a long-period hash instead in exchange for a slight
+decrease in performance:
+
+```python
+# module_env.Append(CPPDEFINES=['ANL_LONG_PERIOD_HASHING'])
+```
+
+Alternatively, you can enable long-period hashing by defining the given preprocessor
+variable before build:
+
+```bash
+scons platform=linux target=release_debug bits=64 define=ANL_LONG_PERIOD_HASHING
+```
 
 ## Usage example
 

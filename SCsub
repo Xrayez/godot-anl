@@ -3,18 +3,27 @@ Import('env')
 
 module_env = env.Clone()
 
-module_env.add_source_files(env.modules_sources, "*.cpp")
+module_env.add_source_files(env.modules_sources, '*.cpp')
 
-module_env.add_source_files(env.modules_sources, "libs/anl/VM/*.cpp")
-module_env.add_source_files(env.modules_sources, "libs/anl/Expression/*.cpp")
-module_env.add_source_files(env.modules_sources, "libs/anl/Imaging/*.cpp")
-module_env.add_source_files(env.modules_sources, "libs/anl/Processing/*.cpp")
+module_env.add_source_files(env.modules_sources, 'libs/anl/VM/*.cpp')
+module_env.add_source_files(env.modules_sources, 'libs/anl/Expression/*.cpp')
+module_env.add_source_files(env.modules_sources, 'libs/anl/Imaging/*.cpp')
+module_env.add_source_files(env.modules_sources, 'libs/anl/Processing/*.cpp')
 
-module_env.Append(CPPPATH=["libs/anl/VM", 
-                           "libs/anl/Expression", 
-                           "libs/anl/Imaging", 
-                           "libs/anl/Processing"])
+module_env.Append(CPPPATH=['libs/anl/VM',
+                           'libs/anl/Expression',
+                           'libs/anl/Imaging',
+                           'libs/anl/Processing'])
 
-module_env.Append(CPPFLAGS=["-std=c++11", "-O3"])
+if env['target'] == 'release':
+    module_env.Append(CPPFLAGS=['-std=c++11', '-O3'])
+else:  # release_debug, debug
+    module_env.Append(CPPFLAGS=['-std=c++11'])
+
+# module_env.Append(CPPDEFINES=['ANL_LONG_PERIOD_HASHING'])
+
+for key, value in ARGLIST:
+    if key == 'define':
+        module_env.Append(CPPDEFINES=[value])
 
 Export('module_env')
