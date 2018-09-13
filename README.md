@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.com/Xrayez/godot-anl.svg?branch=master)](https://travis-ci.com/Xrayez/godot-anl)
 [![Build status](https://ci.appveyor.com/api/projects/status/n6b4hvlk7pxu6dk0/branch/master?svg=true)](https://ci.appveyor.com/project/Xrayez/godot-anl/branch/master)
 
-
 This is a wrapper for the new version of
 [Accidental Noise Library](https://github.com/JTippetts/accidental-noise-library)
 originally written by
@@ -11,6 +10,8 @@ originally written by
 to be properly compiled for [Godot 3.0+](https://github.com/godotengine/godot)
 and be used freely in GDScript.
 
+The master branch aims to be in sync with Godot's master branch. Checkout other
+branches for compatible versions.
 
 ## Overview
 
@@ -23,6 +24,7 @@ the "pipeline"
 
 The library is full of features compared to other noise generation libraries with
 a drawback of poorer performance.
+
 ## Installation
 
 ```bash

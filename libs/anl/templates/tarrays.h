@@ -1,11 +1,14 @@
 #ifndef TARRAYS_H
 #define TARRAYS_H
+
+// Godot's asserts
+#include "core/typedefs.h"
+#include "core/ustring.h"
+
 #include <vector>
 #include <stdexcept>
 #include <cmath>
 #include "../vectortypes.h"
-#include "typedefs.h"
-#include "ustring.h"
 
 namespace anl
 {

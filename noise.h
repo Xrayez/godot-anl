@@ -1,7 +1,7 @@
 #ifndef ANL_NOISE_H
 #define ANL_NOISE_H
 
-#include "reference.h"
+#include "core/reference.h"
 #include "libs/anl/anl.h"
 #include "scene/resources/texture.h"
 
