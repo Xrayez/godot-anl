@@ -1,4 +1,4 @@
-#include "noise.h"
+#include "anl_noise.h"
 #include "core/method_bind_ext.gen.inc"
 
 AnlNoise::AnlNoise(): vm(kernel), eb(kernel) {}

@@ -1,5 +1,5 @@
 #include "register_types.h"
-#include "noise.h"
+#include "anl_noise.h"
 
 void register_anl_types() {
 

@@ -1,8 +1,9 @@
 #ifndef ANL_NOISE_H
 #define ANL_NOISE_H
 
-#include "core/reference.h"
 #include "libs/anl/anl.h"
+
+#include "core/reference.h"
 #include "scene/resources/texture.h"
 
 // Index of the noise function
