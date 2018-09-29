@@ -4,6 +4,7 @@ Import('env')
 module_env = env.Clone()
 
 module_env.add_source_files(env.modules_sources, '*.cpp')
+module_env.add_source_files(env.modules_sources, 'plugin/*.cpp')
 
 module_env.add_source_files(env.modules_sources, 'libs/anl/VM/*.cpp')
 module_env.add_source_files(env.modules_sources, 'libs/anl/Expression/*.cpp')
