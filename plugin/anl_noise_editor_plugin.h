@@ -20,14 +20,15 @@ private:
 
     static AnlNoiseEditor *singleton;
 
-protected:
-	void _notification(int p_what);
-	static void _bind_methods();
+// protected:
+// 	void _notification(int p_what);
+// 	static void _bind_methods();
 
 public:
 	static AnlNoiseEditor *get_singleton() { return singleton; }
 
 	virtual Size2 get_minimum_size() const;
+	AnlNoiseEditor();
 };
 
 class AnlNoiseEditorPlugin : public EditorPlugin {
