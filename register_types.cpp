@@ -6,11 +6,9 @@ void register_anl_types() {
 
     ClassDB::register_class<AnlNoise>();
 
-    EditorNode *en = EditorNode::get_singleton();
-    if(en) {
-        memnew(AnlNoiseEditorPlugin(en));
-    }
-    // en->add_editor_plugin(memnew(AnlNoiseEditorPlugin(en)));
+#ifdef TOOLS_ENABLED
+	EditorPlugins::add_by_type<AnlNoiseEditorPlugin>();
+#endif
 }
 
 void unregister_anl_types() {
