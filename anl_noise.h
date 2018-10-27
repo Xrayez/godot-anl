@@ -3,14 +3,14 @@
 
 #include "libs/anl/anl.h"
 
-#include "core/reference.h"
+#include "core/resource.h"
 #include "scene/resources/texture.h"
 
 // Index of the noise function
 using Index = unsigned int;
 
-class AnlNoise : public Reference {
-    GDCLASS(AnlNoise, Reference);
+class AnlNoise : public Resource {
+    GDCLASS(AnlNoise, Resource);
 
 protected:
     static void _bind_methods();
