@@ -3,7 +3,7 @@
 #include "anl_noise.h"
 #include "visual_anl_noise.h"
 
-#include "plugin/anl_noise_editor_plugin.h"
+#include "plugin/visual_anl_noise_editor_plugin.h"
 
 void register_anl_types() {
 

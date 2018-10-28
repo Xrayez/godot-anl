@@ -1,4 +1,4 @@
-#include "anl_noise_editor_plugin.h"
+#include "visual_anl_noise_editor_plugin.h"
 
 Size2 AnlNoiseEditor::get_minimum_size() const {
 

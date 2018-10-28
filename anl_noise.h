@@ -11,6 +11,7 @@ using Index = unsigned int;
 
 class AnlNoise : public Resource {
     GDCLASS(AnlNoise, Resource);
+    OBJ_SAVE_TYPE(AnlNoise);
 
 protected:
     static void _bind_methods();

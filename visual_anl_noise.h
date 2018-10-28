@@ -5,6 +5,7 @@
 
 class VisualAnlNoise : public AnlNoise {
     GDCLASS(VisualAnlNoise, AnlNoise);
+    OBJ_SAVE_TYPE(VisualAnlNoise);
 
 protected:
     static void _bind_methods();
