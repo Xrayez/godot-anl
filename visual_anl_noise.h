@@ -3,15 +3,212 @@
 
 #include "anl_noise.h"
 
+class VisualAnlNoiseNode;
+
 class VisualAnlNoise : public AnlNoise {
     GDCLASS(VisualAnlNoise, AnlNoise);
     OBJ_SAVE_TYPE(VisualAnlNoise);
 
+public:
+    struct Connection {
+		int from_node;
+		int from_port;
+		int to_node;
+		int to_port;
+	};
+
+private:
+	struct Node {
+		Ref<VisualAnlNoiseNode> node;
+		Vector2 position;
+	};
+
+    struct Graph {
+		Map<int, Node> nodes;
+		List<Connection> connections;
+	} graph;
+
+    Array _get_node_connections() const;
+
+    Vector2 graph_offset;
+
+    volatile mutable bool dirty;
+	void _queue_update();
+
+    union ConnectionKey {
+
+		struct {
+			uint64_t node : 32;
+			uint64_t port : 32;
+		};
+		uint64_t key;
+		bool operator<(const ConnectionKey &p_key) const {
+			return key < p_key.key;
+		}
+	};
+
 protected:
-    static void _bind_methods();
+	virtual void _update_noise() const;
+	static void _bind_methods();
+
+	bool _set(const StringName &p_name, const Variant &p_value);
+	bool _get(const StringName &p_name, Variant &r_ret) const;
+	void _get_property_list(List<PropertyInfo> *p_list) const;
 
 public:
+	enum {
+		NODE_ID_INVALID = -1,
+		NODE_ID_OUTPUT = 0,
+	};
+
+    void add_node(const Ref<VisualAnlNoiseNode> &p_node, const Vector2 &p_position, int p_id);
+	void set_node_position(int p_id, const Vector2 &p_position);
+
+	Vector2 get_node_position(int p_id) const;
+	Ref<VisualAnlNoiseNode> get_node(int p_id) const;
+
+	Vector<int> get_node_list() const;
+	int get_valid_node_id() const;
+
+	int find_node_id(const Ref<VisualAnlNoiseNode> &p_node) const;
+	void remove_node(int p_id);
+
+	bool is_node_connection(int p_from_node, int p_from_port, int p_to_node, int p_to_port) const;
+	bool can_connect_nodes(int p_from_node, int p_from_port, int p_to_node, int p_to_port) const;
+	Error connect_nodes(int p_from_node, int p_from_port, int p_to_node, int p_to_port);
+	void disconnect_nodes(int p_from_node, int p_from_port, int p_to_node, int p_to_port);
+
+	void get_node_connections(List<Connection> *r_connections) const;
+
+	void set_graph_offset(const Vector2 &p_offset);
+	Vector2 get_graph_offset() const;
+
+	String generate_preview_noise(int p_node, int p_port) const;
+
     VisualAnlNoise();
+};
+
+
+class VisualAnlNoiseNode : public Resource {
+	GDCLASS(VisualAnlNoiseNode, Resource)
+
+	int port_preview;
+
+	Map<int, Variant> default_input_values;
+
+	Array _get_default_input_values() const;
+	void _set_default_input_values(const Array &p_values);
+
+protected:
+	static void _bind_methods();
+
+public:
+	enum PortType {
+		PORT_TYPE_SCALAR,
+		PORT_TYPE_INDEX,
+	};
+
+	virtual String get_caption() const = 0;
+
+	virtual int get_input_port_count() const = 0;
+	virtual PortType get_input_port_type(int p_port) const = 0;
+	virtual String get_input_port_name(int p_port) const = 0;
+
+	void set_input_port_default_value(int p_port, const Variant &p_value);
+	Variant get_input_port_default_value(int p_port) const; // if NIL (default if node does not set anything) is returned, it means no default value is wanted if disconnected, thus no input var must be supplied (empty string will be supplied)
+
+	virtual int get_output_port_count() const = 0;
+	virtual PortType get_output_port_type(int p_port) const = 0;
+	virtual String get_output_port_name(int p_port) const = 0;
+
+	void set_output_port_for_preview(int p_index);
+	int get_output_port_for_preview() const;
+
+	virtual bool is_port_separator(int p_index) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual String get_warning() const;
+
+	VisualAnlNoiseNode();
+};
+
+
+class VisualAnlNoiseNodeInput : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeInput, VisualAnlNoiseNode)
+
+	friend class VisualAnlNoise;
+
+	struct Port {
+		PortType type;
+		const char *name;
+		const char *string;
+	};
+
+	static const Port ports[];
+	static const Port preview_ports[];
+
+	String input_name;
+
+protected:
+	static void _bind_methods();
+	void _validate_property(PropertyInfo &property) const;
+
+public:
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual String get_caption() const;
+
+	void set_input_name(String p_name);
+	String get_input_name() const;
+
+	int get_input_index_count() const;
+	PortType get_input_index_type(int p_index) const;
+	String get_input_index_name(int p_index) const;
+
+	PortType get_input_type_by_name(String p_name) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	VisualAnlNoiseNodeInput();
+};
+
+
+class VisualAnlNoiseNodeOutput : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeOutput, VisualAnlNoiseNode)
+
+public:
+	friend class VisualAnlNoise;
+
+	struct Port {
+		PortType type;
+		const char *name;
+		const char *string;
+	};
+
+	static const Port ports[];
+
+public:
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+	Variant get_input_port_default_value(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual bool is_port_separator(int p_index) const;
+
+	virtual String get_caption() const;
+
+	VisualAnlNoiseNodeOutput();
 };
 
 #endif
