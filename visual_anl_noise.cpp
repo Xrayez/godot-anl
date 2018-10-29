@@ -608,19 +608,17 @@ VisualAnlNoiseNodeInput::VisualAnlNoiseNodeInput() {
 
 int VisualAnlNoiseNodeOutput::get_input_port_count() const {
 
-	int count = 0;
-
-	return count;
+	return 1;
 }
 
 VisualAnlNoiseNodeOutput::PortType VisualAnlNoiseNodeOutput::get_input_port_type(int p_port) const {
 
-	return PORT_TYPE_SCALAR;
+	return PORT_TYPE_INDEX;
 }
 
 String VisualAnlNoiseNodeOutput::get_input_port_name(int p_port) const {
 
-	return String();
+	return TTR("Index");
 }
 
 Variant VisualAnlNoiseNodeOutput::get_input_port_default_value(int p_port) const {
@@ -635,7 +633,7 @@ int VisualAnlNoiseNodeOutput::get_output_port_count() const {
 
 VisualAnlNoiseNodeOutput::PortType VisualAnlNoiseNodeOutput::get_output_port_type(int p_port) const {
 
-	return PORT_TYPE_SCALAR;
+	return PORT_TYPE_INDEX;
 }
 
 String VisualAnlNoiseNodeOutput::get_output_port_name(int p_port) const {
