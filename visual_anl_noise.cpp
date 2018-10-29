@@ -100,6 +100,8 @@ void VisualAnlNoiseNodeComponent::add_node(const Ref<VisualAnlNoiseNode> &p_node
 
 	graph.nodes[p_id] = n;
 
+	print_line("added_node");
+
 	_queue_update();
 }
 
