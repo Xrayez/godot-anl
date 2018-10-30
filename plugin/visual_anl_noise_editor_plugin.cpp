@@ -1,5 +1,14 @@
 #include "visual_anl_noise_editor_plugin.h"
 
+#include "core/io/resource_loader.h"
+#include "core/os/input.h"
+#include "core/os/keyboard.h"
+#include "core/project_settings.h"
+#include "editor/editor_properties.h"
+#include "scene/gui/menu_button.h"
+#include "scene/gui/panel.h"
+#include "scene/main/viewport.h"
+
 Control *VisualAnlNoiseNodePlugin::create_editor(const Ref<VisualAnlNoiseNode> &p_node) {
 
 	if (get_script_instance()) {
@@ -324,7 +333,6 @@ void VisualAnlNoiseEditor::_line_edit_changed(const String &p_text, Object *line
 }
 
 void VisualAnlNoiseEditor::_line_edit_focus_out(Object *line_edit, int p_node_id) {
-
 
 }
 
@@ -846,60 +854,59 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 		return input_editor;
 	}
 
-	// Vector<StringName> properties = p_node->get_editable_properties();
-	// if (properties.size() == 0) {
-	// 	return NULL;
-	// }
+	Vector<StringName> properties = p_node->get_editable_properties();
+	if (properties.size() == 0) {
+		return NULL;
+	}
 
-	// List<PropertyInfo> props;
-	// p_node->get_property_list(&props);
+	List<PropertyInfo> props;
+	p_node->get_property_list(&props);
 
-	// Vector<PropertyInfo> pinfo;
+	Vector<PropertyInfo> pinfo;
 
-	// for (List<PropertyInfo>::Element *E = props.front(); E; E = E->next()) {
+	for (List<PropertyInfo>::Element *E = props.front(); E; E = E->next()) {
 
-	// 	for (int i = 0; i < properties.size(); i++) {
-	// 		if (E->get().name == String(properties[i])) {
-	// 			pinfo.push_back(E->get());
-	// 		}
-	// 	}
-	// }
+		for (int i = 0; i < properties.size(); i++) {
+			if (E->get().name == String(properties[i])) {
+				pinfo.push_back(E->get());
+			}
+		}
+	}
 
-	// if (pinfo.size() == 0)
-	// 	return NULL;
+	if (pinfo.size() == 0)
+		return NULL;
 
-	// properties.clear();
+	properties.clear();
 
-	// Ref<VisualAnlNoiseNode> node = p_node;
-	// Vector<EditorProperty *> editors;
+	Ref<VisualAnlNoiseNode> node = p_node;
+	Vector<EditorProperty *> editors;
 
-	// for (int i = 0; i < pinfo.size(); i++) {
+	for (int i = 0; i < pinfo.size(); i++) {
 
-	// 	EditorProperty *prop = EditorInspector::instantiate_property_editor(node.ptr(), pinfo[i].type, pinfo[i].name, pinfo[i].hint, pinfo[i].hint_string, pinfo[i].usage);
-	// 	if (!prop)
-	// 		return NULL;
+		EditorProperty *prop = EditorInspector::instantiate_property_editor(node.ptr(), pinfo[i].type, pinfo[i].name, pinfo[i].hint, pinfo[i].hint_string, pinfo[i].usage);
+		if (!prop)
+			return NULL;
 
-	// 	if (Object::cast_to<EditorPropertyResource>(prop)) {
-	// 		Object::cast_to<EditorPropertyResource>(prop)->set_use_sub_inspector(false);
-	// 		prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
-	// 	} else if (Object::cast_to<EditorPropertyTransform>(prop)) {
-	// 		prop->set_custom_minimum_size(Size2(250 * EDSCALE, 0));
-	// 	} else if (Object::cast_to<EditorPropertyFloat>(prop) || Object::cast_to<EditorPropertyVector3>(prop)) {
-	// 		prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
-	// 	} else if (Object::cast_to<EditorPropertyEnum>(prop)) {
-	// 		prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
-	// 		Object::cast_to<EditorPropertyEnum>(prop)->set_option_button_clip(false);
-	// 	}
+		if (Object::cast_to<EditorPropertyResource>(prop)) {
+			Object::cast_to<EditorPropertyResource>(prop)->set_use_sub_inspector(false);
+			prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
+		} else if (Object::cast_to<EditorPropertyTransform>(prop)) {
+			prop->set_custom_minimum_size(Size2(250 * EDSCALE, 0));
+		} else if (Object::cast_to<EditorPropertyFloat>(prop) || Object::cast_to<EditorPropertyVector3>(prop)) {
+			prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
+		} else if (Object::cast_to<EditorPropertyEnum>(prop)) {
+			prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
+			Object::cast_to<EditorPropertyEnum>(prop)->set_option_button_clip(false);
+		}
 
-	// 	editors.push_back(prop);
-	// 	properties.push_back(pinfo[i].name);
-	// }
+		editors.push_back(prop);
+		properties.push_back(pinfo[i].name);
+	}
 
-	// VisualAnlNoiseNodePluginDefaultEditor *editor = memnew(VisualAnlNoiseNodePluginDefaultEditor);
-	// editor->setup(editors, properties, p_node);
+	VisualAnlNoiseNodePluginDefaultEditor *editor = memnew(VisualAnlNoiseNodePluginDefaultEditor);
+	editor->setup(editors, properties, p_node);
 
-	// return editor;
-	return NULL;
+	return editor;
 }
 
 // void EditorPropertyAnlNoiseMode::_option_selected(int p_which) {
