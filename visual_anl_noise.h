@@ -99,18 +99,6 @@ private:
     volatile mutable bool dirty;
 	void _queue_update();
 
-    union ConnectionKey {
-
-		struct {
-			uint64_t node : 32;
-			uint64_t port : 32;
-		};
-		uint64_t key;
-		bool operator<(const ConnectionKey &p_key) const {
-			return key < p_key.key;
-		}
-	};
-
 protected:
 	virtual void _update_noise() const;
 	static void _bind_methods();
