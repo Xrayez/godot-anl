@@ -524,6 +524,7 @@ void VisualAnlNoiseEditor::_scroll_changed(const Vector2 &p_scroll) {
 }
 
 void VisualAnlNoiseEditor::_node_changed(int p_id) {
+
 	if (updating)
 		return;
 
@@ -674,8 +675,7 @@ VisualAnlNoiseEditor::VisualAnlNoiseEditor() {
 	graph->get_zoom_hbox()->move_child(add_node, 0);
 	add_node->get_popup()->connect("id_pressed", this, "_add_node");
 
-	add_options.push_back(AddOption("Constant", "Functions", "VisualAnlNoiseNodeConstant"));
-	add_options.push_back(AddOption("Input", "Inputs", "VisualAnlNoiseNodeInput"));
+	add_options.push_back(AddOption("Scalar", "Constants", "VisualAnlNoiseNodeScalar"));
 
 	_update_options_menu();
 
@@ -802,6 +802,8 @@ public:
 		undo_redo->add_undo_property(node.ptr(), prop, node->get(prop));
 		undo_redo->commit_action();
 		updating = false;
+
+		_refresh_request();
 	}
 
 	void _node_changed() {

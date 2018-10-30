@@ -3,13 +3,25 @@
 
 #include "../visual_anl_noise.h"
 
-class VisualAnlNoiseNodeConstant : public VisualAnlNoiseNode {
-	GDCLASS(VisualAnlNoiseNodeConstant, VisualAnlNoiseNode)
+class VisualAnlNoiseNodeScalar : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeScalar, VisualAnlNoiseNode)
 
-    real_t constant;
+public:
+	enum ScalarType {
+		SCALAR_CONSTANT,
+		SCALAR_PI,
+		SCALAR_E,
+		SCALAR_ONE,
+		SCALAR_ZERO,
+		SCALAR_POINT5,
+		SCALAR_SQRT2,
+	};
 
-protected:
-    static void _bind_methods();
+	void set_type(ScalarType p_type);
+	ScalarType get_type() const;
+
+	void set_constant(real_t p_value);
+	real_t get_constant() const;
 
 public:
 	virtual String get_caption() const;
@@ -22,12 +34,18 @@ public:
 	virtual PortType get_output_port_type(int p_port) const;
 	virtual String get_output_port_name(int p_port) const;
 
-	void set_constant(real_t p_value);
-	real_t get_constant() const;
-
 	virtual Vector<StringName> get_editable_properties() const;
 
-    VisualAnlNoiseNodeConstant();
+    VisualAnlNoiseNodeScalar();
+
+protected:
+    static void _bind_methods();
+
+private:
+	ScalarType type;
+    real_t constant;
 };
+
+VARIANT_ENUM_CAST(VisualAnlNoiseNodeScalar::ScalarType);
 
 #endif
