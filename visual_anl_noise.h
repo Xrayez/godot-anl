@@ -9,18 +9,16 @@ class VisualAnlNoiseNodeComponent;
 
 class VisualAnlNoise : public AnlNoise {
     GDCLASS(VisualAnlNoise, AnlNoise);
-    OBJ_SAVE_TYPE(VisualAnlNoise);
 
 	Ref<VisualAnlNoiseNodeComponent> component; // default, tree root
 
 protected:
 	static void _bind_methods();
+	void _generate_noise();
 
 public:
 	void set_component(const Ref<VisualAnlNoiseNodeComponent> p_component);
 	Ref<VisualAnlNoiseNodeComponent> get_component() const;
-
-	void generate_noise();
 
 	VisualAnlNoise();
 };
@@ -153,52 +151,6 @@ public:
 	virtual PortType get_output_port_type(int p_port) const;
 	virtual String get_output_port_name(int p_port) const;
 
-};
-
-
-class VisualAnlNoiseNodeInput : public VisualAnlNoiseNode {
-	GDCLASS(VisualAnlNoiseNodeInput, VisualAnlNoiseNode)
-
-	friend class VisualAnlNoise;
-
-	struct Port {
-		PortType type;
-		const char *name;
-		const char *string;
-	};
-
-	static const Port ports[];
-	static const Port preview_ports[];
-
-	String input_name;
-
-protected:
-	static void _bind_methods();
-	void _validate_property(PropertyInfo &property) const;
-
-public:
-	virtual int get_input_port_count() const;
-	virtual PortType get_input_port_type(int p_port) const;
-	virtual String get_input_port_name(int p_port) const;
-
-	virtual int get_output_port_count() const;
-	virtual PortType get_output_port_type(int p_port) const;
-	virtual String get_output_port_name(int p_port) const;
-
-	virtual String get_caption() const;
-
-	void set_input_name(String p_name);
-	String get_input_name() const;
-
-	int get_input_index_count() const;
-	PortType get_input_index_type(int p_index) const;
-	String get_input_index_name(int p_index) const;
-
-	PortType get_input_type_by_name(String p_name) const;
-
-	virtual Vector<StringName> get_editable_properties() const;
-
-	VisualAnlNoiseNodeInput();
 };
 
 

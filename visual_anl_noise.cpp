@@ -90,17 +90,9 @@ void VisualAnlNoiseNodeComponent::add_node(const Ref<VisualAnlNoiseNode> &p_node
 	n.node = p_node;
 	n.position = p_position;
 
-	Ref<VisualAnlNoiseNodeInput> input = n.node;
-
-	if (input.is_valid()) {
-		input->connect("input_type_changed", this, "_input_type_changed", varray(p_id));
-	}
-
 	n.node->connect("changed", this, "_queue_update");
 
 	graph.nodes[p_id] = n;
-
-	print_line("added_node");
 
 	_queue_update();
 }
@@ -156,12 +148,6 @@ void VisualAnlNoiseNodeComponent::remove_node(int p_id) {
 	ERR_FAIL_COND(p_id < 2);
 
 	ERR_FAIL_COND(!graph.nodes.has(p_id));
-
-	Ref<VisualAnlNoiseNodeInput> input = graph.nodes[p_id].node;
-
-	if (input.is_valid()) {
-		input->disconnect("input_type_changed", this, "_input_type_changed");
-	}
 
 	graph.nodes[p_id].node->disconnect("changed", this, "_queue_update");
 
@@ -513,101 +499,6 @@ String VisualAnlNoiseNodeComponent::get_output_port_name(int p_port) const {
 
 String VisualAnlNoiseNodeComponent::get_caption() const {
 	return TTR("Component");
-}
-
-int VisualAnlNoiseNodeInput::get_input_port_count() const {
-
-	return 0;
-}
-
-VisualAnlNoiseNodeInput::PortType VisualAnlNoiseNodeInput::get_input_port_type(int p_port) const {
-
-	return PORT_TYPE_SCALAR;
-}
-
-String VisualAnlNoiseNodeInput::get_input_port_name(int p_port) const {
-
-	return "";
-}
-
-int VisualAnlNoiseNodeInput::get_output_port_count() const {
-
-	return 1;
-}
-
-VisualAnlNoiseNodeInput::PortType VisualAnlNoiseNodeInput::get_output_port_type(int p_port) const {
-
-	return get_input_type_by_name(input_name);
-}
-
-String VisualAnlNoiseNodeInput::get_output_port_name(int p_port) const {
-	return "";
-}
-
-String VisualAnlNoiseNodeInput::get_caption() const {
-	return TTR("Input");
-}
-
-void VisualAnlNoiseNodeInput::set_input_name(String p_name) {
-
-	PortType prev_type = get_input_type_by_name(input_name);
-	input_name = p_name;
-	emit_changed();
-	if (get_input_type_by_name(input_name) != prev_type) {
-		emit_signal("input_type_changed");
-	}
-}
-
-String VisualAnlNoiseNodeInput::get_input_name() const {
-
-	return input_name;
-}
-
-VisualAnlNoiseNodeInput::PortType VisualAnlNoiseNodeInput::get_input_type_by_name(String p_name) const {
-
-	return PORT_TYPE_SCALAR;
-}
-
-int VisualAnlNoiseNodeInput::get_input_index_count() const {
-
-	int count = 0;
-
-	return count;
-}
-
-VisualAnlNoiseNodeInput::PortType VisualAnlNoiseNodeInput::get_input_index_type(int p_index) const {
-
-	return PORT_TYPE_SCALAR;
-}
-
-String VisualAnlNoiseNodeInput::get_input_index_name(int p_index) const {
-
-	return String();
-}
-
-void VisualAnlNoiseNodeInput::_validate_property(PropertyInfo &property) const {
-
-}
-
-Vector<StringName> VisualAnlNoiseNodeInput::get_editable_properties() const {
-
-	Vector<StringName> props;
-	props.push_back("input_name");
-	return props;
-}
-
-void VisualAnlNoiseNodeInput::_bind_methods() {
-
-	ClassDB::bind_method(D_METHOD("set_input_name", "name"), &VisualAnlNoiseNodeInput::set_input_name);
-	ClassDB::bind_method(D_METHOD("get_input_name"), &VisualAnlNoiseNodeInput::get_input_name);
-
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "input_name", PROPERTY_HINT_ENUM, ""), "set_input_name", "get_input_name");
-	ADD_SIGNAL(MethodInfo("input_type_changed"));
-}
-
-VisualAnlNoiseNodeInput::VisualAnlNoiseNodeInput() {
-	input_name = "[None]";
-	// changed when set
 }
 
 int VisualAnlNoiseNodeOutput::get_input_port_count() const {
