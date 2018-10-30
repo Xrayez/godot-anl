@@ -10,6 +10,10 @@ void register_anl_types() {
     ClassDB::register_class<AnlNoise>();
     ClassDB::register_class<VisualAnlNoise>();
 
+    // Component
+    ClassDB::register_class<VisualAnlNoiseNodeComponent>();
+
+    // Nodes
     ClassDB::register_class<VisualAnlNoiseNodeScalar>();
 
 #ifdef TOOLS_ENABLED

@@ -10,7 +10,7 @@ class VisualAnlNoise : public AnlNoise {
     GDCLASS(VisualAnlNoise, AnlNoise);
     OBJ_SAVE_TYPE(VisualAnlNoise);
 
-	Ref<VisualAnlNoiseNodeComponent> component;
+	Ref<VisualAnlNoiseNodeComponent> component; // default, tree root
 
 protected:
 	static void _bind_methods();
@@ -18,6 +18,8 @@ protected:
 public:
 	void set_component(const Ref<VisualAnlNoiseNodeComponent> p_component);
 	Ref<VisualAnlNoiseNodeComponent> get_component() const;
+
+	void generate_noise();
 
 	VisualAnlNoise();
 };

@@ -676,6 +676,7 @@ VisualAnlNoiseEditor::VisualAnlNoiseEditor() {
 	add_node->get_popup()->connect("id_pressed", this, "_add_node");
 
 	add_options.push_back(AddOption("Scalar", "Constants", "VisualAnlNoiseNodeScalar"));
+	add_options.push_back(AddOption("Component", "Component", "VisualAnlNoiseNodeComponent"));
 
 	_update_options_menu();
 

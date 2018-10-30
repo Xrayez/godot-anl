@@ -453,8 +453,10 @@ VisualAnlNoise::VisualAnlNoise() : AnlNoise() {
 
 void VisualAnlNoise::_bind_methods() {
 
-	ClassDB::bind_method(D_METHOD("get_component"), &VisualAnlNoise::get_component);
 	ClassDB::bind_method(D_METHOD("set_component", "component"), &VisualAnlNoise::set_component);
+	ClassDB::bind_method(D_METHOD("get_component"), &VisualAnlNoise::get_component);
+
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "component"), "set_component", "get_component");
 }
 
 void VisualAnlNoise::set_component(const Ref<VisualAnlNoiseNodeComponent> p_component) {
