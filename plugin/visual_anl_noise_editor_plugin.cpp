@@ -487,9 +487,6 @@ void VisualAnlNoiseEditor::_node_selected(Object *p_node) {
 
 	Ref<VisualAnlNoiseNode> vanode = visual_anl_noise->get_component()->get_node(id);
 	ERR_FAIL_COND(!vanode.is_valid());
-
-	//do not rely on this, makes editor more complex
-	//EditorNode::get_singleton()->push_item(vanode.ptr(), "", true);
 }
 
 void VisualAnlNoiseEditor::_input(const Ref<InputEvent> p_event) {
@@ -497,7 +494,7 @@ void VisualAnlNoiseEditor::_input(const Ref<InputEvent> p_event) {
 		Ref<InputEventMouseButton> mb = p_event;
 
 		if (mb.is_valid() && mb->is_pressed() && mb->get_button_index() == BUTTON_RIGHT) {
-			// add_node->get_popup()->set_position(get_viewport()->get_mouse_position());
+			add_node->get_popup()->set_position(get_viewport()->get_mouse_position());
 			add_node->get_popup()->show_modal();
 		}
 	}
@@ -600,25 +597,6 @@ void VisualAnlNoiseEditor::_duplicate_nodes() {
 	}
 }
 
-// void VisualAnlNoiseEditor::_input_select_item(Ref<VisualAnlNoiseNodeInput> input, String name) {
-
-// 	String prev_name = input->get_input_name();
-
-// 	if (name == prev_name)
-// 		return;
-
-// 	UndoRedo *undo_redo = EditorNode::get_singleton()->get_undo_redo();
-// 	undo_redo->create_action("Visual AnlNoise Input Type Changed");
-
-// 	undo_redo->add_do_method(input.ptr(), "set_input_name", name);
-// 	undo_redo->add_undo_method(input.ptr(), "set_input_name", prev_name);
-
-// 	undo_redo->add_do_method(VisualAnlNoiseEditor::get_singleton(), "_update_graph");
-// 	undo_redo->add_undo_method(VisualAnlNoiseEditor::get_singleton(), "_update_graph");
-
-// 	undo_redo->commit_action();
-// }
-
 void VisualAnlNoiseEditor::_bind_methods() {
 
 	ClassDB::bind_method("_update_graph", &VisualAnlNoiseEditor::_update_graph);
@@ -636,7 +614,6 @@ void VisualAnlNoiseEditor::_bind_methods() {
 	ClassDB::bind_method("_line_edit_focus_out", &VisualAnlNoiseEditor::_line_edit_focus_out);
 	ClassDB::bind_method("_line_edit_changed", &VisualAnlNoiseEditor::_line_edit_changed);
 	ClassDB::bind_method("_duplicate_nodes", &VisualAnlNoiseEditor::_duplicate_nodes);
-	// ClassDB::bind_method("_input_select_item", &VisualAnlNoiseEditor::_input_select_item);
 	ClassDB::bind_method("_preview_select_port", &VisualAnlNoiseEditor::_preview_select_port);
 	ClassDB::bind_method("_input", &VisualAnlNoiseEditor::_input);
 }
@@ -712,19 +689,15 @@ bool VisualAnlNoiseEditorPlugin::handles(Object *p_object) const {
 void VisualAnlNoiseEditorPlugin::make_visible(bool p_visible) {
 
 	if (p_visible) {
-		//editor->hide_animation_player_editors();
-		//editor->animation_panel_make_visible(true);
 		button->show();
 		editor->make_bottom_panel_item_visible(visual_anl_noise_editor);
 		visual_anl_noise_editor->set_process_input(true);
-		//visual_anl_noise_editor->set_process(true);
 	} else {
 
 		if (visual_anl_noise_editor->is_visible_in_tree())
 			editor->hide_bottom_panel();
 		button->hide();
 		visual_anl_noise_editor->set_process_input(false);
-		//visual_anl_noise_editor->set_process(false);
 	}
 }
 
@@ -743,49 +716,6 @@ VisualAnlNoiseEditorPlugin::~VisualAnlNoiseEditorPlugin() {
 
 ////////////////
 
-class VisualAnlNoiseNodePluginInputEditor : public OptionButton {
-	GDCLASS(VisualAnlNoiseNodePluginInputEditor, OptionButton)
-
-	Ref<VisualAnlNoiseNodeInput> input;
-
-protected:
-	static void _bind_methods() {
-		ClassDB::bind_method("_item_selected", &VisualAnlNoiseNodePluginInputEditor::_item_selected);
-	}
-
-public:
-	void _notification(int p_what) {
-		if (p_what == NOTIFICATION_READY) {
-			connect("item_selected", this, "_item_selected");
-		}
-	}
-
-	void _item_selected(int p_item) {
-		VisualAnlNoiseEditor::get_singleton()->call_deferred("_input_select_item", input, get_item_text(p_item));
-	}
-
-	void setup(const Ref<VisualAnlNoiseNodeInput> &p_input) {
-		input = p_input;
-		Ref<Texture> type_icon[3] = {
-			EditorNode::get_singleton()->get_gui_base()->get_icon("float", "EditorIcons"),
-			EditorNode::get_singleton()->get_gui_base()->get_icon("Vector3", "EditorIcons"),
-			EditorNode::get_singleton()->get_gui_base()->get_icon("Transform", "EditorIcons"),
-		};
-
-		add_item("[None]");
-		int to_select = -1;
-		for (int i = 0; i < input->get_input_index_count(); i++) {
-			if (input->get_input_name() == input->get_input_index_name(i)) {
-				to_select = i + 1;
-			}
-			add_icon_item(type_icon[input->get_input_index_type(i)], input->get_input_index_name(i));
-		}
-
-		if (to_select >= 0) {
-			select(to_select);
-		}
-	}
-};
 
 class VisualAnlNoiseNodePluginDefaultEditor : public VBoxContainer {
 	GDCLASS(VisualAnlNoiseNodePluginDefaultEditor, VBoxContainer)
@@ -798,7 +728,7 @@ public:
 		UndoRedo *undo_redo = EditorNode::get_singleton()->get_undo_redo();
 
 		updating = true;
-		undo_redo->create_action("Edit Visual Property: " + prop, UndoRedo::MERGE_ENDS);
+		undo_redo->create_action("Edit Visual AnlNoise Property: " + prop, UndoRedo::MERGE_ENDS);
 		undo_redo->add_do_property(node.ptr(), prop, p_value);
 		undo_redo->add_undo_property(node.ptr(), prop, node->get(prop));
 		undo_redo->commit_action();
@@ -849,13 +779,6 @@ public:
 };
 
 Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoiseNode> &p_node) {
-
-	if (p_node->is_class("VisualAnlNoiseNodeInput")) {
-		//create input
-		VisualAnlNoiseNodePluginInputEditor *input_editor = memnew(VisualAnlNoiseNodePluginInputEditor);
-		input_editor->setup(p_node);
-		return input_editor;
-	}
 
 	Vector<StringName> properties = p_node->get_editable_properties();
 	if (properties.size() == 0) {

@@ -6,6 +6,7 @@
 class VisualAnlNoiseNode;
 class VisualAnlNoiseNodeComponent;
 
+
 class VisualAnlNoise : public AnlNoise {
     GDCLASS(VisualAnlNoise, AnlNoise);
     OBJ_SAVE_TYPE(VisualAnlNoise);
