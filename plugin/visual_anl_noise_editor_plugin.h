@@ -32,6 +32,8 @@ private:
 	int editing_port;
 
 	Ref<VisualAnlNoise> visual_anl_noise;
+	Ref<VisualAnlNoiseNodeComponent> edited_component;
+
     GraphEdit *graph;
 	MenuButton *add_node;
 
@@ -88,6 +90,8 @@ private:
 
 	void _duplicate_nodes();
 
+	void _on_noise_changed();
+
 	Vector<Ref<VisualAnlNoiseNodePlugin> > plugins;
 
 	// void _input_select_item(Ref<VisualAnlNoiseNodeInput> input, String name);
@@ -122,7 +126,7 @@ class VisualAnlNoiseEditorPlugin : public EditorPlugin {
 	Button *button;
 
 public:
-	virtual String get_name() const { return "AnlNoise"; }
+	virtual String get_name() const { return "VisualAnlNoise"; }
 	bool has_main_screen() const { return false; }
 	virtual void edit(Object *p_object);
 	virtual bool handles(Object *p_object) const;

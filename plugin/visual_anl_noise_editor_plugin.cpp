@@ -28,7 +28,12 @@ void VisualAnlNoiseEditor::edit(VisualAnlNoise *p_visual_anl_noise) {
 
 	if (p_visual_anl_noise) {
 		visual_anl_noise = Ref<VisualAnlNoise>(p_visual_anl_noise);
+
+		if (!visual_anl_noise->is_connected("changed", this, "_on_noise_changed")) {
+			visual_anl_noise->connect("changed", this, "_on_noise_changed");
+		}
 	} else {
+		visual_anl_noise->disconnect("changed", this, "_on_noise_changed");
 		visual_anl_noise.unref();
 	}
 
@@ -121,10 +126,19 @@ void VisualAnlNoiseEditor::_update_graph() {
 	if (updating)
 		return;
 
-	if (visual_anl_noise.is_null())
+	if (visual_anl_noise.is_null()) {
 		return;
+	}
 
-	graph->set_scroll_ofs(visual_anl_noise->get_component()->get_graph_offset() * EDSCALE);
+	if (edited_component.is_null()) {
+		graph->set_visible(false);
+		return;
+	}
+	else {
+		graph->set_visible(true);
+	}
+
+	graph->set_scroll_ofs(edited_component->get_graph_offset() * EDSCALE);
 
 	graph->clear_connections();
 	//erase all nodes
@@ -143,16 +157,16 @@ void VisualAnlNoiseEditor::_update_graph() {
 	};
 
 	List<VisualAnlNoiseNodeComponent::Connection> connections;
-	visual_anl_noise->get_component()->get_node_connections(&connections);
+	edited_component->get_node_connections(&connections);
 
 	Ref<StyleBoxEmpty> label_style = make_empty_stylebox(2, 1, 2, 1);
 
-	Vector<int> nodes = visual_anl_noise->get_component()->get_node_list();
+	Vector<int> nodes = edited_component->get_node_list();
 
 	for (int n_i = 0; n_i < nodes.size(); n_i++) {
 
-		Vector2 position = visual_anl_noise->get_component()->get_node_position(nodes[n_i]);
-		Ref<VisualAnlNoiseNode> vanode = visual_anl_noise->get_component()->get_node(nodes[n_i]);
+		Vector2 position = edited_component->get_node_position(nodes[n_i]);
+		Ref<VisualAnlNoiseNode> vanode = edited_component->get_node(nodes[n_i]);
 
 		GraphNode *node = memnew(GraphNode);
 		graph->add_child(node);
@@ -311,7 +325,11 @@ void VisualAnlNoiseEditor::_update_graph() {
 
 void VisualAnlNoiseEditor::_preview_select_port(int p_node, int p_port) {
 
-	Ref<VisualAnlNoiseNode> node = visual_anl_noise->get_component()->get_node(p_node);
+	if (edited_component.is_null()) {
+		return;
+	}
+
+	Ref<VisualAnlNoiseNode> node = edited_component->get_node(p_node);
 
 	if (node.is_null()) {
 		return;
@@ -338,8 +356,12 @@ void VisualAnlNoiseEditor::_line_edit_focus_out(Object *line_edit, int p_node_id
 
 void VisualAnlNoiseEditor::_port_edited() {
 
+	if (edited_component.is_null()) {
+		return;
+	}
+
 	Variant value = property_editor->get_variant();
-	Ref<VisualAnlNoiseNode> van = visual_anl_noise->get_component()->get_node(editing_node);
+	Ref<VisualAnlNoiseNode> van = edited_component->get_node(editing_node);
 	ERR_FAIL_COND(!van.is_valid());
 
 	undo_redo->create_action("Set Input Default Port");
@@ -354,7 +376,11 @@ void VisualAnlNoiseEditor::_port_edited() {
 
 void VisualAnlNoiseEditor::_edit_port_default_input(Object *p_button, int p_node, int p_port) {
 
-	Ref<VisualAnlNoiseNode> van = visual_anl_noise->get_component()->get_node(p_node);
+	if (edited_component.is_null()) {
+		return;
+	}
+
+	Ref<VisualAnlNoiseNode> van = edited_component->get_node(p_node);
 
 	Button *button = Object::cast_to<Button>(p_button);
 	ERR_FAIL_COND(!button);
@@ -367,6 +393,10 @@ void VisualAnlNoiseEditor::_edit_port_default_input(Object *p_button, int p_node
 }
 
 void VisualAnlNoiseEditor::_add_node(int p_idx) {
+
+	if (edited_component.is_null()) {
+		return;
+	}
 
 	ERR_FAIL_INDEX(p_idx, add_options.size());
 
@@ -387,11 +417,11 @@ void VisualAnlNoiseEditor::_add_node(int p_idx) {
 
 	Point2 position = (graph->get_scroll_ofs() + graph->get_size() * 0.5) / EDSCALE;
 
-	int id_to_use = visual_anl_noise->get_component()->get_valid_node_id();
+	int id_to_use = edited_component->get_valid_node_id();
 
 	undo_redo->create_action("Add Node to Visual AnlNoise");
-	undo_redo->add_do_method(visual_anl_noise->get_component().ptr(), "add_node", vanode, position, id_to_use);
-	undo_redo->add_undo_method(visual_anl_noise->get_component().ptr(), "remove_node", id_to_use);
+	undo_redo->add_do_method(edited_component.ptr(), "add_node", vanode, position, id_to_use);
+	undo_redo->add_undo_method(edited_component.ptr(), "remove_node", id_to_use);
 	undo_redo->add_do_method(this, "_update_graph");
 	undo_redo->add_undo_method(this, "_update_graph");
 	undo_redo->commit_action();
@@ -399,10 +429,14 @@ void VisualAnlNoiseEditor::_add_node(int p_idx) {
 
 void VisualAnlNoiseEditor::_node_dragged(const Vector2 &p_from, const Vector2 &p_to, int p_node) {
 
+	if (edited_component.is_null()) {
+		return;
+	}
+
 	updating = true;
 	undo_redo->create_action("Node Moved");
-	undo_redo->add_do_method(visual_anl_noise->get_component().ptr(), "set_node_position", p_node, p_to);
-	undo_redo->add_undo_method(visual_anl_noise->get_component().ptr(), "set_node_position", p_node, p_from);
+	undo_redo->add_do_method(edited_component.ptr(), "set_node_position", p_node, p_to);
+	undo_redo->add_undo_method(edited_component.ptr(), "set_node_position", p_node, p_from);
 	undo_redo->add_do_method(this, "_update_graph");
 	undo_redo->add_undo_method(this, "_update_graph");
 	undo_redo->commit_action();
@@ -411,10 +445,14 @@ void VisualAnlNoiseEditor::_node_dragged(const Vector2 &p_from, const Vector2 &p
 
 void VisualAnlNoiseEditor::_connection_request(const String &p_from, int p_from_index, const String &p_to, int p_to_index) {
 
+	if (edited_component.is_null()) {
+		return;
+	}
+
 	int from = p_from.to_int();
 	int to = p_to.to_int();
 
-	if (!visual_anl_noise->get_component()->can_connect_nodes(from, p_from_index, to, p_to_index)) {
+	if (!edited_component->can_connect_nodes(from, p_from_index, to, p_to_index)) {
 		EditorNode::get_singleton()->show_warning(TTR("Unable to connect, port may be in use or connection may be invalid."));
 		return;
 	}
@@ -422,23 +460,27 @@ void VisualAnlNoiseEditor::_connection_request(const String &p_from, int p_from_
 	undo_redo->create_action("Nodes Connected");
 
 	List<VisualAnlNoiseNodeComponent::Connection> conns;
-	visual_anl_noise->get_component()->get_node_connections(&conns);
+	edited_component->get_node_connections(&conns);
 
 	for (List<VisualAnlNoiseNodeComponent::Connection>::Element *E = conns.front(); E; E = E->next()) {
 		if (E->get().to_node == to && E->get().to_port == p_to_index) {
-			undo_redo->add_do_method(visual_anl_noise->get_component().ptr(), "disconnect_nodes", E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
-			undo_redo->add_undo_method(visual_anl_noise->get_component().ptr(), "connect_nodes", E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+			undo_redo->add_do_method(edited_component.ptr(), "disconnect_nodes", E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+			undo_redo->add_undo_method(edited_component.ptr(), "connect_nodes", E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 		}
 	}
 
-	undo_redo->add_do_method(visual_anl_noise->get_component().ptr(), "connect_nodes", from, p_from_index, to, p_to_index);
-	undo_redo->add_undo_method(visual_anl_noise->get_component().ptr(), "disconnect_nodes", from, p_from_index, to, p_to_index);
+	undo_redo->add_do_method(edited_component.ptr(), "connect_nodes", from, p_from_index, to, p_to_index);
+	undo_redo->add_undo_method(edited_component.ptr(), "disconnect_nodes", from, p_from_index, to, p_to_index);
 	undo_redo->add_do_method(this, "_update_graph");
 	undo_redo->add_undo_method(this, "_update_graph");
 	undo_redo->commit_action();
 }
 
 void VisualAnlNoiseEditor::_disconnection_request(const String &p_from, int p_from_index, const String &p_to, int p_to_index) {
+
+	if (edited_component.is_null()) {
+		return;
+	}
 
 	graph->disconnect_node(p_from, p_from_index, p_to, p_to_index);
 
@@ -447,8 +489,8 @@ void VisualAnlNoiseEditor::_disconnection_request(const String &p_from, int p_fr
 
 	//updating = true; seems graph edit can handle this, no need to protect
 	undo_redo->create_action("Nodes Disconnected");
-	undo_redo->add_do_method(visual_anl_noise->get_component().ptr(), "disconnect_nodes", from, p_from_index, to, p_to_index);
-	undo_redo->add_undo_method(visual_anl_noise->get_component().ptr(), "connect_nodes", from, p_from_index, to, p_to_index);
+	undo_redo->add_do_method(edited_component.ptr(), "disconnect_nodes", from, p_from_index, to, p_to_index);
+	undo_redo->add_undo_method(edited_component.ptr(), "connect_nodes", from, p_from_index, to, p_to_index);
 	undo_redo->add_do_method(this, "_update_graph");
 	undo_redo->add_undo_method(this, "_update_graph");
 	undo_redo->commit_action();
@@ -460,16 +502,20 @@ void VisualAnlNoiseEditor::_connection_to_empty(const String &p_from, int p_from
 
 void VisualAnlNoiseEditor::_delete_request(int which) {
 
+	if (edited_component.is_null()) {
+		return;
+	}
+
 	undo_redo->create_action("Delete Node");
-	undo_redo->add_do_method(visual_anl_noise->get_component().ptr(), "remove_node", which);
-	undo_redo->add_undo_method(visual_anl_noise->get_component().ptr(), "add_node", visual_anl_noise->get_component()->get_node(which), visual_anl_noise->get_component()->get_node_position(which), which);
+	undo_redo->add_do_method(edited_component.ptr(), "remove_node", which);
+	undo_redo->add_undo_method(edited_component.ptr(), "add_node", edited_component->get_node(which), edited_component->get_node_position(which), which);
 
 	List<VisualAnlNoiseNodeComponent::Connection> conns;
-	visual_anl_noise->get_component()->get_node_connections(&conns);
+	edited_component->get_node_connections(&conns);
 
 	for (List<VisualAnlNoiseNodeComponent::Connection>::Element *E = conns.front(); E; E = E->next()) {
 		if (E->get().from_node == which || E->get().to_node == which) {
-			undo_redo->add_undo_method(visual_anl_noise->get_component().ptr(), "connect_nodes", E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+			undo_redo->add_undo_method(edited_component.ptr(), "connect_nodes", E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 		}
 	}
 
@@ -480,16 +526,21 @@ void VisualAnlNoiseEditor::_delete_request(int which) {
 
 void VisualAnlNoiseEditor::_node_selected(Object *p_node) {
 
+	if (edited_component.is_null()) {
+		return;
+	}
+
 	GraphNode *gn = Object::cast_to<GraphNode>(p_node);
 	ERR_FAIL_COND(!gn);
 
 	int id = String(gn->get_name()).to_int();
 
-	Ref<VisualAnlNoiseNode> vanode = visual_anl_noise->get_component()->get_node(id);
+	Ref<VisualAnlNoiseNode> vanode = edited_component->get_node(id);
 	ERR_FAIL_COND(!vanode.is_valid());
 }
 
 void VisualAnlNoiseEditor::_input(const Ref<InputEvent> p_event) {
+
 	if (graph->has_focus()) {
 		Ref<InputEventMouseButton> mb = p_event;
 
@@ -513,10 +564,16 @@ void VisualAnlNoiseEditor::_notification(int p_what) {
 }
 
 void VisualAnlNoiseEditor::_scroll_changed(const Vector2 &p_scroll) {
+
+	if (edited_component.is_null()) {
+		return;
+	}
+
 	if (updating)
 		return;
+
 	updating = true;
-	visual_anl_noise->get_component()->set_graph_offset(p_scroll / EDSCALE);
+	edited_component->set_graph_offset(p_scroll / EDSCALE);
 	updating = false;
 }
 
@@ -532,13 +589,17 @@ void VisualAnlNoiseEditor::_node_changed(int p_id) {
 
 void VisualAnlNoiseEditor::_duplicate_nodes() {
 
+	if (edited_component.is_null()) {
+		return;
+	}
+
 	List<int> nodes;
 
 	for (int i = 0; i < graph->get_child_count(); i++) {
 
 		if (Object::cast_to<GraphNode>(graph->get_child(i))) {
 			int id = String(graph->get_child(i)->get_name()).to_int();
-			Ref<VisualAnlNoiseNode> node = visual_anl_noise->get_component()->get_node(id);
+			Ref<VisualAnlNoiseNode> node = edited_component->get_node(id);
 			Ref<VisualAnlNoiseNodeOutput> output = node;
 			if (output.is_valid()) //can't duplicate output
 				continue;
@@ -553,29 +614,29 @@ void VisualAnlNoiseEditor::_duplicate_nodes() {
 
 	undo_redo->create_action("Duplicate Nodes");
 
-	int base_id = visual_anl_noise->get_component()->get_valid_node_id();
+	int base_id = edited_component->get_valid_node_id();
 	int id_from = base_id;
 	Map<int, int> connection_remap;
 
 	for (List<int>::Element *E = nodes.front(); E; E = E->next()) {
 
 		connection_remap[E->get()] = id_from;
-		Ref<VisualAnlNoiseNode> node = visual_anl_noise->get_component()->get_node(E->get());
+		Ref<VisualAnlNoiseNode> node = edited_component->get_node(E->get());
 
 		Ref<VisualAnlNoiseNode> dupli = node->duplicate();
 
-		undo_redo->add_do_method(visual_anl_noise->get_component().ptr(), "add_node", dupli, visual_anl_noise->get_component()->get_node_position(E->get()) + Vector2(10, 10) * EDSCALE, id_from);
-		undo_redo->add_undo_method(visual_anl_noise->get_component().ptr(), "remove_node", id_from);
+		undo_redo->add_do_method(edited_component.ptr(), "add_node", dupli, edited_component->get_node_position(E->get()) + Vector2(10, 10) * EDSCALE, id_from);
+		undo_redo->add_undo_method(edited_component.ptr(), "remove_node", id_from);
 
 		id_from++;
 	}
 
 	List<VisualAnlNoiseNodeComponent::Connection> conns;
-	visual_anl_noise->get_component()->get_node_connections(&conns);
+	edited_component->get_node_connections(&conns);
 
 	for (List<VisualAnlNoiseNodeComponent::Connection>::Element *E = conns.front(); E; E = E->next()) {
 		if (connection_remap.has(E->get().from_node) && connection_remap.has(E->get().to_node)) {
-			undo_redo->add_do_method(visual_anl_noise->get_component().ptr(), "connect_nodes", connection_remap[E->get().from_node], E->get().from_port, connection_remap[E->get().to_node], E->get().to_port);
+			undo_redo->add_do_method(edited_component.ptr(), "connect_nodes", connection_remap[E->get().from_node], E->get().from_port, connection_remap[E->get().to_node], E->get().to_port);
 		}
 	}
 
@@ -599,6 +660,7 @@ void VisualAnlNoiseEditor::_duplicate_nodes() {
 
 void VisualAnlNoiseEditor::_bind_methods() {
 
+	ClassDB::bind_method("_on_noise_changed", &VisualAnlNoiseEditor::_on_noise_changed);
 	ClassDB::bind_method("_update_graph", &VisualAnlNoiseEditor::_update_graph);
 	ClassDB::bind_method("_add_node", &VisualAnlNoiseEditor::_add_node);
 	ClassDB::bind_method("_node_dragged", &VisualAnlNoiseEditor::_node_dragged);
@@ -674,6 +736,16 @@ VisualAnlNoiseEditor::VisualAnlNoiseEditor() {
 	add_child(property_editor);
 
 	property_editor->connect("variant_changed", this, "_port_edited");
+}
+
+void VisualAnlNoiseEditor::_on_noise_changed() {
+
+	Ref<VisualAnlNoiseNodeComponent> component = visual_anl_noise->get_component();
+
+	if (component.is_valid()) {
+		edited_component = component;
+		_update_graph();
+	}
 }
 
 void VisualAnlNoiseEditorPlugin::edit(Object *p_object) {
@@ -842,14 +914,14 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 
 // 	Ref<VisualAnlNoise> visual_anl_noise(Object::cast_to<VisualAnlNoise>(get_edited_object()));
 
-// 	if (visual_anl_noise->get_component()->get_mode() == p_which)
+// 	if (edited_component->get_mode() == p_which)
 // 		return;
 
 // 	UndoRedo *undo_redo = EditorNode::get_singleton()->get_undo_redo();
 // 	undo_redo->create_action("Visual AnlNoise Mode Changed");
 // 	//do is easy
-// 	undo_redo->add_do_method(visual_anl_noise->get_component().ptr(), "set_mode", p_which);
-// 	undo_redo->add_undo_method(visual_anl_noise->get_component().ptr(), "set_mode", visual_anl_noise->get_component()->get_mode());
+// 	undo_redo->add_do_method(edited_component.ptr(), "set_mode", p_which);
+// 	undo_redo->add_undo_method(edited_component.ptr(), "set_mode", edited_component->get_mode());
 // 	//now undo is hell
 
 // 	//1. restore connections to output
@@ -857,10 +929,10 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 
 // 		VisualAnlNoise::Type type = VisualAnlNoise::Type(i);
 // 		List<VisualAnlNoiseNodeComponent::Connection> conns;
-// 		visual_anl_noise->get_component()->get_node_connections(&conns);
+// 		edited_component->get_node_connections(&conns);
 // 		for (List<VisualAnlNoiseNodeComponent::Connection>::Element *E = conns.front(); E; E = E->next()) {
 // 			if (E->get().to_node == VisualAnlNoise::NODE_ID_OUTPUT) {
-// 				undo_redo->add_undo_method(visual_anl_noise->get_component().ptr(), "connect_nodes", E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+// 				undo_redo->add_undo_method(edited_component.ptr(), "connect_nodes", E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 // 			}
 // 		}
 // 	}
@@ -868,9 +940,9 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 // 	for (int i = 0; i < VisualAnlNoise::TYPE_MAX; i++) {
 
 // 		VisualAnlNoise::Type type = VisualAnlNoise::Type(i);
-// 		Vector<int> nodes = visual_anl_noise->get_component()->get_node_list(type);
+// 		Vector<int> nodes = edited_component->get_node_list(type);
 // 		for (int i = 0; i < nodes.size(); i++) {
-// 			Ref<VisualAnlNoiseNodeInput> input = visual_anl_noise->get_component()->get_node(nodes[i]);
+// 			Ref<VisualAnlNoiseNodeInput> input = edited_component->get_node(nodes[i]);
 // 			if (!input.is_valid()) {
 // 				continue;
 // 			}
@@ -881,12 +953,12 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 
 // 	//3. restore enums and flags
 // 	List<PropertyInfo> props;
-// 	visual_anl_noise->get_component()->get_property_list(&props);
+// 	edited_component->get_property_list(&props);
 
 // 	for (List<PropertyInfo>::Element *E = props.front(); E; E = E->next()) {
 
 // 		if (E->get().name.begins_with("flags/") || E->get().name.begins_with("modes/")) {
-// 			undo_redo->add_undo_property(visual_anl_noise->get_component().ptr(), E->get().name, visual_anl_noise->get_component()->get(E->get().name));
+// 			undo_redo->add_undo_property(edited_component.ptr(), E->get().name, edited_component->get(E->get().name));
 // 		}
 // 	}
 
