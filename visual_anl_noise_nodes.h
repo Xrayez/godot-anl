@@ -1,7 +1,7 @@
 #ifndef VISUAL_ANL_NOISE_NODES_H
 #define VISUAL_ANL_NOISE_NODES_H
 
-#include "../visual_anl_noise.h"
+#include "visual_anl_noise.h"
 
 class VisualAnlNoiseNodeScalar : public VisualAnlNoiseNode {
 	GDCLASS(VisualAnlNoiseNodeScalar, VisualAnlNoiseNode)

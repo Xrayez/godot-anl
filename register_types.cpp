@@ -2,8 +2,9 @@
 
 #include "anl_noise.h"
 #include "visual_anl_noise.h"
-#include "nodes/visual_anl_noise_nodes.h"
-#include "plugin/visual_anl_noise_editor_plugin.h"
+#include "visual_anl_noise_nodes.h"
+#include "plugins/visual_anl_noise_editor_plugin.h"
+// #include "plugins/visual_anl_noise_component_editor_plugin.h"
 
 void register_anl_types() {
 

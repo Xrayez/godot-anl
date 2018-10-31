@@ -1,5 +1,5 @@
-#ifndef VISUAL_ANL_NOISE_EDITOR_PLUGIN_H
-#define VISUAL_ANL_NOISE_EDITOR_PLUGIN_H
+#ifndef VISUAL_ANL_NOISE_NODE_COMPONENT_EDITOR_PLUGIN_H
+#define VISUAL_ANL_NOISE_NODE_COMPONENT_EDITOR_PLUGIN_H
 
 #include "../visual_anl_noise.h"
 
@@ -13,6 +13,7 @@
 class VisualAnlNoiseNodePlugin : public Reference {
 
 	GDCLASS(VisualAnlNoiseNodePlugin, Reference)
+
 protected:
 	static void _bind_methods();
 
@@ -20,29 +21,33 @@ public:
 	virtual Control *create_editor(const Ref<VisualAnlNoiseNode> &p_node);
 };
 
-class VisualAnlNoiseEditor : public VBoxContainer {
+class VisualAnlNoiseNodePluginDefault : public VisualAnlNoiseNodePlugin {
 
-	GDCLASS(VisualAnlNoiseEditor, VBoxContainer);
+	GDCLASS(VisualAnlNoiseNodePluginDefault, VisualAnlNoiseNodePlugin)
 
-private:
-	static VisualAnlNoiseEditor *singleton;
+public:
+	virtual Control *create_editor(const Ref<VisualAnlNoiseNode> &p_node);
+};
 
-	CustomPropertyEditor *property_editor;
-	int editing_node;
-	int editing_port;
+class VisualAnlNoiseNodeComponentEditor : public VBoxContainer {
+	GDCLASS(VisualAnlNoiseNodeComponentEditor, VBoxContainer);
 
-	Ref<VisualAnlNoise> visual_anl_noise;
-	Ref<VisualAnlNoiseNodeComponent> edited_component;
+	static VisualAnlNoiseNodeComponentEditor *singleton;
 
+	Vector<Ref<VisualAnlNoiseNodePlugin> > plugins;
+
+	Ref<VisualAnlNoiseNodeComponent> component;
     GraphEdit *graph;
 	MenuButton *add_node;
-
-	OptionButton *edit_type;
 
 	PanelContainer *error_panel;
 	Label *error_label;
 
     UndoRedo *undo_redo;
+
+	CustomPropertyEditor *property_editor;
+	int editing_node;
+	int editing_port;
 
 	void _update_graph();
 
@@ -66,6 +71,7 @@ private:
 	void _update_options_menu();
 
 	void _node_dragged(const Vector2 &p_from, const Vector2 &p_to, int p_node);
+
 	bool updating;
 
 	void _connection_request(const String &p_from, int p_from_index, const String &p_to, int p_to_index);
@@ -92,56 +98,38 @@ private:
 
 	void _on_noise_changed();
 
-	Vector<Ref<VisualAnlNoiseNodePlugin> > plugins;
-
-	// void _input_select_item(Ref<VisualAnlNoiseNodeInput> input, String name);
-
 	void _preview_select_port(int p_node, int p_port);
 	void _input(const Ref<InputEvent> p_event);
+
+	EditorFileDialog *open_file;
+	Ref<VisualAnlNoiseNodeComponent> file_loaded;
+	void _file_opened(const String &p_file);
+
+	enum {
+		MENU_LOAD_FILE = 1000,
+		MENU_PASTE = 1001,
+		MENU_LOAD_FILE_CONFIRM = 1002
+	};
 
 protected:
 	void _notification(int p_what);
 	static void _bind_methods();
 
 public:
-	void add_plugin(const Ref<VisualAnlNoiseNodePlugin> &p_plugin);
-	void remove_plugin(const Ref<VisualAnlNoiseNodePlugin> &p_plugin);
-
-	static VisualAnlNoiseEditor *get_singleton() { return singleton; }
+	static VisualAnlNoiseNodeComponentEditor *get_singleton() { return singleton; }
 
 	void add_custom_type(const String &p_name, const String &p_category, const Ref<Script> &p_script);
 	void remove_custom_type(const Ref<Script> &p_script);
 
+	void add_plugin(const Ref<VisualAnlNoiseNodePlugin> &p_plugin);
+	void remove_plugin(const Ref<VisualAnlNoiseNodePlugin> &p_plugin);
+
 	virtual Size2 get_minimum_size() const;
-	void edit(VisualAnlNoise *p_visual_anl_noise);
-	VisualAnlNoiseEditor();
-};
 
-class VisualAnlNoiseEditorPlugin : public EditorPlugin {
+	bool can_edit(const Ref<VisualAnlNoiseNodeComponent> &p_component);
+	void edit(const Ref<VisualAnlNoiseNodeComponent> &p_component);
 
-	GDCLASS(VisualAnlNoiseEditorPlugin, EditorPlugin);
-
-	VisualAnlNoiseEditor *visual_anl_noise_editor;
-	EditorNode *editor;
-	Button *button;
-
-public:
-	virtual String get_name() const { return "VisualAnlNoise"; }
-	bool has_main_screen() const { return false; }
-	virtual void edit(Object *p_object);
-	virtual bool handles(Object *p_object) const;
-	virtual void make_visible(bool p_visible);
-
-	VisualAnlNoiseEditorPlugin(EditorNode *p_node);
-	~VisualAnlNoiseEditorPlugin();
-};
-
-class VisualAnlNoiseNodePluginDefault : public VisualAnlNoiseNodePlugin {
-
-	GDCLASS(VisualAnlNoiseNodePluginDefault, VisualAnlNoiseNodePlugin)
-
-public:
-	virtual Control *create_editor(const Ref<VisualAnlNoiseNode> &p_node);
+	VisualAnlNoiseNodeComponentEditor();
 };
 
 #endif
