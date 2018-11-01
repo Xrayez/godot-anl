@@ -13,8 +13,6 @@
 
 void VisualAnlNoiseEditor::edit(const Ref<VisualAnlNoise> &p_visual_anl_noise) {
 
-	print_line("edit_noise_requested");
-
 	if (visual_anl_noise.is_valid()) {
 		visual_anl_noise->disconnect("component_changed", this, "_on_component_changed");
 	}
@@ -71,7 +69,7 @@ void VisualAnlNoiseEditor::_update_path() {
 	b->set_button_group(group);
 	b->set_pressed(true);
 	b->set_focus_mode(FOCUS_NONE);
-	// b->connect("pressed", this, "_path_button_pressed", varray(-1));
+	b->connect("pressed", this, "_path_button_pressed", varray(visual_anl_noise->get_component()));
 	path_hb->add_child(b);
 
 	for (int i = 0; i < edited_components.size(); i++) {
@@ -82,8 +80,16 @@ void VisualAnlNoiseEditor::_update_path() {
 		path_hb->add_child(b);
 		b->set_pressed(true);
 		b->set_focus_mode(FOCUS_NONE);
-		// b->connect("pressed", this, "_path_button_pressed", varray(i));
+		b->connect("pressed", this, "_path_button_pressed", varray(edited_components[i]));
 	}
+}
+
+void VisualAnlNoiseEditor::_path_button_pressed(const Ref<VisualAnlNoiseNodeComponent> &comp) {
+
+	if (comp.is_null()) {
+		return;
+	}
+	edit_component(comp);
 }
 
 void VisualAnlNoiseEditor::edit_component(const Ref<VisualAnlNoiseNodeComponent> &p_component) {
@@ -146,7 +152,7 @@ void VisualAnlNoiseEditor::_notification(int p_what) {
 
 void VisualAnlNoiseEditor::_bind_methods() {
 
-	// ClassDB::bind_method("_path_button_pressed", &VisualAnlNoiseEditor::_path_button_pressed);
+	ClassDB::bind_method("_path_button_pressed", &VisualAnlNoiseEditor::_path_button_pressed);
 	ClassDB::bind_method("_on_component_changed", &VisualAnlNoiseEditor::_on_component_changed);
 }
 

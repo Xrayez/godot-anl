@@ -27,7 +27,7 @@ class VisualAnlNoiseEditor : public VBoxContainer {
 
 	void _update_path();
 
-	// void _path_button_pressed(int p_path);
+	void _path_button_pressed(const Ref<VisualAnlNoiseNodeComponent> &comp);
 
 	Vector<Ref<VisualAnlNoiseNodeComponent> > edited_components;
 	VisualAnlNoiseNodeComponentEditor *component_editor;
