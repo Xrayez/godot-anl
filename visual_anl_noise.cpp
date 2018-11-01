@@ -311,7 +311,7 @@ bool VisualAnlNoiseNodeComponent::_set(const StringName &p_name, const Variant &
 	String name = p_name;
 	if (name.begins_with("nodes/")) {
 
-		String index = name.get_slicec('/', 2);
+		String index = name.get_slicec('/', 1);
 		if (index == "connections") {
 
 			Vector<int> conns = p_value;
@@ -324,7 +324,7 @@ bool VisualAnlNoiseNodeComponent::_set(const StringName &p_name, const Variant &
 		}
 
 		int id = index.to_int();
-		String what = name.get_slicec('/', 3);
+		String what = name.get_slicec('/', 2);
 
 		if (what == "node") {
 			add_node(p_value, Vector2(), id);
@@ -342,7 +342,7 @@ bool VisualAnlNoiseNodeComponent::_get(const StringName &p_name, Variant &r_ret)
 	String name = p_name;
 	if (name.begins_with("nodes/")) {
 
-		String index = name.get_slicec('/', 2);
+		String index = name.get_slicec('/', 1);
 		if (index == "connections") {
 
 			Vector<int> conns;
@@ -358,7 +358,7 @@ bool VisualAnlNoiseNodeComponent::_get(const StringName &p_name, Variant &r_ret)
 		}
 
 		int id = index.to_int();
-		String what = name.get_slicec('/', 3);
+		String what = name.get_slicec('/', 2);
 
 		if (what == "node") {
 			r_ret = get_node(id);
@@ -376,7 +376,7 @@ void VisualAnlNoiseNodeComponent::_get_property_list(List<PropertyInfo> *p_list)
     for (Map<int, Node>::Element *E = graph.nodes.front(); E; E = E->next()) {
 
         String prop_name = "nodes/";
-        prop_name += "/" + itos(E->key());
+        prop_name += itos(E->key());
 
         if (E->key() != NODE_ID_OUTPUT) {
 
@@ -460,7 +460,7 @@ void VisualAnlNoise::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("component_changed"));
 }
 
-void VisualAnlNoise::set_component(const Ref<VisualAnlNoiseNodeComponent> p_component) {
+void VisualAnlNoise::set_component(const Ref<VisualAnlNoiseNodeComponent> &p_component) {
 
 	if(p_component.is_valid()) {
 		component = p_component;

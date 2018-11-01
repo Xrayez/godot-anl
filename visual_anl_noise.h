@@ -17,7 +17,7 @@ protected:
 	void _generate_noise();
 
 public:
-	void set_component(const Ref<VisualAnlNoiseNodeComponent> p_component);
+	void set_component(const Ref<VisualAnlNoiseNodeComponent> &p_component);
 	Ref<VisualAnlNoiseNodeComponent> get_component() const;
 
 	VisualAnlNoise();
