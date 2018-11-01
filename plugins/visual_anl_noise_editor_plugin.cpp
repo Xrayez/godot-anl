@@ -13,8 +13,21 @@
 
 void VisualAnlNoiseEditor::edit(const Ref<VisualAnlNoise> &p_visual_anl_noise) {
 
+	print_line("edit_noise_requested");
+
+	if (visual_anl_noise.is_valid()) {
+		visual_anl_noise->disconnect("component_changed", this, "_on_component_changed");
+	}
+
 	if (p_visual_anl_noise.is_valid()) {
 		visual_anl_noise = p_visual_anl_noise;
+
+		if (!visual_anl_noise->is_connected("component_changed", this, "_on_component_changed")) {
+
+			visual_anl_noise->connect("component_changed", this, "_on_component_changed");
+		}
+		edit_component();
+
 	} else {
 		visual_anl_noise.unref();
 	}
@@ -28,7 +41,7 @@ void VisualAnlNoiseEditor::add_plugin(VisualAnlNoiseNodeComponentEditor *p_edito
 
 	ERR_FAIL_COND(p_editor->get_parent());
 	editor_base->add_child(p_editor);
-	editors.push_back(p_editor);
+	component_editor = p_editor;
 	p_editor->set_h_size_flags(SIZE_EXPAND_FILL);
 	p_editor->set_v_size_flags(SIZE_EXPAND_FILL);
 	p_editor->hide();
@@ -38,42 +51,28 @@ void VisualAnlNoiseEditor::remove_plugin(VisualAnlNoiseNodeComponentEditor *p_ed
 
 	ERR_FAIL_COND(p_editor->get_parent() != editor_base);
 	editor_base->remove_child(p_editor);
-	editors.erase(p_editor);
+	component_editor = NULL;
 }
 
-void VisualAnlNoiseEditor::edit_path(const Vector<String> &p_path) {
+void VisualAnlNoiseEditor::edit_component() {
 
-	// button_path.clear();
+	const Ref<VisualAnlNoiseNodeComponent> &component = visual_anl_noise->get_component();
 
-	// Ref<VisualAnlNoiseNode> node = tree->get_tree_root();
+	if(component.is_valid()) {
 
-	// if (node.is_valid()) {
-	// 	current_component = node->get_instance_id();
+		if (component_editor->can_edit(component)) {
+			component_editor->edit(component);
+			component_editor->show();
+		} else {
+			component_editor->edit(Ref<VisualAnlNoiseNode>());
+			component_editor->hide();
+		}
+	}
+}
 
-	// 	for (int i = 0; i < p_path.size(); i++) {
+void VisualAnlNoiseEditor::_on_component_changed() {
 
-	// 		Ref<AnimationNode> child = node->get_child_by_name(p_path[i]);
-	// 		ERR_BREAK(child.is_null());
-	// 		node = child;
-	// 		button_path.push_back(p_path[i]);
-	// 	}
-
-	// 	for (int i = 0; i < editors.size(); i++) {
-	// 		if (editors[i]->can_edit(node)) {
-	// 			editors[i]->edit(node);
-	// 			editors[i]->show();
-	// 		} else {
-	// 			editors[i]->edit(Ref<AnimationNode>());
-	// 			editors[i]->hide();
-	// 		}
-	// 	}
-	// } else {
-	// 	current_component = 0;
-	// }
-
-	// edited_path = button_path;
-
-	// _update_path();
+	edit_component();
 }
 
 Vector<String> VisualAnlNoiseEditor::get_edited_path() const {
@@ -83,10 +82,8 @@ Vector<String> VisualAnlNoiseEditor::get_edited_path() const {
 
 bool VisualAnlNoiseEditor::can_edit(const Ref<VisualAnlNoiseNode> &p_node) const {
 
-	for (int i = 0; i < editors.size(); i++) {
-		if (editors[i]->can_edit(p_node)) {
-			return true;
-		}
+	if (component_editor->can_edit(p_node)) {
+		return true;
 	}
 	return false;
 }
@@ -99,6 +96,7 @@ void VisualAnlNoiseEditor::_notification(int p_what) {
 void VisualAnlNoiseEditor::_bind_methods() {
 
 	// ClassDB::bind_method("_path_button_pressed", &VisualAnlNoiseEditor::_path_button_pressed);
+	ClassDB::bind_method("_on_component_changed", &VisualAnlNoiseEditor::_on_component_changed);
 }
 
 VisualAnlNoiseEditor *VisualAnlNoiseEditor::singleton = NULL;
@@ -112,7 +110,6 @@ VisualAnlNoiseEditor::VisualAnlNoiseEditor() {
 	path_hb = memnew(HBoxContainer);
 	path_edit->add_child(path_hb);
 
-	current_component = 0;
 	singleton = this;
 	editor_base = memnew(PanelContainer);
 	editor_base->set_v_size_flags(SIZE_EXPAND_FILL);

@@ -435,20 +435,21 @@ VisualAnlNoise::VisualAnlNoise() : AnlNoise() {
 
 }
 
-
 void VisualAnlNoise::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("set_component", "component"), &VisualAnlNoise::set_component);
 	ClassDB::bind_method(D_METHOD("get_component"), &VisualAnlNoise::get_component);
 
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "component", PROPERTY_HINT_RESOURCE_TYPE, "VisualAnlNoiseNodeComponent"), "set_component", "get_component");
+
+	ADD_SIGNAL(MethodInfo("component_changed"));
 }
 
 void VisualAnlNoise::set_component(const Ref<VisualAnlNoiseNodeComponent> p_component) {
 
 	if(p_component.is_valid()) {
 		component = p_component;
-		emit_changed();
+		emit_signal("component_changed");
 	}
 }
 
