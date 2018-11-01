@@ -54,9 +54,15 @@ void VisualAnlNoiseEditor::remove_plugin(VisualAnlNoiseNodeComponentEditor *p_ed
 	component_editor = NULL;
 }
 
-void VisualAnlNoiseEditor::edit_component() {
+void VisualAnlNoiseEditor::edit_component(const Ref<VisualAnlNoiseNodeComponent> &p_component) {
 
-	const Ref<VisualAnlNoiseNodeComponent> &component = visual_anl_noise->get_component();
+	Ref<VisualAnlNoiseNodeComponent> component;
+
+	if(p_component.is_null()) {
+		component = visual_anl_noise->get_component();
+	} else {
+		component = p_component;
+	}
 
 	if(component.is_valid()) {
 
@@ -73,6 +79,15 @@ void VisualAnlNoiseEditor::edit_component() {
 void VisualAnlNoiseEditor::_on_component_changed() {
 
 	edit_component();
+}
+
+void VisualAnlNoiseEditor::enter_editor(const Ref<VisualAnlNoiseNode> &p_node) {
+
+	Ref<VisualAnlNoiseNodeComponent> comp = p_node;
+
+	ERR_FAIL_COND(!comp.is_valid());
+
+	edit_component(comp);
 }
 
 Vector<String> VisualAnlNoiseEditor::get_edited_path() const {

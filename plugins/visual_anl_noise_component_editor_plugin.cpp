@@ -1,3 +1,4 @@
+#include "visual_anl_noise_editor_plugin.h"
 #include "visual_anl_noise_component_editor_plugin.h"
 
 #include "core/io/resource_loader.h"
@@ -168,6 +169,16 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 		}
 
 		node->connect("dragged", this, "_node_dragged", varray(nodes[n_i]));
+
+		if (VisualAnlNoiseEditor::get_singleton()->can_edit(vanode)) {
+			node->add_child(memnew(HSeparator));
+			Button *open_in_editor = memnew(Button);
+			open_in_editor->set_text(TTR("Open Editor"));
+			open_in_editor->set_icon(get_icon("Edit", "EditorIcons"));
+			node->add_child(open_in_editor);
+			open_in_editor->connect("pressed", this, "_open_in_editor", varray(vanode), CONNECT_DEFERRED);
+			open_in_editor->set_h_size_flags(SIZE_SHRINK_CENTER);
+		}
 
 		Control *custom_editor = NULL;
 		int port_offset = 0;
@@ -521,6 +532,15 @@ void VisualAnlNoiseNodeComponentEditor::_node_selected(Object *p_node) {
 	ERR_FAIL_COND(!vanode.is_valid());
 }
 
+void VisualAnlNoiseNodeComponentEditor::_open_in_editor(const Ref<VisualAnlNoiseNode>& p_node) {
+
+	Ref<VisualAnlNoiseNodeComponent> comp = p_node;
+
+	ERR_FAIL_COND(!comp.is_valid())
+
+	VisualAnlNoiseEditor::get_singleton()->enter_editor(comp);
+}
+
 void VisualAnlNoiseNodeComponentEditor::_input(const Ref<InputEvent> p_event) {
 
 	if (graph->has_focus()) {
@@ -642,13 +662,13 @@ void VisualAnlNoiseNodeComponentEditor::_duplicate_nodes() {
 
 void VisualAnlNoiseNodeComponentEditor::_bind_methods() {
 
-	// ClassDB::bind_method("_on_noise_changed", &VisualAnlNoiseNodeComponentEditor::_on_noise_changed);
 	ClassDB::bind_method("_update_graph", &VisualAnlNoiseNodeComponentEditor::_update_graph);
 	ClassDB::bind_method("_add_node", &VisualAnlNoiseNodeComponentEditor::_add_node);
 	ClassDB::bind_method("_node_dragged", &VisualAnlNoiseNodeComponentEditor::_node_dragged);
 	ClassDB::bind_method("_connection_request", &VisualAnlNoiseNodeComponentEditor::_connection_request);
 	ClassDB::bind_method("_disconnection_request", &VisualAnlNoiseNodeComponentEditor::_disconnection_request);
 	ClassDB::bind_method("_node_selected", &VisualAnlNoiseNodeComponentEditor::_node_selected);
+	ClassDB::bind_method("_open_in_editor", &VisualAnlNoiseNodeComponentEditor::_open_in_editor);
 	ClassDB::bind_method("_scroll_changed", &VisualAnlNoiseNodeComponentEditor::_scroll_changed);
 	ClassDB::bind_method("_delete_request", &VisualAnlNoiseNodeComponentEditor::_delete_request);
 	ClassDB::bind_method("_node_changed", &VisualAnlNoiseNodeComponentEditor::_node_changed);
