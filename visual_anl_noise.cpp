@@ -80,6 +80,16 @@ VisualAnlNoiseNode::VisualAnlNoiseNode() {
 
 /////////////////////////////////////////////////////////
 
+void VisualAnlNoiseNodeComponent::set_name(const String &p_name) {
+
+	name = p_name;
+}
+
+String VisualAnlNoiseNodeComponent::get_name() const {
+
+	return name;
+}
+
 void VisualAnlNoiseNodeComponent::add_node(const Ref<VisualAnlNoiseNode> &p_node, const Vector2 &p_position, int p_id) {
 
 	ERR_FAIL_COND(p_node.is_null());
@@ -399,6 +409,10 @@ void VisualAnlNoiseNodeComponent::_queue_update() {
 
 void VisualAnlNoiseNodeComponent::_bind_methods() {
 
+
+	ClassDB::bind_method(D_METHOD("set_name", "name"), &VisualAnlNoiseNodeComponent::set_name);
+	ClassDB::bind_method(D_METHOD("get_name"), &VisualAnlNoiseNodeComponent::get_name);
+
 	ClassDB::bind_method(D_METHOD("add_node", "node", "position", "id"), &VisualAnlNoiseNodeComponent::add_node);
 	ClassDB::bind_method(D_METHOD("set_node_position", "id", "position"), &VisualAnlNoiseNodeComponent::set_node_position);
 
@@ -424,6 +438,7 @@ void VisualAnlNoiseNodeComponent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_queue_update"), &VisualAnlNoiseNodeComponent::_queue_update);
 	ClassDB::bind_method(D_METHOD("_update_noise"), &VisualAnlNoiseNodeComponent::_update_noise);
 
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "name", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "set_name", "get_name");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "graph_offset", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "set_graph_offset", "get_graph_offset");
 
 	BIND_CONSTANT(NODE_ID_INVALID);
@@ -465,6 +480,8 @@ VisualAnlNoiseNodeComponent::VisualAnlNoiseNodeComponent() {
     output.instance();
     graph.nodes[NODE_ID_OUTPUT].node = output;
     graph.nodes[NODE_ID_OUTPUT].position = Vector2(400, 150);
+
+	name = "component";
 
 	dirty = true;
 }

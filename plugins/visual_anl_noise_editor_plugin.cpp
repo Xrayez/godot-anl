@@ -27,6 +27,7 @@ void VisualAnlNoiseEditor::edit(const Ref<VisualAnlNoise> &p_visual_anl_noise) {
 			visual_anl_noise->connect("component_changed", this, "_on_component_changed");
 		}
 		edit_component();
+		_update_path();
 
 	} else {
 		visual_anl_noise.unref();
@@ -35,6 +36,7 @@ void VisualAnlNoiseEditor::edit(const Ref<VisualAnlNoise> &p_visual_anl_noise) {
 	if (visual_anl_noise.is_null()) {
 		hide();
 	}
+
 }
 
 void VisualAnlNoiseEditor::add_plugin(VisualAnlNoiseNodeComponentEditor *p_editor) {
@@ -52,6 +54,36 @@ void VisualAnlNoiseEditor::remove_plugin(VisualAnlNoiseNodeComponentEditor *p_ed
 	ERR_FAIL_COND(p_editor->get_parent() != editor_base);
 	editor_base->remove_child(p_editor);
 	component_editor = NULL;
+}
+
+void VisualAnlNoiseEditor::_update_path() {
+
+	while (path_hb->get_child_count()) {
+		memdelete(path_hb->get_child(0));
+	}
+
+	Ref<ButtonGroup> group;
+	group.instance();
+
+	Button *b = memnew(Button);
+	b->set_text("main");
+	b->set_toggle_mode(true);
+	b->set_button_group(group);
+	b->set_pressed(true);
+	b->set_focus_mode(FOCUS_NONE);
+	// b->connect("pressed", this, "_path_button_pressed", varray(-1));
+	path_hb->add_child(b);
+
+	for (int i = 0; i < edited_components.size(); i++) {
+		b = memnew(Button);
+		b->set_text(edited_components[i]->get_name());
+		b->set_toggle_mode(true);
+		b->set_button_group(group);
+		path_hb->add_child(b);
+		b->set_pressed(true);
+		b->set_focus_mode(FOCUS_NONE);
+		// b->connect("pressed", this, "_path_button_pressed", varray(i));
+	}
 }
 
 void VisualAnlNoiseEditor::edit_component(const Ref<VisualAnlNoiseNodeComponent> &p_component) {
@@ -87,7 +119,11 @@ void VisualAnlNoiseEditor::enter_editor(const Ref<VisualAnlNoiseNode> &p_node) {
 
 	ERR_FAIL_COND(!comp.is_valid());
 
+	edited_components.push_back(comp);
+
 	edit_component(comp);
+
+	_update_path();
 }
 
 Vector<String> VisualAnlNoiseEditor::get_edited_path() const {

@@ -83,6 +83,8 @@ public:
 	};
 
 private:
+	StringName name;
+
 	struct Node {
 		Ref<VisualAnlNoiseNode> node;
 		Vector2 position;
@@ -113,6 +115,9 @@ public:
 		NODE_ID_INVALID = -1,
 		NODE_ID_OUTPUT = 0,
 	};
+
+	void set_name(const String &p_name);
+	String get_name() const;
 
     void add_node(const Ref<VisualAnlNoiseNode> &p_node, const Vector2 &p_position, int p_id);
 	void set_node_position(int p_id, const Vector2 &p_position);

@@ -80,7 +80,7 @@ class VisualAnlNoiseNodeComponentEditor : public VBoxContainer {
 	void _scroll_changed(const Vector2 &p_scroll);
 	void _node_selected(Object *p_node);
 
-	void _open_in_editor(const Ref<VisualAnlNoiseNode>& p_node);
+	void _open_in_editor(const Ref<VisualAnlNoiseNodeComponent>& p_node);
 
 	void _delete_request(int);
 

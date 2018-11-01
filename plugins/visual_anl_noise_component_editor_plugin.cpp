@@ -172,15 +172,17 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 
 		node->connect("dragged", this, "_node_dragged", varray(nodes[n_i]));
 
-		if (VisualAnlNoiseEditor::get_singleton()->can_edit(vanode)) {
+		if (VisualAnlNoiseEditor::get_singleton()->can_edit(vanode)) { // it's a component
+
+			Ref<VisualAnlNoiseNodeComponent> comp = vanode;
 
 			// Component's name
 			LineEdit *name = memnew(LineEdit);
-			name->set_text(node->get_name());
+			name->set_text(comp->get_name());
 			name->set_expand_to_text_length(true);
 			node->add_child(name);
-			// name->connect("text_entered", this, "_node_renamed", varray(agnode));
-			// name->connect("focus_exited", this, "_node_renamed_focus_out", varray(name, agnode));
+			// name->connect("text_entered", this, "_node_renamed", varray(comp));
+			// name->connect("focus_exited", this, "_node_renamed_focus_out", varray(name, comp));
 
 			// Open in editor button
 			node->add_child(memnew(HSeparator));
@@ -188,7 +190,7 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 			open_in_editor->set_text(TTR("Open Editor"));
 			open_in_editor->set_icon(get_icon("Edit", "EditorIcons"));
 			node->add_child(open_in_editor);
-			open_in_editor->connect("pressed", this, "_open_in_editor", varray(vanode), CONNECT_DEFERRED);
+			open_in_editor->connect("pressed", this, "_open_in_editor", varray(comp), CONNECT_DEFERRED);
 			open_in_editor->set_h_size_flags(SIZE_SHRINK_CENTER);
 		}
 
@@ -543,7 +545,7 @@ void VisualAnlNoiseNodeComponentEditor::_node_selected(Object *p_node) {
 	ERR_FAIL_COND(!vanode.is_valid());
 }
 
-void VisualAnlNoiseNodeComponentEditor::_open_in_editor(const Ref<VisualAnlNoiseNode>& p_node) {
+void VisualAnlNoiseNodeComponentEditor::_open_in_editor(const Ref<VisualAnlNoiseNodeComponent>& p_node) {
 
 	Ref<VisualAnlNoiseNodeComponent> comp = p_node;
 

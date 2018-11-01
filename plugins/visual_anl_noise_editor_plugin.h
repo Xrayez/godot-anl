@@ -24,12 +24,12 @@ class VisualAnlNoiseEditor : public VBoxContainer {
 	PanelContainer *editor_base;
 
 	Vector<String> button_path;
-	Vector<String> edited_path;
 
 	void _update_path();
 
 	// void _path_button_pressed(int p_path);
 
+	Vector<Ref<VisualAnlNoiseNodeComponent> > edited_components;
 	VisualAnlNoiseNodeComponentEditor *component_editor;
 
 protected:
