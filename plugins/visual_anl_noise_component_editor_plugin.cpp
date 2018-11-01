@@ -163,6 +163,8 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 		node->set_title(vanode->get_caption());
 		node->set_name(itos(nodes[n_i]));
 
+		int port_offset = 0;
+
 		if (nodes[n_i] >= 2) {
 			node->set_show_close_button(true);
 			node->connect("close_request", this, "_delete_request", varray(nodes[n_i]), CONNECT_DEFERRED);
@@ -171,6 +173,16 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 		node->connect("dragged", this, "_node_dragged", varray(nodes[n_i]));
 
 		if (VisualAnlNoiseEditor::get_singleton()->can_edit(vanode)) {
+
+			// Component's name
+			LineEdit *name = memnew(LineEdit);
+			name->set_text(node->get_name());
+			name->set_expand_to_text_length(true);
+			node->add_child(name);
+			// name->connect("text_entered", this, "_node_renamed", varray(agnode));
+			// name->connect("focus_exited", this, "_node_renamed_focus_out", varray(name, agnode));
+
+			// Open in editor button
 			node->add_child(memnew(HSeparator));
 			Button *open_in_editor = memnew(Button);
 			open_in_editor->set_text(TTR("Open Editor"));
@@ -181,7 +193,6 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 		}
 
 		Control *custom_editor = NULL;
-		int port_offset = 0;
 
 		for (int i = 0; i < plugins.size(); i++) {
 			custom_editor = plugins.write[i]->create_editor(vanode);
