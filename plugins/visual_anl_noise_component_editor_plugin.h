@@ -96,7 +96,7 @@ class VisualAnlNoiseNodeComponentEditor : public VBoxContainer {
 
 	void _duplicate_nodes();
 
-	void _on_noise_changed();
+	// void _on_noise_changed();
 
 	void _preview_select_port(int p_node, int p_port);
 	void _input(const Ref<InputEvent> p_event);

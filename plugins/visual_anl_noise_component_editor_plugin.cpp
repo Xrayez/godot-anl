@@ -11,6 +11,13 @@
 
 ///////////////////////////////////
 
+bool VisualAnlNoiseNodeComponentEditor::can_edit(const Ref<VisualAnlNoiseNodeComponent> &p_comp) {
+
+	Ref<VisualAnlNoiseNodeComponent> comp = p_comp;
+
+	return comp.is_valid();
+}
+
 void VisualAnlNoiseNodeComponentEditor::edit(const Ref<VisualAnlNoiseNodeComponent> &p_component) {
 
 	if (p_component.is_valid()) {
@@ -633,7 +640,7 @@ void VisualAnlNoiseNodeComponentEditor::_duplicate_nodes() {
 
 void VisualAnlNoiseNodeComponentEditor::_bind_methods() {
 
-	ClassDB::bind_method("_on_noise_changed", &VisualAnlNoiseNodeComponentEditor::_on_noise_changed);
+	// ClassDB::bind_method("_on_noise_changed", &VisualAnlNoiseNodeComponentEditor::_on_noise_changed);
 	ClassDB::bind_method("_update_graph", &VisualAnlNoiseNodeComponentEditor::_update_graph);
 	ClassDB::bind_method("_add_node", &VisualAnlNoiseNodeComponentEditor::_add_node);
 	ClassDB::bind_method("_node_dragged", &VisualAnlNoiseNodeComponentEditor::_node_dragged);

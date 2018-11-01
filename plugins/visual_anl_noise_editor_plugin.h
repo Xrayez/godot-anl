@@ -23,6 +23,10 @@ class VisualAnlNoiseEditor : public VBoxContainer {
 	HBoxContainer *path_hb;
 	PanelContainer *editor_base;
 
+	Vector<String> button_path;
+	Vector<String> edited_path;
+	Vector<VisualAnlNoiseNodeComponentEditor *> editors;
+
 	void _update_path();
 	void _about_to_show_component();
 	ObjectID current_component;
@@ -41,7 +45,7 @@ public:
 	void add_plugin(VisualAnlNoiseNodeComponentEditor *p_editor);
 	void remove_plugin(VisualAnlNoiseNodeComponentEditor *p_editor);
 
-	bool can_edit(const Ref<VisualAnlNoiseNodeComponent> &p_node) const;
+	bool can_edit(const Ref<VisualAnlNoiseNode> &p_node) const;
 
 	void edit_path(const Vector<String> &p_path);
 	Vector<String> get_edited_path() const;

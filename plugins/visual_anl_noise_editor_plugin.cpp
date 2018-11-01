@@ -28,7 +28,7 @@ void VisualAnlNoiseEditor::add_plugin(VisualAnlNoiseNodeComponentEditor *p_edito
 
 	ERR_FAIL_COND(p_editor->get_parent());
 	editor_base->add_child(p_editor);
-	component_editor = p_editor;
+	editors.push_back(p_editor);
 	p_editor->set_h_size_flags(SIZE_EXPAND_FILL);
 	p_editor->set_v_size_flags(SIZE_EXPAND_FILL);
 	p_editor->hide();
@@ -38,7 +38,57 @@ void VisualAnlNoiseEditor::remove_plugin(VisualAnlNoiseNodeComponentEditor *p_ed
 
 	ERR_FAIL_COND(p_editor->get_parent() != editor_base);
 	editor_base->remove_child(p_editor);
-	component_editor = NULL;
+	editors.erase(p_editor);
+}
+
+void VisualAnlNoiseEditor::edit_path(const Vector<String> &p_path) {
+
+	// button_path.clear();
+
+	// Ref<VisualAnlNoiseNode> node = tree->get_tree_root();
+
+	// if (node.is_valid()) {
+	// 	current_component = node->get_instance_id();
+
+	// 	for (int i = 0; i < p_path.size(); i++) {
+
+	// 		Ref<AnimationNode> child = node->get_child_by_name(p_path[i]);
+	// 		ERR_BREAK(child.is_null());
+	// 		node = child;
+	// 		button_path.push_back(p_path[i]);
+	// 	}
+
+	// 	for (int i = 0; i < editors.size(); i++) {
+	// 		if (editors[i]->can_edit(node)) {
+	// 			editors[i]->edit(node);
+	// 			editors[i]->show();
+	// 		} else {
+	// 			editors[i]->edit(Ref<AnimationNode>());
+	// 			editors[i]->hide();
+	// 		}
+	// 	}
+	// } else {
+	// 	current_component = 0;
+	// }
+
+	// edited_path = button_path;
+
+	// _update_path();
+}
+
+Vector<String> VisualAnlNoiseEditor::get_edited_path() const {
+
+	return button_path;
+}
+
+bool VisualAnlNoiseEditor::can_edit(const Ref<VisualAnlNoiseNode> &p_node) const {
+
+	for (int i = 0; i < editors.size(); i++) {
+		if (editors[i]->can_edit(p_node)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void VisualAnlNoiseEditor::_notification(int p_what) {
@@ -48,14 +98,27 @@ void VisualAnlNoiseEditor::_notification(int p_what) {
 
 void VisualAnlNoiseEditor::_bind_methods() {
 
+	// ClassDB::bind_method("_path_button_pressed", &VisualAnlNoiseEditor::_path_button_pressed);
 }
 
 VisualAnlNoiseEditor *VisualAnlNoiseEditor::singleton = NULL;
 
 VisualAnlNoiseEditor::VisualAnlNoiseEditor() {
 
-	singleton = this;
+	path_edit = memnew(ScrollContainer);
+	add_child(path_edit);
+	path_edit->set_enable_h_scroll(true);
+	path_edit->set_enable_v_scroll(false);
+	path_hb = memnew(HBoxContainer);
+	path_edit->add_child(path_hb);
 
+	current_component = 0;
+	singleton = this;
+	editor_base = memnew(PanelContainer);
+	editor_base->set_v_size_flags(SIZE_EXPAND_FILL);
+	add_child(editor_base);
+
+	add_plugin(memnew(VisualAnlNoiseNodeComponentEditor));
 }
 
 ///////////////////////////////////
