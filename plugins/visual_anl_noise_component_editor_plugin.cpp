@@ -179,8 +179,8 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 			name->set_text(comp->get_component_name());
 			name->set_expand_to_text_length(true);
 			node->add_child(name);
-			name->connect("text_entered", this, "_node_renamed", varray(nodes[n_i]));
-			name->connect("focus_exited", this, "_node_renamed_focus_out", varray(name, nodes[n_i]));
+			name->connect("text_entered", this, "_component_renamed", varray(nodes[n_i]));
+			name->connect("focus_exited", this, "_component_renamed_focus_out", varray(name, nodes[n_i]));
 
 			// Open in editor button
 			node->add_child(memnew(HSeparator));
@@ -325,6 +325,39 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 
 		graph->connect_node(itos(from), from_idx, itos(to), to_idx);
 	}
+}
+
+void VisualAnlNoiseNodeComponentEditor::_component_renamed(const String &p_text, int p_which) {
+
+	Ref<VisualAnlNoiseNodeComponent> comp = component->get_node(p_which);
+	ERR_FAIL_COND(comp.is_null());
+
+	GraphNode *gn = Object::cast_to<GraphNode>(graph->get_node(itos(p_which)));
+
+	String prev_name = comp->get_component_name();
+	ERR_FAIL_COND(prev_name == String());
+
+	String new_name = p_text;
+	ERR_FAIL_COND(new_name == "" || new_name.find(".") != -1 || new_name.find("/") != -1)
+
+	updating = true;
+	undo_redo->create_action("Component Renamed");
+	undo_redo->add_do_method(comp.ptr(), "set_component_name", new_name);
+	undo_redo->add_undo_method(comp.ptr(), "set_component_name", prev_name);
+	undo_redo->add_do_method(this, "_update_graph");
+	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method(VisualAnlNoiseEditor::get_singleton(), "_update_path"); // FIXME: should update button path
+	undo_redo->add_undo_method(VisualAnlNoiseEditor::get_singleton(), "_update_path");
+	undo_redo->commit_action();
+	updating = false;
+
+	gn->set_name(new_name);
+	gn->set_size(gn->get_minimum_size());
+}
+
+void VisualAnlNoiseNodeComponentEditor::_component_renamed_focus_out(Node *le, int p_which) {
+
+	_component_renamed(le->call("get_text"), p_which);
 }
 
 void VisualAnlNoiseNodeComponentEditor::_preview_select_port(int p_node, int p_port) {
@@ -672,6 +705,8 @@ void VisualAnlNoiseNodeComponentEditor::_duplicate_nodes() {
 
 void VisualAnlNoiseNodeComponentEditor::_bind_methods() {
 
+	ClassDB::bind_method("_component_renamed", &VisualAnlNoiseNodeComponentEditor::_component_renamed);
+	ClassDB::bind_method("_component_renamed_focus_out", &VisualAnlNoiseNodeComponentEditor::_component_renamed_focus_out);
 	ClassDB::bind_method("_update_graph", &VisualAnlNoiseNodeComponentEditor::_update_graph);
 	ClassDB::bind_method("_add_node", &VisualAnlNoiseNodeComponentEditor::_add_node);
 	ClassDB::bind_method("_node_dragged", &VisualAnlNoiseNodeComponentEditor::_node_dragged);
