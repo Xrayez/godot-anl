@@ -21,8 +21,6 @@ bool VisualAnlNoiseNodeComponentEditor::can_edit(const Ref<VisualAnlNoiseNodeCom
 
 void VisualAnlNoiseNodeComponentEditor::edit(const Ref<VisualAnlNoiseNodeComponent> &p_component) {
 
-	print_line("edit_component_requested");
-
 	if (p_component.is_valid()) {
 
 		component = p_component;

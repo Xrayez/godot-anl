@@ -13,6 +13,13 @@
 
 void VisualAnlNoiseEditor::edit(const Ref<VisualAnlNoise> &p_visual_anl_noise) {
 
+	if (visual_anl_noise == p_visual_anl_noise) {
+		return;
+	} else {
+		hide();
+		component_editor->hide();
+	}
+
 	if (visual_anl_noise.is_valid()) {
 		visual_anl_noise->disconnect("component_changed", this, "_on_component_changed");
 	}
@@ -21,7 +28,6 @@ void VisualAnlNoiseEditor::edit(const Ref<VisualAnlNoise> &p_visual_anl_noise) {
 		visual_anl_noise = p_visual_anl_noise;
 
 		if (!visual_anl_noise->is_connected("component_changed", this, "_on_component_changed")) {
-
 			visual_anl_noise->connect("component_changed", this, "_on_component_changed");
 		}
 		edit_component();
@@ -34,7 +40,6 @@ void VisualAnlNoiseEditor::edit(const Ref<VisualAnlNoise> &p_visual_anl_noise) {
 	if (visual_anl_noise.is_null()) {
 		hide();
 	}
-
 }
 
 void VisualAnlNoiseEditor::add_plugin(VisualAnlNoiseNodeComponentEditor *p_editor) {
@@ -203,7 +208,16 @@ bool VisualAnlNoiseEditor::can_edit(const Ref<VisualAnlNoiseNode> &p_node) const
 
 void VisualAnlNoiseEditor::_notification(int p_what) {
 
+	if (p_what == NOTIFICATION_PROCESS) {
+		ObjectID component = 0;
+		if (visual_anl_noise.is_valid() && visual_anl_noise->get_component().is_valid()) {
+			component = visual_anl_noise->get_component()->get_instance_id();
+		}
 
+		if (component != current_component) {
+			edit_path(Vector<int>());
+		}
+	}
 }
 
 void VisualAnlNoiseEditor::_bind_methods() {
@@ -251,12 +265,16 @@ void VisualAnlNoiseEditorPlugin::make_visible(bool p_visible) {
 	if (p_visible) {
 		button->show();
 		editor->make_bottom_panel_item_visible(visual_anl_noise_editor);
+
+		visual_anl_noise_editor->set_process(true);
 		visual_anl_noise_editor->set_process_input(true);
 	} else {
 
 		if (visual_anl_noise_editor->is_visible_in_tree())
 			editor->hide_bottom_panel();
 		button->hide();
+
+		visual_anl_noise_editor->set_process(false);
 		visual_anl_noise_editor->set_process_input(false);
 	}
 }
