@@ -474,6 +474,10 @@ Ref<VisualAnlNoiseNodeComponent> VisualAnlNoise::get_component() const {
 	return component;
 }
 
+//////////////////
+// Component node
+//////////////////
+
 VisualAnlNoiseNodeComponent::VisualAnlNoiseNodeComponent() {
 
     Ref<VisualAnlNoiseNodeOutput> output;
@@ -508,16 +512,23 @@ int VisualAnlNoiseNodeComponent::get_output_port_count() const {
 
 VisualAnlNoiseNode::PortType VisualAnlNoiseNodeComponent::get_output_port_type(int p_port) const {
 
-	return PORT_TYPE_SCALAR;
+	// Should always return index of the noise function evaluated
+	return PORT_TYPE_INDEX;
 }
 
 String VisualAnlNoiseNodeComponent::get_output_port_name(int p_port) const {
+
 	return "";
 }
 
 String VisualAnlNoiseNodeComponent::get_caption() const {
+
 	return TTR("Component");
 }
+
+//////////////////
+// Output node
+//////////////////
 
 int VisualAnlNoiseNodeOutput::get_input_port_count() const {
 
