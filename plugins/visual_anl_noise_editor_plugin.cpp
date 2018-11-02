@@ -74,7 +74,7 @@ void VisualAnlNoiseEditor::_update_path() {
 	group.instance();
 
 	Button *b = memnew(Button);
-	b->set_text("main");
+	b->set_text(node->get_component_name());
 	b->set_toggle_mode(true);
 	b->set_button_group(group);
 	b->set_pressed(true);
@@ -89,7 +89,7 @@ void VisualAnlNoiseEditor::_update_path() {
 		node = node->get_node(button_path[i]);
 
 		b = memnew(Button);
-		b->set_text(node->get_name());
+		b->set_text(node->get_component_name());
 		b->set_toggle_mode(true);
 		b->set_button_group(group);
 		path_hb->add_child(b);

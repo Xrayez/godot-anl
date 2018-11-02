@@ -176,11 +176,11 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 
 			// Component's name
 			LineEdit *name = memnew(LineEdit);
-			name->set_text(comp->get_name());
+			name->set_text(comp->get_component_name());
 			name->set_expand_to_text_length(true);
 			node->add_child(name);
-			// name->connect("text_entered", this, "_node_renamed", varray(nodes[n_i]));
-			// name->connect("focus_exited", this, "_node_renamed_focus_out", varray(name, nodes[n_i]));
+			name->connect("text_entered", this, "_node_renamed", varray(nodes[n_i]));
+			name->connect("focus_exited", this, "_node_renamed_focus_out", varray(name, nodes[n_i]));
 
 			// Open in editor button
 			node->add_child(memnew(HSeparator));
