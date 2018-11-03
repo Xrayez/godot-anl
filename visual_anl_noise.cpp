@@ -11,20 +11,32 @@ int VisualAnlNoiseNode::get_output_port_for_preview() const {
 	return port_preview;
 }
 
+void VisualAnlNoiseNode::set_input_port_value(int p_port, const Variant &p_value) {
+
+	// nothing to set
+}
+
+Variant VisualAnlNoiseNode::get_input_port_value(int p_port) const {
+
+	return Variant();
+}
+
 void VisualAnlNoiseNode::set_input_port_default_value(int p_port, const Variant &p_value) {
+
 	default_input_values[p_port] = p_value;
 	emit_changed();
 }
 
 Variant VisualAnlNoiseNode::get_input_port_default_value(int p_port) const {
+
 	if (default_input_values.has(p_port)) {
 		return default_input_values[p_port];
 	}
-
 	return Variant();
 }
 
 bool VisualAnlNoiseNode::is_port_separator(int p_index) const {
+
 	return false;
 }
 
@@ -55,6 +67,21 @@ void VisualAnlNoiseNode::_set_default_input_values(const Array &p_values) {
 
 String VisualAnlNoiseNode::get_warning() const {
 	return String();
+}
+
+void VisualAnlNoiseNode::set_output_port_value(int p_port, const Variant &p_value) {
+
+	// nothing to do
+}
+
+Variant VisualAnlNoiseNode::get_output_port_value(int p_port) const {
+
+	return 0;
+}
+
+void VisualAnlNoiseNode::evaluate(Ref<VisualAnlNoise> noise) {
+
+	// nothing to do
 }
 
 void VisualAnlNoiseNode::_bind_methods() {
@@ -296,11 +323,11 @@ Vector2 VisualAnlNoiseNodeComponent::get_graph_offset() const {
 	return graph_offset;
 }
 
-Index VisualAnlNoiseNodeComponent::evaluate(const Ref<VisualAnlNoise> &p_noise) {
+void VisualAnlNoiseNodeComponent::evaluate(Ref<VisualAnlNoise> noise) {
 
 	// Make it faster to go around through noise nodes
-	VMap<ConnectionKey, const List<Connection>::Element *> input_connections;
-	VMap<ConnectionKey, const List<Connection>::Element *> output_connections;
+	Connections input_connections;
+	Connections output_connections;
 
 	for (const List<Connection>::Element *E = graph.connections.front(); E; E = E->next()) {
 
@@ -315,9 +342,58 @@ Index VisualAnlNoiseNodeComponent::evaluate(const Ref<VisualAnlNoise> &p_noise) 
 		input_connections.insert(to_key, E);
 	}
 
-	// ...
+	Set<int> processed;
 
-	return 0;
+	evaluate_node(NODE_ID_OUTPUT, noise, input_connections, output_connections, processed);
+}
+
+void VisualAnlNoiseNodeComponent::evaluate_node(int node, Ref<VisualAnlNoise> noise, Connections &input_connections, Connections &output_connections, Set<int> &processed) {
+
+	Ref<VisualAnlNoiseNode> &vanode = graph.nodes[node].node;
+
+	// Evaluate inputs recursively first to retrieve needed indexes/values
+	int input_count = vanode->get_input_port_count();
+	for (int i = 0; i < input_count; i++) {
+
+		ConnectionKey ck;
+		ck.node = node;
+		ck.port = i;
+
+		if (input_connections.has(ck)) {
+			int from_node = input_connections[ck]->get().from_node;
+
+			if (processed.has(from_node)) {
+				// Ensure not to re-evaluate nodes
+				// Instruction indexes can be reused by other nodes as input
+				continue;
+			}
+			evaluate_node(from_node, noise, input_connections, output_connections, processed);
+		}
+	}
+	// Pass evaluated indexes/values to this node
+	for (int i = 0; i < input_count; i++) {
+
+		ConnectionKey ck;
+		ck.node = node;
+		ck.port = i;
+
+		if (input_connections.has(ck)) {
+			int from_node = input_connections[ck]->get().from_node;
+			int from_port = input_connections[ck]->get().from_port;
+
+			const Ref<VisualAnlNoiseNode> &from_vanode = graph.nodes[node].node;
+
+			VisualAnlNoiseNode::PortType in_type = vanode->get_input_port_type(i);
+			VisualAnlNoiseNode::PortType out_type = from_vanode->get_output_port_type(from_port);
+
+			vanode->set_input_port_value(i, from_vanode->get_output_port_value(0));
+		}
+	}
+
+	// Ready to evaluate this node with inputs set
+	vanode->evaluate(noise); // sets output value
+
+	processed.insert(node);
 }
 
 // String VisualAnlNoiseNodeComponent::generate_preview_noise(int p_node, int p_port) const {
@@ -592,6 +668,7 @@ VisualAnlNoiseNodeOutput::PortType VisualAnlNoiseNodeOutput::get_output_port_typ
 }
 
 String VisualAnlNoiseNodeOutput::get_output_port_name(int p_port) const {
+
 	return String();
 }
 
@@ -601,8 +678,30 @@ bool VisualAnlNoiseNodeOutput::is_port_separator(int p_index) const {
 }
 
 String VisualAnlNoiseNodeOutput::get_caption() const {
+
 	return TTR("Output");
 }
 
+void VisualAnlNoiseNodeOutput::set_input_port_value(int p_port, const Variant &p_value) {
+
+	output_value = p_value;
+}
+
+Variant VisualAnlNoiseNodeOutput::get_input_port_value(int p_port) const {
+
+	return output_value;
+}
+
+void VisualAnlNoiseNodeOutput::set_output_port_value(int p_port, const Variant &p_value) {
+
+	output_value = p_value;
+}
+
+Variant VisualAnlNoiseNodeOutput::get_output_port_value(int p_port) const {
+
+	return output_value;
+}
+
 VisualAnlNoiseNodeOutput::VisualAnlNoiseNodeOutput() {
+
 }

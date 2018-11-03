@@ -39,6 +39,8 @@ class VisualAnlNoiseNode : public Resource {
 	void _set_default_input_values(const Array &p_values);
 
 protected:
+	Variant output_value;
+
 	static void _bind_methods();
 
 public:
@@ -53,12 +55,18 @@ public:
 	virtual PortType get_input_port_type(int p_port) const = 0;
 	virtual String get_input_port_name(int p_port) const = 0;
 
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+
 	void set_input_port_default_value(int p_port, const Variant &p_value);
 	Variant get_input_port_default_value(int p_port) const; // if NIL (default if node does not set anything) is returned, it means no default value is wanted if disconnected, thus no input var must be supplied (empty string will be supplied)
 
 	virtual int get_output_port_count() const = 0;
 	virtual PortType get_output_port_type(int p_port) const = 0;
 	virtual String get_output_port_name(int p_port) const = 0;
+
+	virtual void set_output_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_output_port_value(int p_port) const;
 
 	void set_output_port_for_preview(int p_index);
 	int get_output_port_for_preview() const;
@@ -68,6 +76,8 @@ public:
 	virtual Vector<StringName> get_editable_properties() const;
 
 	virtual String get_warning() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
 
 	VisualAnlNoiseNode();
 };
@@ -111,6 +121,7 @@ private:
 		}
 	};
 
+
     Vector2 graph_offset;
 
     Array _get_node_connections() const;
@@ -123,6 +134,8 @@ protected:
 	void _get_property_list(List<PropertyInfo> *p_list) const;
 
 public:
+	using Connections = VMap<ConnectionKey, const List<Connection>::Element *>;
+
 	enum {
 		NODE_ID_INVALID = -1,
 		NODE_ID_OUTPUT = 0,
@@ -143,6 +156,8 @@ public:
 	int find_node_id(const Ref<VisualAnlNoiseNode> &p_node) const;
 	void remove_node(int p_id);
 
+	void evaluate_node(int p_id, Ref<VisualAnlNoise> noise, Connections &input_connections, Connections &output_connections, Set<int> &processed);
+
 	bool is_node_connection(int p_from_node, int p_from_port, int p_to_node, int p_to_port) const;
 	bool can_connect_nodes(int p_from_node, int p_from_port, int p_to_node, int p_to_port) const;
 	Error connect_nodes(int p_from_node, int p_from_port, int p_to_node, int p_to_port);
@@ -153,7 +168,6 @@ public:
 	void set_graph_offset(const Vector2 &p_offset);
 	Vector2 get_graph_offset() const;
 
-	Index evaluate(const Ref<VisualAnlNoise> &p_noise);
 
 	// String generate_preview_noise(int p_node, int p_port) const;
 
@@ -170,6 +184,7 @@ public:
 	virtual PortType get_output_port_type(int p_port) const;
 	virtual String get_output_port_name(int p_port) const;
 
+	virtual void evaluate(Ref<VisualAnlNoise> p_noise);
 };
 
 
@@ -188,14 +203,21 @@ public:
 	static const Port ports[];
 
 public:
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+
 	virtual int get_input_port_count() const;
 	virtual PortType get_input_port_type(int p_port) const;
 	virtual String get_input_port_name(int p_port) const;
+
 	Variant get_input_port_default_value(int p_port) const;
 
 	virtual int get_output_port_count() const;
 	virtual PortType get_output_port_type(int p_port) const;
 	virtual String get_output_port_name(int p_port) const;
+
+	virtual void set_output_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_output_port_value(int p_port) const;
 
 	virtual bool is_port_separator(int p_index) const;
 

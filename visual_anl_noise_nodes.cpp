@@ -12,6 +12,16 @@ int VisualAnlNoiseNodeScalar::get_input_port_count() const {
 	return 0;
 }
 
+void VisualAnlNoiseNodeScalar::set_input_port_value(int p_port, const Variant &p_value) {
+
+	constant = p_value;
+}
+
+Variant VisualAnlNoiseNodeScalar::get_input_port_value(int p_port) const {
+
+	return constant;
+}
+
 VisualAnlNoiseNodeScalar::PortType VisualAnlNoiseNodeScalar::get_input_port_type(int p_port) const {
 
 	return PORT_TYPE_SCALAR;
@@ -33,7 +43,7 @@ VisualAnlNoiseNodeScalar::PortType VisualAnlNoiseNodeScalar::get_output_port_typ
 }
 
 String VisualAnlNoiseNodeScalar::get_output_port_name(int p_port) const {
-	return ""; //no output port means the editor will be used as port
+	return "";
 }
 
 void VisualAnlNoiseNodeScalar::set_constant(real_t p_value) {
@@ -69,6 +79,33 @@ Vector<StringName> VisualAnlNoiseNodeScalar::get_editable_properties() const {
 	}
 
 	return props;
+}
+
+void VisualAnlNoiseNodeScalar::evaluate(Ref<VisualAnlNoise> noise) {
+
+	switch(type) {
+
+		case SCALAR_CONSTANT:
+			output_value = noise->constant(constant);
+
+		case SCALAR_PI:
+			output_value = noise->pi();
+
+		case SCALAR_E:
+			output_value = noise->e();
+
+		case SCALAR_ONE:
+			output_value = noise->one();
+
+		case SCALAR_ZERO:
+			output_value = noise->zero();
+
+		case SCALAR_POINT5:
+			output_value = noise->point5();
+
+		case SCALAR_SQRT2:
+			output_value = noise->sqrt2();
+	}
 }
 
 void VisualAnlNoiseNodeScalar::_bind_methods() {
