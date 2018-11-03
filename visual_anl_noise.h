@@ -12,9 +12,13 @@ class VisualAnlNoise : public AnlNoise {
 
 	Ref<VisualAnlNoiseNodeComponent> component; // default, tree root
 
+	void _update_noise();
+	void _queue_update();
+
+	volatile mutable bool dirty;
+
 protected:
 	static void _bind_methods();
-	void _generate_noise();
 
 public:
 	void set_component(const Ref<VisualAnlNoiseNodeComponent> &p_component);
@@ -95,15 +99,23 @@ private:
 		List<Connection> connections;
 	} graph;
 
-    Array _get_node_connections() const;
+	union ConnectionKey {
+
+		struct {
+			uint64_t node : 32;
+			uint64_t port : 32;
+		};
+		uint64_t key;
+		bool operator<(const ConnectionKey &p_key) const {
+			return key < p_key.key;
+		}
+	};
 
     Vector2 graph_offset;
 
-    volatile mutable bool dirty;
-	void _queue_update();
+    Array _get_node_connections() const;
 
 protected:
-	virtual void _update_noise() const;
 	static void _bind_methods();
 
 	bool _set(const StringName &p_name, const Variant &p_value);
@@ -141,7 +153,9 @@ public:
 	void set_graph_offset(const Vector2 &p_offset);
 	Vector2 get_graph_offset() const;
 
-	String generate_preview_noise(int p_node, int p_port) const;
+	Index evaluate(const Ref<VisualAnlNoise> &p_noise);
+
+	// String generate_preview_noise(int p_node, int p_port) const;
 
     VisualAnlNoiseNodeComponent();
 
