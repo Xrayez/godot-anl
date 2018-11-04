@@ -87,24 +87,31 @@ void VisualAnlNoiseNodeScalar::evaluate(Ref<VisualAnlNoise> noise) {
 
 		case SCALAR_CONSTANT:
 			output_value = noise->constant(constant);
+			break;
 
 		case SCALAR_PI:
 			output_value = noise->pi();
+			break;
 
 		case SCALAR_E:
 			output_value = noise->e();
+			break;
 
 		case SCALAR_ONE:
 			output_value = noise->one();
+			break;
 
 		case SCALAR_ZERO:
 			output_value = noise->zero();
+			break;
 
 		case SCALAR_POINT5:
 			output_value = noise->point5();
+			break;
 
 		case SCALAR_SQRT2:
 			output_value = noise->sqrt2();
+			break;
 	}
 }
 
@@ -133,6 +140,126 @@ VisualAnlNoiseNodeScalar::VisualAnlNoiseNodeScalar() {
 	type = SCALAR_CONSTANT;
 	constant = 0.0;
 	// set_input_port_default_value(0, 0.0);
+}
+
+////////////// ScalarOp
+
+String VisualAnlNoiseNodeScalarOp::get_caption() const {
+
+	return "ScalarOp";
+}
+
+int VisualAnlNoiseNodeScalarOp::get_input_port_count() const {
+
+	return 2;
+}
+
+void VisualAnlNoiseNodeScalarOp::set_input_port_value(int p_port, const Variant &p_value) {
+
+	p_port == 0 ? (a = p_value) : (b = p_value);
+}
+
+Variant VisualAnlNoiseNodeScalarOp::get_input_port_value(int p_port) const {
+
+	return p_port == 0 ? a : b;
+}
+
+VisualAnlNoiseNodeScalarOp::PortType VisualAnlNoiseNodeScalarOp::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeScalarOp::get_input_port_name(int p_port) const {
+
+	return p_port == 0 ? "a" : "b";
+}
+
+int VisualAnlNoiseNodeScalarOp::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeScalarOp::PortType VisualAnlNoiseNodeScalarOp::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeScalarOp::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeScalarOp::set_operator(Operator p_op) {
+
+	op = p_op;
+	emit_changed();
+}
+
+VisualAnlNoiseNodeScalarOp::Operator VisualAnlNoiseNodeScalarOp::get_operator() const {
+
+	return op;
+}
+
+Vector<StringName> VisualAnlNoiseNodeScalarOp::get_editable_properties() const {
+
+	Vector<StringName> props;
+	props.push_back("operator");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeScalarOp::evaluate(Ref<VisualAnlNoise> noise) {
+
+	switch(op) {
+
+		case OP_ADD:
+			output_value = noise->add(a, b);
+			break;
+
+		case OP_SUB:
+			output_value = noise->subtract(a, b);
+			break;
+
+		case OP_MUL:
+			output_value = noise->multiply(a, b);
+			break;
+
+		case OP_DIV:
+			output_value = noise->divide(a, b);
+			break;
+
+		case OP_POW:
+			output_value = noise->pow(a, b);
+			break;
+
+		case OP_MAX:
+			output_value = noise->maximum(a, b);
+			break;
+
+		case OP_MIN:
+			output_value = noise->minimum(a, b);
+			break;
+	}
+}
+
+void VisualAnlNoiseNodeScalarOp::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_operator", "operator"), &VisualAnlNoiseNodeScalarOp::set_operator);
+	ClassDB::bind_method(D_METHOD("get_operator"), &VisualAnlNoiseNodeScalarOp::get_operator);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "operator", PROPERTY_HINT_ENUM, "Add,Sub,Multiply,Divide,Power,Max,Min"), "set_operator", "get_operator");
+
+	BIND_ENUM_CONSTANT(OP_ADD);
+	BIND_ENUM_CONSTANT(OP_SUB);
+	BIND_ENUM_CONSTANT(OP_MUL);
+	BIND_ENUM_CONSTANT(OP_DIV);
+	BIND_ENUM_CONSTANT(OP_POW);
+	BIND_ENUM_CONSTANT(OP_MAX);
+	BIND_ENUM_CONSTANT(OP_MIN);
+}
+
+VisualAnlNoiseNodeScalarOp::VisualAnlNoiseNodeScalarOp() {
+
+	op = OP_ADD;
 }
 
 ////////////// Simplex Basis

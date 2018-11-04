@@ -1,4 +1,5 @@
 #include "visual_anl_noise.h"
+#include "visual_anl_noise_nodes.h"
 #include "core/vmap.h"
 
 void VisualAnlNoiseNode::set_output_port_for_preview(int p_index) {
@@ -386,11 +387,9 @@ void VisualAnlNoiseNodeComponent::evaluate_node(int node, Ref<VisualAnlNoise> no
 			VisualAnlNoiseNode::PortType in_type = vanode->get_input_port_type(i);
 			VisualAnlNoiseNode::PortType out_type = from_vanode->get_output_port_type(from_port);
 
-			const Variant &output_value = from_vanode->get_output_port_value(0);
-			vanode->set_input_port_value(i, output_value);
+			vanode->set_input_port_value(i, from_vanode->get_output_port_value(0));
 		}
 	}
-
 	// Ready to evaluate this node with inputs set
 	vanode->evaluate(noise); // sets output value
 
@@ -613,7 +612,7 @@ int VisualAnlNoiseNodeComponent::get_input_port_count() const {
 
 VisualAnlNoiseNode::PortType VisualAnlNoiseNodeComponent::get_input_port_type(int p_port) const {
 
-	return PORT_TYPE_SCALAR;
+	return PORT_TYPE_INDEX;
 }
 
 String VisualAnlNoiseNodeComponent::get_input_port_name(int p_port) const {

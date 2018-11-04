@@ -53,7 +53,6 @@ public:
     Index divide(Index src1, Index src2);
     Index maximum(Index src1, Index src2);
     Index minimum(Index src1, Index src2);
-    Index abs(Index src);
     Index pow(Index src1, Index src2);
     Index bias(Index src1, Index src2);
     Index gain(Index src1, Index src2);
@@ -102,6 +101,7 @@ public:
     Index acos(Index src);
     Index asin(Index src);
     Index atan(Index src);
+    Index abs(Index src);
 
     // Smoothing
     // --------------------------------------------
