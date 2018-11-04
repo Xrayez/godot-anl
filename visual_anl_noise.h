@@ -21,6 +21,8 @@ protected:
 	static void _bind_methods();
 
 public:
+	void generate();
+
 	void set_component(const Ref<VisualAnlNoiseNodeComponent> &p_component);
 	Ref<VisualAnlNoiseNodeComponent> get_component() const;
 

@@ -529,6 +529,12 @@ VisualAnlNoise::VisualAnlNoise() : AnlNoise() {
 	dirty = true;
 }
 
+void VisualAnlNoise::generate() {
+
+	dirty = true;
+	_update_noise();
+}
+
 void VisualAnlNoise::_update_noise() {
 
 	if (component.is_null()) {
@@ -557,6 +563,8 @@ void VisualAnlNoise::_queue_update() {
 }
 
 void VisualAnlNoise::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("generate"), &VisualAnlNoise::generate);
 
 	ClassDB::bind_method(D_METHOD("set_component", "component"), &VisualAnlNoise::set_component);
 	ClassDB::bind_method(D_METHOD("get_component"), &VisualAnlNoise::get_component);
