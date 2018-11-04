@@ -21,6 +21,9 @@ public:
 //------------------------------------------------------------------------------
 // Kernel noise methods
 //------------------------------------------------------------------------------
+    // Scalar
+    // --------------------------
+    Index constant(double value);
     Index pi();
     Index e();
     Index one();
@@ -28,10 +31,13 @@ public:
     Index point5();
     Index sqrt2();
 
-    Index constant(double value);
+    // Seed
+    // ---------------------------------
     Index seed(unsigned int value);
     Index seeder(Index seed, Index src);
 
+    // Basis
+    // ---------------------------------------------------------
     Index value_basis(Index interp, Index seed);
     Index gradient_basis(Index interp, Index seed);
     Index simplex_basis(Index seed);
@@ -39,6 +45,8 @@ public:
                         Index d1, Index d2, Index d3, Index d4,
                         Index distance, Index seed);
 
+    // Scalar operations
+    // ------------------------------------
     Index add(Index src1, Index src2);
     Index subtract(Index src1, Index src2);
     Index multiply(Index src1, Index src2);
@@ -50,6 +58,8 @@ public:
     Index bias(Index src1, Index src2);
     Index gain(Index src1, Index src2);
 
+    // Transform
+    // -----------------------------------------------------------------
     Index scale(Index src, Index scale);
 
     Index scale_x(Index src, Index scale);
@@ -70,16 +80,22 @@ public:
 
     Index rotate(Index src, Index angle, Index ax, Index ay, Index az);
 
+    // Sequence operations
+    // --------------------------------------------------------------------------
     Index add_sequence(Index base, unsigned int number, unsigned int stride = 1);
     Index multiply_sequence(Index base, Index number, unsigned int stride = 1);
     Index max_sequence(Index base, unsigned int number, unsigned int stride = 1);
     Index min_sequence(Index base, unsigned int number, unsigned int stride = 1);
 
+    // Filter
+    // -----------------------------------------------
     Index mix(Index low, Index high, Index control);
     Index select(Index low, Index high, Index control,
                 Index threshold, Index falloff);
     Index clamp(Index src, Index low, Index high);
 
+    // Scalar functions
+    // -------------------
     Index cos(Index src);
     Index sin(Index src);
     Index tan(Index src);
@@ -87,9 +103,13 @@ public:
     Index asin(Index src);
     Index atan(Index src);
 
+    // Smoothing
+    // --------------------------------------------
     Index tiers(Index src, Index num_tiers);
     Index smooth_tiers(Index src, Index num_tiers);
 
+    // Gradients
+    // ---------
     Index x();
     Index y();
     Index z();
@@ -97,6 +117,8 @@ public:
     Index u();
     Index v();
 
+    // Spacing (?)
+    // --------------------------------
     Index dx(Index src, Index spacing);
     Index dy(Index src, Index spacing);
     Index dz(Index src, Index spacing);
@@ -105,12 +127,11 @@ public:
     Index dv(Index src, Index spacing);
 
     Index sigmoid(Index src, Index center, Index ramp);
-
     Index radial();
-
-    Index fractal(Index seed, Index layer,
-                Index persistence, Index lacunarity, Index numoctaves, Index frequency);
     Index randomize(Index seed, Index low, Index high);
+
+    // Step
+    // -------------------------------------------------------
     Index step(Index val, Index control);
     Index linear_step(Index low, Index high, Index control);
     Index smooth_step(Index low, Index high, Index control);
@@ -120,16 +141,20 @@ public:
                         Index t0, Index t1, Index v0, Index v1,
                         Index control);
     // Patterns
-
+    // ------------------------
     Index hex_tile(Index seed);
     Index hex_bump();
 
+    // Color
+    // --------------------------------------------------------
     Index color(const Color& color);
     Index combine_rgba(Index r, Index g, Index b, Index a);
     Index combine_hsva(Index h, Index s, Index v, Index a);
 
     Index scale_offset(Index src, double scale, double offset);
 
+    // Layers
+    // ----------------------------------------------------------------------------------------
     Index fractal_layer(anl::BasisTypes basis, Index interp_type,
                         double scale, double frequency, unsigned int seed, bool rot = true,
                         double angle = 0.5, double ax = 0.0, double ay = 0.0, double az = 1.0);
@@ -142,6 +167,11 @@ public:
                     double scale, double frequency, unsigned int seed, bool rot = true,
                     double angle = 0.5, double ax = 0.0, double ay = 0.0, double az = 1.0);
 
+    // Fractals
+    // ----------------------------------------------------------------------------------------------------
+    Index fractal(Index seed, Index layer,
+                Index persistence, Index lacunarity, Index numoctaves, Index frequency);
+
     Index fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
             unsigned int numoctaves, double frequency, unsigned int seed, bool rot = true);
 
@@ -152,7 +182,7 @@ public:
                 unsigned int numoctaves, double frequency, unsigned int seed, bool rot = true);
 
     // Kernel
-
+    // --------------------
     Index get_last_index();
 
 //------------------------------------------------------------------------------

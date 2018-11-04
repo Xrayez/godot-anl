@@ -76,7 +76,7 @@ void VisualAnlNoiseNode::set_output_port_value(int p_port, const Variant &p_valu
 
 Variant VisualAnlNoiseNode::get_output_port_value(int p_port) const {
 
-	return 0;
+	return output_value;
 }
 
 void VisualAnlNoiseNode::evaluate(Ref<VisualAnlNoise> noise) {
@@ -381,12 +381,16 @@ void VisualAnlNoiseNodeComponent::evaluate_node(int node, Ref<VisualAnlNoise> no
 			int from_node = input_connections[ck]->get().from_node;
 			int from_port = input_connections[ck]->get().from_port;
 
-			const Ref<VisualAnlNoiseNode> &from_vanode = graph.nodes[node].node;
+			const Ref<VisualAnlNoiseNode> &from_vanode = graph.nodes[from_node].node;
 
 			VisualAnlNoiseNode::PortType in_type = vanode->get_input_port_type(i);
 			VisualAnlNoiseNode::PortType out_type = from_vanode->get_output_port_type(from_port);
 
-			vanode->set_input_port_value(i, from_vanode->get_output_port_value(0));
+			const Variant &output_value = from_vanode->get_output_port_value(0);
+			print_line(from_vanode->get_caption());
+			print_line(output_value);
+
+			vanode->set_input_port_value(i, output_value);
 		}
 	}
 

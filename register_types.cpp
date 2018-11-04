@@ -16,6 +16,7 @@ void register_anl_types() {
 
     // Nodes
     ClassDB::register_class<VisualAnlNoiseNodeScalar>();
+    ClassDB::register_class<VisualAnlNoiseNodeSimplexBasis>();
 
 #ifdef TOOLS_ENABLED
 	EditorPlugins::add_by_type<VisualAnlNoiseEditorPlugin>();
