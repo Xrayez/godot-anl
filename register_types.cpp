@@ -4,7 +4,6 @@
 #include "visual_anl_noise.h"
 #include "visual_anl_noise_nodes.h"
 #include "plugins/visual_anl_noise_editor_plugin.h"
-// #include "plugins/visual_anl_noise_component_editor_plugin.h"
 
 void register_anl_types() {
 
@@ -17,6 +16,7 @@ void register_anl_types() {
     // Nodes
     ClassDB::register_class<VisualAnlNoiseNodeScalar>();
     ClassDB::register_class<VisualAnlNoiseNodeSimplexBasis>();
+    ClassDB::register_class<VisualAnlNoiseNodeExpression>();
 
 #ifdef TOOLS_ENABLED
 	EditorPlugins::add_by_type<VisualAnlNoiseEditorPlugin>();

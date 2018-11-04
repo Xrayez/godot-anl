@@ -387,9 +387,6 @@ void VisualAnlNoiseNodeComponent::evaluate_node(int node, Ref<VisualAnlNoise> no
 			VisualAnlNoiseNode::PortType out_type = from_vanode->get_output_port_type(from_port);
 
 			const Variant &output_value = from_vanode->get_output_port_value(0);
-			print_line(from_vanode->get_caption());
-			print_line(output_value);
-
 			vanode->set_input_port_value(i, output_value);
 		}
 	}

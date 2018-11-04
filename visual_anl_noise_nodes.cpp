@@ -219,3 +219,88 @@ VisualAnlNoiseNodeSimplexBasis::VisualAnlNoiseNodeSimplexBasis() {
 
 	seed = 0;
 }
+
+////////////// Expression
+
+String VisualAnlNoiseNodeExpression::get_caption() const {
+
+	return "Expression";
+}
+
+int VisualAnlNoiseNodeExpression::get_input_port_count() const {
+
+	return 0;
+}
+
+void VisualAnlNoiseNodeExpression::set_input_port_value(int p_port, const Variant &p_value) {
+
+	expression = p_value;
+}
+
+Variant VisualAnlNoiseNodeExpression::get_input_port_value(int p_port) const {
+
+	return expression;
+}
+
+VisualAnlNoiseNodeExpression::PortType VisualAnlNoiseNodeExpression::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_SCALAR;
+}
+
+String VisualAnlNoiseNodeExpression::get_input_port_name(int p_port) const {
+
+	return "";
+}
+
+int VisualAnlNoiseNodeExpression::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeExpression::PortType VisualAnlNoiseNodeExpression::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeExpression::get_output_port_name(int p_port) const {
+
+	return "";
+}
+
+void VisualAnlNoiseNodeExpression::set_expression(const String &p_expression) {
+
+	expression = p_expression;
+	emit_changed();
+}
+
+String VisualAnlNoiseNodeExpression::get_expression() const {
+
+	return expression;
+}
+
+Vector<StringName> VisualAnlNoiseNodeExpression::get_editable_properties() const {
+
+	Vector<StringName> props;
+
+	props.push_back("expression");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeExpression::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->evaluate(expression);
+}
+
+void VisualAnlNoiseNodeExpression::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_expression", "value"), &VisualAnlNoiseNodeExpression::set_expression);
+	ClassDB::bind_method(D_METHOD("get_expression"), &VisualAnlNoiseNodeExpression::get_expression);
+
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "expression"), "set_expression", "get_expression");
+}
+
+VisualAnlNoiseNodeExpression::VisualAnlNoiseNodeExpression() {
+
+	expression = "";
+}

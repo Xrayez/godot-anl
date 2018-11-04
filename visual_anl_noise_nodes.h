@@ -50,6 +50,8 @@ private:
     real_t constant;
 };
 
+VARIANT_ENUM_CAST(VisualAnlNoiseNodeScalar::ScalarType);
+
 
 class VisualAnlNoiseNodeSimplexBasis : public VisualAnlNoiseNode {
 	GDCLASS(VisualAnlNoiseNodeSimplexBasis, VisualAnlNoiseNode)
@@ -84,6 +86,38 @@ private:
 	Index seed;
 };
 
-VARIANT_ENUM_CAST(VisualAnlNoiseNodeScalar::ScalarType);
+
+class VisualAnlNoiseNodeExpression : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeExpression, VisualAnlNoiseNode)
+
+public:
+	void set_expression(const String &p_expression);
+	String get_expression() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeExpression();
+
+protected:
+    static void _bind_methods();
+
+private:
+	String expression;
+};
 
 #endif

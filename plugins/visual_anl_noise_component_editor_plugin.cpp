@@ -763,6 +763,7 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 
 	add_options.push_back(AddOption("Scalar", "Constants", "VisualAnlNoiseNodeScalar"));
 	add_options.push_back(AddOption("Simplex", "Basis", "VisualAnlNoiseNodeSimplexBasis"));
+	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
 	add_options.push_back(AddOption("Component", "Component", "VisualAnlNoiseNodeComponent"));
 
 	_update_options_menu();
@@ -869,6 +870,7 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 
 	Vector<StringName> properties = p_node->get_editable_properties();
 	if (properties.size() == 0) {
+		print_line("properties null");
 		return NULL;
 	}
 
@@ -886,8 +888,10 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 		}
 	}
 
-	if (pinfo.size() == 0)
+	if (pinfo.size() == 0) {
+		print_line("pinfo null");
 		return NULL;
+	}
 
 	properties.clear();
 
@@ -897,15 +901,12 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 	for (int i = 0; i < pinfo.size(); i++) {
 
 		EditorProperty *prop = EditorInspector::instantiate_property_editor(node.ptr(), pinfo[i].type, pinfo[i].name, pinfo[i].hint, pinfo[i].hint_string, pinfo[i].usage);
-		if (!prop)
+		if (!prop) {
+			print_line("prop null");
 			return NULL;
+		}
 
-		if (Object::cast_to<EditorPropertyResource>(prop)) {
-			Object::cast_to<EditorPropertyResource>(prop)->set_use_sub_inspector(false);
-			prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
-		} else if (Object::cast_to<EditorPropertyTransform>(prop)) {
-			prop->set_custom_minimum_size(Size2(250 * EDSCALE, 0));
-		} else if (Object::cast_to<EditorPropertyFloat>(prop) || Object::cast_to<EditorPropertyVector3>(prop)) {
+		if (Object::cast_to<EditorPropertyFloat>(prop)) {
 			prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
 		} else if (Object::cast_to<EditorPropertyEnum>(prop)) {
 			prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
