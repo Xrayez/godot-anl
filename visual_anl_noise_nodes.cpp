@@ -408,9 +408,6 @@ String VisualAnlNoiseNodeExpression::get_expression() const {
 Vector<StringName> VisualAnlNoiseNodeExpression::get_editable_properties() const {
 
 	Vector<StringName> props;
-
-	props.push_back("expression");
-
 	return props;
 }
 
@@ -424,7 +421,7 @@ void VisualAnlNoiseNodeExpression::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_expression", "value"), &VisualAnlNoiseNodeExpression::set_expression);
 	ClassDB::bind_method(D_METHOD("get_expression"), &VisualAnlNoiseNodeExpression::get_expression);
 
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "expression"), "set_expression", "get_expression");
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "expression", PROPERTY_HINT_MULTILINE_TEXT), "set_expression", "get_expression");
 }
 
 VisualAnlNoiseNodeExpression::VisualAnlNoiseNodeExpression() {
