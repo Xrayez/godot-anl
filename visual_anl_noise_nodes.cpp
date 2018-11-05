@@ -9,7 +9,7 @@ String VisualAnlNoiseNodeScalar::get_caption() const {
 
 int VisualAnlNoiseNodeScalar::get_input_port_count() const {
 
-	return 0;
+	return type == SCALAR_CONSTANT ? 1 : 0;
 }
 
 void VisualAnlNoiseNodeScalar::set_input_port_value(int p_port, const Variant &p_value) {
@@ -139,7 +139,6 @@ VisualAnlNoiseNodeScalar::VisualAnlNoiseNodeScalar() {
 
 	type = SCALAR_CONSTANT;
 	constant = 0.0;
-	// set_input_port_default_value(0, 0.0);
 }
 
 ////////////// ScalarOp

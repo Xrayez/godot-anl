@@ -131,10 +131,9 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 		}
 	}
 
-	static const Color type_color[3] = {
-		Color::html("#61daf4"),
-		Color::html("#d67dee"),
-		Color::html("#f6a86e")
+	static const Color type_color[2] = {
+		Color::html("#2bc8ff"),
+		Color::html("#d43700"),
 	};
 
 	List<VisualAnlNoiseNodeComponent::Connection> connections;
