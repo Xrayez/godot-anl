@@ -102,6 +102,7 @@ public:
     Index asin(Index src);
     Index atan(Index src);
     Index abs(Index src);
+    Index sigmoid(Index src, Index center, Index ramp);
 
     // Smoothing
     // --------------------------------------------
@@ -126,7 +127,6 @@ public:
     Index du(Index src, Index spacing);
     Index dv(Index src, Index spacing);
 
-    Index sigmoid(Index src, Index center, Index ramp);
     Index radial();
     Index randomize(Index seed, Index low, Index high);
 

@@ -346,6 +346,11 @@ void VisualAnlNoiseNodeComponent::evaluate(Ref<VisualAnlNoise> noise) {
 	Set<int> processed;
 
 	evaluate_node(NODE_ID_OUTPUT, noise, input_connections, output_connections, processed);
+
+	const Ref<VisualAnlNoiseNodeOutput> &output = graph.nodes[NODE_ID_OUTPUT].node;
+	ERR_FAIL_COND(output.is_null());
+
+	output_value = output->get_output_port_value(0);
 }
 
 void VisualAnlNoiseNodeComponent::evaluate_node(int node, Ref<VisualAnlNoise> noise, Connections &input_connections, Connections &output_connections, Set<int> &processed) {
