@@ -57,6 +57,8 @@ public:
 
 	void edit(const Ref<VisualAnlNoise> &p_visual_anl_noise);
 
+	void save_external_data();
+
 	VisualAnlNoiseEditor();
 };
 
@@ -74,6 +76,8 @@ public:
 	virtual void edit(Object *p_object);
 	virtual bool handles(Object *p_object) const;
 	virtual void make_visible(bool p_visible);
+
+	virtual void save_external_data();
 
 	VisualAnlNoiseEditorPlugin(EditorNode *p_node);
 	~VisualAnlNoiseEditorPlugin();

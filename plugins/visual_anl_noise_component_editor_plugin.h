@@ -101,13 +101,14 @@ class VisualAnlNoiseNodeComponentEditor : public VBoxContainer {
 
 	void _duplicate_nodes();
 
-	// void _on_noise_changed();
+	// void save_external_data();
 
 	void _preview_select_port(int p_node, int p_port);
 	void _input(const Ref<InputEvent> p_event);
 
 	EditorFileDialog *open_file;
 	Ref<VisualAnlNoiseNodeComponent> file_loaded;
+
 	void _file_opened(const String &p_file);
 
 	enum {

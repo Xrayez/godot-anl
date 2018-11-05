@@ -42,6 +42,14 @@ void VisualAnlNoiseEditor::edit(const Ref<VisualAnlNoise> &p_visual_anl_noise) {
 	}
 }
 
+void VisualAnlNoiseEditor::save_external_data() {
+
+	if (visual_anl_noise.is_null())
+		return;
+
+	ResourceSaver::save(visual_anl_noise->get_path(), visual_anl_noise);
+}
+
 void VisualAnlNoiseEditor::add_plugin(VisualAnlNoiseNodeComponentEditor *p_editor) {
 
 	ERR_FAIL_COND(p_editor->get_parent());
@@ -277,6 +285,11 @@ void VisualAnlNoiseEditorPlugin::make_visible(bool p_visible) {
 		visual_anl_noise_editor->set_process(false);
 		visual_anl_noise_editor->set_process_input(false);
 	}
+}
+
+void VisualAnlNoiseEditorPlugin::save_external_data() {
+
+	visual_anl_noise_editor->save_external_data();
 }
 
 VisualAnlNoiseEditorPlugin::VisualAnlNoiseEditorPlugin(EditorNode *p_node) {

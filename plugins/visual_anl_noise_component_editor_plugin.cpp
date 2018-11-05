@@ -703,6 +703,14 @@ void VisualAnlNoiseNodeComponentEditor::_duplicate_nodes() {
 	}
 }
 
+// void VisualAnlNoiseNodeComponentEditor::save_external_data() {
+
+// 	if (component.is_null())
+// 		return;
+
+// 	ResourceSaver::save(component->get_path(), component);
+// }
+
 void VisualAnlNoiseNodeComponentEditor::_bind_methods() {
 
 	ClassDB::bind_method("_component_renamed", &VisualAnlNoiseNodeComponentEditor::_component_renamed);
