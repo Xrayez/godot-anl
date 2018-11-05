@@ -574,6 +574,8 @@ void VisualAnlNoiseNodeComponentEditor::_node_selected(Object *p_node) {
 
 	Ref<VisualAnlNoiseNode> vanode = component->get_node(id);
 	ERR_FAIL_COND(!vanode.is_valid());
+
+	EditorNode::get_singleton()->push_item(vanode.ptr(), "", true);
 }
 
 void VisualAnlNoiseNodeComponentEditor::_open_in_editor(int p_which) {
