@@ -996,7 +996,7 @@ void VisualAnlNoiseNodePortPreview::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_DRAW) {
 		noise->generate();
-		preview_tex = noise->map_to_texture(Vector2(256, 256), vanode->get_output_port_value(port));
+		preview_tex = noise->map_to_texture(get_minimum_size(), vanode->get_output_port_value(port));
 		draw_texture_rect(preview_tex, Rect2(Vector2(), get_size()), false);
 	}
 }
