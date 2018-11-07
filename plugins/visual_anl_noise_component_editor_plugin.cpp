@@ -950,16 +950,6 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 	return editor;
 }
 
-void VisualAnlNoiseNodeComponentEditor::_noise_changed() {
-
-	Ref<VisualAnlNoiseNodeComponent> component = visual_anl_noise->get_component();
-
-	if (component.is_valid()) {
-		component = component;
-		_update_graph();
-	}
-}
-
 ///////////////////////////////////
 // Port preview
 ///////////////////////////////////
@@ -996,6 +986,10 @@ void VisualAnlNoiseNodePortPreview::_notification(int p_what) {
 
 	const Ref<VisualAnlNoiseNodeComponent> &component = VisualAnlNoiseNodeComponentEditor::get_singleton()->get_component();
 	ERR_FAIL_COND(component.is_null());
+
+	if(!component->has_node(node)) {
+		return;
+	}
 
 	const Ref<VisualAnlNoiseNode> &vanode = component->get_node(node);
 	ERR_FAIL_COND(vanode.is_null());

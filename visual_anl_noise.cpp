@@ -156,6 +156,11 @@ Ref<VisualAnlNoiseNode> VisualAnlNoiseNodeComponent::get_node(int p_id) const {
 	return graph.nodes[p_id].node;
 }
 
+bool VisualAnlNoiseNodeComponent::has_node(int p_id) const {
+
+	return graph.nodes.has(p_id);
+}
+
 Vector<int> VisualAnlNoiseNodeComponent::get_node_list() const {
 
 	Vector<int> ret;

@@ -152,6 +152,8 @@ public:
 	Vector2 get_node_position(int p_id) const;
 	Ref<VisualAnlNoiseNode> get_node(int p_id) const;
 
+	bool has_node(int p_id) const;
+
 	Vector<int> get_node_list() const;
 	int get_valid_node_id() const;
 
