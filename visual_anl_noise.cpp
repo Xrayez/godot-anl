@@ -96,7 +96,7 @@ void VisualAnlNoiseNode::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_set_default_input_values", "values"), &VisualAnlNoiseNode::_set_default_input_values);
 	ClassDB::bind_method(D_METHOD("_get_default_input_values"), &VisualAnlNoiseNode::_get_default_input_values);
 
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "output_port_for_preview"), "set_output_port_for_preview", "get_output_port_for_preview");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "output_port_for_preview", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "set_output_port_for_preview", "get_output_port_for_preview");
 	ADD_PROPERTYNZ(PropertyInfo(Variant::ARRAY, "default_input_values", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "_set_default_input_values", "_get_default_input_values");
 	ADD_SIGNAL(MethodInfo("editor_refresh_request"));
 }
