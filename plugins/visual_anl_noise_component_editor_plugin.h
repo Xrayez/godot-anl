@@ -123,6 +123,7 @@ protected:
 
 public:
 	static VisualAnlNoiseNodeComponentEditor *get_singleton() { return singleton; }
+	Ref<VisualAnlNoiseNodeComponent> get_component() { return component; }
 
 	void add_custom_type(const String &p_name, const String &p_category, const Ref<Script> &p_script);
 	void remove_custom_type(const Ref<Script> &p_script);
@@ -136,6 +137,28 @@ public:
 	void edit(const Ref<VisualAnlNoiseNodeComponent> &p_component);
 
 	VisualAnlNoiseNodeComponentEditor();
+};
+
+class VisualAnlNoiseNodePortPreview : public Control {
+	GDCLASS(VisualAnlNoiseNodePortPreview, Control)
+
+	Ref<VisualAnlNoise> noise;
+	Ref<Texture> preview_tex;
+
+	int node;
+	int port;
+
+	void _noise_changed();
+
+protected:
+	void _notification(int p_what);
+	static void _bind_methods();
+
+public:
+	virtual Size2 get_minimum_size() const;
+	void setup(const Ref<VisualAnlNoise> &p_noise, int p_node, int p_port);
+
+	VisualAnlNoiseNodePortPreview();
 };
 
 #endif

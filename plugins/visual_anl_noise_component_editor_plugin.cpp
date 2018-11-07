@@ -294,17 +294,34 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 				}
 			}
 
+			if (valid_right) {
+				TextureButton *preview = memnew(TextureButton);
+				preview->set_toggle_mode(true);
+				preview->set_normal_texture(get_icon("GuiVisibilityHidden", "EditorIcons"));
+				preview->set_pressed_texture(get_icon("GuiVisibilityVisible", "EditorIcons"));
+				preview->set_v_size_flags(SIZE_SHRINK_CENTER);
+
+				if (vanode->get_output_port_for_preview() == i) {
+					preview->set_pressed(true);
+				}
+
+				preview->connect("pressed", this, "_preview_select_port", varray(nodes[n_i], i), CONNECT_DEFERRED);
+				hb->add_child(preview);
+			}
+
 			node->add_child(hb);
 
 			node->set_slot(i + port_offset, valid_left, port_left, type_color[port_left], valid_right, port_right, type_color[port_right]);
 		}
 
-		// if (vanode->get_output_port_for_preview() >= 0) {
-		// 	VisualAnlNoiseNodePortPreview *port_preview = memnew(VisualAnlNoiseNodePortPreview);
-		// 	port_preview->setup(visual_anl_noise, nodes[n_i], vanode->get_output_port_for_preview());
-		// 	port_preview->set_h_size_flags(SIZE_SHRINK_CENTER);
-		// 	node->add_child(port_preview);
-		// }
+		if (vanode->get_output_port_for_preview() >= 0) {
+			VisualAnlNoiseNodePortPreview *port_preview = memnew(VisualAnlNoiseNodePortPreview);
+
+			const Ref<VisualAnlNoise> &noise = VisualAnlNoiseEditor::get_singleton()->get_noise();
+			port_preview->setup(noise, nodes[n_i], vanode->get_output_port_for_preview());
+			port_preview->set_h_size_flags(SIZE_SHRINK_CENTER);
+			node->add_child(port_preview);
+		}
 
 		String error = vanode->get_warning();
 		if (error != String()) {
@@ -374,7 +391,8 @@ void VisualAnlNoiseNodeComponentEditor::_preview_select_port(int p_node, int p_p
 	if (node->get_output_port_for_preview() == p_port) {
 		p_port = -1; //toggle it
 	}
-	undo_redo->create_action("Set Uniform Name");
+
+	undo_redo->create_action("Set Output Port For Preview");
 	undo_redo->add_do_method(node.ptr(), "set_output_port_for_preview", p_port);
 	undo_redo->add_undo_method(node.ptr(), "set_output_port_for_preview", node->get_output_port_for_preview());
 	undo_redo->add_do_method(this, "_update_graph");
@@ -882,7 +900,6 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 
 	Vector<StringName> properties = p_node->get_editable_properties();
 	if (properties.size() == 0) {
-		print_line("properties null");
 		return NULL;
 	}
 
@@ -901,7 +918,6 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 	}
 
 	if (pinfo.size() == 0) {
-		print_line("pinfo null");
 		return NULL;
 	}
 
@@ -914,7 +930,6 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 
 		EditorProperty *prop = EditorInspector::instantiate_property_editor(node.ptr(), pinfo[i].type, pinfo[i].name, pinfo[i].hint, pinfo[i].hint_string, pinfo[i].usage);
 		if (!prop) {
-			print_line("prop null");
 			return NULL;
 		}
 
@@ -935,12 +950,66 @@ Control *VisualAnlNoiseNodePluginDefault::create_editor(const Ref<VisualAnlNoise
 	return editor;
 }
 
-// void VisualAnlNoiseNodeComponentEditor::_on_noise_changed() {
+void VisualAnlNoiseNodeComponentEditor::_noise_changed() {
 
-// 	Ref<VisualAnlNoiseNodeComponent> component = visual_anl_noise->get_component();
+	Ref<VisualAnlNoiseNodeComponent> component = visual_anl_noise->get_component();
 
-// 	if (component.is_valid()) {
-// 		component = component;
-// 		_update_graph();
-// 	}
-// }
+	if (component.is_valid()) {
+		component = component;
+		_update_graph();
+	}
+}
+
+///////////////////////////////////
+// Port preview
+///////////////////////////////////
+
+void VisualAnlNoiseNodePortPreview::_noise_changed() {
+
+	if (noise.is_null()) {
+		return;
+	}
+	noise->generate();
+}
+
+void VisualAnlNoiseNodePortPreview::setup(const Ref<VisualAnlNoise> &p_noise, int p_node, int p_port) {
+
+	noise = p_noise;
+	noise->connect("changed", this, "_noise_changed");
+
+	port = p_port;
+	node = p_node;
+
+	update();
+	_noise_changed();
+}
+
+Size2 VisualAnlNoiseNodePortPreview::get_minimum_size() const {
+	return Size2(100, 100) * EDSCALE;
+}
+
+void VisualAnlNoiseNodePortPreview::_notification(int p_what) {
+
+	if(noise.is_null()) {
+		return;
+	}
+
+	const Ref<VisualAnlNoiseNodeComponent> &component = VisualAnlNoiseNodeComponentEditor::get_singleton()->get_component();
+	ERR_FAIL_COND(component.is_null());
+
+	const Ref<VisualAnlNoiseNode> &vanode = component->get_node(node);
+	ERR_FAIL_COND(vanode.is_null());
+
+	if (p_what == NOTIFICATION_DRAW) {
+		noise->generate();
+		preview_tex = noise->map_to_texture(Vector2(256, 256), vanode->get_output_port_value(port));
+		draw_texture_rect(preview_tex, Rect2(Vector2(), get_size()), false);
+	}
+}
+
+void VisualAnlNoiseNodePortPreview::_bind_methods() {
+	ClassDB::bind_method("_noise_changed", &VisualAnlNoiseNodePortPreview::_noise_changed);
+}
+
+VisualAnlNoiseNodePortPreview::VisualAnlNoiseNodePortPreview() {
+}
