@@ -367,7 +367,6 @@ void VisualAnlNoiseNodeComponentEditor::_component_renamed(const String &p_text,
 	undo_redo->commit_action();
 	updating = false;
 
-	gn->set_name(new_name);
 	gn->set_size(gn->get_minimum_size());
 }
 

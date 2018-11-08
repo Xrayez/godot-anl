@@ -172,7 +172,6 @@ public:
 	void set_graph_offset(const Vector2 &p_offset);
 	Vector2 get_graph_offset() const;
 
-
 	// String generate_preview_noise(int p_node, int p_port) const;
 
     VisualAnlNoiseNodeComponent();
@@ -197,14 +196,6 @@ class VisualAnlNoiseNodeOutput : public VisualAnlNoiseNode {
 
 public:
 	friend class VisualAnlNoise;
-
-	struct Port {
-		PortType type;
-		const char *name;
-		const char *string;
-	};
-
-	static const Port ports[];
 
 public:
 	virtual void set_input_port_value(int p_port, const Variant &p_value);
