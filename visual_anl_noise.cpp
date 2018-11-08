@@ -1,5 +1,7 @@
 #include "visual_anl_noise.h"
 #include "visual_anl_noise_nodes.h"
+#include "plugins/visual_anl_noise_editor_plugin.h"
+
 #include "core/vmap.h"
 
 void VisualAnlNoiseNode::set_output_port_for_preview(int p_index) {
@@ -97,7 +99,7 @@ void VisualAnlNoiseNode::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_get_default_input_values"), &VisualAnlNoiseNode::_get_default_input_values);
 
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "output_port_for_preview", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "set_output_port_for_preview", "get_output_port_for_preview");
-	ADD_PROPERTYNZ(PropertyInfo(Variant::ARRAY, "default_input_values", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "_set_default_input_values", "_get_default_input_values");
+	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "default_input_values", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "_set_default_input_values", "_get_default_input_values");
 	ADD_SIGNAL(MethodInfo("editor_refresh_request"));
 }
 
@@ -128,11 +130,12 @@ void VisualAnlNoiseNodeComponent::add_node(const Ref<VisualAnlNoiseNode> &p_node
 	n.node = p_node;
 	n.position = p_position;
 
-	// n.node->connect("changed", this, "_queue_update");
+	Ref<VisualAnlNoise> noise = VisualAnlNoiseEditor::get_singleton()->get_noise();
+	if (noise.is_valid()) {
+		n.node->connect("changed", noise.ptr(), "_queue_update");
+	}
 
 	graph.nodes[p_id] = n;
-
-	// _queue_update();
 }
 
 void VisualAnlNoiseNodeComponent::set_node_position(int p_id, const Vector2 &p_position) {
@@ -189,11 +192,15 @@ int VisualAnlNoiseNodeComponent::find_node_id(const Ref<VisualAnlNoiseNode> &p_n
 void VisualAnlNoiseNodeComponent::remove_node(int p_id) {
 
 	ERR_FAIL_COND(p_id < 2);
-
 	ERR_FAIL_COND(!graph.nodes.has(p_id));
 
-	// graph.nodes[p_id].node->disconnect("changed", this, "_queue_update");
+	Ref<VisualAnlNoise> noise = VisualAnlNoiseEditor::get_singleton()->get_noise();
 
+	if (noise.is_valid()) {
+		if (graph.nodes[p_id].node->is_connected("changed", noise.ptr(), "_queue_update")) {
+			graph.nodes[p_id].node->disconnect("changed", noise.ptr(), "_queue_update");
+		}
+	}
 	graph.nodes.erase(p_id);
 
 	for (List<Connection>::Element *E = graph.connections.front(); E;) {
@@ -203,8 +210,6 @@ void VisualAnlNoiseNodeComponent::remove_node(int p_id) {
 		}
 		E = N;
 	}
-
-	// _queue_update();
 }
 
 bool VisualAnlNoiseNodeComponent::is_node_connection(int p_from_node, int p_from_port, int p_to_node, int p_to_port) const {
@@ -579,8 +584,8 @@ void VisualAnlNoise::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_component", "component"), &VisualAnlNoise::set_component);
 	ClassDB::bind_method(D_METHOD("get_component"), &VisualAnlNoise::get_component);
 
-	// ClassDB::bind_method(D_METHOD("_queue_update"), &VisualAnlNoiseNodeComponent::_queue_update);
-	// ClassDB::bind_method(D_METHOD("_update_noise"), &VisualAnlNoiseNodeComponent::_update_noise);
+	ClassDB::bind_method(D_METHOD("_queue_update"), &VisualAnlNoise::_queue_update);
+	ClassDB::bind_method(D_METHOD("_update_noise"), &VisualAnlNoise::_update_noise);
 
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "component", PROPERTY_HINT_RESOURCE_TYPE, "VisualAnlNoiseNodeComponent"), "set_component", "get_component");
 
