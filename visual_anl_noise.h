@@ -186,6 +186,8 @@ public:
 public:
 	virtual String get_caption() const;
 
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+
 	virtual int get_input_port_count() const;
 	virtual PortType get_input_port_type(int p_port) const;
 	virtual String get_input_port_name(int p_port) const;

@@ -624,6 +624,21 @@ VisualAnlNoiseNodeComponent::VisualAnlNoiseNodeComponent() {
 	name = "component";
 }
 
+void VisualAnlNoiseNodeComponent::set_input_port_value(int p_port, const Variant &p_value) {
+
+	int port = 0;
+
+	for (Map<int, Node>::Element *E = graph.nodes.front(); E; E = E->next()) {
+		Ref<VisualAnlNoiseNodeInput> input = E->get().node;
+		if (input.is_valid()) {
+			if (port == p_port) {
+				return input->set_output_port_value(0, p_value);
+			}
+			++port;
+		}
+	}
+}
+
 int VisualAnlNoiseNodeComponent::get_input_port_count() const {
 
 	int count = 0;
