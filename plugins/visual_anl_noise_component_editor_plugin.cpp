@@ -147,6 +147,7 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 
 		Vector2 position = component->get_node_position(nodes[n_i]);
 		Ref<VisualAnlNoiseNode> vanode = component->get_node(nodes[n_i]);
+		Ref<VisualAnlNoiseNodeInput> input = vanode;
 		Ref<VisualAnlNoiseNodeComponent> comp = vanode; // may be component
 
 		GraphNode *node = memnew(GraphNode);
@@ -177,6 +178,17 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 			port_offset++;
 
 			node->add_child(memnew(HSeparator));
+			port_offset++;
+		}
+		else if (input.is_valid()) {
+			// Inputs's name
+			LineEdit *name = memnew(LineEdit);
+			name->set_text(input->get_input_name());
+			name->set_expand_to_text_length(true);
+			node->add_child(name);
+			name->connect("text_entered", this, "_input_renamed", varray(nodes[n_i]));
+			name->connect("focus_exited", this, "_input_renamed_focus_out", varray(name, nodes[n_i]));
+
 			port_offset++;
 		}
 
@@ -312,19 +324,6 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 			node->add_child(open_in_editor);
 			open_in_editor->connect("pressed", this, "_open_in_editor", varray(nodes[n_i]), CONNECT_DEFERRED);
 			open_in_editor->set_h_size_flags(SIZE_SHRINK_CENTER);
-
-		} else {
-			Ref<VisualAnlNoiseNodeInput> input = vanode;
-
-			if (input.is_valid()) {
-				// Inputs's name
-				LineEdit *name = memnew(LineEdit);
-				name->set_text(input->get_input_name());
-				name->set_expand_to_text_length(true);
-				node->add_child(name);
-				name->connect("text_entered", this, "_input_renamed", varray(nodes[n_i]));
-				name->connect("focus_exited", this, "_input_renamed_focus_out", varray(name, nodes[n_i]));
-			}
 		}
 
 		if (vanode->get_output_port_for_preview() >= 0) {
