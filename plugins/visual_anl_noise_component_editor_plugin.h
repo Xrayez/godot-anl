@@ -96,6 +96,9 @@ class VisualAnlNoiseNodeComponentEditor : public VBoxContainer {
 	void _component_renamed(const String &p_text, int p_which);
 	void _component_renamed_focus_out(Node *le, int p_which);
 
+	void _input_renamed(const String &p_text, int p_which);
+	void _input_renamed_focus_out(Node *le, int p_which);
+
 	void _line_edit_changed(const String &p_text, Object *line_edit, int p_node_id);
 	void _line_edit_focus_out(Object *line_edit, int p_node_id);
 

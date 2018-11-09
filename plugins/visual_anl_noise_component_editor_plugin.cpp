@@ -151,12 +151,7 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 		GraphNode *node = memnew(GraphNode);
 		graph->add_child(node);
 
-		/*if (!vanode->is_connected("changed", this, "_node_changed")) {
-			vanode->connect("changed", this, "_node_changed", varray(vanode->get_instance_id()), CONNECT_DEFERRED);
-		}*/
-
 		node->set_offset(position);
-
 		node->set_title(vanode->get_caption());
 		node->set_name(itos(nodes[n_i]));
 
@@ -169,9 +164,9 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 
 		node->connect("dragged", this, "_node_dragged", varray(nodes[n_i]));
 
-		if (VisualAnlNoiseEditor::get_singleton()->can_edit(vanode)) { // it's a component
+		Ref<VisualAnlNoiseNodeComponent> comp = vanode;
 
-			Ref<VisualAnlNoiseNodeComponent> comp = vanode;
+		if (comp.is_valid()) {
 
 			// Component's name
 			LineEdit *name = memnew(LineEdit);
@@ -189,6 +184,19 @@ void VisualAnlNoiseNodeComponentEditor::_update_graph() {
 			node->add_child(open_in_editor);
 			open_in_editor->connect("pressed", this, "_open_in_editor", varray(nodes[n_i]), CONNECT_DEFERRED);
 			open_in_editor->set_h_size_flags(SIZE_SHRINK_CENTER);
+
+		} else {
+			Ref<VisualAnlNoiseNodeInput> input = vanode;
+
+			if (input.is_valid()) {
+				// Inputs's name
+				LineEdit *name = memnew(LineEdit);
+				name->set_text(input->get_input_name());
+				name->set_expand_to_text_length(true);
+				node->add_child(name);
+				name->connect("text_entered", this, "_input_renamed", varray(nodes[n_i]));
+				name->connect("focus_exited", this, "_input_renamed_focus_out", varray(name, nodes[n_i]));
+			}
 		}
 
 		Control *custom_editor = NULL;
@@ -373,6 +381,35 @@ void VisualAnlNoiseNodeComponentEditor::_component_renamed(const String &p_text,
 void VisualAnlNoiseNodeComponentEditor::_component_renamed_focus_out(Node *le, int p_which) {
 
 	_component_renamed(le->call("get_text"), p_which);
+}
+
+void VisualAnlNoiseNodeComponentEditor::_input_renamed(const String &p_text, int p_which) {
+
+	Ref<VisualAnlNoiseNodeInput> input = component->get_node(p_which);
+	ERR_FAIL_COND(input.is_null());
+
+	GraphNode *gn = Object::cast_to<GraphNode>(graph->get_node(itos(p_which)));
+
+	String prev_name = input->get_input_name();
+
+	String new_name = p_text;
+	ERR_FAIL_COND(new_name == "" || new_name.find(".") != -1 || new_name.find("/") != -1)
+
+	updating = true;
+	undo_redo->create_action("Input Node Renamed");
+	undo_redo->add_do_method(input.ptr(), "set_input_name", new_name);
+	undo_redo->add_undo_method(input.ptr(), "set_input_name", prev_name);
+	undo_redo->add_do_method(this, "_update_graph");
+	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->commit_action();
+	updating = false;
+
+	gn->set_size(gn->get_minimum_size());
+}
+
+void VisualAnlNoiseNodeComponentEditor::_input_renamed_focus_out(Node *le, int p_which) {
+
+	_input_renamed(le->call("get_text"), p_which);
 }
 
 void VisualAnlNoiseNodeComponentEditor::_preview_select_port(int p_node, int p_port) {
@@ -733,6 +770,8 @@ void VisualAnlNoiseNodeComponentEditor::_bind_methods() {
 
 	ClassDB::bind_method("_component_renamed", &VisualAnlNoiseNodeComponentEditor::_component_renamed);
 	ClassDB::bind_method("_component_renamed_focus_out", &VisualAnlNoiseNodeComponentEditor::_component_renamed_focus_out);
+	ClassDB::bind_method("_input_renamed", &VisualAnlNoiseNodeComponentEditor::_input_renamed);
+	ClassDB::bind_method("_input_renamed_focus_out", &VisualAnlNoiseNodeComponentEditor::_input_renamed_focus_out);
 	ClassDB::bind_method("_update_graph", &VisualAnlNoiseNodeComponentEditor::_update_graph);
 	ClassDB::bind_method("_add_node", &VisualAnlNoiseNodeComponentEditor::_add_node);
 	ClassDB::bind_method("_node_dragged", &VisualAnlNoiseNodeComponentEditor::_node_dragged);
@@ -788,12 +827,12 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	add_node->get_popup()->connect("id_pressed", this, "_add_node");
 
 	add_options.push_back(AddOption("Scalar", "Constants", "VisualAnlNoiseNodeScalar"));
-
 	add_options.push_back(AddOption("ScalarOp", "Operators", "VisualAnlNoiseNodeScalarOp"));
-
 	add_options.push_back(AddOption("Simplex", "Basis", "VisualAnlNoiseNodeSimplexBasis"));
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
+
 	add_options.push_back(AddOption("Component", "Component", "VisualAnlNoiseNodeComponent"));
+	add_options.push_back(AddOption("Input", "Component", "VisualAnlNoiseNodeInput"));
 
 	_update_options_menu();
 

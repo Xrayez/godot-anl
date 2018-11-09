@@ -85,6 +85,8 @@ public:
 	VisualAnlNoiseNode();
 };
 
+VARIANT_ENUM_CAST(VisualAnlNoiseNode::PortType);
+
 
 class VisualAnlNoiseNodeComponent : public VisualAnlNoiseNode {
 	GDCLASS(VisualAnlNoiseNodeComponent, VisualAnlNoiseNode)
@@ -100,7 +102,7 @@ public:
 	};
 
 private:
-	StringName name;
+	String name;
 
 	struct Node {
 		Ref<VisualAnlNoiseNode> node;
@@ -193,6 +195,48 @@ public:
 	virtual String get_output_port_name(int p_port) const;
 
 	virtual void evaluate(Ref<VisualAnlNoise> p_noise);
+};
+
+
+class VisualAnlNoiseNodeInput : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeInput, VisualAnlNoiseNode)
+
+private:
+	String input_name;
+	PortType type;
+
+protected:
+	static void _bind_methods();
+
+public:
+	friend class VisualAnlNoise;
+
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual void set_output_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_output_port_value(int p_port) const;
+
+	virtual bool is_port_separator(int p_index) const;
+
+	virtual String get_caption() const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+public:
+	void set_input_name(const String &p_input_name);
+	String get_input_name() const;
+
+	void set_type(PortType p_type);
+	PortType get_type() const;
+
+
+	VisualAnlNoiseNodeInput();
 };
 
 
