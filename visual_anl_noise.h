@@ -203,7 +203,6 @@ class VisualAnlNoiseNodeInput : public VisualAnlNoiseNode {
 
 private:
 	String input_name;
-	PortType type;
 
 protected:
 	static void _bind_methods();
@@ -226,15 +225,9 @@ public:
 
 	virtual String get_caption() const;
 
-	virtual Vector<StringName> get_editable_properties() const;
-
 public:
 	void set_input_name(const String &p_input_name);
 	String get_input_name() const;
-
-	void set_type(PortType p_type);
-	PortType get_type() const;
-
 
 	VisualAnlNoiseNodeInput();
 };

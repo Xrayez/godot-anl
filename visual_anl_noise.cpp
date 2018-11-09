@@ -639,19 +639,7 @@ int VisualAnlNoiseNodeComponent::get_input_port_count() const {
 
 VisualAnlNoiseNode::PortType VisualAnlNoiseNodeComponent::get_input_port_type(int p_port) const {
 
-	PortType type = PORT_TYPE_INDEX;
-	int port = 0;
-
-	for (Map<int, Node>::Element *E = graph.nodes.front(); E; E = E->next()) {
-		Ref<VisualAnlNoiseNodeInput> input = E->get().node;
-		if (input.is_valid()) {
-			if (port == p_port) {
-				return input->get_type();
-			}
-			++port;
-		}
-	}
-	return type;
+	return PORT_TYPE_INDEX;
 }
 
 String VisualAnlNoiseNodeComponent::get_input_port_name(int p_port) const {
@@ -703,7 +691,7 @@ int VisualAnlNoiseNodeInput::get_input_port_count() const {
 
 VisualAnlNoiseNodeInput::PortType VisualAnlNoiseNodeInput::get_input_port_type(int p_port) const {
 
-	return PORT_TYPE_SCALAR;
+	return PORT_TYPE_INDEX;
 }
 
 String VisualAnlNoiseNodeInput::get_input_port_name(int p_port) const {
@@ -718,12 +706,12 @@ int VisualAnlNoiseNodeInput::get_output_port_count() const {
 
 VisualAnlNoiseNodeInput::PortType VisualAnlNoiseNodeInput::get_output_port_type(int p_port) const {
 
-	return type == PORT_TYPE_INDEX ? PORT_TYPE_INDEX : PORT_TYPE_SCALAR;
+	return PORT_TYPE_INDEX;
 }
 
 String VisualAnlNoiseNodeInput::get_output_port_name(int p_port) const {
 
-	return String();
+	return TTR("Index");
 }
 
 bool VisualAnlNoiseNodeInput::is_port_separator(int p_index) const {
@@ -746,14 +734,6 @@ Variant VisualAnlNoiseNodeInput::get_output_port_value(int p_port) const {
 	return output_value;
 }
 
-Vector<StringName> VisualAnlNoiseNodeInput::get_editable_properties() const {
-
-	Vector<StringName> props;
-	props.push_back("type");
-
-	return props;
-}
-
 void VisualAnlNoiseNodeInput::set_input_name(const String &p_name) {
 
 	input_name = p_name;
@@ -765,36 +745,17 @@ String VisualAnlNoiseNodeInput::get_input_name() const {
 	return input_name;
 }
 
-void VisualAnlNoiseNodeInput::set_type(PortType p_type) {
-
-	type = p_type;
-	emit_changed();
-}
-
-VisualAnlNoiseNodeInput::PortType VisualAnlNoiseNodeInput::get_type() const {
-
-	return type;
-}
-
 void VisualAnlNoiseNodeInput::_bind_methods() {
-
-	ClassDB::bind_method(D_METHOD("set_type", "type"), &VisualAnlNoiseNodeInput::set_type);
-	ClassDB::bind_method(D_METHOD("get_type"), &VisualAnlNoiseNodeInput::get_type);
 
 	ClassDB::bind_method(D_METHOD("set_input_name", "name"), &VisualAnlNoiseNodeInput::set_input_name);
 	ClassDB::bind_method(D_METHOD("get_input_name"), &VisualAnlNoiseNodeInput::get_input_name);
 
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "input_name"), "set_input_name", "get_input_name");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "type", PROPERTY_HINT_ENUM, "Scalar,Index"), "set_type", "get_type");
-
-	BIND_ENUM_CONSTANT(PORT_TYPE_SCALAR);
-	BIND_ENUM_CONSTANT(PORT_TYPE_INDEX);
 }
 
 VisualAnlNoiseNodeInput::VisualAnlNoiseNodeInput() {
 
 	input_name = String();
-	type = PORT_TYPE_INDEX;
 }
 
 //////////////////
