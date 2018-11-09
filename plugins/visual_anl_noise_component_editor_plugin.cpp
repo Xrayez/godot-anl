@@ -74,6 +74,7 @@ void VisualAnlNoiseNodeComponentEditor::remove_custom_type(const Ref<Script> &p_
 void VisualAnlNoiseNodeComponentEditor::_update_options_menu() {
 
 	String prev_category;
+
 	add_node->get_popup()->clear();
 	for (int i = 0; i < add_options.size(); i++) {
 		if (prev_category != add_options[i].category) {
@@ -82,6 +83,11 @@ void VisualAnlNoiseNodeComponentEditor::_update_options_menu() {
 		add_node->get_popup()->add_item(add_options[i].name, i);
 		prev_category = add_options[i].category;
 	}
+
+	add_component->get_popup()->clear();
+	add_component->get_popup()->add_item(TTR("New"), OPTION_CREATE_NEW);
+	add_component->get_popup()->add_separator();
+	add_component->get_popup()->add_item(TTR("Load"), OPTION_LOAD);
 }
 
 Size2 VisualAnlNoiseNodeComponentEditor::get_minimum_size() const {
@@ -488,10 +494,7 @@ void VisualAnlNoiseNodeComponentEditor::_edit_port_default_input(Object *p_butto
 
 void VisualAnlNoiseNodeComponentEditor::_add_node(int p_idx) {
 
-	if (component.is_null()) {
-		return;
-	}
-
+	ERR_FAIL_COND(component.is_null());
 	ERR_FAIL_INDEX(p_idx, add_options.size());
 
 	Ref<VisualAnlNoiseNode> vanode;
@@ -515,6 +518,35 @@ void VisualAnlNoiseNodeComponentEditor::_add_node(int p_idx) {
 
 	undo_redo->create_action("Add Node to Visual AnlNoise");
 	undo_redo->add_do_method(component.ptr(), "add_node", vanode, position, id_to_use);
+	undo_redo->add_undo_method(component.ptr(), "remove_node", id_to_use);
+	undo_redo->add_do_method(this, "_update_graph");
+	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->commit_action();
+}
+
+void VisualAnlNoiseNodeComponentEditor::_add_component(int p_option) {
+
+	ERR_FAIL_COND(component.is_null());
+
+	Ref<VisualAnlNoiseNodeComponent> comp;
+
+	switch (p_option) {
+		case OPTION_CREATE_NEW: {
+			comp.instance();
+
+		} break;
+
+		case OPTION_LOAD: {
+
+		} break;
+	}
+
+	Point2 position = (graph->get_scroll_ofs() + graph->get_size() * 0.5) / EDSCALE;
+
+	int id_to_use = component->get_valid_node_id();
+
+	undo_redo->create_action("Add Component to Visual AnlNoise");
+	undo_redo->add_do_method(component.ptr(), "add_node", comp, position, id_to_use);
 	undo_redo->add_undo_method(component.ptr(), "remove_node", id_to_use);
 	undo_redo->add_do_method(this, "_update_graph");
 	undo_redo->add_undo_method(this, "_update_graph");
@@ -778,6 +810,7 @@ void VisualAnlNoiseNodeComponentEditor::_bind_methods() {
 	ClassDB::bind_method("_input_renamed_focus_out", &VisualAnlNoiseNodeComponentEditor::_input_renamed_focus_out);
 	ClassDB::bind_method("_update_graph", &VisualAnlNoiseNodeComponentEditor::_update_graph);
 	ClassDB::bind_method("_add_node", &VisualAnlNoiseNodeComponentEditor::_add_node);
+	ClassDB::bind_method("_add_component", &VisualAnlNoiseNodeComponentEditor::_add_component);
 	ClassDB::bind_method("_node_dragged", &VisualAnlNoiseNodeComponentEditor::_node_dragged);
 	ClassDB::bind_method("_connection_request", &VisualAnlNoiseNodeComponentEditor::_connection_request);
 	ClassDB::bind_method("_disconnection_request", &VisualAnlNoiseNodeComponentEditor::_disconnection_request);
@@ -830,13 +863,17 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	graph->get_zoom_hbox()->move_child(add_node, 0);
 	add_node->get_popup()->connect("id_pressed", this, "_add_node");
 
+	add_component = memnew(MenuButton);
+	graph->get_zoom_hbox()->add_child(add_component);
+	add_component->set_text(TTR("Add Component.."));
+	graph->get_zoom_hbox()->move_child(add_component, 1);
+	add_component->get_popup()->connect("id_pressed", this, "_add_component");
+
 	add_options.push_back(AddOption("Scalar", "Constants", "VisualAnlNoiseNodeScalar"));
 	add_options.push_back(AddOption("ScalarOp", "Operators", "VisualAnlNoiseNodeScalarOp"));
 	add_options.push_back(AddOption("Simplex", "Basis", "VisualAnlNoiseNodeSimplexBasis"));
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
-
-	add_options.push_back(AddOption("Component", "Component", "VisualAnlNoiseNodeComponent"));
-	add_options.push_back(AddOption("Input", "Component", "VisualAnlNoiseNodeInput"));
+	add_options.push_back(AddOption("Input", "Inputs", "VisualAnlNoiseNodeInput"));
 
 	_update_options_menu();
 

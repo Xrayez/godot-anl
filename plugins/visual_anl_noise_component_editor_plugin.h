@@ -38,7 +38,9 @@ class VisualAnlNoiseNodeComponentEditor : public VBoxContainer {
 
 	Ref<VisualAnlNoiseNodeComponent> component;
     GraphEdit *graph;
+
 	MenuButton *add_node;
+	MenuButton *add_component;
 
 	PanelContainer *error_panel;
 	Label *error_label;
@@ -68,6 +70,8 @@ class VisualAnlNoiseNodeComponentEditor : public VBoxContainer {
 	void _draw_color_over_button(Object *obj, Color p_color);
 
 	void _add_node(int p_idx);
+	void _add_component(int p_idx);
+
 	void _update_options_menu();
 
 	void _node_dragged(const Vector2 &p_from, const Vector2 &p_to, int p_node);
@@ -125,6 +129,11 @@ protected:
 	static void _bind_methods();
 
 public:
+	enum ComponentOptions {
+		OPTION_CREATE_NEW,
+		OPTION_LOAD,
+	};
+
 	static VisualAnlNoiseNodeComponentEditor *get_singleton() { return singleton; }
 	Ref<VisualAnlNoiseNodeComponent> get_component() { return component; }
 
