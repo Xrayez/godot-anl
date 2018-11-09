@@ -405,16 +405,6 @@ void VisualAnlNoiseNodeComponent::evaluate_node(int node, Ref<VisualAnlNoise> no
 	processed.insert(node);
 }
 
-// String VisualAnlNoiseNodeComponent::generate_preview_noise(int p_node, int p_port) const {
-
-// 	Ref<VisualAnlNoiseNode> node = get_node(p_node);
-
-// 	ERR_FAIL_COND_V(!node.is_valid(), String());
-// 	ERR_FAIL_COND_V(p_port < 0 || p_port >= node->get_output_port_count(), String());
-
-//     return String();
-// }
-
 bool VisualAnlNoiseNodeComponent::_set(const StringName &p_name, const Variant &p_value) {
 
 	String name = p_name;
@@ -636,17 +626,49 @@ VisualAnlNoiseNodeComponent::VisualAnlNoiseNodeComponent() {
 
 int VisualAnlNoiseNodeComponent::get_input_port_count() const {
 
-	return 0;
+	int count = 0;
+
+	for (Map<int, Node>::Element *E = graph.nodes.front(); E; E = E->next()) {
+		Ref<VisualAnlNoiseNodeInput> input = E->get().node;
+		if (input.is_valid()) {
+			++count;
+		}
+	}
+	return count;
 }
 
 VisualAnlNoiseNode::PortType VisualAnlNoiseNodeComponent::get_input_port_type(int p_port) const {
 
-	return PORT_TYPE_INDEX;
+	PortType type = PORT_TYPE_INDEX;
+	int port = 0;
+
+	for (Map<int, Node>::Element *E = graph.nodes.front(); E; E = E->next()) {
+		Ref<VisualAnlNoiseNodeInput> input = E->get().node;
+		if (input.is_valid()) {
+			if (port == p_port) {
+				return input->get_type();
+			}
+			++port;
+		}
+	}
+	return type;
 }
 
 String VisualAnlNoiseNodeComponent::get_input_port_name(int p_port) const {
 
-	return "";
+	String name;
+	int port = 0;
+
+	for (Map<int, Node>::Element *E = graph.nodes.front(); E; E = E->next()) {
+		Ref<VisualAnlNoiseNodeInput> input = E->get().node;
+		if (input.is_valid()) {
+			if (port == p_port) {
+				return input->get_input_name();
+			}
+			++port;
+		}
+	}
+	return name;
 }
 
 int VisualAnlNoiseNodeComponent::get_output_port_count() const {
