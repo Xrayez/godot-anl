@@ -970,7 +970,6 @@ void VisualAnlNoiseNodePortPreview::setup(const Ref<VisualAnlNoise> &p_noise, in
 	node = p_node;
 
 	update();
-	_noise_changed();
 }
 
 Size2 VisualAnlNoiseNodePortPreview::get_minimum_size() const {
@@ -994,7 +993,6 @@ void VisualAnlNoiseNodePortPreview::_notification(int p_what) {
 	ERR_FAIL_COND(vanode.is_null());
 
 	if (p_what == NOTIFICATION_DRAW) {
-		noise->generate();
 		preview_tex = noise->map_to_texture(get_minimum_size(), vanode->get_output_port_value(port));
 		draw_texture_rect(preview_tex, Rect2(Vector2(), get_size()), false);
 	}

@@ -14,6 +14,7 @@ class VisualAnlNoise : public AnlNoise {
 
 	void _update_noise();
 	void _queue_update();
+	void _component_updated();
 
 	volatile mutable bool dirty;
 
@@ -123,10 +124,14 @@ private:
 		}
 	};
 
-
     Vector2 graph_offset;
 
+	volatile mutable bool dirty;
+
     Array _get_node_connections() const;
+
+	void _queue_update();
+	void _notify_changed();
 
 protected:
 	static void _bind_methods();

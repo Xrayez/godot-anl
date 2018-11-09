@@ -130,12 +130,11 @@ void VisualAnlNoiseNodeComponent::add_node(const Ref<VisualAnlNoiseNode> &p_node
 	n.node = p_node;
 	n.position = p_position;
 
-	Ref<VisualAnlNoise> noise = VisualAnlNoiseEditor::get_singleton()->get_noise();
-	if (noise.is_valid()) {
-		n.node->connect("changed", noise.ptr(), "_queue_update");
-	}
+	n.node->connect("changed", this, "_notify_changed");
 
 	graph.nodes[p_id] = n;
+
+	_notify_changed();
 }
 
 void VisualAnlNoiseNodeComponent::set_node_position(int p_id, const Vector2 &p_position) {
@@ -194,13 +193,7 @@ void VisualAnlNoiseNodeComponent::remove_node(int p_id) {
 	ERR_FAIL_COND(p_id < 2);
 	ERR_FAIL_COND(!graph.nodes.has(p_id));
 
-	Ref<VisualAnlNoise> noise = VisualAnlNoiseEditor::get_singleton()->get_noise();
-
-	if (noise.is_valid()) {
-		if (graph.nodes[p_id].node->is_connected("changed", noise.ptr(), "_queue_update")) {
-			graph.nodes[p_id].node->disconnect("changed", noise.ptr(), "_queue_update");
-		}
-	}
+	graph.nodes[p_id].node->disconnect("changed", this, "_notify_changed");
 	graph.nodes.erase(p_id);
 
 	for (List<Connection>::Element *E = graph.connections.front(); E;) {
@@ -210,6 +203,7 @@ void VisualAnlNoiseNodeComponent::remove_node(int p_id) {
 		}
 		E = N;
 	}
+	_notify_changed();
 }
 
 bool VisualAnlNoiseNodeComponent::is_node_connection(int p_from_node, int p_from_port, int p_to_node, int p_to_port) const {
@@ -285,7 +279,7 @@ Error VisualAnlNoiseNodeComponent::connect_nodes(int p_from_node, int p_from_por
 	c.to_port = p_to_port;
 	graph.connections.push_back(c);
 
-	// _queue_update();
+	_notify_changed();
 
 	return OK;
 }
@@ -296,7 +290,7 @@ void VisualAnlNoiseNodeComponent::disconnect_nodes(int p_from_node, int p_from_p
 
 		if (E->get().from_node == p_from_node && E->get().from_port == p_from_port && E->get().to_node == p_to_node && E->get().to_port == p_to_port) {
 			graph.connections.erase(E);
-			// _queue_update();
+			_notify_changed();
 			return;
 		}
 	}
@@ -502,6 +496,11 @@ void VisualAnlNoiseNodeComponent::_get_property_list(List<PropertyInfo> *p_list)
     p_list->push_back(PropertyInfo(Variant::POOL_INT_ARRAY, "nodes/connections", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR));
 }
 
+void VisualAnlNoiseNodeComponent::_notify_changed() {
+
+	emit_changed();
+}
+
 void VisualAnlNoiseNodeComponent::_bind_methods() {
 
 
@@ -531,6 +530,8 @@ void VisualAnlNoiseNodeComponent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_graph_offset"), &VisualAnlNoiseNodeComponent::get_graph_offset);
 
 	ClassDB::bind_method(D_METHOD("evaluate", "noise"), &VisualAnlNoiseNodeComponent::evaluate);
+
+	ClassDB::bind_method(D_METHOD("_notify_changed"), &VisualAnlNoiseNodeComponent::_notify_changed);
 
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "name", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "set_component_name", "get_component_name");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "graph_offset", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "set_graph_offset", "get_graph_offset");
@@ -566,6 +567,11 @@ void VisualAnlNoise::_update_noise() {
 	component->evaluate(Ref<VisualAnlNoise>(this));
 }
 
+void VisualAnlNoise::_component_updated() {
+
+	generate();
+}
+
 void VisualAnlNoise::_queue_update() {
 
 	if (dirty) {
@@ -586,6 +592,7 @@ void VisualAnlNoise::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("_queue_update"), &VisualAnlNoise::_queue_update);
 	ClassDB::bind_method(D_METHOD("_update_noise"), &VisualAnlNoise::_update_noise);
+	ClassDB::bind_method(D_METHOD("_component_updated"), &VisualAnlNoise::_component_updated);
 
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "component", PROPERTY_HINT_RESOURCE_TYPE, "VisualAnlNoiseNodeComponent"), "set_component", "get_component");
 
@@ -595,11 +602,18 @@ void VisualAnlNoise::_bind_methods() {
 void VisualAnlNoise::set_component(const Ref<VisualAnlNoiseNodeComponent> &p_component) {
 
 	if(p_component.is_valid()) {
+
+		if (component.is_valid() && component->is_connected("changed", this, "_component_updated")) {
+			component->disconnect("changed", this, "_component_updated");
+		}
 		component = p_component;
+		component->connect("changed", this, "_component_updated");
+
+		generate();
+
 		emit_signal("component_changed");
 	}
 }
-
 
 Ref<VisualAnlNoiseNodeComponent> VisualAnlNoise::get_component() const {
 
