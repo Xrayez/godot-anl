@@ -19,8 +19,10 @@ void register_anl_types() {
     ClassDB::register_class<VisualAnlNoiseNodeScalar>();
     ClassDB::register_class<VisualAnlNoiseNodeScalarOp>();
 
+    // Transform
     ClassDB::register_class<VisualAnlNoiseNodeTranslate>();
     ClassDB::register_class<VisualAnlNoiseNodeScale>();
+    ClassDB::register_class<VisualAnlNoiseNodeRotate>();
 
     ClassDB::register_class<VisualAnlNoiseNodeSimplexBasis>();
     ClassDB::register_class<VisualAnlNoiseNodeExpression>();

@@ -611,3 +611,85 @@ VisualAnlNoiseNodeScale::VisualAnlNoiseNodeScale() {
 	source = 0;
 	by = 0;
 }
+
+////////////// Rotate
+
+String VisualAnlNoiseNodeRotate::get_caption() const {
+
+	return "Rotate";
+}
+
+int VisualAnlNoiseNodeRotate::get_input_port_count() const {
+
+	return 5;
+}
+
+void VisualAnlNoiseNodeRotate::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: source = p_value; break;
+		case 1: angle = p_value; break;
+		case 2: ax = p_value; break;
+		case 3: ay = p_value; break;
+		case 4: az = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeRotate::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return source;
+		case 1: return angle;
+		case 2: return ax;
+		case 3: return ay;
+		case 4: return az;
+	}
+	return Variant();
+}
+
+VisualAnlNoiseNodeRotate::PortType VisualAnlNoiseNodeRotate::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeRotate::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "source";
+		case 1: return "angle";
+		case 2: return "ax";
+		case 3: return "ay";
+		case 4: return "az";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeRotate::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeRotate::PortType VisualAnlNoiseNodeRotate::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeRotate::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeRotate::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->rotate(source, angle, ax, ay, az);
+}
+
+void VisualAnlNoiseNodeRotate::_bind_methods() {
+
+}
+
+VisualAnlNoiseNodeRotate::VisualAnlNoiseNodeRotate() {
+
+	source = 0;
+	angle = 0;
+	ax = ay = az = 0;
+}
