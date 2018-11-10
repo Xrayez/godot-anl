@@ -7,11 +7,20 @@ This is a wrapper for the new version of
 [Accidental Noise Library](https://github.com/JTippetts/accidental-noise-library)
 originally written by
 [Joshua Tippetts](https://sourceforge.net/u/tippettsj/profile/), modified
-to be properly compiled for [Godot 3.0+](https://github.com/godotengine/godot)
+to be properly compiled for [Godot 3.1](https://github.com/godotengine/godot)
 and be used freely in GDScript.
 
 The master branch aims to be in sync with Godot's master branch. Checkout other
-branches for compatible versions.
+branches and/or releases for compatible versions.
+
+## WIP features:
+
+* ability to construct noise from visual nodes in editor;
+* make custom modular noise as components from base nodes.
+
+![Visual Accidental Noise Workbench](examples/images/visual_noise.png)
+
+The code structure is somewhat established for visual noise but can't be considered stable, and not all nodes are created/exposed yet. Feel free to report bugs and contribute!
 
 ## Overview
 
