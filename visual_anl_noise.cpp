@@ -102,7 +102,7 @@ void VisualAnlNoiseNode::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "default_input_values", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "_set_default_input_values", "_get_default_input_values");
 	ADD_SIGNAL(MethodInfo("editor_refresh_request"));
 
-	BIND_ENUM_CONSTANT(Axis::AXIS_ALL);
+	BIND_ENUM_CONSTANT(Axis::AXIS_DOMAIN);
 	BIND_ENUM_CONSTANT(Axis::AXIS_X);
 	BIND_ENUM_CONSTANT(Axis::AXIS_Y);
 	BIND_ENUM_CONSTANT(Axis::AXIS_Z);

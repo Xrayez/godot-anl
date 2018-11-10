@@ -5,7 +5,7 @@
 
 struct Axis {
 	enum AxisType {
-		AXIS_ALL,
+		AXIS_DOMAIN,
 		AXIS_X,
 		AXIS_Y,
 		AXIS_Z,
@@ -18,7 +18,7 @@ struct Axis {
 
 	String as_alpha() const {
 		switch (type) {
-			case AXIS_ALL: return "";
+			case AXIS_DOMAIN: return "";
 			case AXIS_X: return "x";
 			case AXIS_Y: return "y";
 			case AXIS_Z: return "z";
@@ -30,10 +30,10 @@ struct Axis {
 	}
 
 	_FORCE_INLINE_ static String get_hints() {
-		return "All,X,Y,Z,W,U,V";
+		return "Domain,X,Y,Z,W,U,V";
 	}
 
-	Axis() { type = AXIS_ALL; }
+	Axis() { type = AXIS_DOMAIN; }
 };
 
 VARIANT_ENUM_CAST(Axis::AxisType);

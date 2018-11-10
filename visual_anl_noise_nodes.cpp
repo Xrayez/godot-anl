@@ -501,7 +501,7 @@ Vector<StringName> VisualAnlNoiseNodeTranslate::get_editable_properties() const 
 void VisualAnlNoiseNodeTranslate::evaluate(Ref<VisualAnlNoise> noise) {
 
 	String m = method;
-	if (axis.type != Axis::AXIS_ALL) {
+	if (axis.type != Axis::AXIS_DOMAIN) {
 		m = method + "_" + axis.as_alpha();
 	}
 	output_value = noise->call(m, source, by);
@@ -592,7 +592,7 @@ Vector<StringName> VisualAnlNoiseNodeScale::get_editable_properties() const {
 void VisualAnlNoiseNodeScale::evaluate(Ref<VisualAnlNoise> noise) {
 
 	String m = method;
-	if (axis.type != Axis::AXIS_ALL) {
+	if (axis.type != Axis::AXIS_DOMAIN) {
 		m = method + "_" + axis.as_alpha();
 	}
 	output_value = noise->call(m, source, by);
