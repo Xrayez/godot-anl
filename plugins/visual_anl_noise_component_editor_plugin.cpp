@@ -85,9 +85,9 @@ void VisualAnlNoiseNodeComponentEditor::_update_options_menu() {
 	}
 
 	add_component->get_popup()->clear();
-	add_component->get_popup()->add_item(TTR("New"), OPTION_CREATE_NEW);
+	add_component->get_popup()->add_item(TTR("New"), MENU_CREATE_NEW);
 	add_component->get_popup()->add_separator();
-	add_component->get_popup()->add_item(TTR("Load"), OPTION_LOAD);
+	add_component->get_popup()->add_item(TTR("Load.."), MENU_LOAD_FILE);
 }
 
 Size2 VisualAnlNoiseNodeComponentEditor::get_minimum_size() const {
@@ -446,6 +446,14 @@ void VisualAnlNoiseNodeComponentEditor::_preview_select_port(int p_node, int p_p
 	undo_redo->commit_action();
 }
 
+void VisualAnlNoiseNodeComponentEditor::_file_opened(const String &p_file) {
+
+	file_loaded = ResourceLoader::load(p_file);
+	if (file_loaded.is_valid()) {
+		_add_component(MENU_LOAD_FILE_CONFIRM);
+	}
+}
+
 void VisualAnlNoiseNodeComponentEditor::_line_edit_changed(const String &p_text, Object *line_edit, int p_node_id) {
 
 }
@@ -531,12 +539,32 @@ void VisualAnlNoiseNodeComponentEditor::_add_component(int p_option) {
 	Ref<VisualAnlNoiseNodeComponent> comp;
 
 	switch (p_option) {
-		case OPTION_CREATE_NEW: {
+		case MENU_CREATE_NEW: {
+
 			comp.instance();
 
 		} break;
 
-		case OPTION_LOAD: {
+		case MENU_LOAD_FILE: {
+
+			open_file->clear_filters();
+			List<String> filters;
+			ResourceLoader::get_recognized_extensions_for_type("VisualAnlNoiseNodeComponent", &filters);
+			for (List<String>::Element *E = filters.front(); E; E = E->next()) {
+				open_file->add_filter("*." + E->get());
+			}
+			open_file->popup_centered_ratio();
+
+		} break;
+
+		case MENU_LOAD_FILE_CONFIRM: {
+
+			comp = file_loaded;
+			// file_loaded.unref();
+
+		} break;
+
+		case MENU_PASTE: {
 
 		} break;
 	}
@@ -826,6 +854,7 @@ void VisualAnlNoiseNodeComponentEditor::_bind_methods() {
 	ClassDB::bind_method("_line_edit_changed", &VisualAnlNoiseNodeComponentEditor::_line_edit_changed);
 	ClassDB::bind_method("_duplicate_nodes", &VisualAnlNoiseNodeComponentEditor::_duplicate_nodes);
 	ClassDB::bind_method("_preview_select_port", &VisualAnlNoiseNodeComponentEditor::_preview_select_port);
+	ClassDB::bind_method("_file_opened", &VisualAnlNoiseNodeComponentEditor::_file_opened);
 	ClassDB::bind_method("_input", &VisualAnlNoiseNodeComponentEditor::_input);
 }
 
@@ -874,7 +903,6 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	add_options.push_back(AddOption("Simplex", "Basis", "VisualAnlNoiseNodeSimplexBasis"));
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
 	add_options.push_back(AddOption("Input", "Inputs", "VisualAnlNoiseNodeInput"));
-
 	_update_options_menu();
 
 	error_panel = memnew(PanelContainer);
@@ -884,16 +912,21 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	error_label->set_text("eh");
 	error_panel->hide();
 
-	undo_redo = EditorNode::get_singleton()->get_undo_redo();
-
 	Ref<VisualAnlNoiseNodePluginDefault> default_plugin;
 	default_plugin.instance();
 	add_plugin(default_plugin);
 
 	property_editor = memnew(CustomPropertyEditor);
 	add_child(property_editor);
-
 	property_editor->connect("variant_changed", this, "_port_edited");
+
+	open_file = memnew(EditorFileDialog);
+	add_child(open_file);
+	open_file->set_title(TTR("Open Component Node"));
+	open_file->set_mode(EditorFileDialog::MODE_OPEN_FILE);
+	open_file->connect("file_selected", this, "_file_opened");
+
+	undo_redo = EditorNode::get_singleton()->get_undo_redo();
 }
 
 ///////////////////////////////////

@@ -115,13 +115,13 @@ class VisualAnlNoiseNodeComponentEditor : public VBoxContainer {
 
 	EditorFileDialog *open_file;
 	Ref<VisualAnlNoiseNodeComponent> file_loaded;
-
 	void _file_opened(const String &p_file);
 
 	enum {
-		MENU_LOAD_FILE = 1000,
-		MENU_PASTE = 1001,
-		MENU_LOAD_FILE_CONFIRM = 1002
+		MENU_CREATE_NEW,
+		MENU_LOAD_FILE,
+		MENU_PASTE,
+		MENU_LOAD_FILE_CONFIRM,
 	};
 
 protected:
@@ -129,10 +129,6 @@ protected:
 	static void _bind_methods();
 
 public:
-	enum ComponentOptions {
-		OPTION_CREATE_NEW,
-		OPTION_LOAD,
-	};
 
 	static VisualAnlNoiseNodeComponentEditor *get_singleton() { return singleton; }
 	Ref<VisualAnlNoiseNodeComponent> get_component() { return component; }
