@@ -234,7 +234,9 @@ protected:
     static void _bind_methods();
 
 private:
-	Index src, translate;
+	static const String method;
+
+	Index source, by;
     Axis axis;
 };
 

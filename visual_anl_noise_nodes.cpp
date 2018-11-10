@@ -432,6 +432,8 @@ VisualAnlNoiseNodeExpression::VisualAnlNoiseNodeExpression() {
 
 ////////////// Translate
 
+const String VisualAnlNoiseNodeTranslate::method = "translate";
+
 String VisualAnlNoiseNodeTranslate::get_caption() const {
 
 	return "Translate";
@@ -444,12 +446,12 @@ int VisualAnlNoiseNodeTranslate::get_input_port_count() const {
 
 void VisualAnlNoiseNodeTranslate::set_input_port_value(int p_port, const Variant &p_value) {
 
-	p_port == 0 ? src = p_value : translate = p_value;
+	p_port == 0 ? source = p_value : by = p_value;
 }
 
 Variant VisualAnlNoiseNodeTranslate::get_input_port_value(int p_port) const {
 
-	return p_port == 0 ? src : translate;
+	return p_port == 0 ? source : by;
 }
 
 VisualAnlNoiseNodeTranslate::PortType VisualAnlNoiseNodeTranslate::get_input_port_type(int p_port) const {
@@ -498,14 +500,11 @@ Vector<StringName> VisualAnlNoiseNodeTranslate::get_editable_properties() const 
 
 void VisualAnlNoiseNodeTranslate::evaluate(Ref<VisualAnlNoise> noise) {
 
-	String translate_method;
+	String m = method;
 	if (axis.type != Axis::AXIS_ALL) {
-		translate_method = "translate_" + axis.as_alpha();
-	} else {
-		translate_method = "translate";
+		m = method + "_" + axis.as_alpha();
 	}
-
-	output_value = noise->call(translate_method, src, translate);
+	output_value = noise->call(m, source, by);
 }
 
 void VisualAnlNoiseNodeTranslate::_bind_methods() {
@@ -525,6 +524,6 @@ void VisualAnlNoiseNodeTranslate::_bind_methods() {
 
 VisualAnlNoiseNodeTranslate::VisualAnlNoiseNodeTranslate() {
 
-	src = 0;
-	translate = 0;
+	source = 0;
+	by = 0;
 }
