@@ -3,6 +3,42 @@
 
 #include "visual_anl_noise.h"
 
+struct Axis {
+	enum AxisType {
+		AXIS_ALL,
+		AXIS_X,
+		AXIS_Y,
+		AXIS_Z,
+		AXIS_W,
+		AXIS_U,
+		AXIS_V,
+	};
+
+	AxisType type;
+
+	String as_alpha() const {
+		switch (type) {
+			case AXIS_ALL: return "";
+			case AXIS_X: return "x";
+			case AXIS_Y: return "y";
+			case AXIS_Z: return "z";
+			case AXIS_W: return "w";
+			case AXIS_U: return "u";
+			case AXIS_V: return "v";
+		}
+		return "";
+	}
+
+	_FORCE_INLINE_ static String get_hints() {
+		return "All,X,Y,Z,W,U,V";
+	}
+
+	Axis() { type = AXIS_ALL; }
+};
+
+VARIANT_ENUM_CAST(Axis::AxisType);
+
+
 class VisualAnlNoiseNodeScalar : public VisualAnlNoiseNode {
 	GDCLASS(VisualAnlNoiseNodeScalar, VisualAnlNoiseNode)
 
@@ -165,6 +201,41 @@ protected:
 
 private:
 	String expression;
+};
+
+
+class VisualAnlNoiseNodeTranslate : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeTranslate, VisualAnlNoiseNode)
+
+public:
+	void set_axis(Axis::AxisType p_type);
+	Axis::AxisType get_axis() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeTranslate();
+
+protected:
+    static void _bind_methods();
+
+private:
+	Index src, translate;
+    Axis axis;
 };
 
 #endif

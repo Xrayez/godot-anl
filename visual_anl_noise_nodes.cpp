@@ -427,3 +427,104 @@ VisualAnlNoiseNodeExpression::VisualAnlNoiseNodeExpression() {
 
 	expression = "";
 }
+
+//============ Transform
+
+////////////// Translate
+
+String VisualAnlNoiseNodeTranslate::get_caption() const {
+
+	return "Translate";
+}
+
+int VisualAnlNoiseNodeTranslate::get_input_port_count() const {
+
+	return 2;
+}
+
+void VisualAnlNoiseNodeTranslate::set_input_port_value(int p_port, const Variant &p_value) {
+
+	p_port == 0 ? src = p_value : translate = p_value;
+}
+
+Variant VisualAnlNoiseNodeTranslate::get_input_port_value(int p_port) const {
+
+	return p_port == 0 ? src : translate;
+}
+
+VisualAnlNoiseNodeTranslate::PortType VisualAnlNoiseNodeTranslate::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeTranslate::get_input_port_name(int p_port) const {
+
+	return p_port == 0 ? "source" : "by";
+}
+
+int VisualAnlNoiseNodeTranslate::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeTranslate::PortType VisualAnlNoiseNodeTranslate::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeTranslate::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeTranslate::set_axis(Axis::AxisType p_axis) {
+
+	axis.type = p_axis;
+	emit_changed();
+}
+
+Axis::AxisType VisualAnlNoiseNodeTranslate::get_axis() const {
+
+	return axis.type;
+}
+
+Vector<StringName> VisualAnlNoiseNodeTranslate::get_editable_properties() const {
+
+	Vector<StringName> props;
+
+	props.push_back("axis");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeTranslate::evaluate(Ref<VisualAnlNoise> noise) {
+
+	String translate_method;
+	if (axis.type != Axis::AXIS_ALL) {
+		translate_method = "translate_" + axis.as_alpha();
+	} else {
+		translate_method = "translate";
+	}
+
+	output_value = noise->call(translate_method, src, translate);
+}
+
+void VisualAnlNoiseNodeTranslate::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_axis", "axis"), &VisualAnlNoiseNodeTranslate::set_axis);
+	ClassDB::bind_method(D_METHOD("get_axis"), &VisualAnlNoiseNodeTranslate::get_axis);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "axis", PROPERTY_HINT_ENUM, Axis::get_hints()), "set_axis", "get_axis");
+
+	BIND_ENUM_CONSTANT(Axis::AXIS_X);
+	BIND_ENUM_CONSTANT(Axis::AXIS_Y);
+	BIND_ENUM_CONSTANT(Axis::AXIS_Z);
+	BIND_ENUM_CONSTANT(Axis::AXIS_W);
+	BIND_ENUM_CONSTANT(Axis::AXIS_U);
+	BIND_ENUM_CONSTANT(Axis::AXIS_V);
+}
+
+VisualAnlNoiseNodeTranslate::VisualAnlNoiseNodeTranslate() {
+
+	src = 0;
+	translate = 0;
+}

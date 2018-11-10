@@ -900,6 +900,7 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 
 	add_options.push_back(AddOption("Scalar", "Constants", "VisualAnlNoiseNodeScalar"));
 	add_options.push_back(AddOption("ScalarOp", "Operators", "VisualAnlNoiseNodeScalarOp"));
+	add_options.push_back(AddOption("Translate", "Transform", "VisualAnlNoiseNodeTranslate"));
 	add_options.push_back(AddOption("Simplex", "Basis", "VisualAnlNoiseNodeSimplexBasis"));
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
 	add_options.push_back(AddOption("Input", "Inputs", "VisualAnlNoiseNodeInput"));
