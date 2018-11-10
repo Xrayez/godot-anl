@@ -520,3 +520,94 @@ VisualAnlNoiseNodeTranslate::VisualAnlNoiseNodeTranslate() {
 	source = 0;
 	by = 0;
 }
+
+////////////// Scale
+
+const String VisualAnlNoiseNodeScale::method = "scale";
+
+String VisualAnlNoiseNodeScale::get_caption() const {
+
+	return "Scale";
+}
+
+int VisualAnlNoiseNodeScale::get_input_port_count() const {
+
+	return 2;
+}
+
+void VisualAnlNoiseNodeScale::set_input_port_value(int p_port, const Variant &p_value) {
+
+	p_port == 0 ? source = p_value : by = p_value;
+}
+
+Variant VisualAnlNoiseNodeScale::get_input_port_value(int p_port) const {
+
+	return p_port == 0 ? source : by;
+}
+
+VisualAnlNoiseNodeScale::PortType VisualAnlNoiseNodeScale::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeScale::get_input_port_name(int p_port) const {
+
+	return p_port == 0 ? "source" : "by";
+}
+
+int VisualAnlNoiseNodeScale::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeScale::PortType VisualAnlNoiseNodeScale::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeScale::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeScale::set_axis(Axis::AxisType p_axis) {
+
+	axis.type = p_axis;
+	emit_changed();
+}
+
+Axis::AxisType VisualAnlNoiseNodeScale::get_axis() const {
+
+	return axis.type;
+}
+
+Vector<StringName> VisualAnlNoiseNodeScale::get_editable_properties() const {
+
+	Vector<StringName> props;
+
+	props.push_back("axis");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeScale::evaluate(Ref<VisualAnlNoise> noise) {
+
+	String m = method;
+	if (axis.type != Axis::AXIS_ALL) {
+		m = method + "_" + axis.as_alpha();
+	}
+	output_value = noise->call(m, source, by);
+}
+
+void VisualAnlNoiseNodeScale::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_axis", "axis"), &VisualAnlNoiseNodeScale::set_axis);
+	ClassDB::bind_method(D_METHOD("get_axis"), &VisualAnlNoiseNodeScale::get_axis);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "axis", PROPERTY_HINT_ENUM, Axis::get_hints()), "set_axis", "get_axis");
+}
+
+VisualAnlNoiseNodeScale::VisualAnlNoiseNodeScale() {
+
+	source = 0;
+	by = 0;
+}

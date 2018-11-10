@@ -204,4 +204,41 @@ private:
     Axis axis;
 };
 
+
+class VisualAnlNoiseNodeScale : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeScale, VisualAnlNoiseNode)
+
+public:
+	void set_axis(Axis::AxisType p_type);
+	Axis::AxisType get_axis() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeScale();
+
+protected:
+    static void _bind_methods();
+
+private:
+	static const String method;
+
+	Index source, by;
+    Axis axis;
+};
+
 #endif
