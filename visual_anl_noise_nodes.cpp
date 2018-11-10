@@ -513,13 +513,6 @@ void VisualAnlNoiseNodeTranslate::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_axis"), &VisualAnlNoiseNodeTranslate::get_axis);
 
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "axis", PROPERTY_HINT_ENUM, Axis::get_hints()), "set_axis", "get_axis");
-
-	BIND_ENUM_CONSTANT(Axis::AXIS_X);
-	BIND_ENUM_CONSTANT(Axis::AXIS_Y);
-	BIND_ENUM_CONSTANT(Axis::AXIS_Z);
-	BIND_ENUM_CONSTANT(Axis::AXIS_W);
-	BIND_ENUM_CONSTANT(Axis::AXIS_U);
-	BIND_ENUM_CONSTANT(Axis::AXIS_V);
 }
 
 VisualAnlNoiseNodeTranslate::VisualAnlNoiseNodeTranslate() {

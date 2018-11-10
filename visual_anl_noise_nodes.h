@@ -3,42 +3,6 @@
 
 #include "visual_anl_noise.h"
 
-struct Axis {
-	enum AxisType {
-		AXIS_ALL,
-		AXIS_X,
-		AXIS_Y,
-		AXIS_Z,
-		AXIS_W,
-		AXIS_U,
-		AXIS_V,
-	};
-
-	AxisType type;
-
-	String as_alpha() const {
-		switch (type) {
-			case AXIS_ALL: return "";
-			case AXIS_X: return "x";
-			case AXIS_Y: return "y";
-			case AXIS_Z: return "z";
-			case AXIS_W: return "w";
-			case AXIS_U: return "u";
-			case AXIS_V: return "v";
-		}
-		return "";
-	}
-
-	_FORCE_INLINE_ static String get_hints() {
-		return "All,X,Y,Z,W,U,V";
-	}
-
-	Axis() { type = AXIS_ALL; }
-};
-
-VARIANT_ENUM_CAST(Axis::AxisType);
-
-
 class VisualAnlNoiseNodeScalar : public VisualAnlNoiseNode {
 	GDCLASS(VisualAnlNoiseNodeScalar, VisualAnlNoiseNode)
 
