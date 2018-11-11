@@ -1082,3 +1082,78 @@ VisualAnlNoiseNodeClamp::VisualAnlNoiseNodeClamp() {
 	source = 0;
 	low = high = 0;
 }
+
+////////////// Mix
+
+String VisualAnlNoiseNodeMix::get_caption() const {
+
+	return "Mix";
+}
+
+int VisualAnlNoiseNodeMix::get_input_port_count() const {
+
+	return 3;
+}
+
+void VisualAnlNoiseNodeMix::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: low = p_value; break;
+		case 1: high = p_value; break;
+		case 2: control = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeMix::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return low;
+		case 1: return high;
+		case 2: return control;
+	}
+	return Variant();
+}
+
+VisualAnlNoiseNodeMix::PortType VisualAnlNoiseNodeMix::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeMix::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "low";
+		case 1: return "high";
+		case 2: return "control";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeMix::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeMix::PortType VisualAnlNoiseNodeMix::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeMix::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeMix::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->mix(low, high, control);
+}
+
+void VisualAnlNoiseNodeMix::_bind_methods() {
+
+}
+
+VisualAnlNoiseNodeMix::VisualAnlNoiseNodeMix() {
+
+	low = high = 0;
+	control = 0;
+}
