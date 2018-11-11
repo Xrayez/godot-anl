@@ -102,6 +102,54 @@ private:
 VARIANT_ENUM_CAST(VisualAnlNoiseNodeScalarOp::Operator);
 
 
+class VisualAnlNoiseNodeScalarFunc : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeScalarFunc, VisualAnlNoiseNode)
+
+public:
+	enum Function {
+		FUNC_COS,
+		FUNC_SIN,
+		FUNC_TAN,
+		FUNC_ACOS,
+		FUNC_ASIN,
+		FUNC_ATAN,
+		FUNC_ABS,
+		FUNC_SIGMOID,
+	};
+
+	void set_function(Function p_op);
+	Function get_function() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeScalarFunc();
+
+protected:
+    static void _bind_methods();
+
+private:
+	Function func;
+	Index source;
+};
+
+VARIANT_ENUM_CAST(VisualAnlNoiseNodeScalarFunc::Function);
+
+
 class VisualAnlNoiseNodeValueBasis : public VisualAnlNoiseNode {
 	GDCLASS(VisualAnlNoiseNodeValueBasis, VisualAnlNoiseNode)
 

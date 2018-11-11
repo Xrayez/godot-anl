@@ -271,6 +271,131 @@ VisualAnlNoiseNodeScalarOp::VisualAnlNoiseNodeScalarOp() {
 	op = OP_ADD;
 }
 
+////////////// ScalarFunc
+
+String VisualAnlNoiseNodeScalarFunc::get_caption() const {
+
+	return "ScalarFunc";
+}
+
+int VisualAnlNoiseNodeScalarFunc::get_input_port_count() const {
+
+	return 1;
+}
+
+void VisualAnlNoiseNodeScalarFunc::set_input_port_value(int p_port, const Variant &p_value) {
+
+	source = p_value;
+}
+
+Variant VisualAnlNoiseNodeScalarFunc::get_input_port_value(int p_port) const {
+
+	return source;
+}
+
+VisualAnlNoiseNodeScalarFunc::PortType VisualAnlNoiseNodeScalarFunc::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeScalarFunc::get_input_port_name(int p_port) const {
+
+	return "source";
+}
+
+int VisualAnlNoiseNodeScalarFunc::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeScalarFunc::PortType VisualAnlNoiseNodeScalarFunc::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeScalarFunc::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeScalarFunc::set_function(Function p_func) {
+
+	func = p_func;
+	emit_changed();
+}
+
+VisualAnlNoiseNodeScalarFunc::Function VisualAnlNoiseNodeScalarFunc::get_function() const {
+
+	return func;
+}
+
+Vector<StringName> VisualAnlNoiseNodeScalarFunc::get_editable_properties() const {
+
+	Vector<StringName> props;
+	props.push_back("function");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeScalarFunc::evaluate(Ref<VisualAnlNoise> noise) {
+
+	switch(func) {
+
+		case FUNC_COS:
+			output_value = noise->cos(source);
+			break;
+
+		case FUNC_SIN:
+			output_value = noise->sin(source);
+			break;
+
+		case FUNC_TAN:
+			output_value = noise->tan(source);
+			break;
+
+		case FUNC_ACOS:
+			output_value = noise->acos(source);
+			break;
+
+		case FUNC_ASIN:
+			output_value = noise->asin(source);
+			break;
+
+		case FUNC_ATAN:
+			output_value = noise->atan(source);
+			break;
+
+		case FUNC_ABS:
+			output_value = noise->abs(source);
+			break;
+
+		case FUNC_SIGMOID:
+			output_value = noise->sigmoid(source);
+			break;
+	}
+}
+
+void VisualAnlNoiseNodeScalarFunc::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_function", "function"), &VisualAnlNoiseNodeScalarFunc::set_function);
+	ClassDB::bind_method(D_METHOD("get_function"), &VisualAnlNoiseNodeScalarFunc::get_function);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "function", PROPERTY_HINT_ENUM, "Cos,Sin,Tan,Acos,Asin,Atan,Abs,Sigmoid"), "set_function", "get_function");
+
+	BIND_ENUM_CONSTANT(FUNC_COS);
+	BIND_ENUM_CONSTANT(FUNC_SIN);
+	BIND_ENUM_CONSTANT(FUNC_TAN);
+	BIND_ENUM_CONSTANT(FUNC_ACOS);
+	BIND_ENUM_CONSTANT(FUNC_ASIN);
+	BIND_ENUM_CONSTANT(FUNC_ATAN);
+	BIND_ENUM_CONSTANT(FUNC_ABS);
+	BIND_ENUM_CONSTANT(FUNC_SIGMOID);
+}
+
+VisualAnlNoiseNodeScalarFunc::VisualAnlNoiseNodeScalarFunc() {
+
+	func = FUNC_COS;
+}
+
 ////////////// Value Basis
 
 String VisualAnlNoiseNodeValueBasis::get_caption() const {

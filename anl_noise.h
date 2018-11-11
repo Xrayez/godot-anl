@@ -102,7 +102,7 @@ public:
     Index asin(Index src);
     Index atan(Index src);
     Index abs(Index src);
-    Index sigmoid(Index src, Index center, Index ramp);
+    Index sigmoid(Index src);
 
     // Smoothing
     // --------------------------------------------
