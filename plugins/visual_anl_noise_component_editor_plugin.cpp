@@ -911,6 +911,7 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	add_options.push_back(AddOption("Value", "Basis", "VisualAnlNoiseNodeValueBasis"));
 	add_options.push_back(AddOption("Gradient", "Basis", "VisualAnlNoiseNodeGradientBasis"));
 	add_options.push_back(AddOption("Simplex", "Basis", "VisualAnlNoiseNodeSimplexBasis"));
+	add_options.push_back(AddOption("Cellular", "Basis", "VisualAnlNoiseNodeCellularBasis"));
 
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
 

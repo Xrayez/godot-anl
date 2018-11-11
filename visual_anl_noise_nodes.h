@@ -172,6 +172,43 @@ private:
 };
 
 
+class VisualAnlNoiseNodeCellularBasis : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeCellularBasis, VisualAnlNoiseNode)
+
+public:
+	void set_distance(Index p_idx);
+	Index get_distance() const;
+
+	void set_seed(Index p_idx);
+	Index get_seed() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeCellularBasis();
+
+protected:
+    static void _bind_methods();
+
+private:
+	Index f1, f2, f3, f4;
+	Index d1, d2, d3, d4;
+	Index distance, seed;
+};
+
+
 class VisualAnlNoiseNodeSimplexBasis : public VisualAnlNoiseNode {
 	GDCLASS(VisualAnlNoiseNodeSimplexBasis, VisualAnlNoiseNode)
 

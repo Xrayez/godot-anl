@@ -445,6 +445,135 @@ VisualAnlNoiseNodeGradientBasis::VisualAnlNoiseNodeGradientBasis() {
 	seed = 0;
 }
 
+////////////// Cellular Basis
+
+String VisualAnlNoiseNodeCellularBasis::get_caption() const {
+
+	return "CellularBasis";
+}
+
+int VisualAnlNoiseNodeCellularBasis::get_input_port_count() const {
+
+	return 10;
+}
+
+void VisualAnlNoiseNodeCellularBasis::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: f1 = p_value; break;
+		case 1: f2 = p_value; break;
+		case 2: f3 = p_value; break;
+		case 3: f4 = p_value; break;
+		case 4: d1 = p_value; break;
+		case 5: d2 = p_value; break;
+		case 6: d3 = p_value; break;
+		case 7: d4 = p_value; break;
+		case 8: distance = p_value; break;
+		case 9: seed = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeCellularBasis::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return f1;
+		case 1: return f2;
+		case 2: return f3;
+		case 3: return f4;
+		case 4: return d1;
+		case 5: return d2;
+		case 6: return d3;
+		case 7: return d4;
+		case 8: return distance;
+		case 9: return seed;
+	}
+	return Variant();
+}
+
+VisualAnlNoiseNodeCellularBasis::PortType VisualAnlNoiseNodeCellularBasis::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeCellularBasis::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "f1";
+		case 1: return "f2";
+		case 2: return "f3";
+		case 3: return "f4";
+		case 4: return "d1";
+		case 5: return "d2";
+		case 6: return "d3";
+		case 7: return "d4";
+		case 8: return "distance";
+		case 9: return "seed";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeCellularBasis::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeCellularBasis::PortType VisualAnlNoiseNodeCellularBasis::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeCellularBasis::get_output_port_name(int p_port) const {
+
+	return "";
+}
+
+void VisualAnlNoiseNodeCellularBasis::set_seed(Index p_seed) {
+
+	seed = p_seed;
+	emit_changed();
+}
+
+Index VisualAnlNoiseNodeCellularBasis::get_seed() const {
+
+	return seed;
+}
+
+void VisualAnlNoiseNodeCellularBasis::set_distance(Index p_distance) {
+
+	distance = p_distance;
+	emit_changed();
+}
+
+Index VisualAnlNoiseNodeCellularBasis::get_distance() const {
+
+	return distance;
+}
+
+void VisualAnlNoiseNodeCellularBasis::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->cellular_basis(f1, f2, f3, f4, d1, d2, d3, d4, distance, seed);
+}
+
+void VisualAnlNoiseNodeCellularBasis::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_distance", "value"), &VisualAnlNoiseNodeCellularBasis::set_distance);
+	ClassDB::bind_method(D_METHOD("get_distance"), &VisualAnlNoiseNodeCellularBasis::get_distance);
+
+	ClassDB::bind_method(D_METHOD("set_seed", "value"), &VisualAnlNoiseNodeCellularBasis::set_seed);
+	ClassDB::bind_method(D_METHOD("get_seed"), &VisualAnlNoiseNodeCellularBasis::get_seed);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "distance"), "set_distance", "get_distance");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "seed"), "set_seed", "get_seed");
+}
+
+VisualAnlNoiseNodeCellularBasis::VisualAnlNoiseNodeCellularBasis() {
+
+	f1 = f2 = f3 = f4 = 0;
+	d1 = d2 = d3 = d4 = 0;
+	distance = 0;
+	seed = 0;
+}
+
 ////////////// Simplex Basis
 
 String VisualAnlNoiseNodeSimplexBasis::get_caption() const {
