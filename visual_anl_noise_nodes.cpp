@@ -353,6 +353,98 @@ VisualAnlNoiseNodeValueBasis::VisualAnlNoiseNodeValueBasis() {
 	seed = 0;
 }
 
+////////////// Gradient Basis
+
+String VisualAnlNoiseNodeGradientBasis::get_caption() const {
+
+	return "GradientBasis";
+}
+
+int VisualAnlNoiseNodeGradientBasis::get_input_port_count() const {
+
+	return 2;
+}
+
+void VisualAnlNoiseNodeGradientBasis::set_input_port_value(int p_port, const Variant &p_value) {
+
+	p_port == 0 ? interp = p_value : seed = p_value;
+}
+
+Variant VisualAnlNoiseNodeGradientBasis::get_input_port_value(int p_port) const {
+
+	return p_port == 0 ? interp : seed;
+}
+
+VisualAnlNoiseNodeGradientBasis::PortType VisualAnlNoiseNodeGradientBasis::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeGradientBasis::get_input_port_name(int p_port) const {
+
+	return p_port == 0 ? "interp" : "seed";
+}
+
+int VisualAnlNoiseNodeGradientBasis::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeGradientBasis::PortType VisualAnlNoiseNodeGradientBasis::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeGradientBasis::get_output_port_name(int p_port) const {
+
+	return "";
+}
+
+void VisualAnlNoiseNodeGradientBasis::set_seed(Index p_seed) {
+
+	seed = p_seed;
+	emit_changed();
+}
+
+Index VisualAnlNoiseNodeGradientBasis::get_seed() const {
+
+	return seed;
+}
+
+void VisualAnlNoiseNodeGradientBasis::set_interpolation(Index p_interp) {
+
+	interp = p_interp;
+	emit_changed();
+}
+
+Index VisualAnlNoiseNodeGradientBasis::get_interpolation() const {
+
+	return interp;
+}
+
+void VisualAnlNoiseNodeGradientBasis::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->gradient_basis(interp, seed);
+}
+
+void VisualAnlNoiseNodeGradientBasis::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_interpolation", "value"), &VisualAnlNoiseNodeGradientBasis::set_interpolation);
+	ClassDB::bind_method(D_METHOD("get_interpolation"), &VisualAnlNoiseNodeGradientBasis::get_interpolation);
+
+	ClassDB::bind_method(D_METHOD("set_seed", "value"), &VisualAnlNoiseNodeGradientBasis::set_seed);
+	ClassDB::bind_method(D_METHOD("get_seed"), &VisualAnlNoiseNodeGradientBasis::get_seed);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "interpolation"), "set_interpolation", "get_interpolation");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "seed"), "set_seed", "get_seed");
+}
+
+VisualAnlNoiseNodeGradientBasis::VisualAnlNoiseNodeGradientBasis() {
+
+	interp = 0;
+	seed = 0;
+}
+
 ////////////// Simplex Basis
 
 String VisualAnlNoiseNodeSimplexBasis::get_caption() const {
