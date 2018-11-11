@@ -237,6 +237,14 @@ void VisualAnlNoiseNodeScalarOp::evaluate(Ref<VisualAnlNoise> noise) {
 		case OP_MIN:
 			output_value = noise->minimum(a, b);
 			break;
+
+		case OP_BIAS:
+			output_value = noise->bias(a, b);
+			break;
+
+		case OP_GAIN:
+			output_value = noise->gain(a, b);
+			break;
 	}
 }
 
@@ -245,7 +253,7 @@ void VisualAnlNoiseNodeScalarOp::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_operator", "operator"), &VisualAnlNoiseNodeScalarOp::set_operator);
 	ClassDB::bind_method(D_METHOD("get_operator"), &VisualAnlNoiseNodeScalarOp::get_operator);
 
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "operator", PROPERTY_HINT_ENUM, "Add,Sub,Multiply,Divide,Power,Max,Min"), "set_operator", "get_operator");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "operator", PROPERTY_HINT_ENUM, "Add,Sub,Multiply,Divide,Power,Max,Min,Bias,Gain"), "set_operator", "get_operator");
 
 	BIND_ENUM_CONSTANT(OP_ADD);
 	BIND_ENUM_CONSTANT(OP_SUB);
@@ -254,6 +262,8 @@ void VisualAnlNoiseNodeScalarOp::_bind_methods() {
 	BIND_ENUM_CONSTANT(OP_POW);
 	BIND_ENUM_CONSTANT(OP_MAX);
 	BIND_ENUM_CONSTANT(OP_MIN);
+	BIND_ENUM_CONSTANT(OP_BIAS);
+	BIND_ENUM_CONSTANT(OP_GAIN);
 }
 
 VisualAnlNoiseNodeScalarOp::VisualAnlNoiseNodeScalarOp() {

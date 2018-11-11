@@ -65,6 +65,8 @@ public:
 		OP_POW,
 		OP_MAX,
 		OP_MIN,
+		OP_BIAS,
+		OP_GAIN,
 	};
 
 	void set_operator(Operator p_op);
