@@ -30,6 +30,9 @@ void register_anl_types() {
     ClassDB::register_class<VisualAnlNoiseNodeSimplexBasis>();
     ClassDB::register_class<VisualAnlNoiseNodeCellularBasis>();
 
+    // Filter
+    ClassDB::register_class<VisualAnlNoiseNodeClamp>();
+
     // Misc
     ClassDB::register_class<VisualAnlNoiseNodeExpression>();
 

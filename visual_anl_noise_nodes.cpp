@@ -1007,3 +1007,78 @@ VisualAnlNoiseNodeRotate::VisualAnlNoiseNodeRotate() {
 	angle = 0;
 	ax = ay = az = 0;
 }
+
+////////////// Clamp
+
+String VisualAnlNoiseNodeClamp::get_caption() const {
+
+	return "Clamp";
+}
+
+int VisualAnlNoiseNodeClamp::get_input_port_count() const {
+
+	return 3;
+}
+
+void VisualAnlNoiseNodeClamp::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: source = p_value; break;
+		case 1: low = p_value; break;
+		case 2: high = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeClamp::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return source;
+		case 1: return low;
+		case 2: return high;
+	}
+	return Variant();
+}
+
+VisualAnlNoiseNodeClamp::PortType VisualAnlNoiseNodeClamp::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeClamp::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "source";
+		case 1: return "low";
+		case 2: return "high";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeClamp::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeClamp::PortType VisualAnlNoiseNodeClamp::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeClamp::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeClamp::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->clamp(source, low, high);
+}
+
+void VisualAnlNoiseNodeClamp::_bind_methods() {
+
+}
+
+VisualAnlNoiseNodeClamp::VisualAnlNoiseNodeClamp() {
+
+	source = 0;
+	low = high = 0;
+}
