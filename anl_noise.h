@@ -59,7 +59,7 @@ public:
 
     // Transform
     // -----------------------------------------------------------------
-    Index scale(Index src, Index scale);
+    Index scale(Index src, Index scale); // domain
 
     Index scale_x(Index src, Index scale);
     Index scale_y(Index src, Index scale);
@@ -68,7 +68,7 @@ public:
     Index scale_u(Index src, Index scale);
     Index scale_v(Index src, Index scale);
 
-    Index translate(Index src, Index translate);
+    Index translate(Index src, Index translate); // domain
 
     Index translate_x(Index src, Index translate);
     Index translate_y(Index src, Index translate);
@@ -77,7 +77,7 @@ public:
     Index translate_u(Index src, Index translate);
     Index translate_v(Index src, Index translate);
 
-    Index rotate(Index src, Index angle, Index ax, Index ay, Index az);
+    Index rotate(Index src, Index angle, Index ax, Index ay, Index az); // domain
 
     // Sequence operations
     // --------------------------------------------------------------------------

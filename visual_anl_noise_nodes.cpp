@@ -261,6 +261,98 @@ VisualAnlNoiseNodeScalarOp::VisualAnlNoiseNodeScalarOp() {
 	op = OP_ADD;
 }
 
+////////////// Value Basis
+
+String VisualAnlNoiseNodeValueBasis::get_caption() const {
+
+	return "ValueBasis";
+}
+
+int VisualAnlNoiseNodeValueBasis::get_input_port_count() const {
+
+	return 2;
+}
+
+void VisualAnlNoiseNodeValueBasis::set_input_port_value(int p_port, const Variant &p_value) {
+
+	p_port == 0 ? interp = p_value : seed = p_value;
+}
+
+Variant VisualAnlNoiseNodeValueBasis::get_input_port_value(int p_port) const {
+
+	return p_port == 0 ? interp : seed;
+}
+
+VisualAnlNoiseNodeValueBasis::PortType VisualAnlNoiseNodeValueBasis::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeValueBasis::get_input_port_name(int p_port) const {
+
+	return p_port == 0 ? "interp" : "seed";
+}
+
+int VisualAnlNoiseNodeValueBasis::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeValueBasis::PortType VisualAnlNoiseNodeValueBasis::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeValueBasis::get_output_port_name(int p_port) const {
+
+	return "";
+}
+
+void VisualAnlNoiseNodeValueBasis::set_seed(Index p_seed) {
+
+	seed = p_seed;
+	emit_changed();
+}
+
+Index VisualAnlNoiseNodeValueBasis::get_seed() const {
+
+	return seed;
+}
+
+void VisualAnlNoiseNodeValueBasis::set_interpolation(Index p_interp) {
+
+	interp = p_interp;
+	emit_changed();
+}
+
+Index VisualAnlNoiseNodeValueBasis::get_interpolation() const {
+
+	return interp;
+}
+
+void VisualAnlNoiseNodeValueBasis::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->value_basis(interp, seed);
+}
+
+void VisualAnlNoiseNodeValueBasis::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_interpolation", "value"), &VisualAnlNoiseNodeValueBasis::set_interpolation);
+	ClassDB::bind_method(D_METHOD("get_interpolation"), &VisualAnlNoiseNodeValueBasis::get_interpolation);
+
+	ClassDB::bind_method(D_METHOD("set_seed", "value"), &VisualAnlNoiseNodeValueBasis::set_seed);
+	ClassDB::bind_method(D_METHOD("get_seed"), &VisualAnlNoiseNodeValueBasis::get_seed);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "interpolation"), "set_interpolation", "get_interpolation");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "seed"), "set_seed", "get_seed");
+}
+
+VisualAnlNoiseNodeValueBasis::VisualAnlNoiseNodeValueBasis() {
+
+	interp = 0;
+	seed = 0;
+}
+
 ////////////// Simplex Basis
 
 String VisualAnlNoiseNodeSimplexBasis::get_caption() const {
@@ -290,7 +382,7 @@ VisualAnlNoiseNodeSimplexBasis::PortType VisualAnlNoiseNodeSimplexBasis::get_inp
 
 String VisualAnlNoiseNodeSimplexBasis::get_input_port_name(int p_port) const {
 
-	return "Seed";
+	return "seed";
 }
 
 int VisualAnlNoiseNodeSimplexBasis::get_output_port_count() const {
@@ -317,15 +409,6 @@ void VisualAnlNoiseNodeSimplexBasis::set_seed(Index p_seed) {
 Index VisualAnlNoiseNodeSimplexBasis::get_seed() const {
 
 	return seed;
-}
-
-Vector<StringName> VisualAnlNoiseNodeSimplexBasis::get_editable_properties() const {
-
-	Vector<StringName> props;
-
-	// props.push_back("seed");
-
-	return props;
 }
 
 void VisualAnlNoiseNodeSimplexBasis::evaluate(Ref<VisualAnlNoise> noise) {

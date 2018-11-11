@@ -10,10 +10,10 @@ void register_anl_types() {
     ClassDB::register_class<AnlNoise>();
     ClassDB::register_class<VisualAnlNoise>();
 
-    // Component
+    ////// Component
     ClassDB::register_class<VisualAnlNoiseNodeComponent>();
 
-    // Nodes
+    ////// Nodes
     ClassDB::register_class<VisualAnlNoiseNodeInput>();
 
     ClassDB::register_class<VisualAnlNoiseNodeScalar>();
@@ -24,7 +24,11 @@ void register_anl_types() {
     ClassDB::register_class<VisualAnlNoiseNodeScale>();
     ClassDB::register_class<VisualAnlNoiseNodeRotate>();
 
+    // Basis
+    ClassDB::register_class<VisualAnlNoiseNodeValueBasis>();
     ClassDB::register_class<VisualAnlNoiseNodeSimplexBasis>();
+
+    // Misc
     ClassDB::register_class<VisualAnlNoiseNodeExpression>();
 
 #ifdef TOOLS_ENABLED

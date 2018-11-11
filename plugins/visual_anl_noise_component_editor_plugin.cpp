@@ -898,6 +898,9 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	graph->get_zoom_hbox()->move_child(add_component, 1);
 	add_component->get_popup()->connect("id_pressed", this, "_add_component");
 
+	// Add node options
+	add_options.push_back(AddOption("Input", "Inputs", "VisualAnlNoiseNodeInput"));
+
 	add_options.push_back(AddOption("Scalar", "Constants", "VisualAnlNoiseNodeScalar"));
 	add_options.push_back(AddOption("ScalarOp", "Operators", "VisualAnlNoiseNodeScalarOp"));
 
@@ -905,9 +908,10 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	add_options.push_back(AddOption("Scale", "Transform", "VisualAnlNoiseNodeScale"));
 	add_options.push_back(AddOption("Rotate", "Transform", "VisualAnlNoiseNodeRotate"));
 
+	add_options.push_back(AddOption("Value", "Basis", "VisualAnlNoiseNodeValueBasis"));
 	add_options.push_back(AddOption("Simplex", "Basis", "VisualAnlNoiseNodeSimplexBasis"));
+
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
-	add_options.push_back(AddOption("Input", "Inputs", "VisualAnlNoiseNodeInput"));
 
 	_update_options_menu();
 
