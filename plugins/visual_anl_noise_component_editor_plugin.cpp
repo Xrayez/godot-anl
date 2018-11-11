@@ -914,6 +914,7 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	add_options.push_back(AddOption("Cellular", "Basis", "VisualAnlNoiseNodeCellularBasis"));
 
 	add_options.push_back(AddOption("Mix", "Filter", "VisualAnlNoiseNodeMix"));
+	add_options.push_back(AddOption("Select", "Filter", "VisualAnlNoiseNodeSelect"));
 	add_options.push_back(AddOption("Clamp", "Filter", "VisualAnlNoiseNodeClamp"));
 
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));

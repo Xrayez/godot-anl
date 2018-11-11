@@ -32,6 +32,7 @@ void register_anl_types() {
 
     // Filter
     ClassDB::register_class<VisualAnlNoiseNodeMix>();
+    ClassDB::register_class<VisualAnlNoiseNodeSelect>();
     ClassDB::register_class<VisualAnlNoiseNodeClamp>();
 
     // Misc

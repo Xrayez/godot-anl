@@ -1157,3 +1157,86 @@ VisualAnlNoiseNodeMix::VisualAnlNoiseNodeMix() {
 	low = high = 0;
 	control = 0;
 }
+
+////////////// Select
+
+String VisualAnlNoiseNodeSelect::get_caption() const {
+
+	return "Select";
+}
+
+int VisualAnlNoiseNodeSelect::get_input_port_count() const {
+
+	return 5;
+}
+
+void VisualAnlNoiseNodeSelect::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: low = p_value; break;
+		case 1: high = p_value; break;
+		case 2: control = p_value; break;
+		case 3: threshold = p_value; break;
+		case 4: falloff = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeSelect::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return low;
+		case 1: return high;
+		case 2: return control;
+		case 3: return threshold;
+		case 4: return falloff;
+	}
+	return Variant();
+}
+
+VisualAnlNoiseNodeSelect::PortType VisualAnlNoiseNodeSelect::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeSelect::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "low";
+		case 1: return "high";
+		case 2: return "control";
+		case 3: return "threshold";
+		case 4: return "falloff";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeSelect::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeSelect::PortType VisualAnlNoiseNodeSelect::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeSelect::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeSelect::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->select(low, high, control, threshold, falloff);
+}
+
+void VisualAnlNoiseNodeSelect::_bind_methods() {
+
+}
+
+VisualAnlNoiseNodeSelect::VisualAnlNoiseNodeSelect() {
+
+	low = high = 0;
+	control = 0;
+	threshold = 0;
+	falloff = 0;
+}

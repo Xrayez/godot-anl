@@ -118,7 +118,7 @@ public:
     Index u();
     Index v();
 
-    // Spacing (?)
+    // Derivatives
     // --------------------------------
     Index dx(Index src, Index spacing);
     Index dy(Index src, Index spacing);
