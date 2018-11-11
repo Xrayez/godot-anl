@@ -1,0 +1,1 @@
+godot --no-window -d -s tests/test_runner.gd

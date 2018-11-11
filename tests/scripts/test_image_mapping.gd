@@ -17,7 +17,7 @@ func _init():
 
 	var a = n.simplex_basis(randi())
 
-	var combine = n.combine_rgba(r,g,n.constant(0),n.one())
+	var combine = n.combine_rgba(r,g,b,a)
 	n.scale(combine, n.constant(3))
 
 	# Image mapping

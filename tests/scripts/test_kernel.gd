@@ -91,7 +91,7 @@ func _init():
 	i = n.du(i, n.point5())
 	i = n.dv(i, n.point5())
 
-	i = n.sigmoid(i, n.x(), n.y())
+	i = n.sigmoid(i)
 
 	i = n.radial()
 
