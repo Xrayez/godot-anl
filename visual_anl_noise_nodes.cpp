@@ -268,6 +268,10 @@ void VisualAnlNoiseNodeScalarOp::_bind_methods() {
 
 VisualAnlNoiseNodeScalarOp::VisualAnlNoiseNodeScalarOp() {
 
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 0);
+
+	a = b = 0;
 	op = OP_ADD;
 }
 
@@ -393,6 +397,8 @@ void VisualAnlNoiseNodeScalarFunc::_bind_methods() {
 
 VisualAnlNoiseNodeScalarFunc::VisualAnlNoiseNodeScalarFunc() {
 
+	set_input_port_default_value(0, 0);
+
 	func = FUNC_COS;
 }
 
@@ -483,6 +489,9 @@ void VisualAnlNoiseNodeValueBasis::_bind_methods() {
 }
 
 VisualAnlNoiseNodeValueBasis::VisualAnlNoiseNodeValueBasis() {
+
+	set_input_port_default_value(0, anl::INTERP_QUINTIC);
+	set_input_port_default_value(1, 0);
 
 	interp = 0;
 	seed = 0;
@@ -575,6 +584,9 @@ void VisualAnlNoiseNodeGradientBasis::_bind_methods() {
 }
 
 VisualAnlNoiseNodeGradientBasis::VisualAnlNoiseNodeGradientBasis() {
+
+	set_input_port_default_value(0, anl::INTERP_QUINTIC);
+	set_input_port_default_value(1, 0);
 
 	interp = 0;
 	seed = 0;
@@ -713,7 +725,7 @@ VisualAnlNoiseNodeCellularBasis::VisualAnlNoiseNodeCellularBasis() {
 	set_input_port_default_value(6, 0);
 	set_input_port_default_value(7, 0);
 
-	set_input_port_default_value(8, 0);
+	set_input_port_default_value(8, anl::DISTANCE_EUCLID);
 	set_input_port_default_value(9, 0);
 
 	f1 = f2 = f3 = f4 = 0;
@@ -794,6 +806,8 @@ void VisualAnlNoiseNodeSimplexBasis::_bind_methods() {
 }
 
 VisualAnlNoiseNodeSimplexBasis::VisualAnlNoiseNodeSimplexBasis() {
+
+	set_input_port_default_value(0, 0);
 
 	seed = 0;
 }
@@ -969,6 +983,9 @@ void VisualAnlNoiseNodeTranslate::_bind_methods() {
 
 VisualAnlNoiseNodeTranslate::VisualAnlNoiseNodeTranslate() {
 
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 0);
+
 	source = 0;
 	by = 0;
 }
@@ -1060,6 +1077,9 @@ void VisualAnlNoiseNodeScale::_bind_methods() {
 
 VisualAnlNoiseNodeScale::VisualAnlNoiseNodeScale() {
 
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 1);
+
 	source = 0;
 	by = 0;
 }
@@ -1141,6 +1161,12 @@ void VisualAnlNoiseNodeRotate::_bind_methods() {
 
 VisualAnlNoiseNodeRotate::VisualAnlNoiseNodeRotate() {
 
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 0);
+	set_input_port_default_value(2, 0);
+	set_input_port_default_value(3, 0);
+	set_input_port_default_value(4, 1); // for 2D case
+
 	source = 0;
 	angle = 0;
 	ax = ay = az = 0;
@@ -1217,6 +1243,10 @@ void VisualAnlNoiseNodeClamp::_bind_methods() {
 
 VisualAnlNoiseNodeClamp::VisualAnlNoiseNodeClamp() {
 
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 0);
+	set_input_port_default_value(2, 1);
+
 	source = 0;
 	low = high = 0;
 }
@@ -1291,6 +1321,10 @@ void VisualAnlNoiseNodeMix::_bind_methods() {
 }
 
 VisualAnlNoiseNodeMix::VisualAnlNoiseNodeMix() {
+
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 1);
+	set_input_port_default_value(2, 0);
 
 	low = high = 0;
 	control = 0;
@@ -1372,6 +1406,12 @@ void VisualAnlNoiseNodeSelect::_bind_methods() {
 }
 
 VisualAnlNoiseNodeSelect::VisualAnlNoiseNodeSelect() {
+
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 1);
+	set_input_port_default_value(2, 0);
+	set_input_port_default_value(3, 0.5);
+	set_input_port_default_value(4, 0);
 
 	low = high = 0;
 	control = 0;
