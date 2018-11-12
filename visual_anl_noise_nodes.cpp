@@ -703,6 +703,19 @@ void VisualAnlNoiseNodeCellularBasis::_bind_methods() {
 
 VisualAnlNoiseNodeCellularBasis::VisualAnlNoiseNodeCellularBasis() {
 
+	set_input_port_default_value(0, -1);
+	set_input_port_default_value(1, 1);
+	set_input_port_default_value(2, 0);
+	set_input_port_default_value(3, 0);
+
+	set_input_port_default_value(4, 0);
+	set_input_port_default_value(5, 0);
+	set_input_port_default_value(6, 0);
+	set_input_port_default_value(7, 0);
+
+	set_input_port_default_value(8, 0);
+	set_input_port_default_value(9, 0);
+
 	f1 = f2 = f3 = f4 = 0;
 	d1 = d2 = d3 = d4 = 0;
 	distance = 0;
