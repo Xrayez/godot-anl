@@ -52,6 +52,9 @@ void register_anl_types() {
     ClassDB::register_class<VisualAnlNoiseNodeRadial>();
     ClassDB::register_class<VisualAnlNoiseNodeCurveSection>();
 
+    // Patterns
+    ClassDB::register_class<VisualAnlNoiseNodeHex>();
+
     // Misc
     ClassDB::register_class<VisualAnlNoiseNodeExpression>();
 

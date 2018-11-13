@@ -2206,3 +2206,101 @@ VisualAnlNoiseNodeCurveSection::VisualAnlNoiseNodeCurveSection() {
 	t0 = t1 = v0 = v1 = 0;
 	control = 0;
 }
+
+////////////// Scalar
+
+String VisualAnlNoiseNodeHex::get_caption() const {
+
+	return "Hex";
+}
+
+void VisualAnlNoiseNodeHex::set_input_port_value(int p_port, const Variant &p_value) {
+
+	seed = p_value;
+}
+
+Variant VisualAnlNoiseNodeHex::get_input_port_value(int p_port) const {
+
+	return seed;
+}
+
+int VisualAnlNoiseNodeHex::get_input_port_count() const {
+
+	return 1; // hack to be compatible with hex tile
+}
+
+VisualAnlNoiseNodeHex::PortType VisualAnlNoiseNodeHex::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeHex::get_input_port_name(int p_port) const {
+
+	return type == HEX_TILE ? "seed" : "";
+}
+
+int VisualAnlNoiseNodeHex::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeHex::PortType VisualAnlNoiseNodeHex::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeHex::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeHex::set_type(HexType p_type) {
+
+	type = p_type;
+	emit_changed();
+}
+
+VisualAnlNoiseNodeHex::HexType VisualAnlNoiseNodeHex::get_type() const {
+
+	return type;
+}
+
+Vector<StringName> VisualAnlNoiseNodeHex::get_editable_properties() const {
+
+	Vector<StringName> props;
+	props.push_back("type");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeHex::evaluate(Ref<VisualAnlNoise> noise) {
+
+	switch(type) {
+
+		case HEX_TILE:
+			output_value = noise->hex_tile(seed);
+			break;
+
+		case HEX_BUMP:
+			output_value = noise->hex_bump();
+			break;
+	}
+}
+
+void VisualAnlNoiseNodeHex::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_type", "type"), &VisualAnlNoiseNodeHex::set_type);
+	ClassDB::bind_method(D_METHOD("get_type"), &VisualAnlNoiseNodeHex::get_type);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "type", PROPERTY_HINT_ENUM, "Tile,Bump"), "set_type", "get_type");
+
+	BIND_ENUM_CONSTANT(HEX_TILE);
+	BIND_ENUM_CONSTANT(HEX_BUMP);
+}
+
+VisualAnlNoiseNodeHex::VisualAnlNoiseNodeHex() {
+
+	set_input_port_default_value(0, 0);
+
+	type = HEX_TILE;
+	seed = 0;
+}

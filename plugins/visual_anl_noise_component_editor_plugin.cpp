@@ -921,6 +921,8 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	add_options.push_back(AddOption("Step", "Other", "VisualAnlNoiseNodeStep"));
 	add_options.push_back(AddOption("CurveSection", "Other", "VisualAnlNoiseNodeCurveSection"));
 
+	add_options.push_back(AddOption("Hex", "Patterns", "VisualAnlNoiseNodeHex"));
+
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
 
 	_update_options_menu();
