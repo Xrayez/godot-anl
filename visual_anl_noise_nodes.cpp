@@ -1882,3 +1882,82 @@ void VisualAnlNoiseNodeRadial::_bind_methods() {
 VisualAnlNoiseNodeRadial::VisualAnlNoiseNodeRadial() {
 
 }
+
+////////////// Randomize
+
+String VisualAnlNoiseNodeRandomize::get_caption() const {
+
+	return "Randomize";
+}
+
+int VisualAnlNoiseNodeRandomize::get_input_port_count() const {
+
+	return 3;
+}
+
+void VisualAnlNoiseNodeRandomize::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: seed = p_value; break;
+		case 1: low = p_value; break;
+		case 2: high = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeRandomize::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return seed;
+		case 1: return low;
+		case 2: return high;
+	}
+	return Variant();
+}
+
+VisualAnlNoiseNodeRandomize::PortType VisualAnlNoiseNodeRandomize::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeRandomize::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "seed";
+		case 1: return "low";
+		case 2: return "high";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeRandomize::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeRandomize::PortType VisualAnlNoiseNodeRandomize::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeRandomize::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeRandomize::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->randomize(seed, low, high);
+}
+
+void VisualAnlNoiseNodeRandomize::_bind_methods() {
+
+}
+
+VisualAnlNoiseNodeRandomize::VisualAnlNoiseNodeRandomize() {
+
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 0);
+	set_input_port_default_value(2, 1);
+
+	seed = 0;
+	low = high = 0;
+}
