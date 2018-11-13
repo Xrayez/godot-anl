@@ -57,6 +57,7 @@ void register_anl_types() {
 
     // Color
     ClassDB::register_class<VisualAnlNoiseNodeColor>();
+    ClassDB::register_class<VisualAnlNoiseNodeColorCombine>();
 
     // Misc
     ClassDB::register_class<VisualAnlNoiseNodeExpression>();

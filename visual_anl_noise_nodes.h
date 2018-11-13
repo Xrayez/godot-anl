@@ -892,4 +892,47 @@ private:
 	Color color;
 };
 
+
+class VisualAnlNoiseNodeColorCombine : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeColorCombine, VisualAnlNoiseNode)
+
+public:
+	enum CombineMode {
+		COMBINE_RGBA,
+		COMBINE_HSVA,
+	};
+
+	void set_type(CombineMode p_type);
+	CombineMode get_type() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeColorCombine();
+
+protected:
+    static void _bind_methods();
+
+private:
+	CombineMode type;
+
+	Index c1, c2, c3, c4;
+};
+
+VARIANT_ENUM_CAST(VisualAnlNoiseNodeColorCombine::CombineMode);
+
 #endif

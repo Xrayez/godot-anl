@@ -2377,3 +2377,123 @@ VisualAnlNoiseNodeColor::VisualAnlNoiseNodeColor() {
 
 	color = Color(1, 1, 1, 1);
 }
+
+
+
+////////////// ColorCombine
+
+String VisualAnlNoiseNodeColorCombine::get_caption() const {
+
+	return "ColorCombine";
+}
+
+void VisualAnlNoiseNodeColorCombine::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: c1 = p_value; break;
+		case 1: c2 = p_value; break;
+		case 2: c3 = p_value; break;
+		case 3: c4 = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeColorCombine::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return c1;
+		case 1: return c2;
+		case 2: return c3;
+		case 3: return c4;
+	}
+	return Variant();
+}
+
+int VisualAnlNoiseNodeColorCombine::get_input_port_count() const {
+
+	return 4;
+}
+
+VisualAnlNoiseNodeColorCombine::PortType VisualAnlNoiseNodeColorCombine::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeColorCombine::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return type == COMBINE_RGBA ? "r" : "h";
+		case 1: return type == COMBINE_RGBA ? "g" : "s";
+		case 2: return type == COMBINE_RGBA ? "b" : "v";
+		case 3: return "a";
+	}
+	return String();
+}
+
+int VisualAnlNoiseNodeColorCombine::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeColorCombine::PortType VisualAnlNoiseNodeColorCombine::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeColorCombine::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeColorCombine::set_type(CombineMode p_type) {
+
+	type = p_type;
+	emit_changed();
+}
+
+VisualAnlNoiseNodeColorCombine::CombineMode VisualAnlNoiseNodeColorCombine::get_type() const {
+
+	return type;
+}
+
+Vector<StringName> VisualAnlNoiseNodeColorCombine::get_editable_properties() const {
+
+	Vector<StringName> props;
+	props.push_back("type");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeColorCombine::evaluate(Ref<VisualAnlNoise> noise) {
+
+	switch(type) {
+
+		case COMBINE_RGBA:
+			output_value = noise->combine_rgba(c1, c2, c3, c4);
+			break;
+
+		case COMBINE_HSVA:
+			output_value = noise->combine_hsva(c1, c2, c3, c4);
+			break;
+	}
+}
+
+void VisualAnlNoiseNodeColorCombine::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_type", "type"), &VisualAnlNoiseNodeColorCombine::set_type);
+	ClassDB::bind_method(D_METHOD("get_type"), &VisualAnlNoiseNodeColorCombine::get_type);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "type", PROPERTY_HINT_ENUM, "RGBA,HSVA"), "set_type", "get_type");
+
+	BIND_ENUM_CONSTANT(COMBINE_RGBA);
+	BIND_ENUM_CONSTANT(COMBINE_HSVA);
+}
+
+VisualAnlNoiseNodeColorCombine::VisualAnlNoiseNodeColorCombine() {
+
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 0);
+	set_input_port_default_value(2, 0);
+	set_input_port_default_value(3, 1);
+
+	type = COMBINE_RGBA;
+	c1 = c2 = c3 = c4 = 0;
+}
