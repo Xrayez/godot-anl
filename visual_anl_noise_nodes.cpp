@@ -2497,3 +2497,105 @@ VisualAnlNoiseNodeColorCombine::VisualAnlNoiseNodeColorCombine() {
 	type = COMBINE_RGBA;
 	c1 = c2 = c3 = c4 = 0;
 }
+
+////////////// ScaleOffset
+
+String VisualAnlNoiseNodeScaleOffset::get_caption() const {
+
+	return "ScaleOffset";
+}
+
+void VisualAnlNoiseNodeScaleOffset::set_scale(double p_scale) {
+
+	scale = p_scale;
+	emit_changed();
+}
+
+double VisualAnlNoiseNodeScaleOffset::get_scale() const {
+
+	return scale;
+}
+
+void VisualAnlNoiseNodeScaleOffset::set_offset(double p_offset) {
+
+	offset = p_offset;
+	emit_changed();
+}
+
+double VisualAnlNoiseNodeScaleOffset::get_offset() const {
+
+	return offset;
+}
+
+void VisualAnlNoiseNodeScaleOffset::set_input_port_value(int p_port, const Variant &p_value) {
+
+	source = p_value;
+}
+
+Variant VisualAnlNoiseNodeScaleOffset::get_input_port_value(int p_port) const {
+
+	return source;
+}
+
+int VisualAnlNoiseNodeScaleOffset::get_input_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeScaleOffset::PortType VisualAnlNoiseNodeScaleOffset::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeScaleOffset::get_input_port_name(int p_port) const {
+
+	return "source";
+}
+
+int VisualAnlNoiseNodeScaleOffset::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeScaleOffset::PortType VisualAnlNoiseNodeScaleOffset::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeScaleOffset::get_output_port_name(int p_port) const {
+	return "";
+}
+
+Vector<StringName> VisualAnlNoiseNodeScaleOffset::get_editable_properties() const {
+
+	Vector<StringName> props;
+
+	props.push_back("scale");
+	props.push_back("offset");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeScaleOffset::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->scale_offset(source, scale, offset);
+}
+
+void VisualAnlNoiseNodeScaleOffset::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_scale", "scale"), &VisualAnlNoiseNodeScaleOffset::set_scale);
+	ClassDB::bind_method(D_METHOD("get_scale"), &VisualAnlNoiseNodeScaleOffset::get_scale);
+
+	ClassDB::bind_method(D_METHOD("set_offset", "offset"), &VisualAnlNoiseNodeScaleOffset::set_offset);
+	ClassDB::bind_method(D_METHOD("get_offset"), &VisualAnlNoiseNodeScaleOffset::get_offset);
+
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "scale"), "set_scale", "get_scale");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "offset"), "set_offset", "get_offset");
+}
+
+VisualAnlNoiseNodeScaleOffset::VisualAnlNoiseNodeScaleOffset() {
+
+	source = 0;
+	scale = 1.0;
+	offset = 0.0;
+}

@@ -916,15 +916,16 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	add_options.push_back(AddOption("Gradient", "Axis", "VisualAnlNoiseNodeGradient"));
 	add_options.push_back(AddOption("Derivative", "Axis", "VisualAnlNoiseNodeDerivative"));
 
-	add_options.push_back(AddOption("Tiers", "Other", "VisualAnlNoiseNodeTiers"));
-	add_options.push_back(AddOption("Radial", "Other", "VisualAnlNoiseNodeRadial"));
-	add_options.push_back(AddOption("Step", "Other", "VisualAnlNoiseNodeStep"));
-	add_options.push_back(AddOption("CurveSection", "Other", "VisualAnlNoiseNodeCurveSection"));
-
 	add_options.push_back(AddOption("Hex", "Patterns", "VisualAnlNoiseNodeHex"));
 
 	add_options.push_back(AddOption("Color", "Color", "VisualAnlNoiseNodeColor"));
 	add_options.push_back(AddOption("ColorCombine", "Color", "VisualAnlNoiseNodeColorCombine"));
+
+	add_options.push_back(AddOption("Tiers", "Other", "VisualAnlNoiseNodeTiers"));
+	add_options.push_back(AddOption("Radial", "Other", "VisualAnlNoiseNodeRadial"));
+	add_options.push_back(AddOption("Step", "Other", "VisualAnlNoiseNodeStep"));
+	add_options.push_back(AddOption("CurveSection", "Other", "VisualAnlNoiseNodeCurveSection"));
+	add_options.push_back(AddOption("ScaleOffset", "Other", "VisualAnlNoiseNodeScaleOffset"));
 
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
 

@@ -935,4 +935,44 @@ private:
 
 VARIANT_ENUM_CAST(VisualAnlNoiseNodeColorCombine::CombineMode);
 
+
+class VisualAnlNoiseNodeScaleOffset : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeScaleOffset, VisualAnlNoiseNode)
+
+public:
+	void set_scale(double p_value);
+	double get_scale() const;
+
+	void set_offset(double p_value);
+	double get_offset() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeScaleOffset();
+
+protected:
+    static void _bind_methods();
+
+private:
+    Index source;
+
+	double scale;
+	double offset;
+};
+
 #endif
