@@ -36,8 +36,11 @@ void register_anl_types() {
     ClassDB::register_class<VisualAnlNoiseNodeSelect>();
     ClassDB::register_class<VisualAnlNoiseNodeClamp>();
 
-    // Misc
+    // Axis
     ClassDB::register_class<VisualAnlNoiseNodeGradient>();
+    ClassDB::register_class<VisualAnlNoiseNodeDerivative>();
+
+    // Misc
     ClassDB::register_class<VisualAnlNoiseNodeTiers>();
     ClassDB::register_class<VisualAnlNoiseNodeExpression>();
 

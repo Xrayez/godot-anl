@@ -911,6 +911,7 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	add_options.push_back(AddOption("Clamp", "Filter", "VisualAnlNoiseNodeClamp"));
 
 	add_options.push_back(AddOption("Gradient", "Axis", "VisualAnlNoiseNodeGradient"));
+	add_options.push_back(AddOption("Derivative", "Axis", "VisualAnlNoiseNodeDerivative"));
 
 	add_options.push_back(AddOption("Tiers", "Misc", "VisualAnlNoiseNodeTiers"));
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));

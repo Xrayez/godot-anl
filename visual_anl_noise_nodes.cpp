@@ -1426,17 +1426,6 @@ String VisualAnlNoiseNodeTiers::get_caption() const {
 	return "Tiers";
 }
 
-void VisualAnlNoiseNodeGradient::set_axis(Axis::AxisType p_axis) {
-
-	axis.type = p_axis;
-	emit_changed();
-}
-
-Axis::AxisType VisualAnlNoiseNodeGradient::get_axis() const {
-
-	return axis.type;
-}
-
 void VisualAnlNoiseNodeTiers::set_smooth(Smoothness p_smooth) {
 
 	smooth = p_smooth;
@@ -1541,6 +1530,17 @@ String VisualAnlNoiseNodeGradient::get_caption() const {
 	return "Gradient";
 }
 
+void VisualAnlNoiseNodeGradient::set_axis(Axis::AxisType p_axis) {
+
+	axis.type = p_axis;
+	emit_changed();
+}
+
+Axis::AxisType VisualAnlNoiseNodeGradient::get_axis() const {
+
+	return axis.type;
+}
+
 int VisualAnlNoiseNodeGradient::get_input_port_count() const {
 
 	return 0;
@@ -1599,4 +1599,109 @@ void VisualAnlNoiseNodeGradient::_bind_methods() {
 VisualAnlNoiseNodeGradient::VisualAnlNoiseNodeGradient() {
 
 	axis.type = Axis::AXIS_X;
+}
+
+////////////// Derivative
+
+String VisualAnlNoiseNodeDerivative::get_caption() const {
+
+	return "Derivative";
+}
+
+void VisualAnlNoiseNodeDerivative::set_axis(Axis::AxisType p_axis) {
+
+	axis.type = p_axis;
+	emit_changed();
+}
+
+Axis::AxisType VisualAnlNoiseNodeDerivative::get_axis() const {
+
+	return axis.type;
+}
+
+void VisualAnlNoiseNodeDerivative::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: source = p_value; break;
+		case 1: spacing = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeDerivative::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return source;
+		case 1: return spacing;
+	}
+	return Variant();
+}
+
+int VisualAnlNoiseNodeDerivative::get_input_port_count() const {
+
+	return 2;
+}
+
+VisualAnlNoiseNodeDerivative::PortType VisualAnlNoiseNodeDerivative::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeDerivative::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "source";
+		case 1: return "spacing";
+	}
+	return String();
+}
+
+int VisualAnlNoiseNodeDerivative::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeDerivative::PortType VisualAnlNoiseNodeDerivative::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeDerivative::get_output_port_name(int p_port) const {
+	return "";
+}
+
+Vector<StringName> VisualAnlNoiseNodeDerivative::get_editable_properties() const {
+
+	Vector<StringName> props;
+
+	props.push_back("axis");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeDerivative::evaluate(Ref<VisualAnlNoise> noise) {
+
+	if (axis.type != Axis::AXIS_DOMAIN) {
+		output_value = noise->call("d" + axis.as_alpha(), source, spacing);
+	} else {
+		output_value = noise->zero(); // a workaround to circumvent domain enum
+	}
+}
+
+void VisualAnlNoiseNodeDerivative::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_axis", "axis"), &VisualAnlNoiseNodeDerivative::set_axis);
+	ClassDB::bind_method(D_METHOD("get_axis"), &VisualAnlNoiseNodeDerivative::get_axis);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "axis", PROPERTY_HINT_ENUM, Axis::get_hints()), "set_axis", "get_axis");
+}
+
+VisualAnlNoiseNodeDerivative::VisualAnlNoiseNodeDerivative() {
+
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 1);
+
+	axis.type = Axis::AXIS_X;
+
+	source = 0;
+	spacing = 0;
 }
