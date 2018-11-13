@@ -1418,11 +1418,23 @@ VisualAnlNoiseNodeSelect::VisualAnlNoiseNodeSelect() {
 	threshold = 0;
 	falloff = 0;
 }
+
 ////////////// Tiers
 
 String VisualAnlNoiseNodeTiers::get_caption() const {
 
 	return "Tiers";
+}
+
+void VisualAnlNoiseNodeGradient::set_axis(Axis::AxisType p_axis) {
+
+	axis.type = p_axis;
+	emit_changed();
+}
+
+Axis::AxisType VisualAnlNoiseNodeGradient::get_axis() const {
+
+	return axis.type;
 }
 
 void VisualAnlNoiseNodeTiers::set_smooth(Smoothness p_smooth) {
@@ -1520,4 +1532,71 @@ VisualAnlNoiseNodeTiers::VisualAnlNoiseNodeTiers() {
 
 	source = 0;
 	tiers = 0;
+}
+
+////////////// Gradient
+
+String VisualAnlNoiseNodeGradient::get_caption() const {
+
+	return "Gradient";
+}
+
+int VisualAnlNoiseNodeGradient::get_input_port_count() const {
+
+	return 0;
+}
+
+VisualAnlNoiseNodeGradient::PortType VisualAnlNoiseNodeGradient::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeGradient::get_input_port_name(int p_port) const {
+
+	return "";
+}
+
+int VisualAnlNoiseNodeGradient::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeGradient::PortType VisualAnlNoiseNodeGradient::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeGradient::get_output_port_name(int p_port) const {
+	return "";
+}
+
+Vector<StringName> VisualAnlNoiseNodeGradient::get_editable_properties() const {
+
+	Vector<StringName> props;
+
+	props.push_back("axis");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeGradient::evaluate(Ref<VisualAnlNoise> noise) {
+
+	if (axis.type != Axis::AXIS_DOMAIN) {
+		output_value = noise->call(axis.as_alpha());
+	} else {
+		output_value = noise->zero(); // a workaround to circumvent domain enum
+	}
+}
+
+void VisualAnlNoiseNodeGradient::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_axis", "axis"), &VisualAnlNoiseNodeGradient::set_axis);
+	ClassDB::bind_method(D_METHOD("get_axis"), &VisualAnlNoiseNodeGradient::get_axis);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "axis", PROPERTY_HINT_ENUM, Axis::get_hints()), "set_axis", "get_axis");
+}
+
+VisualAnlNoiseNodeGradient::VisualAnlNoiseNodeGradient() {
+
+	axis.type = Axis::AXIS_X;
 }

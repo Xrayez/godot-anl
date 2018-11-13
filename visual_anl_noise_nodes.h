@@ -560,4 +560,36 @@ private:
 
 VARIANT_ENUM_CAST(VisualAnlNoiseNodeTiers::Smoothness);
 
+
+class VisualAnlNoiseNodeGradient : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeGradient, VisualAnlNoiseNode)
+
+public:
+	void set_axis(Axis::AxisType p_type);
+	Axis::AxisType get_axis() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeGradient();
+
+protected:
+    static void _bind_methods();
+
+private:
+	Axis axis;
+};
+
 #endif
