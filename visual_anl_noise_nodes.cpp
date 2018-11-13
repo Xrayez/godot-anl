@@ -1961,3 +1961,153 @@ VisualAnlNoiseNodeRandomize::VisualAnlNoiseNodeRandomize() {
 	seed = 0;
 	low = high = 0;
 }
+
+////////////// Step
+
+String VisualAnlNoiseNodeStep::get_caption() const {
+
+	return "Step";
+}
+
+
+void VisualAnlNoiseNodeStep::set_type(StepType p_type) {
+
+	type = p_type;
+	emit_changed();
+}
+
+VisualAnlNoiseNodeStep::StepType VisualAnlNoiseNodeStep::get_type() const {
+
+	return type;
+}
+
+
+int VisualAnlNoiseNodeStep::get_input_port_count() const {
+
+	return 3; // hack be compatible with regular step
+}
+
+void VisualAnlNoiseNodeStep::set_input_port_value(int p_port, const Variant &p_value) {
+
+	if (type != STEP_REGULAR) {
+		switch (p_port) {
+			case 0: low = p_value; break;
+			case 1: high = p_value; break;
+			case 2: control = p_value; break;
+		}
+	} else {
+		switch (p_port) {
+			case 0: value = p_value; break;
+			case 1: control = p_value; break;
+		}
+	}
+}
+
+Variant VisualAnlNoiseNodeStep::get_input_port_value(int p_port) const {
+
+	if (type != STEP_REGULAR) {
+		switch (p_port) {
+			case 0: return low;
+			case 1: return high;
+			case 2: return control;
+		}
+	} else {
+		switch (p_port) {
+			case 0: return value;
+			case 1: return control;
+		}
+	}
+	return Variant();
+}
+
+VisualAnlNoiseNodeStep::PortType VisualAnlNoiseNodeStep::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeStep::get_input_port_name(int p_port) const {
+
+	if (type != STEP_REGULAR) {
+		switch (p_port) {
+			case 0: return "low";
+			case 1: return "high";
+			case 2: return "control";
+		}
+	} else {
+		switch (p_port) {
+			case 0: return "value";
+			case 1: return "control";
+		}
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeStep::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeStep::PortType VisualAnlNoiseNodeStep::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeStep::get_output_port_name(int p_port) const {
+	return "";
+}
+
+Vector<StringName> VisualAnlNoiseNodeStep::get_editable_properties() const {
+
+	Vector<StringName> props;
+
+	props.push_back("type");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeStep::evaluate(Ref<VisualAnlNoise> noise) {
+
+	switch (type) {
+		case STEP_REGULAR: {
+			output_value = noise->step(value, control);
+		} break;
+
+		case STEP_LINEAR: {
+			output_value = noise->linear_step(low, high, control);
+		} break;
+
+		case STEP_SMOOTH: {
+			output_value = noise->smooth_step(low, high, control);
+		} break;
+
+		case STEP_SMOOTHER: {
+			output_value = noise->smoother_step(low, high, control);
+		} break;
+	}
+}
+
+void VisualAnlNoiseNodeStep::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_type", "type"), &VisualAnlNoiseNodeStep::set_type);
+	ClassDB::bind_method(D_METHOD("get_type"), &VisualAnlNoiseNodeStep::get_type);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "type", PROPERTY_HINT_ENUM, "Regular,Linear,Smooth,Smoother"), "set_type", "get_type");
+
+	BIND_ENUM_CONSTANT(STEP_REGULAR);
+	BIND_ENUM_CONSTANT(STEP_LINEAR);
+	BIND_ENUM_CONSTANT(STEP_SMOOTH);
+	BIND_ENUM_CONSTANT(STEP_SMOOTHER);
+}
+
+VisualAnlNoiseNodeStep::VisualAnlNoiseNodeStep() {
+
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 1);
+	set_input_port_default_value(2, 0);
+
+	type = STEP_REGULAR;
+
+	value = 0;
+	low = high = 0;
+	control = 0;
+}
