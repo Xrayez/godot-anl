@@ -14,8 +14,14 @@ void register_anl_types() {
     ClassDB::register_class<VisualAnlNoiseNodeComponent>();
 
     ////// Nodes
-    ClassDB::register_class<VisualAnlNoiseNodeInput>();
 
+    // Input
+    ClassDB::register_class<VisualAnlNoiseNodeInput>();
+    ClassDB::register_class<VisualAnlNoiseNodeSeed>();
+    ClassDB::register_class<VisualAnlNoiseNodeSeeder>();
+    // ClassDB::register_class<VisualAnlNoiseNodeRandomize>();
+
+    // Scalar
     ClassDB::register_class<VisualAnlNoiseNodeScalar>();
     ClassDB::register_class<VisualAnlNoiseNodeScalarOp>();
     ClassDB::register_class<VisualAnlNoiseNodeScalarFunc>();

@@ -892,6 +892,9 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 
 	// Add node options
 	add_options.push_back(AddOption("Input", "Inputs", "VisualAnlNoiseNodeInput"));
+	add_options.push_back(AddOption("Seed", "Inputs", "VisualAnlNoiseNodeSeed"));
+	add_options.push_back(AddOption("Seeder", "Inputs", "VisualAnlNoiseNodeSeeder"));
+	// add_options.push_back(AddOption("Randomize", "Inputs", "VisualAnlNoiseNodeRandomize"));
 
 	add_options.push_back(AddOption("Scalar", "Scalar", "VisualAnlNoiseNodeScalar"));
 	add_options.push_back(AddOption("ScalarOp", "Scalar", "VisualAnlNoiseNodeScalarOp"));

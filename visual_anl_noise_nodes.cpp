@@ -12,16 +12,6 @@ int VisualAnlNoiseNodeScalar::get_input_port_count() const {
 	return 0;
 }
 
-void VisualAnlNoiseNodeScalar::set_input_port_value(int p_port, const Variant &p_value) {
-
-	constant = p_value;
-}
-
-Variant VisualAnlNoiseNodeScalar::get_input_port_value(int p_port) const {
-
-	return constant;
-}
-
 VisualAnlNoiseNodeScalar::PortType VisualAnlNoiseNodeScalar::get_input_port_type(int p_port) const {
 
 	return PORT_TYPE_SCALAR;
@@ -139,6 +129,144 @@ VisualAnlNoiseNodeScalar::VisualAnlNoiseNodeScalar() {
 
 	type = SCALAR_CONSTANT;
 	constant = 0.0;
+}
+
+////////////// Seed
+
+String VisualAnlNoiseNodeSeed::get_caption() const {
+
+	return "Seed";
+}
+
+int VisualAnlNoiseNodeSeed::get_input_port_count() const {
+
+	return 0;
+}
+
+VisualAnlNoiseNodeSeed::PortType VisualAnlNoiseNodeSeed::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeSeed::get_input_port_name(int p_port) const {
+
+	return String();
+}
+
+int VisualAnlNoiseNodeSeed::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeSeed::PortType VisualAnlNoiseNodeSeed::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeSeed::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeSeed::set_seed(unsigned int p_value) {
+
+	seed = p_value;
+	emit_changed();
+}
+
+unsigned int VisualAnlNoiseNodeSeed::get_seed() const {
+
+	return seed;
+}
+
+Vector<StringName> VisualAnlNoiseNodeSeed::get_editable_properties() const {
+
+	Vector<StringName> props;
+
+	props.push_back("seed");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeSeed::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->seed(seed);
+}
+
+void VisualAnlNoiseNodeSeed::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_seed", "seed"), &VisualAnlNoiseNodeSeed::set_seed);
+	ClassDB::bind_method(D_METHOD("get_seed"), &VisualAnlNoiseNodeSeed::get_seed);
+
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "seed"), "set_seed", "get_seed"); // REAL: hack for editing
+}
+
+VisualAnlNoiseNodeSeed::VisualAnlNoiseNodeSeed() {
+
+	seed = 0;
+}
+
+////////////// Seeder
+
+String VisualAnlNoiseNodeSeeder::get_caption() const {
+
+	return "Seeder";
+}
+
+int VisualAnlNoiseNodeSeeder::get_input_port_count() const {
+
+	return 2;
+}
+
+void VisualAnlNoiseNodeSeeder::set_input_port_value(int p_port, const Variant &p_value) {
+
+	p_port == 0 ? (seed = p_value) : (source = p_value);
+}
+
+Variant VisualAnlNoiseNodeSeeder::get_input_port_value(int p_port) const {
+
+	return p_port == 0 ? seed : source;
+}
+
+VisualAnlNoiseNodeSeeder::PortType VisualAnlNoiseNodeSeeder::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeSeeder::get_input_port_name(int p_port) const {
+
+	return p_port == 0 ? "seed" : "source";
+}
+
+int VisualAnlNoiseNodeSeeder::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeSeeder::PortType VisualAnlNoiseNodeSeeder::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeSeeder::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeSeeder::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->seeder(seed, source);
+}
+
+void VisualAnlNoiseNodeSeeder::_bind_methods() {
+
+}
+
+VisualAnlNoiseNodeSeeder::VisualAnlNoiseNodeSeeder() {
+
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 0);
+
+	seed = 0;
+	source = 0;
 }
 
 ////////////// ScalarOp

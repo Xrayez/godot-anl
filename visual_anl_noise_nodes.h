@@ -26,8 +26,6 @@ public:
 public:
 	virtual String get_caption() const;
 
-	virtual void set_input_port_value(int p_port, const Variant &p_value);
-	virtual Variant get_input_port_value(int p_port) const;
 	virtual int get_input_port_count() const;
 	virtual PortType get_input_port_type(int p_port) const;
 	virtual String get_input_port_name(int p_port) const;
@@ -51,6 +49,67 @@ private:
 };
 
 VARIANT_ENUM_CAST(VisualAnlNoiseNodeScalar::ScalarType);
+
+
+class VisualAnlNoiseNodeSeed : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeSeed, VisualAnlNoiseNode)
+
+public:
+	void set_seed(unsigned int p_value);
+	unsigned int get_seed() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeSeed();
+
+protected:
+    static void _bind_methods();
+
+private:
+    unsigned int seed;
+};
+
+
+class VisualAnlNoiseNodeSeeder : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeSeeder, VisualAnlNoiseNode)
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeSeeder();
+
+protected:
+    static void _bind_methods();
+
+private:
+    Index seed;
+	Index source;
+};
 
 
 class VisualAnlNoiseNodeScalarOp : public VisualAnlNoiseNode {

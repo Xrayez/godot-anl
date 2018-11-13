@@ -401,10 +401,10 @@ void VisualAnlNoiseNodeComponent::evaluate_node(int node, Ref<VisualAnlNoise> no
 
 			const Ref<VisualAnlNoiseNode> &from_vanode = graph.nodes[from_node].node;
 
-			VisualAnlNoiseNode::PortType in_type = vanode->get_input_port_type(i);
-			VisualAnlNoiseNode::PortType out_type = from_vanode->get_output_port_type(from_port);
+			// VisualAnlNoiseNode::PortType in_type = vanode->get_input_port_type(i);
+			// VisualAnlNoiseNode::PortType out_type = from_vanode->get_output_port_type(from_port);
 
-			vanode->set_input_port_value(i, from_vanode->get_output_port_value(0));
+			vanode->set_input_port_value(i, from_vanode->get_output_port_value(from_port));
 		}
 		else {
 			Variant default_value = vanode->get_input_port_default_value(i);
