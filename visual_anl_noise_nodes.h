@@ -860,4 +860,36 @@ private:
 
 VARIANT_ENUM_CAST(VisualAnlNoiseNodeHex::HexType);
 
+
+class VisualAnlNoiseNodeColor : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeColor, VisualAnlNoiseNode)
+
+public:
+	void set_color(const Color &p_color);
+	Color get_color() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeColor();
+
+protected:
+    static void _bind_methods();
+
+private:
+	Color color;
+};
+
 #endif

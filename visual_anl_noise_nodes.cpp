@@ -2207,7 +2207,7 @@ VisualAnlNoiseNodeCurveSection::VisualAnlNoiseNodeCurveSection() {
 	control = 0;
 }
 
-////////////// Scalar
+////////////// Hex
 
 String VisualAnlNoiseNodeHex::get_caption() const {
 
@@ -2303,4 +2303,77 @@ VisualAnlNoiseNodeHex::VisualAnlNoiseNodeHex() {
 
 	type = HEX_TILE;
 	seed = 0;
+}
+
+////////////// Color
+
+String VisualAnlNoiseNodeColor::get_caption() const {
+
+	return "Color";
+}
+
+int VisualAnlNoiseNodeColor::get_input_port_count() const {
+
+	return 0;
+}
+
+VisualAnlNoiseNodeColor::PortType VisualAnlNoiseNodeColor::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeColor::get_input_port_name(int p_port) const {
+
+	return "";
+}
+
+int VisualAnlNoiseNodeColor::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeColor::PortType VisualAnlNoiseNodeColor::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeColor::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeColor::set_color(const Color &p_color) {
+
+	color = p_color;
+	emit_changed();
+}
+
+Color VisualAnlNoiseNodeColor::get_color() const {
+
+	return color;
+}
+
+Vector<StringName> VisualAnlNoiseNodeColor::get_editable_properties() const {
+
+	Vector<StringName> props;
+	props.push_back("color");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeColor::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->color(color);
+}
+
+void VisualAnlNoiseNodeColor::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_color", "color"), &VisualAnlNoiseNodeColor::set_color);
+	ClassDB::bind_method(D_METHOD("get_color"), &VisualAnlNoiseNodeColor::get_color);
+
+	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "color"), "set_color", "get_color");
+}
+
+VisualAnlNoiseNodeColor::VisualAnlNoiseNodeColor() {
+
+	color = Color(1, 1, 1, 1);
 }

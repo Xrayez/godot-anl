@@ -923,6 +923,8 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 
 	add_options.push_back(AddOption("Hex", "Patterns", "VisualAnlNoiseNodeHex"));
 
+	add_options.push_back(AddOption("Color", "Color", "VisualAnlNoiseNodeColor"));
+
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
 
 	_update_options_menu();
