@@ -2111,3 +2111,98 @@ VisualAnlNoiseNodeStep::VisualAnlNoiseNodeStep() {
 	low = high = 0;
 	control = 0;
 }
+
+////////////// Curve Section
+
+String VisualAnlNoiseNodeCurveSection::get_caption() const {
+
+	return "CurveSection";
+}
+
+int VisualAnlNoiseNodeCurveSection::get_input_port_count() const {
+
+	return 6;
+}
+
+void VisualAnlNoiseNodeCurveSection::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: lowv = p_value; break;
+		case 1: t0 = p_value; break;
+		case 2: t1 = p_value; break;
+		case 3: v0 = p_value; break;
+		case 4: v1 = p_value; break;
+		case 5: control = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeCurveSection::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return lowv;
+		case 1: return t0;
+		case 2: return t1;
+		case 3: return v0;
+		case 4: return v1;
+		case 5: return control;
+	}
+	return Variant();
+}
+
+VisualAnlNoiseNodeCurveSection::PortType VisualAnlNoiseNodeCurveSection::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeCurveSection::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "lowv";
+		case 1: return "t0";
+		case 2: return "t1";
+		case 3: return "v0";
+		case 4: return "v1";
+		case 5: return "control";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeCurveSection::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeCurveSection::PortType VisualAnlNoiseNodeCurveSection::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeCurveSection::get_output_port_name(int p_port) const {
+
+	return "";
+}
+
+void VisualAnlNoiseNodeCurveSection::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->curve_section(lowv, t0, t1, v0, v1, control);
+}
+
+void VisualAnlNoiseNodeCurveSection::_bind_methods() {
+
+}
+
+VisualAnlNoiseNodeCurveSection::VisualAnlNoiseNodeCurveSection() {
+
+	set_input_port_default_value(0, 0);
+
+	set_input_port_default_value(1, -1);
+	set_input_port_default_value(2, 1);
+	set_input_port_default_value(3, -1);
+	set_input_port_default_value(4, 1);
+
+	set_input_port_default_value(5, 0);
+
+	lowv = 0;
+	t0 = t1 = v0 = v1 = 0;
+	control = 0;
+}

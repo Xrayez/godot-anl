@@ -46,10 +46,13 @@ void register_anl_types() {
     ClassDB::register_class<VisualAnlNoiseNodeGradient>();
     ClassDB::register_class<VisualAnlNoiseNodeDerivative>();
 
-    // Misc
+    // Other
     ClassDB::register_class<VisualAnlNoiseNodeStep>();
     ClassDB::register_class<VisualAnlNoiseNodeTiers>();
     ClassDB::register_class<VisualAnlNoiseNodeRadial>();
+    ClassDB::register_class<VisualAnlNoiseNodeCurveSection>();
+
+    // Misc
     ClassDB::register_class<VisualAnlNoiseNodeExpression>();
 
 #ifdef TOOLS_ENABLED
