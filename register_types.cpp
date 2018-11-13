@@ -42,6 +42,7 @@ void register_anl_types() {
 
     // Misc
     ClassDB::register_class<VisualAnlNoiseNodeTiers>();
+    ClassDB::register_class<VisualAnlNoiseNodeRadial>();
     ClassDB::register_class<VisualAnlNoiseNodeExpression>();
 
 #ifdef TOOLS_ENABLED

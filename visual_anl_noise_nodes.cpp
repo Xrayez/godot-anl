@@ -1705,3 +1705,52 @@ VisualAnlNoiseNodeDerivative::VisualAnlNoiseNodeDerivative() {
 	source = 0;
 	spacing = 0;
 }
+
+////////////// Radial
+
+String VisualAnlNoiseNodeRadial::get_caption() const {
+
+	return "Radial";
+}
+
+int VisualAnlNoiseNodeRadial::get_input_port_count() const {
+
+	return 0;
+}
+
+VisualAnlNoiseNodeRadial::PortType VisualAnlNoiseNodeRadial::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeRadial::get_input_port_name(int p_port) const {
+
+	return "";
+}
+
+int VisualAnlNoiseNodeRadial::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeRadial::PortType VisualAnlNoiseNodeRadial::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeRadial::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeRadial::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->radial();
+}
+
+void VisualAnlNoiseNodeRadial::_bind_methods() {
+
+}
+
+VisualAnlNoiseNodeRadial::VisualAnlNoiseNodeRadial() {
+
+}

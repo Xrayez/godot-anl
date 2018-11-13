@@ -914,6 +914,7 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	add_options.push_back(AddOption("Derivative", "Axis", "VisualAnlNoiseNodeDerivative"));
 
 	add_options.push_back(AddOption("Tiers", "Misc", "VisualAnlNoiseNodeTiers"));
+	add_options.push_back(AddOption("Radial", "Misc", "VisualAnlNoiseNodeRadial"));
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAnlNoiseNodeExpression"));
 
 	_update_options_menu();
