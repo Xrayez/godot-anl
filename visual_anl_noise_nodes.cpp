@@ -1418,3 +1418,106 @@ VisualAnlNoiseNodeSelect::VisualAnlNoiseNodeSelect() {
 	threshold = 0;
 	falloff = 0;
 }
+////////////// Tiers
+
+String VisualAnlNoiseNodeTiers::get_caption() const {
+
+	return "Tiers";
+}
+
+void VisualAnlNoiseNodeTiers::set_smooth(Smoothness p_smooth) {
+
+	smooth = p_smooth;
+	emit_changed();
+}
+
+VisualAnlNoiseNodeTiers::Smoothness VisualAnlNoiseNodeTiers::get_smooth() const {
+
+	return smooth;
+}
+
+int VisualAnlNoiseNodeTiers::get_input_port_count() const {
+
+	return 2;
+}
+
+void VisualAnlNoiseNodeTiers::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: source = p_value; break;
+		case 1: tiers = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeTiers::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return source;
+		case 1: return tiers;
+	}
+	return Variant();
+}
+
+VisualAnlNoiseNodeTiers::PortType VisualAnlNoiseNodeTiers::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeTiers::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "source";
+		case 1: return "tiers";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeTiers::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeTiers::PortType VisualAnlNoiseNodeTiers::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeTiers::get_output_port_name(int p_port) const {
+	return "";
+}
+
+Vector<StringName> VisualAnlNoiseNodeTiers::get_editable_properties() const {
+
+	Vector<StringName> props;
+	props.push_back("smooth");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeTiers::evaluate(Ref<VisualAnlNoise> noise) {
+
+	if (smooth) {
+		output_value = noise->smooth_tiers(source, tiers);
+	} else {
+		output_value = noise->tiers(source, tiers);
+	}
+}
+
+void VisualAnlNoiseNodeTiers::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_smooth", "smooth"), &VisualAnlNoiseNodeTiers::set_smooth);
+	ClassDB::bind_method(D_METHOD("get_smooth"), &VisualAnlNoiseNodeTiers::get_smooth);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "smooth", PROPERTY_HINT_ENUM, "No smoothing, Smoothed"), "set_smooth", "get_smooth");
+}
+
+VisualAnlNoiseNodeTiers::VisualAnlNoiseNodeTiers() {
+
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 5);
+
+	smooth = SMOOTHING_DISABLED;
+
+	source = 0;
+	tiers = 0;
+}

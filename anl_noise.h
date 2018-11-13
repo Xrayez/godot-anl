@@ -104,7 +104,7 @@ public:
     Index abs(Index src);
     Index sigmoid(Index src);
 
-    // Smoothing
+    // Tiers
     // --------------------------------------------
     Index tiers(Index src, Index num_tiers);
     Index smooth_tiers(Index src, Index num_tiers);
