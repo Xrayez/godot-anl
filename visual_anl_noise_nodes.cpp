@@ -219,12 +219,12 @@ int VisualAnlNoiseNodeSeeder::get_input_port_count() const {
 
 void VisualAnlNoiseNodeSeeder::set_input_port_value(int p_port, const Variant &p_value) {
 
-	p_port == 0 ? (seed = p_value) : (source = p_value);
+	p_port == 0 ? (seed = p_value) : (input = p_value);
 }
 
 Variant VisualAnlNoiseNodeSeeder::get_input_port_value(int p_port) const {
 
-	return p_port == 0 ? seed : source;
+	return p_port == 0 ? seed : input;
 }
 
 VisualAnlNoiseNodeSeeder::PortType VisualAnlNoiseNodeSeeder::get_input_port_type(int p_port) const {
@@ -234,7 +234,7 @@ VisualAnlNoiseNodeSeeder::PortType VisualAnlNoiseNodeSeeder::get_input_port_type
 
 String VisualAnlNoiseNodeSeeder::get_input_port_name(int p_port) const {
 
-	return p_port == 0 ? "seed" : "source";
+	return p_port == 0 ? "seed" : "input";
 }
 
 int VisualAnlNoiseNodeSeeder::get_output_port_count() const {
@@ -253,7 +253,7 @@ String VisualAnlNoiseNodeSeeder::get_output_port_name(int p_port) const {
 
 void VisualAnlNoiseNodeSeeder::evaluate(Ref<VisualAnlNoise> noise) {
 
-	output_value = noise->seeder(seed, source);
+	output_value = noise->seeder(seed, input);
 }
 
 void VisualAnlNoiseNodeSeeder::_bind_methods() {
@@ -266,7 +266,7 @@ VisualAnlNoiseNodeSeeder::VisualAnlNoiseNodeSeeder() {
 	set_input_port_default_value(1, 0);
 
 	seed = 0;
-	source = 0;
+	input = 0;
 }
 
 ////////////// ScalarOp
@@ -417,12 +417,12 @@ int VisualAnlNoiseNodeScalarFunc::get_input_port_count() const {
 
 void VisualAnlNoiseNodeScalarFunc::set_input_port_value(int p_port, const Variant &p_value) {
 
-	source = p_value;
+	input = p_value;
 }
 
 Variant VisualAnlNoiseNodeScalarFunc::get_input_port_value(int p_port) const {
 
-	return source;
+	return input;
 }
 
 VisualAnlNoiseNodeScalarFunc::PortType VisualAnlNoiseNodeScalarFunc::get_input_port_type(int p_port) const {
@@ -432,7 +432,7 @@ VisualAnlNoiseNodeScalarFunc::PortType VisualAnlNoiseNodeScalarFunc::get_input_p
 
 String VisualAnlNoiseNodeScalarFunc::get_input_port_name(int p_port) const {
 
-	return "source";
+	return "input";
 }
 
 int VisualAnlNoiseNodeScalarFunc::get_output_port_count() const {
@@ -473,35 +473,35 @@ void VisualAnlNoiseNodeScalarFunc::evaluate(Ref<VisualAnlNoise> noise) {
 	switch(func) {
 
 		case FUNC_COS:
-			output_value = noise->cos(source);
+			output_value = noise->cos(input);
 			break;
 
 		case FUNC_SIN:
-			output_value = noise->sin(source);
+			output_value = noise->sin(input);
 			break;
 
 		case FUNC_TAN:
-			output_value = noise->tan(source);
+			output_value = noise->tan(input);
 			break;
 
 		case FUNC_ACOS:
-			output_value = noise->acos(source);
+			output_value = noise->acos(input);
 			break;
 
 		case FUNC_ASIN:
-			output_value = noise->asin(source);
+			output_value = noise->asin(input);
 			break;
 
 		case FUNC_ATAN:
-			output_value = noise->atan(source);
+			output_value = noise->atan(input);
 			break;
 
 		case FUNC_ABS:
-			output_value = noise->abs(source);
+			output_value = noise->abs(input);
 			break;
 
 		case FUNC_SIGMOID:
-			output_value = noise->sigmoid(source);
+			output_value = noise->sigmoid(input);
 			break;
 	}
 }
@@ -1040,12 +1040,12 @@ int VisualAnlNoiseNodeTranslate::get_input_port_count() const {
 
 void VisualAnlNoiseNodeTranslate::set_input_port_value(int p_port, const Variant &p_value) {
 
-	p_port == 0 ? source = p_value : by = p_value;
+	p_port == 0 ? input = p_value : by = p_value;
 }
 
 Variant VisualAnlNoiseNodeTranslate::get_input_port_value(int p_port) const {
 
-	return p_port == 0 ? source : by;
+	return p_port == 0 ? input : by;
 }
 
 VisualAnlNoiseNodeTranslate::PortType VisualAnlNoiseNodeTranslate::get_input_port_type(int p_port) const {
@@ -1055,7 +1055,7 @@ VisualAnlNoiseNodeTranslate::PortType VisualAnlNoiseNodeTranslate::get_input_por
 
 String VisualAnlNoiseNodeTranslate::get_input_port_name(int p_port) const {
 
-	return p_port == 0 ? "source" : "by";
+	return p_port == 0 ? "input" : "by";
 }
 
 int VisualAnlNoiseNodeTranslate::get_output_port_count() const {
@@ -1098,7 +1098,7 @@ void VisualAnlNoiseNodeTranslate::evaluate(Ref<VisualAnlNoise> noise) {
 	if (axis.type != Axis::AXIS_DOMAIN) {
 		m = method + "_" + axis.as_alpha();
 	}
-	output_value = noise->call(m, source, by);
+	output_value = noise->call(m, input, by);
 }
 
 void VisualAnlNoiseNodeTranslate::_bind_methods() {
@@ -1114,7 +1114,7 @@ VisualAnlNoiseNodeTranslate::VisualAnlNoiseNodeTranslate() {
 	set_input_port_default_value(0, 0);
 	set_input_port_default_value(1, 0);
 
-	source = 0;
+	input = 0;
 	by = 0;
 }
 
@@ -1134,12 +1134,12 @@ int VisualAnlNoiseNodeScale::get_input_port_count() const {
 
 void VisualAnlNoiseNodeScale::set_input_port_value(int p_port, const Variant &p_value) {
 
-	p_port == 0 ? source = p_value : by = p_value;
+	p_port == 0 ? input = p_value : by = p_value;
 }
 
 Variant VisualAnlNoiseNodeScale::get_input_port_value(int p_port) const {
 
-	return p_port == 0 ? source : by;
+	return p_port == 0 ? input : by;
 }
 
 VisualAnlNoiseNodeScale::PortType VisualAnlNoiseNodeScale::get_input_port_type(int p_port) const {
@@ -1149,7 +1149,7 @@ VisualAnlNoiseNodeScale::PortType VisualAnlNoiseNodeScale::get_input_port_type(i
 
 String VisualAnlNoiseNodeScale::get_input_port_name(int p_port) const {
 
-	return p_port == 0 ? "source" : "by";
+	return p_port == 0 ? "input" : "by";
 }
 
 int VisualAnlNoiseNodeScale::get_output_port_count() const {
@@ -1192,7 +1192,7 @@ void VisualAnlNoiseNodeScale::evaluate(Ref<VisualAnlNoise> noise) {
 	if (axis.type != Axis::AXIS_DOMAIN) {
 		m = method + "_" + axis.as_alpha();
 	}
-	output_value = noise->call(m, source, by);
+	output_value = noise->call(m, input, by);
 }
 
 void VisualAnlNoiseNodeScale::_bind_methods() {
@@ -1208,7 +1208,7 @@ VisualAnlNoiseNodeScale::VisualAnlNoiseNodeScale() {
 	set_input_port_default_value(0, 0);
 	set_input_port_default_value(1, 1);
 
-	source = 0;
+	input = 0;
 	by = 0;
 }
 
@@ -1227,7 +1227,7 @@ int VisualAnlNoiseNodeRotate::get_input_port_count() const {
 void VisualAnlNoiseNodeRotate::set_input_port_value(int p_port, const Variant &p_value) {
 
 	switch (p_port) {
-		case 0: source = p_value; break;
+		case 0: input = p_value; break;
 		case 1: angle = p_value; break;
 		case 2: ax = p_value; break;
 		case 3: ay = p_value; break;
@@ -1238,7 +1238,7 @@ void VisualAnlNoiseNodeRotate::set_input_port_value(int p_port, const Variant &p
 Variant VisualAnlNoiseNodeRotate::get_input_port_value(int p_port) const {
 
 	switch (p_port) {
-		case 0: return source;
+		case 0: return input;
 		case 1: return angle;
 		case 2: return ax;
 		case 3: return ay;
@@ -1255,7 +1255,7 @@ VisualAnlNoiseNodeRotate::PortType VisualAnlNoiseNodeRotate::get_input_port_type
 String VisualAnlNoiseNodeRotate::get_input_port_name(int p_port) const {
 
 	switch (p_port) {
-		case 0: return "source";
+		case 0: return "input";
 		case 1: return "angle";
 		case 2: return "ax";
 		case 3: return "ay";
@@ -1280,7 +1280,7 @@ String VisualAnlNoiseNodeRotate::get_output_port_name(int p_port) const {
 
 void VisualAnlNoiseNodeRotate::evaluate(Ref<VisualAnlNoise> noise) {
 
-	output_value = noise->rotate(source, angle, ax, ay, az);
+	output_value = noise->rotate(input, angle, ax, ay, az);
 }
 
 void VisualAnlNoiseNodeRotate::_bind_methods() {
@@ -1295,7 +1295,7 @@ VisualAnlNoiseNodeRotate::VisualAnlNoiseNodeRotate() {
 	set_input_port_default_value(3, 0);
 	set_input_port_default_value(4, 1); // for 2D case
 
-	source = 0;
+	input = 0;
 	angle = 0;
 	ax = ay = az = 0;
 }
@@ -1315,7 +1315,7 @@ int VisualAnlNoiseNodeClamp::get_input_port_count() const {
 void VisualAnlNoiseNodeClamp::set_input_port_value(int p_port, const Variant &p_value) {
 
 	switch (p_port) {
-		case 0: source = p_value; break;
+		case 0: input = p_value; break;
 		case 1: low = p_value; break;
 		case 2: high = p_value; break;
 	}
@@ -1324,7 +1324,7 @@ void VisualAnlNoiseNodeClamp::set_input_port_value(int p_port, const Variant &p_
 Variant VisualAnlNoiseNodeClamp::get_input_port_value(int p_port) const {
 
 	switch (p_port) {
-		case 0: return source;
+		case 0: return input;
 		case 1: return low;
 		case 2: return high;
 	}
@@ -1339,7 +1339,7 @@ VisualAnlNoiseNodeClamp::PortType VisualAnlNoiseNodeClamp::get_input_port_type(i
 String VisualAnlNoiseNodeClamp::get_input_port_name(int p_port) const {
 
 	switch (p_port) {
-		case 0: return "source";
+		case 0: return "input";
 		case 1: return "low";
 		case 2: return "high";
 	}
@@ -1362,7 +1362,7 @@ String VisualAnlNoiseNodeClamp::get_output_port_name(int p_port) const {
 
 void VisualAnlNoiseNodeClamp::evaluate(Ref<VisualAnlNoise> noise) {
 
-	output_value = noise->clamp(source, low, high);
+	output_value = noise->clamp(input, low, high);
 }
 
 void VisualAnlNoiseNodeClamp::_bind_methods() {
@@ -1375,7 +1375,7 @@ VisualAnlNoiseNodeClamp::VisualAnlNoiseNodeClamp() {
 	set_input_port_default_value(1, 0);
 	set_input_port_default_value(2, 1);
 
-	source = 0;
+	input = 0;
 	low = high = 0;
 }
 
@@ -1573,7 +1573,7 @@ int VisualAnlNoiseNodeTiers::get_input_port_count() const {
 void VisualAnlNoiseNodeTiers::set_input_port_value(int p_port, const Variant &p_value) {
 
 	switch (p_port) {
-		case 0: source = p_value; break;
+		case 0: input = p_value; break;
 		case 1: tiers = p_value; break;
 	}
 }
@@ -1581,7 +1581,7 @@ void VisualAnlNoiseNodeTiers::set_input_port_value(int p_port, const Variant &p_
 Variant VisualAnlNoiseNodeTiers::get_input_port_value(int p_port) const {
 
 	switch (p_port) {
-		case 0: return source;
+		case 0: return input;
 		case 1: return tiers;
 	}
 	return Variant();
@@ -1595,7 +1595,7 @@ VisualAnlNoiseNodeTiers::PortType VisualAnlNoiseNodeTiers::get_input_port_type(i
 String VisualAnlNoiseNodeTiers::get_input_port_name(int p_port) const {
 
 	switch (p_port) {
-		case 0: return "source";
+		case 0: return "input";
 		case 1: return "tiers";
 	}
 	return "";
@@ -1626,9 +1626,9 @@ Vector<StringName> VisualAnlNoiseNodeTiers::get_editable_properties() const {
 void VisualAnlNoiseNodeTiers::evaluate(Ref<VisualAnlNoise> noise) {
 
 	if (smooth) {
-		output_value = noise->smooth_tiers(source, tiers);
+		output_value = noise->smooth_tiers(input, tiers);
 	} else {
-		output_value = noise->tiers(source, tiers);
+		output_value = noise->tiers(input, tiers);
 	}
 }
 
@@ -1647,7 +1647,7 @@ VisualAnlNoiseNodeTiers::VisualAnlNoiseNodeTiers() {
 
 	smooth = SMOOTHING_DISABLED;
 
-	source = 0;
+	input = 0;
 	tiers = 0;
 }
 
@@ -1750,7 +1750,7 @@ Axis::AxisType VisualAnlNoiseNodeDerivative::get_axis() const {
 void VisualAnlNoiseNodeDerivative::set_input_port_value(int p_port, const Variant &p_value) {
 
 	switch (p_port) {
-		case 0: source = p_value; break;
+		case 0: input = p_value; break;
 		case 1: spacing = p_value; break;
 	}
 }
@@ -1758,7 +1758,7 @@ void VisualAnlNoiseNodeDerivative::set_input_port_value(int p_port, const Varian
 Variant VisualAnlNoiseNodeDerivative::get_input_port_value(int p_port) const {
 
 	switch (p_port) {
-		case 0: return source;
+		case 0: return input;
 		case 1: return spacing;
 	}
 	return Variant();
@@ -1777,7 +1777,7 @@ VisualAnlNoiseNodeDerivative::PortType VisualAnlNoiseNodeDerivative::get_input_p
 String VisualAnlNoiseNodeDerivative::get_input_port_name(int p_port) const {
 
 	switch (p_port) {
-		case 0: return "source";
+		case 0: return "input";
 		case 1: return "spacing";
 	}
 	return String();
@@ -1809,7 +1809,7 @@ Vector<StringName> VisualAnlNoiseNodeDerivative::get_editable_properties() const
 void VisualAnlNoiseNodeDerivative::evaluate(Ref<VisualAnlNoise> noise) {
 
 	if (axis.type != Axis::AXIS_DOMAIN) {
-		output_value = noise->call("d" + axis.as_alpha(), source, spacing);
+		output_value = noise->call("d" + axis.as_alpha(), input, spacing);
 	} else {
 		output_value = noise->zero(); // a workaround to circumvent domain enum
 	}
@@ -1830,7 +1830,7 @@ VisualAnlNoiseNodeDerivative::VisualAnlNoiseNodeDerivative() {
 
 	axis.type = Axis::AXIS_X;
 
-	source = 0;
+	input = 0;
 	spacing = 0;
 }
 
@@ -2529,12 +2529,12 @@ double VisualAnlNoiseNodeScaleOffset::get_offset() const {
 
 void VisualAnlNoiseNodeScaleOffset::set_input_port_value(int p_port, const Variant &p_value) {
 
-	source = p_value;
+	input = p_value;
 }
 
 Variant VisualAnlNoiseNodeScaleOffset::get_input_port_value(int p_port) const {
 
-	return source;
+	return input;
 }
 
 int VisualAnlNoiseNodeScaleOffset::get_input_port_count() const {
@@ -2549,7 +2549,7 @@ VisualAnlNoiseNodeScaleOffset::PortType VisualAnlNoiseNodeScaleOffset::get_input
 
 String VisualAnlNoiseNodeScaleOffset::get_input_port_name(int p_port) const {
 
-	return "source";
+	return "input";
 }
 
 int VisualAnlNoiseNodeScaleOffset::get_output_port_count() const {
@@ -2578,7 +2578,7 @@ Vector<StringName> VisualAnlNoiseNodeScaleOffset::get_editable_properties() cons
 
 void VisualAnlNoiseNodeScaleOffset::evaluate(Ref<VisualAnlNoise> noise) {
 
-	output_value = noise->scale_offset(source, scale, offset);
+	output_value = noise->scale_offset(input, scale, offset);
 }
 
 void VisualAnlNoiseNodeScaleOffset::_bind_methods() {
@@ -2595,7 +2595,7 @@ void VisualAnlNoiseNodeScaleOffset::_bind_methods() {
 
 VisualAnlNoiseNodeScaleOffset::VisualAnlNoiseNodeScaleOffset() {
 
-	source = 0;
+	input = 0;
 	scale = 1.0;
 	offset = 0.0;
 }

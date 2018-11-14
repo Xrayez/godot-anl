@@ -108,7 +108,7 @@ protected:
 
 private:
     Index seed;
-	Index source;
+	Index input;
 };
 
 
@@ -203,7 +203,7 @@ protected:
 
 private:
 	Function func;
-	Index source;
+	Index input;
 };
 
 VARIANT_ENUM_CAST(VisualAnlNoiseNodeScalarFunc::Function);
@@ -416,7 +416,7 @@ protected:
 private:
 	static const String method;
 
-	Index source, by;
+	Index input, by;
     Axis axis;
 };
 
@@ -453,7 +453,7 @@ protected:
 private:
 	static const String method;
 
-	Index source, by;
+	Index input, by;
     Axis axis;
 };
 
@@ -482,7 +482,7 @@ protected:
     static void _bind_methods();
 
 private:
-	Index source, angle;
+	Index input, angle;
 	Index ax, ay, az;
 };
 
@@ -511,7 +511,7 @@ protected:
     static void _bind_methods();
 
 private:
-	Index source;
+	Index input;
 	Index low, high;
 };
 
@@ -613,7 +613,7 @@ protected:
 private:
 	Smoothness smooth;
 
-	Index source;
+	Index input;
 	Index tiers;
 };
 
@@ -684,7 +684,7 @@ protected:
 private:
 	Axis axis;
 
-	Index source;
+	Index input;
 	Index spacing;
 };
 
@@ -969,7 +969,7 @@ protected:
     static void _bind_methods();
 
 private:
-    Index source;
+    Index input;
 
 	double scale;
 	double offset;
