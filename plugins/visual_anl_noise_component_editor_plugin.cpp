@@ -921,6 +921,8 @@ VisualAnlNoiseNodeComponentEditor::VisualAnlNoiseNodeComponentEditor() {
 	add_options.push_back(AddOption("Color", "Color", "VisualAnlNoiseNodeColor"));
 	add_options.push_back(AddOption("ColorCombine", "Color", "VisualAnlNoiseNodeColorCombine"));
 
+	add_options.push_back(AddOption("Fractal", "Fractal", "VisualAnlNoiseNodeFractal"));
+	// add_options.push_back(AddOption("FractalVariant", "Fractal", "VisualAnlNoiseNodeFractalVariant"));
 	add_options.push_back(AddOption("Layer", "Fractal", "VisualAnlNoiseNodeFractalLayer"));
 
 	add_options.push_back(AddOption("Tiers", "Other", "VisualAnlNoiseNodeTiers"));

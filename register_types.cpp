@@ -54,6 +54,8 @@ void register_anl_types() {
     ClassDB::register_class<VisualAnlNoiseNodeColorCombine>();
 
     // Fractal
+    ClassDB::register_class<VisualAnlNoiseNodeFractal>();
+    // ClassDB::register_class<VisualAnlNoiseNodeFractalVariant>();
     ClassDB::register_class<VisualAnlNoiseNodeFractalLayer>();
 
     // Other

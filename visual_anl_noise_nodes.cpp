@@ -2770,3 +2770,98 @@ VisualAnlNoiseNodeFractalLayer::VisualAnlNoiseNodeFractalLayer() {
 	ay = 0.0;
 	az = 1.0;
 }
+
+////////////// Fractal
+
+String VisualAnlNoiseNodeFractal::get_caption() const {
+
+	return "Fractal";
+}
+
+int VisualAnlNoiseNodeFractal::get_input_port_count() const {
+
+	return 6;
+}
+
+void VisualAnlNoiseNodeFractal::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: seed = p_value; break;
+		case 1: layer = p_value; break;
+		case 2: persistence = p_value; break;
+		case 3: lacunarity = p_value; break;
+		case 4: numoctaves = p_value; break;
+		case 5: frequency = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeFractal::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return seed;
+		case 1: return layer;
+		case 2: return persistence;
+		case 3: return lacunarity;
+		case 4: return numoctaves;
+		case 5: return frequency;
+	}
+	return Variant();
+}
+
+VisualAnlNoiseNodeFractal::PortType VisualAnlNoiseNodeFractal::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeFractal::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "seed";
+		case 1: return "layer";
+		case 2: return "persistence";
+		case 3: return "lacunarity";
+		case 4: return "numoctaves";
+		case 5: return "frequency";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeFractal::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeFractal::PortType VisualAnlNoiseNodeFractal::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeFractal::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeFractal::evaluate(Ref<VisualAnlNoise> noise) {
+
+	output_value = noise->fractal(seed, layer, persistence, lacunarity, numoctaves, frequency);
+}
+
+void VisualAnlNoiseNodeFractal::_bind_methods() {
+
+}
+
+VisualAnlNoiseNodeFractal::VisualAnlNoiseNodeFractal() {
+
+	set_input_port_default_value(0, 0);
+	set_input_port_default_value(1, 0);
+	set_input_port_default_value(2, 0);
+	set_input_port_default_value(3, 0);
+	set_input_port_default_value(4, 0);
+	set_input_port_default_value(5, 0);
+
+	seed = 0;
+	layer = 0;
+	persistence = 0;
+	lacunarity = 0;
+	numoctaves = 0;
+	frequency = 0;
+}
