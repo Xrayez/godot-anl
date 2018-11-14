@@ -2599,3 +2599,174 @@ VisualAnlNoiseNodeScaleOffset::VisualAnlNoiseNodeScaleOffset() {
 	scale = 1.0;
 	offset = 0.0;
 }
+
+////////////// Layer
+
+String VisualAnlNoiseNodeFractalLayer::get_caption() const {
+
+	return "Layer";
+}
+
+void VisualAnlNoiseNodeFractalLayer::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: interp = p_value; break;
+		case 1: scale = p_value; break;
+		case 2: frequency = p_value; break;
+		case 3: seed = p_value; break;
+		case 4: rot = p_value; break;
+		case 5: angle = p_value; break;
+		case 6: ax = p_value; break;
+		case 7: ay = p_value; break;
+		case 8: az = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeFractalLayer::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return interp;
+		case 1: return scale;
+		case 2: return frequency;
+		case 3: return seed;
+		case 4: return rot;
+		case 5: return angle;
+		case 6: return ax;
+		case 7: return ay;
+		case 8: return az;
+	}
+	return Variant();
+}
+
+int VisualAnlNoiseNodeFractalLayer::get_input_port_count() const {
+
+	return 9;
+}
+
+VisualAnlNoiseNodeFractalLayer::PortType VisualAnlNoiseNodeFractalLayer::get_input_port_type(int p_port) const {
+
+	return p_port != 0 ? PORT_TYPE_SCALAR : PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeFractalLayer::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "interp";
+		case 1: return "scale";
+		case 2: return "frequency";
+		case 3: return "seed";
+		case 4: return "rot";
+		case 5: return "angle";
+		case 6: return "ax";
+		case 7: return "ay";
+		case 8: return "az";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeFractalLayer::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeFractalLayer::PortType VisualAnlNoiseNodeFractalLayer::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeFractalLayer::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeFractalLayer::set_type(LayerType p_type) {
+
+	type = p_type;
+	emit_changed();
+}
+
+VisualAnlNoiseNodeFractalLayer::LayerType VisualAnlNoiseNodeFractalLayer::get_type() const {
+
+	return type;
+}
+
+void VisualAnlNoiseNodeFractalLayer::set_basis(anl::BasisTypes p_basis) {
+
+	basis = p_basis;
+	emit_changed();
+}
+
+anl::BasisTypes VisualAnlNoiseNodeFractalLayer::get_basis() const {
+
+	return basis;
+}
+
+Vector<StringName> VisualAnlNoiseNodeFractalLayer::get_editable_properties() const {
+
+	Vector<StringName> props;
+	props.push_back("type");
+	props.push_back("basis");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeFractalLayer::evaluate(Ref<VisualAnlNoise> noise) {
+
+	switch(type) {
+
+		case LAYER_FRACTAL:
+			output_value = noise->fractal_layer(basis, interp, scale, frequency, seed, rot, angle, ax, ay, az);
+			break;
+
+		case LAYER_RIDGED:
+			output_value = noise->ridged_layer(basis, interp, scale, frequency, seed, rot, angle, ax, ay, az);
+			break;
+
+		case LAYER_BILLOW:
+			output_value = noise->billow_layer(basis, interp, scale, frequency, seed, rot, angle, ax, ay, az);
+			break;
+	}
+}
+
+void VisualAnlNoiseNodeFractalLayer::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_type", "type"), &VisualAnlNoiseNodeFractalLayer::set_type);
+	ClassDB::bind_method(D_METHOD("get_type"), &VisualAnlNoiseNodeFractalLayer::get_type);
+
+	ClassDB::bind_method(D_METHOD("set_basis", "basis"), &VisualAnlNoiseNodeFractalLayer::set_basis);
+	ClassDB::bind_method(D_METHOD("get_basis"), &VisualAnlNoiseNodeFractalLayer::get_basis);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "type", PROPERTY_HINT_ENUM, "Fractal,Ridged,Billow"), "set_type", "get_type");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "basis", PROPERTY_HINT_ENUM, "Value,Gradient,Simplex"), "set_basis", "get_basis");
+
+	BIND_ENUM_CONSTANT(LAYER_FRACTAL);
+	BIND_ENUM_CONSTANT(LAYER_RIDGED);
+	BIND_ENUM_CONSTANT(LAYER_BILLOW);
+}
+
+VisualAnlNoiseNodeFractalLayer::VisualAnlNoiseNodeFractalLayer() {
+
+	type = LAYER_FRACTAL;
+	basis = anl::BASIS_SIMPLEX;
+
+	set_input_port_default_value(0, anl::INTERP_QUINTIC);
+	set_input_port_default_value(1, 1.0);
+	set_input_port_default_value(2, 1.0);
+	set_input_port_default_value(3, 0);
+
+	set_input_port_default_value(4, true);
+	set_input_port_default_value(5, 0.5);
+	set_input_port_default_value(6, 0.0);
+	set_input_port_default_value(7, 0.0);
+	set_input_port_default_value(8, 1.0);
+
+	interp = 0;
+	scale = 1.0;
+	frequency = 1.0;
+	seed = 0;
+
+	rot = true;
+	angle = 0.5;
+	ax = 0.0;
+	ay = 0.0;
+	az = 1.0;
+}

@@ -975,4 +975,60 @@ private:
 	double offset;
 };
 
+
+class VisualAnlNoiseNodeFractalLayer : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeFractalLayer, VisualAnlNoiseNode)
+
+public:
+	enum LayerType {
+		LAYER_FRACTAL,
+		LAYER_RIDGED,
+		LAYER_BILLOW,
+	};
+
+	void set_type(LayerType p_type);
+	LayerType get_type() const;
+
+	void set_basis(anl::BasisTypes p_basis);
+	anl::BasisTypes get_basis() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeFractalLayer();
+
+protected:
+    static void _bind_methods();
+
+private:
+	LayerType type;
+	anl::BasisTypes basis;
+
+	Index interp;
+	double scale;
+	double frequency;
+	unsigned int seed;
+	bool rot;
+    double angle = 0.5;
+	double ax = 0.0;
+	double ay = 0.0;
+	double az = 1.0;
+};
+
+VARIANT_ENUM_CAST(VisualAnlNoiseNodeFractalLayer::LayerType);
+
 #endif
