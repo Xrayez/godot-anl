@@ -38,7 +38,8 @@ public:
     CKernel();
 	CKernel(const CKernel &rhs);
 
-
+    void initConstants();
+    void clear();
 
     CInstructionIndex pi();
     CInstructionIndex e();

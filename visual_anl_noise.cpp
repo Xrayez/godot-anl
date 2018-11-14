@@ -576,7 +576,9 @@ void VisualAnlNoise::_update_noise() {
 
 	dirty = false;
 
-	// reset();
+	// Some nodes like fractal layer make use of previously created
+	// instruction indexes that might not be connected, so be sure to clean up
+	clear();
 
 	component->evaluate(Ref<VisualAnlNoise>(this));
 }

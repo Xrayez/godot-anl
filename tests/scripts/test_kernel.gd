@@ -137,3 +137,4 @@ func _init():
 	# Kernel
 
 	i = n.index
+	n.clear()

@@ -596,6 +596,11 @@ Index AnlNoise::get_last_index() {
     return kernel.lastIndex().getIndex();
 }
 
+void AnlNoise::clear() {
+
+    kernel.clear();
+}
+
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
@@ -854,7 +859,9 @@ void AnlNoise::_bind_methods() {
                                   "numoctaves", "frequency", "seed", "rotation"),&AnlNoise::billow, DEFVAL(true));
 
 
+    // Kernel
     ClassDB::bind_method(D_METHOD("get_last_index"),&AnlNoise::get_last_index);
+    ClassDB::bind_method(D_METHOD("clear"),&AnlNoise::clear);
 
     ADD_PROPERTY(PropertyInfo(Variant::INT, "index"), "", "get_last_index");
 

@@ -8,12 +8,7 @@ namespace anl
 
 CKernel::CKernel()
 {
-    pi_=constant(3.14159265358979323846);
-    e_=constant(2.71828182845904523536);
-    one_=constant(1.0);
-    zero_=constant(0.0);
-    point5_=constant(0.5);
-    sqrt2_=constant(sqrt(2.0));
+    initConstants();
 }
 
 CKernel::CKernel(const CKernel &rhs)
@@ -26,6 +21,24 @@ CKernel::CKernel(const CKernel &rhs)
 	point5_=rhs.point5_;
 	sqrt2_=rhs.sqrt2_;
 	vars_=rhs.vars_;
+}
+
+void CKernel::initConstants()
+{
+    pi_=constant(3.14159265358979323846);
+    e_=constant(2.71828182845904523536);
+    one_=constant(1.0);
+    zero_=constant(0.0);
+    point5_=constant(0.5);
+    sqrt2_=constant(sqrt(2.0));
+}
+
+void CKernel::clear()
+{
+    kernel_.clear();
+    initConstants();
+
+    vars_.clear();
 }
 
 CInstructionIndex CKernel::pi()
