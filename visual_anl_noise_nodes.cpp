@@ -2853,10 +2853,10 @@ VisualAnlNoiseNodeFractal::VisualAnlNoiseNodeFractal() {
 
 	set_input_port_default_value(0, 0);
 	set_input_port_default_value(1, 0);
-	set_input_port_default_value(2, 0);
-	set_input_port_default_value(3, 0);
-	set_input_port_default_value(4, 0);
-	set_input_port_default_value(5, 0);
+	set_input_port_default_value(2, 1.0);
+	set_input_port_default_value(3, 1.0);
+	set_input_port_default_value(4, 1);
+	set_input_port_default_value(5, 1.0);
 
 	seed = 0;
 	layer = 0;
