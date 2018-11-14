@@ -408,17 +408,23 @@ void VisualAnlNoiseNodeComponent::evaluate_node(int node, Ref<VisualAnlNoise> no
 		}
 		else {
 			Variant default_value = vanode->get_input_port_default_value(i);
+			VisualAnlNoiseNode::PortType in_type = vanode->get_input_port_type(i);
 
 			if (default_value.get_type() != Variant::NIL) {
 
+				if (in_type == PORT_TYPE_INDEX) {
+					// Evaluate constant noise from default value
 					switch (default_value.get_type()) {
 						case Variant::INT:
 						case Variant::REAL: {
-							// Evaluate constant noise from default value
 							Index constant = noise->constant(default_value);
 							vanode->set_input_port_value(i, constant);
 						} break;
 						default: {}
+					}
+				} else if (in_type == PORT_TYPE_SCALAR) {
+					// Just set default value
+					vanode->set_input_port_value(i, default_value);
 				}
 			}
 		}
