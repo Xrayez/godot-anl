@@ -4,6 +4,8 @@
 
 #include "core/vmap.h"
 
+const int VisualAnlNoiseNode::OUTPUT_PORT = 0;
+
 void VisualAnlNoiseNode::set_output_port_for_preview(int p_index) {
 
 	port_preview = p_index;
@@ -357,12 +359,27 @@ void VisualAnlNoiseNodeComponent::evaluate(Ref<VisualAnlNoise> noise) {
 
 	Set<int> processed;
 
+	// First, lets evaluate nodes that aren't connected to output
+	for (const Map<int, Node>::Element *E = graph.nodes.front(); E; E = E->next()) {
+
+		ConnectionKey ck;
+		ck.node = E->key();
+		ck.port = OUTPUT_PORT;
+
+		if (ck.node != NODE_ID_OUTPUT && !output_connections.has(ck)) {
+			// Found node which output port is not connected
+			evaluate_node(ck.node, noise, input_connections, output_connections, processed);
+		}
+	}
+
+	// Second, evaluate the main output node
 	evaluate_node(NODE_ID_OUTPUT, noise, input_connections, output_connections, processed);
 
 	const Ref<VisualAnlNoiseNodeOutput> &output = graph.nodes[NODE_ID_OUTPUT].node;
 	ERR_FAIL_COND(output.is_null());
 
-	output_value = output->get_output_port_value(0);
+	// Finally, get the last index of the noise function evaluated
+	output_value = output->get_output_port_value(OUTPUT_PORT);
 }
 
 void VisualAnlNoiseNodeComponent::evaluate_node(int node, Ref<VisualAnlNoise> noise, Connections &input_connections, Connections &output_connections, Set<int> &processed) {

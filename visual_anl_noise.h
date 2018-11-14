@@ -77,6 +77,7 @@ class VisualAnlNoiseNode : public Resource {
 	void _set_default_input_values(const Array &p_values);
 
 protected:
+	static const int OUTPUT_PORT;
 	Variant output_value;
 
 	static void _bind_methods();
