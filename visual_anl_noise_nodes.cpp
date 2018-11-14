@@ -2865,3 +2865,164 @@ VisualAnlNoiseNodeFractal::VisualAnlNoiseNodeFractal() {
 	numoctaves = 0;
 	frequency = 0;
 }
+
+////////////// FractalVariant
+
+String VisualAnlNoiseNodeFractalVariant::get_caption() const {
+
+	return "FractalVariant";
+}
+
+void VisualAnlNoiseNodeFractalVariant::set_input_port_value(int p_port, const Variant &p_value) {
+
+	switch (p_port) {
+		case 0: numoctaves = p_value; break;
+		case 1: frequency = p_value; break;
+		case 2: seed = p_value; break;
+		case 3: rot = p_value; break;
+	}
+}
+
+Variant VisualAnlNoiseNodeFractalVariant::get_input_port_value(int p_port) const {
+
+	switch (p_port) {
+		case 0: return numoctaves;
+		case 1: return frequency;
+		case 2: return seed;
+		case 3: return rot;
+	}
+	return Variant();
+}
+
+int VisualAnlNoiseNodeFractalVariant::get_input_port_count() const {
+
+	return 4;
+}
+
+VisualAnlNoiseNodeFractalVariant::PortType VisualAnlNoiseNodeFractalVariant::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_SCALAR;
+}
+
+String VisualAnlNoiseNodeFractalVariant::get_input_port_name(int p_port) const {
+
+	switch (p_port) {
+		case 0: return "numoctaves";
+		case 1: return "frequency";
+		case 2: return "seed";
+		case 3: return "rot";
+	}
+	return "";
+}
+
+int VisualAnlNoiseNodeFractalVariant::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAnlNoiseNodeFractalVariant::PortType VisualAnlNoiseNodeFractalVariant::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAnlNoiseNodeFractalVariant::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAnlNoiseNodeFractalVariant::set_type(FractalType p_type) {
+
+	type = p_type;
+	emit_changed();
+}
+
+VisualAnlNoiseNodeFractalVariant::FractalType VisualAnlNoiseNodeFractalVariant::get_type() const {
+
+	return type;
+}
+
+void VisualAnlNoiseNodeFractalVariant::set_basis(anl::BasisTypes p_basis) {
+
+	basis = p_basis;
+	emit_changed();
+}
+
+anl::BasisTypes VisualAnlNoiseNodeFractalVariant::get_basis() const {
+
+	return basis;
+}
+
+void VisualAnlNoiseNodeFractalVariant::set_interpolation(anl::InterpolationTypes p_interpolation) {
+
+	interpolation = p_interpolation;
+	emit_changed();
+}
+
+anl::InterpolationTypes VisualAnlNoiseNodeFractalVariant::get_interpolation() const {
+
+	return interpolation;
+}
+
+Vector<StringName> VisualAnlNoiseNodeFractalVariant::get_editable_properties() const {
+
+	Vector<StringName> props;
+	props.push_back("type");
+	props.push_back("basis");
+	props.push_back("interpolation");
+
+	return props;
+}
+
+void VisualAnlNoiseNodeFractalVariant::evaluate(Ref<VisualAnlNoise> noise) {
+
+	switch(type) {
+
+		case TYPE_FBM:
+			output_value = noise->fbm(basis, interpolation, numoctaves, frequency, seed, rot);
+			break;
+
+		case TYPE_RIDGED_MULTIFRACTAL:
+			output_value = noise->ridged_multifractal(basis, interpolation, numoctaves, frequency, seed, rot);
+			break;
+
+		case TYPE_BILLOW:
+			output_value = noise->billow(basis, interpolation, numoctaves, frequency, seed, rot);
+			break;
+	}
+}
+
+void VisualAnlNoiseNodeFractalVariant::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_type", "type"), &VisualAnlNoiseNodeFractalVariant::set_type);
+	ClassDB::bind_method(D_METHOD("get_type"), &VisualAnlNoiseNodeFractalVariant::get_type);
+
+	ClassDB::bind_method(D_METHOD("set_basis", "basis"), &VisualAnlNoiseNodeFractalVariant::set_basis);
+	ClassDB::bind_method(D_METHOD("get_basis"), &VisualAnlNoiseNodeFractalVariant::get_basis);
+
+	ClassDB::bind_method(D_METHOD("set_interpolation", "interpolation"), &VisualAnlNoiseNodeFractalVariant::set_interpolation);
+	ClassDB::bind_method(D_METHOD("get_interpolation"), &VisualAnlNoiseNodeFractalVariant::get_interpolation);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "type", PROPERTY_HINT_ENUM, "Fractal,Ridged,Billow"), "set_type", "get_type");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "basis", PROPERTY_HINT_ENUM, "Value,Gradient,Simplex"), "set_basis", "get_basis");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "interpolation", PROPERTY_HINT_ENUM, "None,Linear,Hermite,Quintic"), "set_interpolation", "get_interpolation");
+
+	BIND_ENUM_CONSTANT(TYPE_FBM);
+	BIND_ENUM_CONSTANT(TYPE_RIDGED_MULTIFRACTAL);
+	BIND_ENUM_CONSTANT(TYPE_BILLOW);
+}
+
+VisualAnlNoiseNodeFractalVariant::VisualAnlNoiseNodeFractalVariant() {
+
+	type = TYPE_FBM;
+	basis = anl::BASIS_SIMPLEX;
+	interpolation = anl::INTERP_QUINTIC;
+
+	set_input_port_default_value(0, 1);
+	set_input_port_default_value(1, 1.0);
+	set_input_port_default_value(2, 0);
+	set_input_port_default_value(3, true);
+
+	numoctaves = 1;
+	frequency = 1.0;
+	seed = 0;
+	rot = true;
+}

@@ -1064,4 +1064,59 @@ private:
 	Index frequency;
 };
 
+
+class VisualAnlNoiseNodeFractalVariant : public VisualAnlNoiseNode {
+	GDCLASS(VisualAnlNoiseNodeFractalVariant, VisualAnlNoiseNode)
+
+public:
+	enum FractalType {
+		TYPE_FBM,
+		TYPE_RIDGED_MULTIFRACTAL,
+		TYPE_BILLOW,
+	};
+
+	void set_type(FractalType p_type);
+	FractalType get_type() const;
+
+	void set_basis(anl::BasisTypes p_basis);
+	anl::BasisTypes get_basis() const;
+
+	void set_interpolation(anl::InterpolationTypes p_interpolation);
+	anl::InterpolationTypes get_interpolation() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAnlNoise> noise);
+
+    VisualAnlNoiseNodeFractalVariant();
+
+protected:
+    static void _bind_methods();
+
+private:
+	FractalType type;
+	anl::BasisTypes basis;
+	anl::InterpolationTypes interpolation;
+
+	unsigned int numoctaves;
+	double frequency = 1.0;
+	unsigned int seed = 0;
+	bool rot = true;
+};
+
+VARIANT_ENUM_CAST(VisualAnlNoiseNodeFractalVariant::FractalType);
+
 #endif

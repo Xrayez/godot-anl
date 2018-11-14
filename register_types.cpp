@@ -55,7 +55,7 @@ void register_anl_types() {
 
     // Fractal
     ClassDB::register_class<VisualAnlNoiseNodeFractal>();
-    // ClassDB::register_class<VisualAnlNoiseNodeFractalVariant>();
+    ClassDB::register_class<VisualAnlNoiseNodeFractalVariant>();
     ClassDB::register_class<VisualAnlNoiseNodeFractalLayer>();
 
     // Other
