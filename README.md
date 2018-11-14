@@ -20,7 +20,7 @@ branches and/or releases for compatible versions.
 
 ![Visual Accidental Noise Workbench](examples/images/visual_noise.png)
 
-The code structure is somewhat established for visual noise but can't be considered stable, and not all nodes are created/exposed yet. Feel free to report bugs and contribute!
+The code structure is somewhat established for visual noise but can't be considered stable. Feel free to report bugs and contribute!
 
 ## Overview
 
