@@ -676,31 +676,33 @@ Ref<Image> AccidentalNoise::map_to_image(const Vector2& size,
 
             anl::CArray2Drgba img(size.x, size.y);
             anl::mapRGBA2DNoZ(mode, img, kernel, ranges, index);
+            auto src_data = img.getData();
 
             dest_data.resize(SIZE * 4);
             PoolVector<uint8_t>::Write w = dest_data.write();
-            auto src_data = img.getData();
 
-            for(int i = 0, j = 0; j < SIZE; i += 4, ++j) {
-                w[i + 0] = static_cast<uint8_t>(src_data[j].r * 255);
-                w[i + 1] = static_cast<uint8_t>(src_data[j].g * 255);
-                w[i + 2] = static_cast<uint8_t>(src_data[j].b * 255);
-                w[i + 3] = static_cast<uint8_t>(src_data[j].a * 255);
+            for(int i = 0; i < SIZE; ++i) {
+                w[i * 4 + 0] = (uint8_t)(src_data[i].r * 255);
+                w[i * 4 + 1] = (uint8_t)(src_data[i].g * 255);
+                w[i * 4 + 2] = (uint8_t)(src_data[i].b * 255);
+                w[i * 4 + 3] = (uint8_t)(src_data[i].a * 255);
             }
         } break;
 
-        case Image::Format::FORMAT_L8: {
+        case Image::Format::FORMAT_L8: { // grayscale
+
             anl::CArray2Dd img(size.x, size.y);
             anl::map2DNoZ(mode, img, kernel, ranges, index);
+            auto src_data = img.getData();
 
             dest_data.resize(SIZE);
             PoolVector<uint8_t>::Write w = dest_data.write();
-            auto src_data = img.getData();
 
             for(int i = 0; i < SIZE; ++i) {
-                w[i] = static_cast<uint8_t>(src_data[i] * 255);
+                w[i] = (uint8_t)(src_data[i] * 255);
             }
         } break;
+
         default: {
             ERR_EXPLAIN("Image format " + itos(format) + " is not supported for noise mapping.");
             ERR_FAIL_V(Ref<Image>());
