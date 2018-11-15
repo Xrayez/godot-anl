@@ -69,6 +69,7 @@ public:
 class VisualAccidentalNoiseNode : public Resource {
 	GDCLASS(VisualAccidentalNoiseNode, Resource)
 
+
 	int port_preview;
 
 	Map<int, Variant> default_input_values;
@@ -77,12 +78,13 @@ class VisualAccidentalNoiseNode : public Resource {
 	void _set_default_input_values(const Array &p_values);
 
 protected:
-	static const int OUTPUT_PORT;
 	Variant output_value;
 
 	static void _bind_methods();
 
 public:
+	static const int OUTPUT_PORT;
+
 	enum PortType {
 		PORT_TYPE_SCALAR,
 		PORT_TYPE_INDEX,
