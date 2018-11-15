@@ -1,4 +1,5 @@
 #include "visual_noise_editor_plugin.h"
+#include "visual_noise_component_editor_plugin.h"
 
 #include "core/io/resource_loader.h"
 #include "core/os/input.h"
@@ -21,15 +22,13 @@ void VisualAccidentalNoiseEditor::edit(const Ref<VisualAccidentalNoise> &p_visua
 	}
 
 	if (visual_anl_noise.is_valid()) {
-		visual_anl_noise->disconnect("component_changed", this, "_on_component_changed");
+		_disconnect_changed(p_visual_anl_noise);
 	}
 
 	if (p_visual_anl_noise.is_valid()) {
 		visual_anl_noise = p_visual_anl_noise;
 
-		if (!visual_anl_noise->is_connected("component_changed", this, "_on_component_changed")) {
-			visual_anl_noise->connect("component_changed", this, "_on_component_changed");
-		}
+		_connect_changed(p_visual_anl_noise);
 		edit_component();
 		_update_path();
 
@@ -40,6 +39,35 @@ void VisualAccidentalNoiseEditor::edit(const Ref<VisualAccidentalNoise> &p_visua
 	if (visual_anl_noise.is_null()) {
 		hide();
 	}
+}
+
+void VisualAccidentalNoiseEditor::_connect_changed(const Ref<VisualAccidentalNoise> &p_visual_anl_noise) {
+
+	if (!visual_anl_noise->is_connected("component_changed", this, "_on_component_changed")) {
+		visual_anl_noise->connect("component_changed", this, "_on_component_changed");
+	}
+	if (!visual_anl_noise->is_connected("changed", this, "_on_changed")) {
+		visual_anl_noise->connect("changed", this, "_on_changed", varray(p_visual_anl_noise), CONNECT_DEFERRED);
+	}
+}
+
+void VisualAccidentalNoiseEditor::_disconnect_changed(const Ref<VisualAccidentalNoise> &p_visual_anl_noise) {
+
+	if (visual_anl_noise->is_connected("component_changed", this, "_on_component_changed")) {
+		visual_anl_noise->disconnect("component_changed", this, "_on_component_changed");
+	}
+	if (visual_anl_noise->is_connected("changed", this, "_on_changed")) {
+		visual_anl_noise->disconnect("changed", this, "_on_changed");
+	}
+}
+
+void VisualAccidentalNoiseEditor::_on_changed(Ref<VisualAccidentalNoise> p_visual_anl_noise) {
+
+	p_visual_anl_noise->generate();
+
+	Ref<VisualAccidentalNoiseNodeComponent> comp = p_visual_anl_noise->get_component();
+
+	VisualAccidentalNoiseNodeComponentEditor::get_singleton()->edit(comp);
 }
 
 void VisualAccidentalNoiseEditor::save_external_data() {
@@ -232,6 +260,11 @@ void VisualAccidentalNoiseEditor::_bind_methods() {
 
 	ClassDB::bind_method("_path_button_pressed", &VisualAccidentalNoiseEditor::_path_button_pressed);
 	ClassDB::bind_method("_on_component_changed", &VisualAccidentalNoiseEditor::_on_component_changed);
+
+	ClassDB::bind_method("_connect_changed", &VisualAccidentalNoiseEditor::_connect_changed);
+	ClassDB::bind_method("_disconnect_changed", &VisualAccidentalNoiseEditor::_disconnect_changed);
+
+	ClassDB::bind_method("_on_changed", &VisualAccidentalNoiseEditor::_on_changed);
 }
 
 VisualAccidentalNoiseEditor *VisualAccidentalNoiseEditor::singleton = NULL;

@@ -1136,8 +1136,14 @@ void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 	ERR_FAIL_COND(vanode.is_null());
 
 	if (p_what == NOTIFICATION_DRAW) {
-		preview_tex = noise->map_to_texture(get_minimum_size(), vanode->get_output_port_value(port));
+		Index prev_eval_index = noise->get_eval_index();
+		noise->set_eval_index(vanode->get_output_port_value(port));
+
+		const Size2i tex_size = get_minimum_size();
+		preview_tex = noise->get_texture(tex_size.x, tex_size.y);
 		draw_texture_rect(preview_tex, Rect2(Vector2(), get_size()), false);
+
+		noise->set_eval_index(prev_eval_index);
 	}
 }
 

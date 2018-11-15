@@ -17,7 +17,22 @@ protected:
     static void _bind_methods();
 
 public:
+    enum Format {
+        FORMAT_NOISE,
+        FORMAT_COLOR,
+    };
+
     AccidentalNoise();
+
+    void set_mode(anl::EMappingModes p_mode);
+    anl::EMappingModes get_mode() const;
+
+    void set_ranges(const AABB &p_ranges);
+    AABB get_ranges() const;
+
+    void set_format(Format p_format);
+    Format get_format() const;
+
 //------------------------------------------------------------------------------
 // Kernel noise methods
 //------------------------------------------------------------------------------
@@ -217,35 +232,31 @@ public:
     Index evaluate(const String& expression);
 
 //------------------------------------------------------------------------------
-// Image methods
+// Image/texture methods
 //------------------------------------------------------------------------------
-    Ref<Image> map_to_image(const Vector2& image_size,
-                            Index index,
-                            anl::EMappingModes mode = anl::EMappingModes::SEAMLESS_NONE,
-                            const Rect2& mapping_ranges = Rect2(-1, -1, 2, 2),
-                            Image::Format format = Image::Format::FORMAT_RGBA8);
+    Ref<Image> get_image(int p_width, int p_height);
+    Ref<Image> get_seamless_image(int p_width, int p_height);
 
-    Ref<Texture> map_to_texture(const Vector2& texture_size,
-                                Index index,
-                                anl::EMappingModes mode = anl::EMappingModes::SEAMLESS_NONE,
-                                const Rect2& ranges = Rect2(-1, -1, 2, 2),
-                                int flags = Texture::FLAGS_DEFAULT);
-
-    void gen_texture(const Vector2& size, anl::EMappingModes mode,
-                    Index index, const String& filename);
+    Ref<Texture> get_texture(int p_width, int p_height);
 
 private:
-    Index eval_index;
-
     anl::CKernel kernel;
     anl::CNoiseExecutor vm;
     anl::CExpressionBuilder eb;
 
+    Index eval_index;
+
+    anl::EMappingModes mode;
+    AABB ranges;
+    Format format;
+
+    Ref<Image> _map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, const AABB &p_ranges, Format p_format);
 };
 
 VARIANT_ENUM_CAST(anl::InterpolationTypes);
 VARIANT_ENUM_CAST(anl::DistanceTypes);
 VARIANT_ENUM_CAST(anl::BasisTypes);
 VARIANT_ENUM_CAST(anl::EMappingModes);
+VARIANT_ENUM_CAST(AccidentalNoise::Format);
 
 #endif

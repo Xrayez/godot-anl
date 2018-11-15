@@ -579,7 +579,10 @@ void VisualAccidentalNoiseNodeComponent::_bind_methods() {
 
 
 VisualAccidentalNoise::VisualAccidentalNoise() : AccidentalNoise() {
+
 	dirty = true;
+
+	// connect("changed", this, "_queue_update");
 }
 
 void VisualAccidentalNoise::generate() {
@@ -604,6 +607,8 @@ void VisualAccidentalNoise::_update_noise() {
 	clear();
 
 	component->evaluate(Ref<VisualAccidentalNoise>(this));
+
+	set_eval_index(component->get_output_port_value(VisualAccidentalNoiseNode::OUTPUT_PORT));
 }
 
 void VisualAccidentalNoise::_component_updated() {

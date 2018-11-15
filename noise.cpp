@@ -1,7 +1,47 @@
 #include "noise.h"
 #include "core/method_bind_ext.gen.inc"
 
-AccidentalNoise::AccidentalNoise(): eval_index(0), vm(kernel), eb(kernel) {}
+AccidentalNoise::AccidentalNoise(): vm(kernel), eb(kernel) {
+
+    eval_index = 0;
+
+    mode = anl::EMappingModes::SEAMLESS_NONE;
+    ranges = AABB(Vector3(-1, -1, -1), Vector3(2, 2, 2));
+    format = FORMAT_COLOR;
+}
+
+void AccidentalNoise::set_mode(anl::EMappingModes p_mode) {
+
+    mode = p_mode;
+    emit_changed();
+}
+
+anl::EMappingModes AccidentalNoise::get_mode() const {
+
+    return mode;
+}
+
+void AccidentalNoise::set_ranges(const AABB &p_ranges) {
+
+    ranges = p_ranges;
+    emit_changed();
+}
+
+AABB AccidentalNoise::get_ranges() const {
+
+    return ranges;
+}
+
+void AccidentalNoise::set_format(Format p_format) {
+
+    format = p_format;
+}
+
+AccidentalNoise::Format AccidentalNoise::get_format() const {
+
+    return format;
+}
+
 //------------------------------------------------------------------------------
 // Kernel methods
 //------------------------------------------------------------------------------
@@ -593,7 +633,7 @@ Index AccidentalNoise::billow(anl::BasisTypes basis, anl::InterpolationTypes int
 
 void AccidentalNoise::set_eval_index(Index p_index) {
 
-    ERR_FAIL_INDEX(p_index, kernel.getKernel()->size());
+    // ERR_FAIL_INDEX(p_index, kernel.getKernel()->size());
 
     eval_index = p_index;
 }
@@ -672,23 +712,62 @@ Index AccidentalNoise::evaluate(const String& expression) {
 //------------------------------------------------------------------------------
 // Image methods
 //------------------------------------------------------------------------------
-Ref<Image> AccidentalNoise::map_to_image(const Vector2& size,
-                                  Index index,
-                                  anl::EMappingModes mode,
-                                  const Rect2& map,
-                                  Image::Format format) {
+Ref<Image> AccidentalNoise::get_image(int p_width, int p_height) {
 
-    anl::SMappingRanges ranges(map.position.x, map.position.x + map.size.x,
-                               map.position.y, map.position.y + map.size.y);
+    return _map_to_image(p_width, p_height, eval_index, mode, ranges, format);
+}
+
+Ref<Image> AccidentalNoise::get_seamless_image(int p_width, int p_height) {
+
+    // Returns seamless image regardless of mapping mode
+    return _map_to_image(p_width, p_height, eval_index, anl::SEAMLESS_XY, ranges, format);
+}
+
+Ref<Texture> AccidentalNoise::get_texture(int p_width, int p_height) {
+
+    const Ref<Image> &image = get_image(p_width, p_height);
+
+    Ref<ImageTexture> texture = memnew(ImageTexture);
+    texture->create_from_image(image);
+
+    return texture;
+}
+
+Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, const AABB& p_ranges, Format p_format) {
+
+    anl::SMappingRanges ranges(
+        p_ranges.position.x, p_ranges.position.x + p_ranges.size.x,
+        p_ranges.position.y, p_ranges.position.y + p_ranges.size.y,
+        p_ranges.position.z, p_ranges.position.z + p_ranges.size.z
+    );
 
     PoolVector<uint8_t> dest_data;
-    const int SIZE = size.x * size.y;
+    const int SIZE = p_width * p_height;
 
-    switch(format) {
-        case Image::Format::FORMAT_RGBA8: {
+    Ref<Image> noise = memnew(Image);
 
-            anl::CArray2Drgba img(size.x, size.y);
-            anl::mapRGBA2DNoZ(mode, img, kernel, ranges, index);
+    switch(p_format) {
+
+        case FORMAT_NOISE: { // scalar, grayscale image
+
+            anl::CArray2Dd img(p_width, p_height);
+            anl::map2DNoZ(p_mode, img, kernel, ranges, p_index);
+            auto src_data = img.getData();
+
+            dest_data.resize(SIZE);
+            PoolVector<uint8_t>::Write w = dest_data.write();
+
+            for(int i = 0; i < SIZE; ++i) {
+                w[i] = (uint8_t)(src_data[i] * 255);
+            }
+            noise->create(p_width, p_height, 0, Image::FORMAT_L8, dest_data);
+
+        } break;
+
+        case FORMAT_COLOR: { // suitable for textures
+
+            anl::CArray2Drgba img(p_width, p_height);
+            anl::mapRGBA2DNoZ(p_mode, img, kernel, ranges, p_index);
             auto src_data = img.getData();
 
             dest_data.resize(SIZE * 4);
@@ -700,56 +779,31 @@ Ref<Image> AccidentalNoise::map_to_image(const Vector2& size,
                 w[i * 4 + 2] = (uint8_t)(src_data[i].b * 255);
                 w[i * 4 + 3] = (uint8_t)(src_data[i].a * 255);
             }
+            noise->create(p_width, p_height, 0, Image::FORMAT_RGBA8, dest_data);
+
         } break;
-
-        case Image::Format::FORMAT_L8: { // grayscale
-
-            anl::CArray2Dd img(size.x, size.y);
-            anl::map2DNoZ(mode, img, kernel, ranges, index);
-            auto src_data = img.getData();
-
-            dest_data.resize(SIZE);
-            PoolVector<uint8_t>::Write w = dest_data.write();
-
-            for(int i = 0; i < SIZE; ++i) {
-                w[i] = (uint8_t)(src_data[i] * 255);
-            }
-        } break;
-
-        default: {
-            ERR_EXPLAIN("Image format " + itos(format) + " is not supported for noise mapping.");
-            ERR_FAIL_V(Ref<Image>());
-        };
     }
-    Ref<Image> noise = memnew(Image);
-    noise->create(size.x, size.y, 0, format, dest_data);
 
     return noise;
 }
 
-Ref<Texture> AccidentalNoise::map_to_texture(const Vector2& texture_size,
-                                      Index index,
-                                      anl::EMappingModes mode,
-                                      const Rect2& map,
-                                      int flags) {
-
-    const Ref<Image>& image = map_to_image(texture_size, index, mode, map);
-    Ref<ImageTexture> texture = memnew(ImageTexture);
-    texture->create_from_image(image, flags);
-
-    return texture;
-}
-
-void AccidentalNoise::gen_texture(const Vector2& size, anl::EMappingModes mode,
-                           Index index, const String& filename) {
-
-    // Experimental
-    anl::CArray2Drgba img(size.x, size.y);
-    anl::mapRGBA2DNoZ(mode, img, kernel, anl::SMappingRanges(), index);
-    anl::saveRGBAArray(filename.utf8().get_data(), &img);
-}
-
 void AccidentalNoise::_bind_methods() {
+
+    ClassDB::bind_method(D_METHOD("set_mode", "mode"),&AccidentalNoise::set_mode);
+    ClassDB::bind_method(D_METHOD("get_mode"),&AccidentalNoise::get_mode);
+
+    ClassDB::bind_method(D_METHOD("set_ranges", "ranges"),&AccidentalNoise::set_ranges);
+    ClassDB::bind_method(D_METHOD("get_ranges"),&AccidentalNoise::get_ranges);
+
+    ClassDB::bind_method(D_METHOD("set_format", "format"),&AccidentalNoise::set_format);
+    ClassDB::bind_method(D_METHOD("get_format"),&AccidentalNoise::get_format);
+
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "mode", PROPERTY_HINT_ENUM, "Seamless none,Seamless X,Seamless Y,Seamless Z,Seamless XY,Seamless XZ,Seamless YZ,Seamless XYZ"), "set_mode", "get_mode");
+    ADD_PROPERTY(PropertyInfo(Variant::AABB, "ranges"), "set_ranges", "get_ranges");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "format", PROPERTY_HINT_ENUM, "Noise,Color"), "set_format", "get_format");
+
+    BIND_ENUM_CONSTANT(FORMAT_NOISE);
+    BIND_ENUM_CONSTANT(FORMAT_COLOR);
 
     // Kernel methods
 
@@ -912,13 +966,12 @@ void AccidentalNoise::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("evaluate", "expression"),&AccidentalNoise::evaluate);
 
-    // Image methods
+    // Image/texture methods
 
-    ClassDB::bind_method(D_METHOD("map_to_image", "size", "index", "mode", "mapping_ranges", "format"),&AccidentalNoise::map_to_image, DEFVAL(anl::EMappingModes::SEAMLESS_NONE), DEFVAL(Rect2(-1, -1, 2, 2)), DEFVAL(Image::Format::FORMAT_RGBA8) );
-    ClassDB::bind_method(D_METHOD("map_to_texture", "size", "index", "mode", "mapping_ranges", "flags"),&AccidentalNoise::map_to_texture, DEFVAL(anl::EMappingModes::SEAMLESS_NONE), DEFVAL(Rect2(-1, -1, 2, 2)), DEFVAL(Texture::FLAGS_DEFAULT) );
+    ClassDB::bind_method(D_METHOD("get_image", "width", "height"),&AccidentalNoise::get_image);
+    ClassDB::bind_method(D_METHOD("get_seamless_image", "width", "height"),&AccidentalNoise::get_seamless_image);
 
-    ClassDB::bind_method(D_METHOD("gen_texture", "size", "mode", "index", "filename"),&AccidentalNoise::gen_texture);
-
+    ClassDB::bind_method(D_METHOD("get_texture", "width", "height"),&AccidentalNoise::get_texture);
 
     using namespace anl;
     // Use namespace declaration to avoid having
