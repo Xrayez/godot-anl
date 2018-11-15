@@ -92,7 +92,7 @@ func radial():
 	map_to_texture(n)
 
 func map_to_texture(n):
-	texture = n.map_to_texture(size, n.index, AccidentalNoise.SEAMLESS_NONE, mapping_ranges)
+	texture = n.map_to_texture(size, n.last_index, AccidentalNoise.SEAMLESS_NONE, mapping_ranges)
 
 func _input(event):
 	if event is InputEventMouseButton:

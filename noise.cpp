@@ -1,7 +1,7 @@
 #include "noise.h"
 #include "core/method_bind_ext.gen.inc"
 
-AccidentalNoise::AccidentalNoise(): vm(kernel), eb(kernel) {}
+AccidentalNoise::AccidentalNoise(): eval_index(0), vm(kernel), eb(kernel) {}
 //------------------------------------------------------------------------------
 // Kernel methods
 //------------------------------------------------------------------------------
@@ -591,6 +591,18 @@ Index AccidentalNoise::billow(anl::BasisTypes basis, anl::InterpolationTypes int
 
 // Kernel
 
+void AccidentalNoise::set_eval_index(Index p_index) {
+
+    ERR_FAIL_INDEX(p_index, kernel.getKernel()->size());
+
+    eval_index = p_index;
+}
+
+Index AccidentalNoise::get_eval_index() {
+
+    return eval_index;
+}
+
 Index AccidentalNoise::get_last_index() {
 
     return kernel.lastIndex().getIndex();
@@ -598,53 +610,54 @@ Index AccidentalNoise::get_last_index() {
 
 void AccidentalNoise::clear() {
 
+    eval_index = 0;
     kernel.clear();
 }
 
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
-double AccidentalNoise::get_scalar_2d(double x, double y, Index index) {
+double AccidentalNoise::get_noise_2d(double x, double y) {
 
-    return vm.evaluateScalar(x, y, index);
+    return vm.evaluateScalar(x, y, eval_index);
 }
 
-double AccidentalNoise::get_scalar_3d(double x, double y, double z, Index index) {
+double AccidentalNoise::get_noise_3d(double x, double y, double z) {
 
-    return vm.evaluateScalar(x, y, z, index);
+    return vm.evaluateScalar(x, y, z, eval_index);
 }
 
-double AccidentalNoise::get_scalar_4d(double x, double y, double z, double w, Index index) {
+double AccidentalNoise::get_noise_4d(double x, double y, double z, double w) {
 
-    return vm.evaluateScalar(x, y, z, w, index);
+    return vm.evaluateScalar(x, y, z, w, eval_index);
 }
 
-double AccidentalNoise::get_scalar_6d(double x, double y, double z, double w, double u, double v, Index index) {
+double AccidentalNoise::get_noise_6d(double x, double y, double z, double w, double u, double v) {
 
-    return vm.evaluateScalar(x, y, z, w, u, v, index);
+    return vm.evaluateScalar(x, y, z, w, u, v, eval_index);
 }
 
-Color AccidentalNoise::get_color_2d(double x, double y, Index index) {
+Color AccidentalNoise::get_color_2d(double x, double y) {
 
-    anl::SRGBA c = vm.evaluateColor(x, y, index);
+    anl::SRGBA c = vm.evaluateColor(x, y, eval_index);
     return Color(c.r, c.g, c.b, c.a);
 }
 
-Color AccidentalNoise::get_color_3d(double x, double y, double z, Index index) {
+Color AccidentalNoise::get_color_3d(double x, double y, double z) {
 
-    anl::SRGBA c = vm.evaluateColor(x, y, z, index);
+    anl::SRGBA c = vm.evaluateColor(x, y, z, eval_index);
     return Color(c.r, c.g, c.b, c.a);
 }
 
-Color AccidentalNoise::get_color_4d(double x, double y, double z, double w, Index index) {
+Color AccidentalNoise::get_color_4d(double x, double y, double z, double w) {
 
-    anl::SRGBA c = vm.evaluateColor(x, y, z, w, index);
+    anl::SRGBA c = vm.evaluateColor(x, y, z, w, eval_index);
     return Color(c.r, c.g, c.b, c.a);
 }
 
-Color AccidentalNoise::get_color_6d(double x, double y, double z, double w, double u, double v, Index index) {
+Color AccidentalNoise::get_color_6d(double x, double y, double z, double w, double u, double v) {
 
-    anl::SRGBA c = vm.evaluateColor(x, y, z, w, u, v, index);
+    anl::SRGBA c = vm.evaluateColor(x, y, z, w, u, v, eval_index);
     return Color(c.r, c.g, c.b, c.a);
 }
 //------------------------------------------------------------------------------
@@ -865,24 +878,35 @@ void AccidentalNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("billow", "basis_type", "interp_type",
                                   "numoctaves", "frequency", "seed", "rotation"),&AccidentalNoise::billow, DEFVAL(true));
 
-
     // Kernel
+
+    ClassDB::bind_method(D_METHOD("set_eval_index"),&AccidentalNoise::set_eval_index);
+    ClassDB::bind_method(D_METHOD("get_eval_index"),&AccidentalNoise::get_eval_index);
+
     ClassDB::bind_method(D_METHOD("get_last_index"),&AccidentalNoise::get_last_index);
+
     ClassDB::bind_method(D_METHOD("clear"),&AccidentalNoise::clear);
 
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "index"), "", "get_last_index");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "eval_index"), "set_eval_index", "get_eval_index");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "last_index"), "", "get_last_index");
 
     // NoiseExecutor methods
 
-    ClassDB::bind_method(D_METHOD("get_scalar_2d", "x", "y", "index"),&AccidentalNoise::get_scalar_2d);
-    ClassDB::bind_method(D_METHOD("get_scalar_3d", "x", "y", "z" "index"),&AccidentalNoise::get_scalar_3d);
-    ClassDB::bind_method(D_METHOD("get_scalar_4d", "x", "y", "z", "w" "index"),&AccidentalNoise::get_scalar_4d);
-    ClassDB::bind_method(D_METHOD("get_scalar_6d", "x", "y", "z", "w", "u", "v", "index"),&AccidentalNoise::get_scalar_6d);
+    ClassDB::bind_method(D_METHOD("get_noise_2d", "x", "y"),&AccidentalNoise::get_noise_2d);
+    ClassDB::bind_method(D_METHOD("get_noise_3d", "x", "y", "z"),&AccidentalNoise::get_noise_3d);
+    ClassDB::bind_method(D_METHOD("get_noise_4d", "x", "y", "z", "w"),&AccidentalNoise::get_noise_4d);
+    ClassDB::bind_method(D_METHOD("get_noise_6d", "x", "y", "z", "w", "u", "v"),&AccidentalNoise::get_noise_6d);
 
-    ClassDB::bind_method(D_METHOD("get_color_2d", "x", "y", "index"),&AccidentalNoise::get_color_2d);
-    ClassDB::bind_method(D_METHOD("get_color_3d", "x", "y", "z", "index"),&AccidentalNoise::get_color_3d);
-    ClassDB::bind_method(D_METHOD("get_color_4d", "x", "y", "z", "w", "index"),&AccidentalNoise::get_color_4d);
-    ClassDB::bind_method(D_METHOD("get_color_6d", "x", "y", "z", "w", "u", "v", "index"),&AccidentalNoise::get_color_6d);
+    ClassDB::bind_method(D_METHOD("get_color_2d", "x", "y"),&AccidentalNoise::get_color_2d);
+    ClassDB::bind_method(D_METHOD("get_color_3d", "x", "y", "z"),&AccidentalNoise::get_color_3d);
+    ClassDB::bind_method(D_METHOD("get_color_4d", "x", "y", "z", "w"),&AccidentalNoise::get_color_4d);
+    ClassDB::bind_method(D_METHOD("get_color_6d", "x", "y", "z", "w", "u", "v"),&AccidentalNoise::get_color_6d);
+
+    ClassDB::bind_method(D_METHOD("get_noise_2dv", "pos"),&AccidentalNoise::get_noise_2dv);
+    ClassDB::bind_method(D_METHOD("get_noise_3dv", "pos"),&AccidentalNoise::get_noise_3dv);
+
+    ClassDB::bind_method(D_METHOD("get_color_2dv", "pos"),&AccidentalNoise::get_color_2dv);
+    ClassDB::bind_method(D_METHOD("get_color_3dv", "pos"),&AccidentalNoise::get_color_3dv);
 
     // ExpressionBuilder methods
 

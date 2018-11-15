@@ -7,7 +7,7 @@
 	    AccidentalNoise class can be used for generating a variety of noise types in a modular way. Noise functions can be chained together to create more complex functions out of elementary ones.
         The noise generation procedure consists of the two main steps:
         1. Adding elementary noise functions to Kernel by calling methods that return an index of the created function. The returned index can be then passed to other noise functions that can use it, building a pipeline.
-        2. Using NoiseExecutor methods (e.g get_scalar_2d) to obtain the noise at specified index, virtually at any point of the function chain.
+        2. Using NoiseExecutor methods (e.g get_noise_2d) to obtain the noise at specified index, virtually at any point of the function chain.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -421,7 +421,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_scalar_2d">
+		<method name="get_noise_2d">
 			<return type="float">
 			</return>
 			<argument index="0" name="x" type="float">
@@ -433,7 +433,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_scalar_3d">
+		<method name="get_noise_3d">
 			<return type="float">
 			</return>
 			<argument index="0" name="x" type="float">
@@ -447,7 +447,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_scalar_4d">
+		<method name="get_noise_4d">
 			<return type="float">
 			</return>
 			<argument index="0" name="x" type="float">
@@ -463,7 +463,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_scalar_6d">
+		<method name="get_noise_6d">
 			<return type="float">
 			</return>
 			<argument index="0" name="6_axis" type="PoolRealArray">

@@ -80,24 +80,26 @@ var select = n.select(
 	perturb, n.constant(0.5), n.zero()
 )
 
+n.eval_index = select
+
 var image = Image.new()
 image.lock()
 
 # Draw evaluated function
 for y in range(HEIGHT):
 	for x in range(WIDTH):
-		var value = n.get_color_2d(x, y, n.index)
+		var value = n.get_color_2d(x, y)
 		image.set_pixel(x, y, value)
 
 image.unlock()
 ```
 You can also map the noise to an image with dedicated method instead:
 ```gdscript
-image = n.map_to_image(size, noise.index)
+image = n.map_to_image(size, noise.eval_index)
 ```
 ... or even tiled texture!
 ```gdscript
-texture = n.map_to_texture(size, noise.index, AccidentalNoise.SEAMLESS_XY)
+texture = n.map_to_texture(size, noise.eval_index, AccidentalNoise.SEAMLESS_XY)
 ```
 
 ### Result

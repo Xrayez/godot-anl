@@ -183,6 +183,9 @@ public:
 
     // Kernel
     // --------------------
+    void set_eval_index(Index p_index);
+    Index get_eval_index();
+
     Index get_last_index();
 
     void clear();
@@ -190,15 +193,23 @@ public:
 //------------------------------------------------------------------------------
 // NoiseExecutor methods
 //------------------------------------------------------------------------------
-    double get_scalar_2d(double x, double y, Index);
-    double get_scalar_3d(double x, double y, double z, Index);
-    double get_scalar_4d(double x, double y, double z, double w, Index);
-    double get_scalar_6d(double x, double y, double z, double w, double u, double v, Index);
+    double get_noise_2d(double x, double y);
+    double get_noise_3d(double x, double y, double z);
+    double get_noise_4d(double x, double y, double z, double w);
+    double get_noise_6d(double x, double y, double z, double w, double u, double v);
 
-    Color get_color_2d(double x, double y, Index);
-    Color get_color_3d(double x, double y, double z, Index);
-    Color get_color_4d(double x, double y, double z, double w, Index);
-    Color get_color_6d(double x, double y, double z, double w, double u, double v, Index);
+    Color get_color_2d(double x, double y);
+    Color get_color_3d(double x, double y, double z);
+    Color get_color_4d(double x, double y, double z, double w);
+    Color get_color_6d(double x, double y, double z, double w, double u, double v);
+
+    // Convenience
+
+    _FORCE_INLINE_ double get_noise_2dv(const Vector2 &v) { return get_noise_2d(v.x, v.y); }
+    _FORCE_INLINE_ double get_noise_3dv(const Vector3 &v) { return get_noise_3d(v.x, v.y, v.z); }
+
+    _FORCE_INLINE_ Color get_color_2dv(const Vector2 &v) { return get_color_2d(v.x, v.y); }
+    _FORCE_INLINE_ Color get_color_3dv(const Vector3 &v) { return get_color_3d(v.x, v.y, v.z); }
 
 //------------------------------------------------------------------------------
 // ExpressionBuilder methods
@@ -224,6 +235,7 @@ public:
                     Index index, const String& filename);
 
 private:
+    Index eval_index;
 
     anl::CKernel kernel;
     anl::CNoiseExecutor vm;
