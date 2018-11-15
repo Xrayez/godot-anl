@@ -1,5 +1,5 @@
-#ifndef ANL_NOISE_H
-#define ANL_NOISE_H
+#ifndef ACCIDENTAL_NOISE_H
+#define ACCIDENTAL_NOISE_H
 
 #include "libs/anl/anl.h"
 
@@ -9,15 +9,15 @@
 // Index of the noise function
 using Index = unsigned int;
 
-class AnlNoise : public Resource {
-    GDCLASS(AnlNoise, Resource);
-    OBJ_SAVE_TYPE(AnlNoise);
+class AccidentalNoise : public Resource {
+    GDCLASS(AccidentalNoise, Resource);
+    OBJ_SAVE_TYPE(AccidentalNoise);
 
 protected:
     static void _bind_methods();
 
 public:
-    AnlNoise();
+    AccidentalNoise();
 //------------------------------------------------------------------------------
 // Kernel noise methods
 //------------------------------------------------------------------------------

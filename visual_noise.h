@@ -1,7 +1,7 @@
-#ifndef VISUAL_ANL_NOISE_H
-#define VISUAL_ANL_NOISE_H
+#ifndef VISUAL_ACCIDENTAL_NOISE_H
+#define VISUAL_ACCIDENTAL_NOISE_H
 
-#include "anl_noise.h"
+#include "noise.h"
 
 struct Axis {
 	enum AxisType {
@@ -39,13 +39,13 @@ struct Axis {
 VARIANT_ENUM_CAST(Axis::AxisType);
 
 
-class VisualAnlNoiseNode;
-class VisualAnlNoiseNodeComponent;
+class VisualAccidentalNoiseNode;
+class VisualAccidentalNoiseNodeComponent;
 
-class VisualAnlNoise : public AnlNoise {
-    GDCLASS(VisualAnlNoise, AnlNoise);
+class VisualAccidentalNoise : public AccidentalNoise {
+    GDCLASS(VisualAccidentalNoise, AccidentalNoise);
 
-	Ref<VisualAnlNoiseNodeComponent> component; // default, tree root
+	Ref<VisualAccidentalNoiseNodeComponent> component; // default, tree root
 
 	void _update_noise();
 	void _queue_update();
@@ -59,15 +59,15 @@ protected:
 public:
 	void generate();
 
-	void set_component(const Ref<VisualAnlNoiseNodeComponent> &p_component);
-	Ref<VisualAnlNoiseNodeComponent> get_component() const;
+	void set_component(const Ref<VisualAccidentalNoiseNodeComponent> &p_component);
+	Ref<VisualAccidentalNoiseNodeComponent> get_component() const;
 
-	VisualAnlNoise();
+	VisualAccidentalNoise();
 };
 
 
-class VisualAnlNoiseNode : public Resource {
-	GDCLASS(VisualAnlNoiseNode, Resource)
+class VisualAccidentalNoiseNode : public Resource {
+	GDCLASS(VisualAccidentalNoiseNode, Resource)
 
 	int port_preview;
 
@@ -116,18 +116,18 @@ public:
 
 	virtual String get_warning() const;
 
-	virtual void evaluate(Ref<VisualAnlNoise> noise);
+	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-	VisualAnlNoiseNode();
+	VisualAccidentalNoiseNode();
 };
 
-VARIANT_ENUM_CAST(VisualAnlNoiseNode::PortType);
+VARIANT_ENUM_CAST(VisualAccidentalNoiseNode::PortType);
 
 
-class VisualAnlNoiseNodeComponent : public VisualAnlNoiseNode {
-	GDCLASS(VisualAnlNoiseNodeComponent, VisualAnlNoiseNode)
+class VisualAccidentalNoiseNodeComponent : public VisualAccidentalNoiseNode {
+	GDCLASS(VisualAccidentalNoiseNodeComponent, VisualAccidentalNoiseNode)
 
-	friend class VisualAnlNoise;
+	friend class VisualAccidentalNoise;
 
 public:
     struct Connection {
@@ -141,7 +141,7 @@ private:
 	String name;
 
 	struct Node {
-		Ref<VisualAnlNoiseNode> node;
+		Ref<VisualAccidentalNoiseNode> node;
 		Vector2 position;
 	};
 
@@ -189,21 +189,21 @@ public:
 	void set_component_name(const String &p_name);
 	String get_component_name() const;
 
-    void add_node(const Ref<VisualAnlNoiseNode> &p_node, const Vector2 &p_position, int p_id);
+    void add_node(const Ref<VisualAccidentalNoiseNode> &p_node, const Vector2 &p_position, int p_id);
 	void set_node_position(int p_id, const Vector2 &p_position);
 
 	Vector2 get_node_position(int p_id) const;
-	Ref<VisualAnlNoiseNode> get_node(int p_id) const;
+	Ref<VisualAccidentalNoiseNode> get_node(int p_id) const;
 
 	bool has_node(int p_id) const;
 
 	Vector<int> get_node_list() const;
 	int get_valid_node_id() const;
 
-	int find_node_id(const Ref<VisualAnlNoiseNode> &p_node) const;
+	int find_node_id(const Ref<VisualAccidentalNoiseNode> &p_node) const;
 	void remove_node(int p_id);
 
-	void evaluate_node(int p_id, Ref<VisualAnlNoise> noise, Connections &input_connections, Connections &output_connections, Set<int> &processed);
+	void evaluate_node(int p_id, Ref<VisualAccidentalNoise> noise, Connections &input_connections, Connections &output_connections, Set<int> &processed);
 
 	bool is_node_connection(int p_from_node, int p_from_port, int p_to_node, int p_to_port) const;
 	bool can_connect_nodes(int p_from_node, int p_from_port, int p_to_node, int p_to_port) const;
@@ -217,7 +217,7 @@ public:
 
 	// String generate_preview_noise(int p_node, int p_port) const;
 
-    VisualAnlNoiseNodeComponent();
+    VisualAccidentalNoiseNodeComponent();
 
 public:
 	virtual String get_caption() const;
@@ -232,12 +232,12 @@ public:
 	virtual PortType get_output_port_type(int p_port) const;
 	virtual String get_output_port_name(int p_port) const;
 
-	virtual void evaluate(Ref<VisualAnlNoise> p_noise);
+	virtual void evaluate(Ref<VisualAccidentalNoise> p_noise);
 };
 
 
-class VisualAnlNoiseNodeInput : public VisualAnlNoiseNode {
-	GDCLASS(VisualAnlNoiseNodeInput, VisualAnlNoiseNode)
+class VisualAccidentalNoiseNodeInput : public VisualAccidentalNoiseNode {
+	GDCLASS(VisualAccidentalNoiseNodeInput, VisualAccidentalNoiseNode)
 
 private:
 	String input_name;
@@ -246,7 +246,7 @@ protected:
 	static void _bind_methods();
 
 public:
-	friend class VisualAnlNoise;
+	friend class VisualAccidentalNoise;
 
 	virtual int get_input_port_count() const;
 	virtual PortType get_input_port_type(int p_port) const;
@@ -267,15 +267,15 @@ public:
 	void set_input_name(const String &p_input_name);
 	String get_input_name() const;
 
-	VisualAnlNoiseNodeInput();
+	VisualAccidentalNoiseNodeInput();
 };
 
 
-class VisualAnlNoiseNodeOutput : public VisualAnlNoiseNode {
-	GDCLASS(VisualAnlNoiseNodeOutput, VisualAnlNoiseNode)
+class VisualAccidentalNoiseNodeOutput : public VisualAccidentalNoiseNode {
+	GDCLASS(VisualAccidentalNoiseNodeOutput, VisualAccidentalNoiseNode)
 
 public:
-	friend class VisualAnlNoise;
+	friend class VisualAccidentalNoise;
 
 public:
 	virtual void set_input_port_value(int p_port, const Variant &p_value);
@@ -298,7 +298,7 @@ public:
 
 	virtual String get_caption() const;
 
-	VisualAnlNoiseNodeOutput();
+	VisualAccidentalNoiseNodeOutput();
 };
 
 #endif

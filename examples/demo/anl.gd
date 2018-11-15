@@ -29,33 +29,33 @@ func _ready():
 		$noise.add_item(noise)
 
 func value_basis():
-	var n = AnlNoise.new()
-	n.value_basis( n.constant(AnlNoise.INTERP_HERMITE), n.seed(randi()) )
+	var n = AccidentalNoise.new()
+	n.value_basis( n.constant(AccidentalNoise.INTERP_HERMITE), n.seed(randi()) )
 	map_to_texture(n)
 
 func gradient_basis():
-	var n = AnlNoise.new()
-	n.gradient_basis( n.constant(AnlNoise.INTERP_QUINTIC), n.seed(randi()) )
+	var n = AccidentalNoise.new()
+	n.gradient_basis( n.constant(AccidentalNoise.INTERP_QUINTIC), n.seed(randi()) )
 	map_to_texture(n)
 
 func simplex_basis():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 	n.simplex_basis( n.seed(randi()) )
 	map_to_texture(n)
 
 func cellular_basis():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 
 	var basis = n.cellular_basis( n.constant(-0.25), n.constant(-0.3), n.constant(0.8), n.constant(0),
 								  n.zero(), n.zero(), n.zero(), n.zero(),
-								  n.constant(AnlNoise.DISTANCE_EUCLID), n.seed(randi()) )
+								  n.constant(AccidentalNoise.DISTANCE_EUCLID), n.seed(randi()) )
 	n.clamp(basis, n.zero(), n.one())
 	map_to_texture(n)
 
 func fractal():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 
-	var layer = n.fractal_layer(AnlNoise.BASIS_GRADIENT, n.constant(AnlNoise.INTERP_QUINTIC), 1, 1, randi())
+	var layer = n.fractal_layer(AccidentalNoise.BASIS_GRADIENT, n.constant(AccidentalNoise.INTERP_QUINTIC), 1, 1, randi())
 
 	var persistence = n.constant(-0.5)
 	var lacunarity = n.constant(4)
@@ -67,32 +67,32 @@ func fractal():
 	map_to_texture(n)
 
 func hex_tile():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 	n.hex_tile( n.seed(randi()) )
 	map_to_texture(n)
 
 func hex_bump():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 	n.hex_bump()
 	map_to_texture(n)
 
 func x():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 	n.x()
 	map_to_texture(n)
 
 func y():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 	n.y()
 	map_to_texture(n)
 
 func radial():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 	n.radial()
 	map_to_texture(n)
 
 func map_to_texture(n):
-	texture = n.map_to_texture(size, n.index, AnlNoise.SEAMLESS_NONE, mapping_ranges)
+	texture = n.map_to_texture(size, n.index, AccidentalNoise.SEAMLESS_NONE, mapping_ranges)
 
 func _input(event):
 	if event is InputEventMouseButton:

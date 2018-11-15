@@ -1,75 +1,75 @@
 #include "register_types.h"
 
-#include "anl_noise.h"
-#include "visual_anl_noise.h"
-#include "visual_anl_noise_nodes.h"
-#include "plugins/visual_anl_noise_editor_plugin.h"
+#include "noise.h"
+#include "visual_noise.h"
+#include "visual_noise_nodes.h"
+#include "plugins/visual_noise_editor_plugin.h"
 
 void register_anl_types() {
 
-    ClassDB::register_class<AnlNoise>();
-    ClassDB::register_class<VisualAnlNoise>();
+    ClassDB::register_class<AccidentalNoise>();
+    ClassDB::register_class<VisualAccidentalNoise>();
 
     ////// Component
-    ClassDB::register_class<VisualAnlNoiseNodeComponent>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeComponent>();
 
     ////// Nodes
 
     // Input
-    ClassDB::register_class<VisualAnlNoiseNodeInput>();
-    ClassDB::register_class<VisualAnlNoiseNodeSeed>();
-    ClassDB::register_class<VisualAnlNoiseNodeSeeder>();
-    ClassDB::register_class<VisualAnlNoiseNodeRandomize>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeInput>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeSeed>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeSeeder>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeRandomize>();
 
     // Scalar
-    ClassDB::register_class<VisualAnlNoiseNodeScalar>();
-    ClassDB::register_class<VisualAnlNoiseNodeScalarOp>();
-    ClassDB::register_class<VisualAnlNoiseNodeScalarFunc>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeScalar>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeScalarOp>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeScalarFunc>();
 
     // Transform
-    ClassDB::register_class<VisualAnlNoiseNodeTranslate>();
-    ClassDB::register_class<VisualAnlNoiseNodeScale>();
-    ClassDB::register_class<VisualAnlNoiseNodeRotate>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeTranslate>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeScale>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeRotate>();
 
     // Basis
-    ClassDB::register_class<VisualAnlNoiseNodeValueBasis>();
-    ClassDB::register_class<VisualAnlNoiseNodeGradientBasis>();
-    ClassDB::register_class<VisualAnlNoiseNodeSimplexBasis>();
-    ClassDB::register_class<VisualAnlNoiseNodeCellularBasis>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeValueBasis>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeGradientBasis>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeSimplexBasis>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeCellularBasis>();
 
     // Filter
-    ClassDB::register_class<VisualAnlNoiseNodeMix>();
-    ClassDB::register_class<VisualAnlNoiseNodeSelect>();
-    ClassDB::register_class<VisualAnlNoiseNodeClamp>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeMix>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeSelect>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeClamp>();
 
     // Axis
-    ClassDB::register_class<VisualAnlNoiseNodeGradient>();
-    ClassDB::register_class<VisualAnlNoiseNodeDerivative>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeGradient>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeDerivative>();
 
     // Patterns
-    ClassDB::register_class<VisualAnlNoiseNodeHex>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeHex>();
 
     // Color
-    ClassDB::register_class<VisualAnlNoiseNodeColor>();
-    ClassDB::register_class<VisualAnlNoiseNodeColorCombine>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeColor>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeColorCombine>();
 
     // Fractal
-    ClassDB::register_class<VisualAnlNoiseNodeFractal>();
-    ClassDB::register_class<VisualAnlNoiseNodeFractalVariant>();
-    ClassDB::register_class<VisualAnlNoiseNodeFractalLayer>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeFractal>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeFractalVariant>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeFractalLayer>();
 
     // Other
-    ClassDB::register_class<VisualAnlNoiseNodeStep>();
-    ClassDB::register_class<VisualAnlNoiseNodeTiers>();
-    ClassDB::register_class<VisualAnlNoiseNodeRadial>();
-    ClassDB::register_class<VisualAnlNoiseNodeCurveSection>();
-    ClassDB::register_class<VisualAnlNoiseNodeScaleOffset>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeStep>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeTiers>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeRadial>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeCurveSection>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeScaleOffset>();
 
     // Misc
-    ClassDB::register_class<VisualAnlNoiseNodeExpression>();
+    ClassDB::register_class<VisualAccidentalNoiseNodeExpression>();
 
 #ifdef TOOLS_ENABLED
-	EditorPlugins::add_by_type<VisualAnlNoiseEditorPlugin>();
+	EditorPlugins::add_by_type<VisualAccidentalNoiseEditorPlugin>();
 #endif
 }
 

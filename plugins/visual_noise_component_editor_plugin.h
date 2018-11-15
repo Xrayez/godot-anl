@@ -1,7 +1,7 @@
-#ifndef VISUAL_ANL_NOISE_NODE_COMPONENT_EDITOR_PLUGIN_H
-#define VISUAL_ANL_NOISE_NODE_COMPONENT_EDITOR_PLUGIN_H
+#ifndef VISUAL_ACCIDENTAL_NOISE_NODE_COMPONENT_EDITOR_PLUGIN_H
+#define VISUAL_ACCIDENTAL_NOISE_NODE_COMPONENT_EDITOR_PLUGIN_H
 
-#include "../visual_anl_noise.h"
+#include "../visual_noise.h"
 
 #include "editor/editor_node.h"
 #include "editor/editor_plugin.h"
@@ -10,33 +10,33 @@
 #include "scene/gui/popup.h"
 #include "scene/gui/tree.h"
 
-class VisualAnlNoiseNodePlugin : public Reference {
+class VisualAccidentalNoiseNodePlugin : public Reference {
 
-	GDCLASS(VisualAnlNoiseNodePlugin, Reference)
+	GDCLASS(VisualAccidentalNoiseNodePlugin, Reference)
 
 protected:
 	static void _bind_methods();
 
 public:
-	virtual Control *create_editor(const Ref<VisualAnlNoiseNode> &p_node);
+	virtual Control *create_editor(const Ref<VisualAccidentalNoiseNode> &p_node);
 };
 
-class VisualAnlNoiseNodePluginDefault : public VisualAnlNoiseNodePlugin {
+class VisualAccidentalNoiseNodePluginDefault : public VisualAccidentalNoiseNodePlugin {
 
-	GDCLASS(VisualAnlNoiseNodePluginDefault, VisualAnlNoiseNodePlugin)
+	GDCLASS(VisualAccidentalNoiseNodePluginDefault, VisualAccidentalNoiseNodePlugin)
 
 public:
-	virtual Control *create_editor(const Ref<VisualAnlNoiseNode> &p_node);
+	virtual Control *create_editor(const Ref<VisualAccidentalNoiseNode> &p_node);
 };
 
-class VisualAnlNoiseNodeComponentEditor : public VBoxContainer {
-	GDCLASS(VisualAnlNoiseNodeComponentEditor, VBoxContainer);
+class VisualAccidentalNoiseNodeComponentEditor : public VBoxContainer {
+	GDCLASS(VisualAccidentalNoiseNodeComponentEditor, VBoxContainer);
 
-	static VisualAnlNoiseNodeComponentEditor *singleton;
+	static VisualAccidentalNoiseNodeComponentEditor *singleton;
 
-	Vector<Ref<VisualAnlNoiseNodePlugin> > plugins;
+	Vector<Ref<VisualAccidentalNoiseNodePlugin> > plugins;
 
-	Ref<VisualAnlNoiseNodeComponent> component;
+	Ref<VisualAccidentalNoiseNodeComponent> component;
     GraphEdit *graph;
 
 	MenuButton *add_node;
@@ -114,7 +114,7 @@ class VisualAnlNoiseNodeComponentEditor : public VBoxContainer {
 	void _input(const Ref<InputEvent> p_event);
 
 	EditorFileDialog *open_file;
-	Ref<VisualAnlNoiseNodeComponent> file_loaded;
+	Ref<VisualAccidentalNoiseNodeComponent> file_loaded;
 	void _file_opened(const String &p_file);
 
 	enum {
@@ -130,27 +130,27 @@ protected:
 
 public:
 
-	static VisualAnlNoiseNodeComponentEditor *get_singleton() { return singleton; }
-	Ref<VisualAnlNoiseNodeComponent> get_component() { return component; }
+	static VisualAccidentalNoiseNodeComponentEditor *get_singleton() { return singleton; }
+	Ref<VisualAccidentalNoiseNodeComponent> get_component() { return component; }
 
 	void add_custom_type(const String &p_name, const String &p_category, const Ref<Script> &p_script);
 	void remove_custom_type(const Ref<Script> &p_script);
 
-	void add_plugin(const Ref<VisualAnlNoiseNodePlugin> &p_plugin);
-	void remove_plugin(const Ref<VisualAnlNoiseNodePlugin> &p_plugin);
+	void add_plugin(const Ref<VisualAccidentalNoiseNodePlugin> &p_plugin);
+	void remove_plugin(const Ref<VisualAccidentalNoiseNodePlugin> &p_plugin);
 
 	virtual Size2 get_minimum_size() const;
 
-	bool can_edit(const Ref<VisualAnlNoiseNodeComponent> &p_component);
-	void edit(const Ref<VisualAnlNoiseNodeComponent> &p_component);
+	bool can_edit(const Ref<VisualAccidentalNoiseNodeComponent> &p_component);
+	void edit(const Ref<VisualAccidentalNoiseNodeComponent> &p_component);
 
-	VisualAnlNoiseNodeComponentEditor();
+	VisualAccidentalNoiseNodeComponentEditor();
 };
 
-class VisualAnlNoiseNodePortPreview : public Control {
-	GDCLASS(VisualAnlNoiseNodePortPreview, Control)
+class VisualAccidentalNoiseNodePortPreview : public Control {
+	GDCLASS(VisualAccidentalNoiseNodePortPreview, Control)
 
-	Ref<VisualAnlNoise> noise;
+	Ref<VisualAccidentalNoise> noise;
 	Ref<Texture> preview_tex;
 
 	int node;
@@ -164,9 +164,9 @@ protected:
 
 public:
 	virtual Size2 get_minimum_size() const;
-	void setup(const Ref<VisualAnlNoise> &p_noise, int p_node, int p_port);
+	void setup(const Ref<VisualAccidentalNoise> &p_noise, int p_node, int p_port);
 
-	VisualAnlNoiseNodePortPreview();
+	VisualAccidentalNoiseNodePortPreview();
 };
 
 #endif

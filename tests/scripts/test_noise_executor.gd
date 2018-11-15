@@ -1,10 +1,10 @@
 extends Node2D
 
 func _init():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 
 	var gradient = n.y()
-	var fractal = n.fbm(AnlNoise.BASIS_SIMPLEX, n.constant(AnlNoise.INTERP_LINEAR), 3, 5, randi())
+	var fractal = n.fbm(AccidentalNoise.BASIS_SIMPLEX, n.constant(AccidentalNoise.INTERP_LINEAR), 3, 5, randi())
 	var scale_offset = n.scale_offset(fractal, 0.5, 0)
 	n.translate(gradient, scale_offset)
 

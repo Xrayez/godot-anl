@@ -1,7 +1,7 @@
 extends Node2D
 
 func _init():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 
 	var i # instruction index
 	i = n.pi()
@@ -15,12 +15,12 @@ func _init():
 	var si = n.seed(123)
 	i = n.seeder( i, n.constant(randi()) )
 
-	i = n.value_basis(n.constant(AnlNoise.INTERP_NONE), si)
-	i = n.gradient_basis(n.constant(AnlNoise.INTERP_LINEAR), si)
+	i = n.value_basis(n.constant(AccidentalNoise.INTERP_NONE), si)
+	i = n.gradient_basis(n.constant(AccidentalNoise.INTERP_LINEAR), si)
 	i = n.simplex_basis(si)
 	var f = n.point5()
 	var d = n.zero()
-	i = n.cellular_basis(f,f,f,f, d,d,d,d, n.constant(AnlNoise.DISTANCE_MANHATTAN), si)
+	i = n.cellular_basis(f,f,f,f, d,d,d,d, n.constant(AccidentalNoise.DISTANCE_MANHATTAN), si)
 
 	var ci = n.constant(10)
 	i = n.add(i, ci)
@@ -115,23 +115,23 @@ func _init():
 
 	i = n.scale_offset(i, 0.5, 0.0)
 
-	i = n.fractal_layer(AnlNoise.BASIS_GRADIENT, n.constant(AnlNoise.INTERP_QUINTIC),
+	i = n.fractal_layer(AccidentalNoise.BASIS_GRADIENT, n.constant(AccidentalNoise.INTERP_QUINTIC),
 					    0, 1, 2, true, # scale, frequency, seed, rotation
 					    0.8, 0.2, 0.2, 0.1) # angle, ax, ay, az
 
-	i = n.ridged_layer(AnlNoise.BASIS_SIMPLEX, n.constant(AnlNoise.INTERP_HERMITE),
+	i = n.ridged_layer(AccidentalNoise.BASIS_SIMPLEX, n.constant(AccidentalNoise.INTERP_HERMITE),
 					   0, 1, 2, false) # scale, frequency, seed, rotation
 
-	i = n.billow_layer(AnlNoise.BASIS_VALUE, n.constant(AnlNoise.INTERP_LINEAR),
+	i = n.billow_layer(AccidentalNoise.BASIS_VALUE, n.constant(AccidentalNoise.INTERP_LINEAR),
 					   0, 1, 2, 3, true, 0.7) # scale, frequency, seed, rotation, angle
 
-	i = n.fbm(AnlNoise.BASIS_VALUE, n.constant(AnlNoise.INTERP_LINEAR),
+	i = n.fbm(AccidentalNoise.BASIS_VALUE, n.constant(AccidentalNoise.INTERP_LINEAR),
 			  2, 2, ci, true) # octaves, frequency, seed, rotation
 
-	i = n.ridged_multifractal(AnlNoise.BASIS_VALUE, n.constant(AnlNoise.INTERP_NONE),
+	i = n.ridged_multifractal(AccidentalNoise.BASIS_VALUE, n.constant(AccidentalNoise.INTERP_NONE),
 							  2, 2, ci) # octaves, frequency, seed
 
-	i = n.billow(AnlNoise.BASIS_GRADIENT, n.constant(AnlNoise.INTERP_HERMITE),
+	i = n.billow(AccidentalNoise.BASIS_GRADIENT, n.constant(AccidentalNoise.INTERP_HERMITE),
 				 2, 2, ci) # octaves, frequency, seed
 
 	# Kernel

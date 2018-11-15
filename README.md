@@ -24,7 +24,7 @@ The code structure is somewhat established for visual noise but can't be conside
 
 ## Overview
 
-The AnlNoise class encapsulates the two main classes required for noise
+The AccidentalNoise class encapsulates the two main classes required for noise
 generation: CKernel, CNoiseExecutor
 
 The kernel holds any amount of noise functions together creating compound noise
@@ -66,11 +66,11 @@ scons platform=linux target=release_debug bits=64 define=ANL_LONG_PERIOD_HASHING
 ## Usage example
 
 ```gdscript
-var n = AnlNoise.new()
+var n = AccidentalNoise.new()
 
 var gradient = n.y()
 
-var fractal = n.fbm(AnlNoise.BASIS_GRADIENT, AnlNoise.INTERP_QUINTIC, 4, 3, randi())
+var fractal = n.fbm(AccidentalNoise.BASIS_GRADIENT, AccidentalNoise.INTERP_QUINTIC, 4, 3, randi())
 var scale_offset = n.scale_offset(fractal, 0.5, 0)
 
 var perturb = n.translate(gradient, scale_offset)
@@ -97,7 +97,7 @@ image = n.map_to_image(size, noise.index)
 ```
 ... or even tiled texture!
 ```gdscript
-texture = n.map_to_texture(size, noise.index, AnlNoise.SEAMLESS_XY)
+texture = n.map_to_texture(size, noise.index, AccidentalNoise.SEAMLESS_XY)
 ```
 
 ### Result
@@ -107,7 +107,7 @@ You can also use the expression builder to simplify the process of chaining
 functions together to one-liners, something like this:
 
 ```gdscript
-var n = AnlNoise.new()
+var n = AccidentalNoise.new()
 
 var expression = "translate(select(0, 1, (x + y), 0.5, 0), 10)"
 var function = n.evaluate(expression)

@@ -1,4 +1,4 @@
-#include "visual_anl_noise_editor_plugin.h"
+#include "visual_noise_editor_plugin.h"
 
 #include "core/io/resource_loader.h"
 #include "core/os/input.h"
@@ -11,7 +11,7 @@
 
 ///////////////////////////////////
 
-void VisualAnlNoiseEditor::edit(const Ref<VisualAnlNoise> &p_visual_anl_noise) {
+void VisualAccidentalNoiseEditor::edit(const Ref<VisualAccidentalNoise> &p_visual_anl_noise) {
 
 	if (visual_anl_noise == p_visual_anl_noise) {
 		return;
@@ -42,7 +42,7 @@ void VisualAnlNoiseEditor::edit(const Ref<VisualAnlNoise> &p_visual_anl_noise) {
 	}
 }
 
-void VisualAnlNoiseEditor::save_external_data() {
+void VisualAccidentalNoiseEditor::save_external_data() {
 
 	if (visual_anl_noise.is_null())
 		return;
@@ -50,7 +50,7 @@ void VisualAnlNoiseEditor::save_external_data() {
 	ResourceSaver::save(visual_anl_noise->get_path(), visual_anl_noise);
 }
 
-void VisualAnlNoiseEditor::add_plugin(VisualAnlNoiseNodeComponentEditor *p_editor) {
+void VisualAccidentalNoiseEditor::add_plugin(VisualAccidentalNoiseNodeComponentEditor *p_editor) {
 
 	ERR_FAIL_COND(p_editor->get_parent());
 	editor_base->add_child(p_editor);
@@ -60,16 +60,16 @@ void VisualAnlNoiseEditor::add_plugin(VisualAnlNoiseNodeComponentEditor *p_edito
 	p_editor->hide();
 }
 
-void VisualAnlNoiseEditor::remove_plugin(VisualAnlNoiseNodeComponentEditor *p_editor) {
+void VisualAccidentalNoiseEditor::remove_plugin(VisualAccidentalNoiseNodeComponentEditor *p_editor) {
 
 	ERR_FAIL_COND(p_editor->get_parent() != editor_base);
 	editor_base->remove_child(p_editor);
 	component_editor = NULL;
 }
 
-void VisualAnlNoiseEditor::_update_path() {
+void VisualAccidentalNoiseEditor::_update_path() {
 
-	Ref<VisualAnlNoiseNodeComponent> node = visual_anl_noise->get_component();
+	Ref<VisualAccidentalNoiseNodeComponent> node = visual_anl_noise->get_component();
 	if (node.is_null()) {
 		return;
 	}
@@ -90,7 +90,7 @@ void VisualAnlNoiseEditor::_update_path() {
 	b->connect("pressed", this, "_path_button_pressed", varray(-1));
 	path_hb->add_child(b);
 
-	Ref<VisualAnlNoiseNodeComponent> comp;
+	Ref<VisualAccidentalNoiseNodeComponent> comp;
 
 	for (int i = 0; i < button_path.size(); i++) {
 
@@ -107,31 +107,31 @@ void VisualAnlNoiseEditor::_update_path() {
 	}
 }
 
-Ref<VisualAnlNoiseNodeComponent> VisualAnlNoiseEditor::_get_child_by_path(const Ref<VisualAnlNoiseNodeComponent> &p_node, Vector<int> &p_path) {
+Ref<VisualAccidentalNoiseNodeComponent> VisualAccidentalNoiseEditor::_get_child_by_path(const Ref<VisualAccidentalNoiseNodeComponent> &p_node, Vector<int> &p_path) {
 
-	Ref<VisualAnlNoiseNodeComponent> node = p_node;
+	Ref<VisualAccidentalNoiseNodeComponent> node = p_node;
 
 	for (int i = 0; i < p_path.size(); i++) {
 
-		Ref<VisualAnlNoiseNodeComponent> child = node->get_node(p_path[i]);
+		Ref<VisualAccidentalNoiseNodeComponent> child = node->get_node(p_path[i]);
 		ERR_BREAK(child.is_null());
 		node = child;
 	}
 	return node;
 }
 
-void VisualAnlNoiseEditor::edit_path(const Vector<int> &p_path) {
+void VisualAccidentalNoiseEditor::edit_path(const Vector<int> &p_path) {
 
 	button_path.clear();
 
-	Ref<VisualAnlNoiseNodeComponent> node = visual_anl_noise->get_component();
+	Ref<VisualAccidentalNoiseNodeComponent> node = visual_anl_noise->get_component();
 
 	if (node.is_valid()) {
 		current_component = node->get_instance_id();
 
 		for (int i = 0; i < p_path.size(); i++) {
 
-			Ref<VisualAnlNoiseNodeComponent> child = node->get_node(p_path[i]);
+			Ref<VisualAccidentalNoiseNodeComponent> child = node->get_node(p_path[i]);
 			ERR_BREAK(child.is_null());
 			node = child;
 			button_path.push_back(p_path[i]);
@@ -146,9 +146,9 @@ void VisualAnlNoiseEditor::edit_path(const Vector<int> &p_path) {
 	_update_path();
 }
 
-void VisualAnlNoiseEditor::_path_button_pressed(int p_path) {
+void VisualAccidentalNoiseEditor::_path_button_pressed(int p_path) {
 
-	Ref<VisualAnlNoiseNodeComponent> node = visual_anl_noise->get_component();
+	Ref<VisualAccidentalNoiseNodeComponent> node = visual_anl_noise->get_component();
 
 	if (node.is_null())
 		return;
@@ -157,7 +157,7 @@ void VisualAnlNoiseEditor::_path_button_pressed(int p_path) {
 
 	if (p_path >= 0) {
 		for (int i = 0; i <= p_path; i++) {
-			Ref<VisualAnlNoiseNodeComponent> child = node->get_node(button_path[i]);
+			Ref<VisualAccidentalNoiseNodeComponent> child = node->get_node(button_path[i]);
 			ERR_BREAK(child.is_null());
 			node = child;
 			edited_path.push_back(button_path[i]);
@@ -167,9 +167,9 @@ void VisualAnlNoiseEditor::_path_button_pressed(int p_path) {
 	edit_component(node);
 }
 
-void VisualAnlNoiseEditor::edit_component(const Ref<VisualAnlNoiseNodeComponent> &p_component) {
+void VisualAccidentalNoiseEditor::edit_component(const Ref<VisualAccidentalNoiseNodeComponent> &p_component) {
 
-	Ref<VisualAnlNoiseNodeComponent> component;
+	Ref<VisualAccidentalNoiseNodeComponent> component;
 
 	if(p_component.is_null()) {
 		component = visual_anl_noise->get_component();
@@ -183,30 +183,30 @@ void VisualAnlNoiseEditor::edit_component(const Ref<VisualAnlNoiseNodeComponent>
 			component_editor->edit(component);
 			component_editor->show();
 		} else {
-			component_editor->edit(Ref<VisualAnlNoiseNode>());
+			component_editor->edit(Ref<VisualAccidentalNoiseNode>());
 			component_editor->hide();
 		}
 	}
 }
 
-void VisualAnlNoiseEditor::_on_component_changed() {
+void VisualAccidentalNoiseEditor::_on_component_changed() {
 
 	edit_component();
 }
 
-void VisualAnlNoiseEditor::enter_editor(int p_which) {
+void VisualAccidentalNoiseEditor::enter_editor(int p_which) {
 
 	Vector<int> path = edited_path;
 	path.push_back(p_which);
 	edit_path(path);
 }
 
-Vector<int> VisualAnlNoiseEditor::get_edited_path() const {
+Vector<int> VisualAccidentalNoiseEditor::get_edited_path() const {
 
 	return button_path;
 }
 
-bool VisualAnlNoiseEditor::can_edit(const Ref<VisualAnlNoiseNode> &p_node) const {
+bool VisualAccidentalNoiseEditor::can_edit(const Ref<VisualAccidentalNoiseNode> &p_node) const {
 
 	if (component_editor->can_edit(p_node)) {
 		return true;
@@ -214,7 +214,7 @@ bool VisualAnlNoiseEditor::can_edit(const Ref<VisualAnlNoiseNode> &p_node) const
 	return false;
 }
 
-void VisualAnlNoiseEditor::_notification(int p_what) {
+void VisualAccidentalNoiseEditor::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_PROCESS) {
 		ObjectID component = 0;
@@ -228,15 +228,15 @@ void VisualAnlNoiseEditor::_notification(int p_what) {
 	}
 }
 
-void VisualAnlNoiseEditor::_bind_methods() {
+void VisualAccidentalNoiseEditor::_bind_methods() {
 
-	ClassDB::bind_method("_path_button_pressed", &VisualAnlNoiseEditor::_path_button_pressed);
-	ClassDB::bind_method("_on_component_changed", &VisualAnlNoiseEditor::_on_component_changed);
+	ClassDB::bind_method("_path_button_pressed", &VisualAccidentalNoiseEditor::_path_button_pressed);
+	ClassDB::bind_method("_on_component_changed", &VisualAccidentalNoiseEditor::_on_component_changed);
 }
 
-VisualAnlNoiseEditor *VisualAnlNoiseEditor::singleton = NULL;
+VisualAccidentalNoiseEditor *VisualAccidentalNoiseEditor::singleton = NULL;
 
-VisualAnlNoiseEditor::VisualAnlNoiseEditor() {
+VisualAccidentalNoiseEditor::VisualAccidentalNoiseEditor() {
 
 	path_edit = memnew(ScrollContainer);
 	add_child(path_edit);
@@ -251,24 +251,24 @@ VisualAnlNoiseEditor::VisualAnlNoiseEditor() {
 	editor_base->set_v_size_flags(SIZE_EXPAND_FILL);
 	add_child(editor_base);
 
-	add_plugin(memnew(VisualAnlNoiseNodeComponentEditor));
+	add_plugin(memnew(VisualAccidentalNoiseNodeComponentEditor));
 }
 
 ///////////////////////////////////
 // Plugin
 ///////////////////////////////////
 
-void VisualAnlNoiseEditorPlugin::edit(Object *p_object) {
+void VisualAccidentalNoiseEditorPlugin::edit(Object *p_object) {
 
-	visual_anl_noise_editor->edit(Object::cast_to<VisualAnlNoise>(p_object));
+	visual_anl_noise_editor->edit(Object::cast_to<VisualAccidentalNoise>(p_object));
 }
 
-bool VisualAnlNoiseEditorPlugin::handles(Object *p_object) const {
+bool VisualAccidentalNoiseEditorPlugin::handles(Object *p_object) const {
 
-	return p_object->is_class("VisualAnlNoise");
+	return p_object->is_class("VisualAccidentalNoise");
 }
 
-void VisualAnlNoiseEditorPlugin::make_visible(bool p_visible) {
+void VisualAccidentalNoiseEditorPlugin::make_visible(bool p_visible) {
 
 	if (p_visible) {
 		button->show();
@@ -287,20 +287,20 @@ void VisualAnlNoiseEditorPlugin::make_visible(bool p_visible) {
 	}
 }
 
-void VisualAnlNoiseEditorPlugin::save_external_data() {
+void VisualAccidentalNoiseEditorPlugin::save_external_data() {
 
 	visual_anl_noise_editor->save_external_data();
 }
 
-VisualAnlNoiseEditorPlugin::VisualAnlNoiseEditorPlugin(EditorNode *p_node) {
+VisualAccidentalNoiseEditorPlugin::VisualAccidentalNoiseEditorPlugin(EditorNode *p_node) {
 
 	editor = p_node;
-	visual_anl_noise_editor = memnew(VisualAnlNoiseEditor);
+	visual_anl_noise_editor = memnew(VisualAccidentalNoiseEditor);
 	visual_anl_noise_editor->set_custom_minimum_size(Size2(0, 300));
 
-	button = editor->add_bottom_panel_item(TTR("VisualAnlNoise"), visual_anl_noise_editor);
+	button = editor->add_bottom_panel_item(TTR("VisualAccidentalNoise"), visual_anl_noise_editor);
 	button->hide();
 }
 
-VisualAnlNoiseEditorPlugin::~VisualAnlNoiseEditorPlugin() {
+VisualAccidentalNoiseEditorPlugin::~VisualAccidentalNoiseEditorPlugin() {
 }

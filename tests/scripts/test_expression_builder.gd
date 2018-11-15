@@ -1,7 +1,7 @@
 extends Node2D
 
 func _init():
-    var n = AnlNoise.new()
+    var n = AccidentalNoise.new()
 
     var expression = String()
 

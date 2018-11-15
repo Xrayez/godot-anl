@@ -1,7 +1,7 @@
 extends Node2D
 
 func _init():
-	var n = AnlNoise.new()
+	var n = AccidentalNoise.new()
 
 	var r = n.scale(n.simplex_basis(randi()), n.constant(5))
 	r = n.clamp(r, n.constant(0.6) , n.constant(0.75))
@@ -23,8 +23,8 @@ func _init():
 	# Image mapping
 	var tex = ImageTexture.new()
 	var img = Image.new()
-	img = n.map_to_image(Vector2(100, 100), n.index, AnlNoise.SEAMLESS_XY)
+	img = n.map_to_image(Vector2(100, 100), n.index, AccidentalNoise.SEAMLESS_XY)
 	tex.create_from_image(img)
 
 	# Texture mapping
-	tex = n.map_to_texture(Vector2(100, 100), n.index, AnlNoise.SEAMLESS_NONE)
+	tex = n.map_to_texture(Vector2(100, 100), n.index, AccidentalNoise.SEAMLESS_NONE)
