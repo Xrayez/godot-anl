@@ -8,7 +8,7 @@ namespace anl
 struct SRGBA
 {
     SRGBA() : r(0), g(0), b(0), a(0) {}
-    SRGBA(int al) : r(a), g(a), b(a), a(al) {}
+    SRGBA(int al) : r(al), g(al), b(al), a(al) {}
     SRGBA(const  SRGBA &rhs) : r(rhs.r), g(rhs.g), b(rhs.b), a(rhs.a) {}
     SRGBA(const float t1, const float t2, const float t3, const float t4) : r(t1), g(t2), b(t3), a(t4) {}
     ~SRGBA() {}

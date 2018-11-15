@@ -701,9 +701,14 @@ Ref<Image> AccidentalNoise::map_to_image(const Vector2& size,
                 w[i] = static_cast<uint8_t>(src_data[i] * 255);
             }
         } break;
+        default: {
+            ERR_EXPLAIN("Image format " + itos(format) + " is not supported for noise mapping.");
+            ERR_FAIL_V(Ref<Image>());
+        };
     }
     Ref<Image> noise = memnew(Image);
     noise->create(size.x, size.y, 0, format, dest_data);
+
     return noise;
 }
 
