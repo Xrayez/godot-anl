@@ -153,7 +153,9 @@ void VisualAccidentalNoiseNodeComponentEditor::_update_graph() {
 
 		Vector2 position = component->get_node_position(nodes[n_i]);
 		Ref<VisualAccidentalNoiseNode> vanode = component->get_node(nodes[n_i]);
-		Ref<VisualAccidentalNoiseNodeInput> input = vanode;
+
+		Ref<VisualAccidentalNoiseNodeInput> input = vanode; // may be input
+		Ref<VisualAccidentalNoiseNodeOutput> output = vanode; // may be output
 		Ref<VisualAccidentalNoiseNodeComponent> comp = vanode; // may be component
 
 		GraphNode *node = memnew(GraphNode);
@@ -293,7 +295,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_update_graph() {
 				}
 			}
 
-			if (valid_right) {
+			if (valid_right || output.is_valid()) {
 				TextureButton *preview = memnew(TextureButton);
 				preview->set_toggle_mode(true);
 				preview->set_normal_texture(get_icon("GuiVisibilityHidden", "EditorIcons"));
@@ -1116,7 +1118,30 @@ void VisualAccidentalNoiseNodePortPreview::setup(const Ref<VisualAccidentalNoise
 }
 
 Size2 VisualAccidentalNoiseNodePortPreview::get_minimum_size() const {
-	return Size2(100, 100) * EDSCALE;
+
+	Size2 min_size = Size2(100, 100) * EDSCALE;
+
+	if(noise.is_null()) {
+		return min_size;
+	}
+
+	const Ref<VisualAccidentalNoiseNodeComponent> &component = VisualAccidentalNoiseNodeComponentEditor::get_singleton()->get_component();
+	ERR_FAIL_COND_V(component.is_null(), min_size);
+
+	if(!component->has_node(node)) {
+		return min_size;
+	}
+
+	const Ref<VisualAccidentalNoiseNode> &vanode = component->get_node(node);
+	ERR_FAIL_COND_V(vanode.is_null(), min_size);
+
+
+	Ref<VisualAccidentalNoiseNodeOutput> output = vanode;
+	if (output.is_valid()) {
+		min_size *= 4;
+	}
+
+	return min_size;
 }
 
 void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
@@ -1139,9 +1164,10 @@ void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 		Index prev_eval_index = noise->get_eval_index();
 		noise->set_eval_index(vanode->get_output_port_value(port));
 
-		const Size2i tex_size = get_minimum_size();
+		Size2 tex_size = get_minimum_size();
+
 		preview_tex = noise->get_texture(tex_size.x, tex_size.y);
-		draw_texture_rect(preview_tex, Rect2(Vector2(), get_size()), false);
+		draw_texture_rect(preview_tex, Rect2(Vector2(), tex_size), false);
 
 		noise->set_eval_index(prev_eval_index);
 	}
