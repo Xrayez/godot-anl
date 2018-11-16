@@ -600,6 +600,10 @@ void VisualAccidentalNoise::_update_noise() {
 	if (!dirty)
 		return;
 
+	if (!get_expression().empty()) {
+		return;
+	}
+
 	dirty = false;
 
 	// Some nodes like fractal layer make use of previously created

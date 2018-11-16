@@ -4,6 +4,7 @@
 AccidentalNoise::AccidentalNoise(): vm(kernel), eb(kernel) {
 
     eval_index = 0;
+    prev_eval_index = 0;
 
     mode = anl::EMappingModes::SEAMLESS_NONE;
     ranges = AABB(Vector3(-1, -1, -1), Vector3(2, 2, 2));
@@ -35,11 +36,36 @@ AABB AccidentalNoise::get_ranges() const {
 void AccidentalNoise::set_format(Format p_format) {
 
     format = p_format;
+    emit_changed();
 }
 
 AccidentalNoise::Format AccidentalNoise::get_format() const {
 
     return format;
+}
+
+void AccidentalNoise::set_expression(const String &p_expression) {
+
+    if (expression.empty() && p_expression.empty()) {
+        return;
+    }
+    expression = p_expression;
+
+    if (!expression.empty()) {
+        Index exp_index = evaluate(expression);
+        prev_eval_index = eval_index;
+        eval_index = exp_index;
+    } else {
+        // Resume
+        eval_index = prev_eval_index;
+    }
+
+    emit_changed();
+}
+
+String AccidentalNoise::get_expression() const {
+
+    return expression;
 }
 
 //------------------------------------------------------------------------------
@@ -635,6 +661,10 @@ void AccidentalNoise::set_eval_index(Index p_index) {
 
     // ERR_FAIL_INDEX(p_index, kernel.getKernel()->size());
 
+    if (!expression.empty()) {
+        return;
+    }
+    prev_eval_index = eval_index;
     eval_index = p_index;
 }
 
@@ -651,6 +681,10 @@ Index AccidentalNoise::get_last_index() {
 void AccidentalNoise::clear() {
 
     eval_index = 0;
+    prev_eval_index = 0;
+
+    expression = String();
+
     kernel.clear();
 }
 
@@ -704,6 +738,8 @@ Color AccidentalNoise::get_color_6d(double x, double y, double z, double w, doub
 // ExpressionBuilder methods
 //------------------------------------------------------------------------------
 Index AccidentalNoise::evaluate(const String& expression) {
+
+    WARN_PRINT("ExpressionBuilder is unstable, use at your own discretion.");
 
     auto function = eb.eval(expression.utf8().get_data());
     return function.getIndex();
@@ -798,9 +834,13 @@ void AccidentalNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_format", "format"),&AccidentalNoise::set_format);
     ClassDB::bind_method(D_METHOD("get_format"),&AccidentalNoise::get_format);
 
+    ClassDB::bind_method(D_METHOD("set_expression", "expression"),&AccidentalNoise::set_expression);
+    ClassDB::bind_method(D_METHOD("get_expression"),&AccidentalNoise::get_expression);
+
     ADD_PROPERTY(PropertyInfo(Variant::INT, "mode", PROPERTY_HINT_ENUM, "Seamless none,Seamless X,Seamless Y,Seamless Z,Seamless XY,Seamless XZ,Seamless YZ,Seamless XYZ"), "set_mode", "get_mode");
     ADD_PROPERTY(PropertyInfo(Variant::AABB, "ranges"), "set_ranges", "get_ranges");
     ADD_PROPERTY(PropertyInfo(Variant::INT, "format", PROPERTY_HINT_ENUM, "Noise,Color"), "set_format", "get_format");
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "expression", PROPERTY_HINT_MULTILINE_TEXT), "set_expression", "get_expression");
 
     BIND_ENUM_CONSTANT(FORMAT_NOISE);
     BIND_ENUM_CONSTANT(FORMAT_COLOR);

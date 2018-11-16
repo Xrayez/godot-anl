@@ -6,7 +6,7 @@
 #include "core/resource.h"
 #include "scene/resources/texture.h"
 
-// Index of the noise function
+// Instruction index of the noise function
 using Index = unsigned int;
 
 class AccidentalNoise : public Resource {
@@ -32,6 +32,9 @@ public:
 
     void set_format(Format p_format);
     Format get_format() const;
+
+    void set_expression(const String &p_expression);
+    String get_expression() const;
 
 //------------------------------------------------------------------------------
 // Kernel noise methods
@@ -245,10 +248,12 @@ private:
     anl::CExpressionBuilder eb;
 
     Index eval_index;
+    Index prev_eval_index;
 
     anl::EMappingModes mode;
     AABB ranges;
     Format format;
+    String expression;
 
     Ref<Image> _map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, const AABB &p_ranges, Format p_format);
 };
