@@ -30,7 +30,6 @@ void VisualAccidentalNoiseEditor::edit(const Ref<VisualAccidentalNoise> &p_visua
 
 		_connect_changed(p_visual_anl_noise);
 		edit_component();
-		_update_path();
 
 	} else {
 		visual_anl_noise.unref();
