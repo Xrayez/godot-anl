@@ -42,6 +42,7 @@ VARIANT_ENUM_CAST(Axis::AxisType);
 class VisualAccidentalNoiseNode;
 class VisualAccidentalNoiseNodeComponent;
 
+
 class VisualAccidentalNoise : public AccidentalNoise {
     GDCLASS(VisualAccidentalNoise, AccidentalNoise);
 
@@ -57,14 +58,28 @@ protected:
 	static void _bind_methods();
 
 public:
+	void set_clamping_enabled(bool p_enable);
+	bool is_clamping_enabled() const;
+
+	void set_clamp_low(double p_value);
+	double get_clamp_low() const;
+
+	void set_clamp_high(double p_value);
+	double get_clamp_high() const;
+
 	void generate();
 
 	void set_component(const Ref<VisualAccidentalNoiseNodeComponent> &p_component);
 	Ref<VisualAccidentalNoiseNodeComponent> get_component() const;
 
 	VisualAccidentalNoise();
-};
 
+private:
+	bool clamping_enabled;
+
+	double clamp_low;
+	double clamp_high;
+};
 
 class VisualAccidentalNoiseNode : public Resource {
 	GDCLASS(VisualAccidentalNoiseNode, Resource)
@@ -287,16 +302,9 @@ public:
 	virtual PortType get_input_port_type(int p_port) const;
 	virtual String get_input_port_name(int p_port) const;
 
-	Variant get_input_port_default_value(int p_port) const;
-
 	virtual int get_output_port_count() const;
 	virtual PortType get_output_port_type(int p_port) const;
 	virtual String get_output_port_name(int p_port) const;
-
-	virtual void set_output_port_value(int p_port, const Variant &p_value);
-	virtual Variant get_output_port_value(int p_port) const;
-
-	virtual bool is_port_separator(int p_index) const;
 
 	virtual String get_caption() const;
 

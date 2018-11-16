@@ -580,9 +580,13 @@ void VisualAccidentalNoiseNodeComponent::_bind_methods() {
 
 VisualAccidentalNoise::VisualAccidentalNoise() : AccidentalNoise() {
 
+	clamping_enabled = false;
+	clamp_low = 0.0;
+	clamp_high = 1.0;
+
 	dirty = true;
 
-	// connect("changed", this, "_queue_update");
+	connect("changed", this, "_queue_update");
 }
 
 void VisualAccidentalNoise::generate() {
@@ -612,7 +616,13 @@ void VisualAccidentalNoise::_update_noise() {
 
 	component->evaluate(Ref<VisualAccidentalNoise>(this));
 
-	set_eval_index(component->get_output_port_value(VisualAccidentalNoiseNode::OUTPUT_PORT));
+	Index output_value = component->get_output_port_value(VisualAccidentalNoiseNode::OUTPUT_PORT);
+
+	if (clamping_enabled) {
+		output_value = clamp(output_value, constant(clamp_low), constant(clamp_high));
+	}
+
+	set_eval_index(output_value);
 }
 
 void VisualAccidentalNoise::_component_updated() {
@@ -631,20 +641,68 @@ void VisualAccidentalNoise::_queue_update() {
 	call_deferred("_update_noise");
 }
 
+
+void VisualAccidentalNoise::set_clamping_enabled(bool p_enable) {
+
+	clamping_enabled = p_enable;
+	emit_changed();
+}
+
+bool VisualAccidentalNoise::is_clamping_enabled() const {
+
+	return clamping_enabled;
+}
+
+void VisualAccidentalNoise::set_clamp_low(double p_value) {
+
+	clamp_low = p_value;
+	emit_changed();
+}
+
+double VisualAccidentalNoise::get_clamp_low() const {
+
+	return clamp_low;
+}
+
+void VisualAccidentalNoise::set_clamp_high(double p_value) {
+
+	clamp_high = p_value;
+	emit_changed();
+}
+
+double VisualAccidentalNoise::get_clamp_high() const {
+
+	return clamp_high;
+}
+
 void VisualAccidentalNoise::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_clamping_enabled", "enabled"), &VisualAccidentalNoise::set_clamping_enabled);
+	ClassDB::bind_method(D_METHOD("is_clamping_enabled"), &VisualAccidentalNoise::is_clamping_enabled);
+
+	ClassDB::bind_method(D_METHOD("set_clamp_low", "value"), &VisualAccidentalNoise::set_clamp_low);
+	ClassDB::bind_method(D_METHOD("get_clamp_low"), &VisualAccidentalNoise::get_clamp_low);
+
+	ClassDB::bind_method(D_METHOD("set_clamp_high", "value"), &VisualAccidentalNoise::set_clamp_high);
+	ClassDB::bind_method(D_METHOD("get_clamp_high"), &VisualAccidentalNoise::get_clamp_high);
+
+	// Clamping properties should be set before component is loaded
+	ADD_GROUP("Clamp", "clamp_");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "clamp_output"), "set_clamping_enabled", "is_clamping_enabled");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "clamp_low"), "set_clamp_low", "get_clamp_low");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "clamp_high"), "set_clamp_high", "get_clamp_high");
 
 	ClassDB::bind_method(D_METHOD("generate"), &VisualAccidentalNoise::generate);
 
 	ClassDB::bind_method(D_METHOD("set_component", "component"), &VisualAccidentalNoise::set_component);
 	ClassDB::bind_method(D_METHOD("get_component"), &VisualAccidentalNoise::get_component);
 
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "component", PROPERTY_HINT_RESOURCE_TYPE, "VisualAccidentalNoiseNodeComponent"), "set_component", "get_component");
+	ADD_SIGNAL(MethodInfo("component_changed"));
+
 	ClassDB::bind_method(D_METHOD("_queue_update"), &VisualAccidentalNoise::_queue_update);
 	ClassDB::bind_method(D_METHOD("_update_noise"), &VisualAccidentalNoise::_update_noise);
 	ClassDB::bind_method(D_METHOD("_component_updated"), &VisualAccidentalNoise::_component_updated);
-
-	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "component", PROPERTY_HINT_RESOURCE_TYPE, "VisualAccidentalNoiseNodeComponent"), "set_component", "get_component");
-
-	ADD_SIGNAL(MethodInfo("component_changed"));
 }
 
 void VisualAccidentalNoise::set_component(const Ref<VisualAccidentalNoiseNodeComponent> &p_component) {
@@ -850,11 +908,6 @@ String VisualAccidentalNoiseNodeOutput::get_input_port_name(int p_port) const {
 	return TTR("Index");
 }
 
-Variant VisualAccidentalNoiseNodeOutput::get_input_port_default_value(int p_port) const {
-
-	return Variant();
-}
-
 int VisualAccidentalNoiseNodeOutput::get_output_port_count() const {
 
 	return 0;
@@ -868,11 +921,6 @@ VisualAccidentalNoiseNodeOutput::PortType VisualAccidentalNoiseNodeOutput::get_o
 String VisualAccidentalNoiseNodeOutput::get_output_port_name(int p_port) const {
 
 	return String();
-}
-
-bool VisualAccidentalNoiseNodeOutput::is_port_separator(int p_index) const {
-
-	return false;
 }
 
 String VisualAccidentalNoiseNodeOutput::get_caption() const {
@@ -890,16 +938,7 @@ Variant VisualAccidentalNoiseNodeOutput::get_input_port_value(int p_port) const 
 	return output_value;
 }
 
-void VisualAccidentalNoiseNodeOutput::set_output_port_value(int p_port, const Variant &p_value) {
-
-	output_value = p_value;
-}
-
-Variant VisualAccidentalNoiseNodeOutput::get_output_port_value(int p_port) const {
-
-	return output_value;
-}
-
 VisualAccidentalNoiseNodeOutput::VisualAccidentalNoiseNodeOutput() {
 
+	set_input_port_default_value(0, 0);
 }

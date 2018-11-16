@@ -15,8 +15,11 @@ void register_anl_types() {
 
     ////// Nodes
 
-    // Input
+    // Input/Output
     ClassDB::register_class<VisualAccidentalNoiseNodeInput>();
+    ClassDB::register_virtual_class<VisualAccidentalNoiseNodeOutput>();
+
+    // Seed
     ClassDB::register_class<VisualAccidentalNoiseNodeSeed>();
     ClassDB::register_class<VisualAccidentalNoiseNodeSeeder>();
     ClassDB::register_class<VisualAccidentalNoiseNodeRandomize>();

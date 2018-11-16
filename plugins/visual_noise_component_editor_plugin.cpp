@@ -1150,26 +1150,41 @@ void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 		return;
 	}
 
-	const Ref<VisualAccidentalNoiseNodeComponent> &component = VisualAccidentalNoiseNodeComponentEditor::get_singleton()->get_component();
-	ERR_FAIL_COND(component.is_null());
+	const Ref<VisualAccidentalNoiseNodeComponent> &edited_comp = VisualAccidentalNoiseNodeComponentEditor::get_singleton()->get_component();
+	ERR_FAIL_COND(edited_comp.is_null());
 
-	if(!component->has_node(node)) {
+	const Ref<VisualAccidentalNoiseNodeComponent> &comp = VisualAccidentalNoiseEditor::get_singleton()->get_noise()->get_component();
+	ERR_FAIL_COND(comp.is_null());
+
+	if(!edited_comp->has_node(node)) {
 		return;
 	}
 
-	const Ref<VisualAccidentalNoiseNode> &vanode = component->get_node(node);
+	const Ref<VisualAccidentalNoiseNode> &vanode = edited_comp->get_node(node);
 	ERR_FAIL_COND(vanode.is_null());
 
 	if (p_what == NOTIFICATION_DRAW) {
-		Index prev_eval_index = noise->get_eval_index();
-		noise->set_eval_index(vanode->get_output_port_value(port));
 
+		Index prev_eval_index;
 		Size2 tex_size = get_minimum_size();
 
-		preview_tex = noise->get_texture(tex_size.x, tex_size.y);
-		draw_texture_rect(preview_tex, Rect2(Vector2(), tex_size), false);
+		Ref<VisualAccidentalNoiseNodeOutput> output = vanode;
 
-		noise->set_eval_index(prev_eval_index);
+		if (edited_comp == comp && output.is_valid()) {
+			// Make preview from noise directly for this output node (possibly clamped)
+			preview_tex = noise->get_texture(tex_size.x, tex_size.y);
+			draw_texture_rect(preview_tex, Rect2(Vector2(), tex_size), false);
+
+		} else {
+			// Generate preview for at each node chain
+			prev_eval_index = noise->get_eval_index();
+			noise->set_eval_index(vanode->get_output_port_value(port));
+
+			preview_tex = noise->get_texture(tex_size.x, tex_size.y);
+			draw_texture_rect(preview_tex, Rect2(Vector2(), tex_size), false);
+
+			noise->set_eval_index(prev_eval_index);
+		}
 	}
 }
 
