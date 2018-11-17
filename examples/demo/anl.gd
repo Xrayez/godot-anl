@@ -18,10 +18,12 @@ var noises = [
 var x = 10
 var y = 10
 
+var cur_method = noises[0]
+
 onready var size = get_viewport().size
 onready var ratio = float(size.x) / size.y
 
-onready var mapping_ranges = Rect2(Vector2(), Vector2(x * ratio, y))
+onready var mapping_ranges = AABB(Vector3(), Vector3(x * ratio, y, 1))
 
 func _ready():
 	value_basis()
@@ -31,17 +33,17 @@ func _ready():
 func value_basis():
 	var n = AccidentalNoise.new()
 	n.value_basis( n.constant(AccidentalNoise.INTERP_HERMITE), n.seed(randi()) )
-	map_to_texture(n)
+	get_texture(n)
 
 func gradient_basis():
 	var n = AccidentalNoise.new()
 	n.gradient_basis( n.constant(AccidentalNoise.INTERP_QUINTIC), n.seed(randi()) )
-	map_to_texture(n)
+	get_texture(n)
 
 func simplex_basis():
 	var n = AccidentalNoise.new()
 	n.simplex_basis( n.seed(randi()) )
-	map_to_texture(n)
+	get_texture(n)
 
 func cellular_basis():
 	var n = AccidentalNoise.new()
@@ -50,7 +52,7 @@ func cellular_basis():
 								  n.zero(), n.zero(), n.zero(), n.zero(),
 								  n.constant(AccidentalNoise.DISTANCE_EUCLID), n.seed(randi()) )
 	n.clamp(basis, n.zero(), n.one())
-	map_to_texture(n)
+	get_texture(n)
 
 func fractal():
 	var n = AccidentalNoise.new()
@@ -64,35 +66,44 @@ func fractal():
 
 	var s = n.seed(randi())
 	n.fractal(s, layer, persistence, lacunarity, numoctaves, freq)
-	map_to_texture(n)
+	get_texture(n)
 
 func hex_tile():
 	var n = AccidentalNoise.new()
 	n.hex_tile( n.seed(randi()) )
-	map_to_texture(n)
+	get_texture(n)
 
 func hex_bump():
 	var n = AccidentalNoise.new()
 	n.hex_bump()
-	map_to_texture(n)
+	get_texture(n)
 
 func x():
 	var n = AccidentalNoise.new()
 	n.x()
-	map_to_texture(n)
+	get_texture(n)
 
 func y():
 	var n = AccidentalNoise.new()
 	n.y()
-	map_to_texture(n)
+	get_texture(n)
 
 func radial():
 	var n = AccidentalNoise.new()
 	n.radial()
-	map_to_texture(n)
+	get_texture(n)
 
-func map_to_texture(n):
-	texture = n.map_to_texture(size, n.last_index, AccidentalNoise.SEAMLESS_NONE, mapping_ranges)
+func get_texture(n):
+	n.mode = AccidentalNoise.SEAMLESS_NONE
+	n.format = AccidentalNoise.FORMAT_NOISE
+	n.ranges = mapping_ranges
+	
+	if not cur_method in ['x', 'y', 'radial']:
+		n.function = n.clamp(n.last_function, n.zero(), n.one())
+	else:
+		n.function = n.last_function
+		
+	texture = n.get_texture(size.x, size.y)
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -102,6 +113,7 @@ func _input(event):
 
 func _on_noise_item_selected(id):
 	var method = $noise.get_item_text(id)
+	cur_method = method
 	if has_method(method):
 		call(method)
 		update()
