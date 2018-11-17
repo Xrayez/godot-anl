@@ -237,10 +237,15 @@ public:
 //------------------------------------------------------------------------------
 // Image/texture methods
 //------------------------------------------------------------------------------
+    // 2D
     Ref<Image> get_image(int p_width, int p_height);
     Ref<Image> get_seamless_image(int p_width, int p_height);
 
     Ref<Texture> get_texture(int p_width, int p_height);
+
+    // 3D
+    Vector<Ref<Image>> get_image_3d(int p_width, int p_height, int p_depth);
+    Vector<Ref<Image>> get_seamless_image_3d(int p_width, int p_height, int p_depth);
 
 private:
     anl::CKernel kernel;
@@ -256,6 +261,7 @@ private:
     String expression;
 
     Ref<Image> _map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges);
+    Vector<Ref<Image>> _map_to_image_3d(int p_width, int p_height, int p_depth, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB& p_ranges);
 };
 
 VARIANT_ENUM_CAST(anl::InterpolationTypes);

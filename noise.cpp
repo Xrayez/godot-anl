@@ -769,6 +769,17 @@ Ref<Texture> AccidentalNoise::get_texture(int p_width, int p_height) {
     return texture;
 }
 
+Vector<Ref<Image>> AccidentalNoise::get_image_3d(int p_width, int p_height, int p_depth) {
+
+    return _map_to_image_3d(p_width, p_height, p_depth, function, mode, format, ranges);
+}
+
+Vector<Ref<Image>> AccidentalNoise::get_seamless_image_3d(int p_width, int p_height, int p_depth) {
+
+    // Returns seamless 3D image regardless of mapping mode
+    return _map_to_image_3d(p_width, p_height, p_depth, function, anl::SEAMLESS_XY, format, ranges);
+}
+
 Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB& p_ranges) {
 
     anl::SMappingRanges ranges(
@@ -780,11 +791,12 @@ Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_ind
     PoolVector<uint8_t> dest_data;
     const int SIZE = p_width * p_height;
 
-    Ref<Image> noise = memnew(Image);
+    Image::Format image_format = Image::Format::FORMAT_L8;
 
     switch(p_format) {
 
         case FORMAT_NOISE: { // scalar, grayscale image
+            image_format = Image::Format::FORMAT_L8;
 
             anl::CArray2Dd img(p_width, p_height);
             anl::map2DNoZ(p_mode, img, kernel, ranges, p_index);
@@ -796,11 +808,10 @@ Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_ind
             for(int i = 0; i < SIZE; ++i) {
                 w[i] = (uint8_t)(src_data[i] * 255);
             }
-            noise->create(p_width, p_height, 0, Image::FORMAT_L8, dest_data);
-
         } break;
 
         case FORMAT_COLOR: { // suitable for textures
+            image_format = Image::Format::FORMAT_RGBA8;
 
             anl::CArray2Drgba img(p_width, p_height);
             anl::mapRGBA2DNoZ(p_mode, img, kernel, ranges, p_index);
@@ -815,10 +826,82 @@ Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_ind
                 w[i * 4 + 2] = (uint8_t)(src_data[i].b * 255);
                 w[i * 4 + 3] = (uint8_t)(src_data[i].a * 255);
             }
-            noise->create(p_width, p_height, 0, Image::FORMAT_RGBA8, dest_data);
-
         } break;
     }
+
+    Ref<Image> noise = memnew(Image);
+    noise->create(p_width, p_height, 0, image_format, dest_data);
+
+    return noise;
+}
+
+Vector<Ref<Image>> AccidentalNoise::_map_to_image_3d(int p_width, int p_height, int p_depth, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB& p_ranges) {
+
+    anl::SMappingRanges ranges(
+        p_ranges.position.x, p_ranges.position.x + p_ranges.size.x,
+        p_ranges.position.y, p_ranges.position.y + p_ranges.size.y,
+        p_ranges.position.z, p_ranges.position.z + p_ranges.size.z
+    );
+
+    Vector<PoolVector<uint8_t>> dest_data;
+    const int SIZE = p_width * p_height;
+
+    Image::Format image_format = Image::Format::FORMAT_L8;
+
+    switch(p_format) {
+
+        case FORMAT_NOISE: { // scalar, grayscale image
+            image_format = Image::Format::FORMAT_L8;
+
+ 			anl::CArray3Dd img(p_width, p_height, p_depth);
+			anl::map3D(p_mode, img, kernel, ranges, p_index);
+
+			for (int k = 0; k < p_depth; k++) {
+
+				PoolVector<uint8_t> dest_data_image;
+				dest_data_image.resize(SIZE);
+				PoolVector<uint8_t>::Write w = dest_data_image.write();
+
+				auto src_data = img.getData();
+
+				for (int i = SIZE * k; i < SIZE * (k + 1); i++) {
+					w[i] = (uint8_t)(src_data[i] * 255);
+				}
+				dest_data.push_back(dest_data_image);
+			}
+        } break;
+
+        case FORMAT_COLOR: { // suitable for textures
+            image_format = Image::Format::FORMAT_RGBA8;
+
+            anl::CArray3Drgba img(p_width, p_height, p_depth);
+            anl::mapRGBA3D(p_mode, img, kernel, ranges, p_index);
+
+            for(int k = 0; k < p_depth; ++k) {
+
+                PoolVector<uint8_t> dest_data_image;
+				dest_data_image.resize(SIZE * 4);
+                PoolVector<uint8_t>::Write w = dest_data_image.write();
+
+                auto src_data = img.getData();
+
+                for(int dest = 0, src = SIZE * k; src < SIZE * (k + 1); dest += 4, ++src) { // TODO: optimize (like 2D)?
+                    w[dest + 0] = (uint8_t)(src_data[src].r * 255);
+                    w[dest + 1] = (uint8_t)(src_data[src].g * 255);
+                    w[dest + 2] = (uint8_t)(src_data[src].b * 255);
+                    w[dest + 3] = (uint8_t)(src_data[src].a * 255);
+                }
+                dest_data.push_back(dest_data_image);
+            }
+        } break;
+    }
+
+    Vector<Ref<Image>> noise;
+    for (int i = 0; i < dest_data.size(); i++) {
+		Ref<Image> noise_image = memnew(Image);
+		noise_image->create(p_width, p_height, 0, image_format, dest_data[i]);
+		noise.push_back(noise_image);
+	}
 
     return noise;
 }
