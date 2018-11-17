@@ -7,7 +7,7 @@ AccidentalNoise::AccidentalNoise(): vm(kernel), eb(kernel) {
     prev_function = 0;
 
     mode = anl::EMappingModes::SEAMLESS_NONE;
-    format = FORMAT_COLOR;
+    format = FORMAT_NOISE;
     ranges = AABB(Vector3(-1, -1, -1), Vector3(2, 2, 2));
 }
 
