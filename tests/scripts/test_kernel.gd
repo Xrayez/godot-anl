@@ -136,6 +136,6 @@ func _init():
 
 	# Kernel
 
-	i = n.eval_index
-	i = n.last_index
+	i = n.function
+	i = n.last_function
 	n.clear()

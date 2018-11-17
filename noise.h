@@ -201,10 +201,10 @@ public:
 
     // Kernel
     // --------------------
-    void set_eval_index(Index p_index);
-    Index get_eval_index();
+    void set_function(Index p_index);
+    Index get_function();
 
-    Index get_last_index();
+    Index get_last_function();
 
     void clear();
 
@@ -247,8 +247,8 @@ private:
     anl::CNoiseExecutor vm;
     anl::CExpressionBuilder eb;
 
-    Index eval_index;
-    Index prev_eval_index;
+    Index function;
+    Index prev_function;
 
     anl::EMappingModes mode;
     AABB ranges;

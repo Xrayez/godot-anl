@@ -622,7 +622,7 @@ void VisualAccidentalNoise::_update_noise() {
 		output_value = clamp(output_value, constant(clamp_low), constant(clamp_high));
 	}
 
-	set_eval_index(output_value);
+	set_function(output_value);
 }
 
 void VisualAccidentalNoise::_component_updated() {

@@ -3,8 +3,8 @@
 
 AccidentalNoise::AccidentalNoise(): vm(kernel), eb(kernel) {
 
-    eval_index = 0;
-    prev_eval_index = 0;
+    function = 0;
+    prev_function = 0;
 
     mode = anl::EMappingModes::SEAMLESS_NONE;
     ranges = AABB(Vector3(-1, -1, -1), Vector3(2, 2, 2));
@@ -53,11 +53,11 @@ void AccidentalNoise::set_expression(const String &p_expression) {
 
     if (!expression.empty()) {
         Index exp_index = evaluate(expression);
-        prev_eval_index = eval_index;
-        eval_index = exp_index;
+        prev_function = function;
+        function = exp_index;
     } else {
         // Resume
-        eval_index = prev_eval_index;
+        function = prev_function;
     }
 
     emit_changed();
@@ -657,31 +657,31 @@ Index AccidentalNoise::billow(anl::BasisTypes basis, anl::InterpolationTypes int
 
 // Kernel
 
-void AccidentalNoise::set_eval_index(Index p_index) {
+void AccidentalNoise::set_function(Index p_index) {
 
     // ERR_FAIL_INDEX(p_index, kernel.getKernel()->size());
 
     if (!expression.empty()) {
         return;
     }
-    prev_eval_index = eval_index;
-    eval_index = p_index;
+    prev_function = function;
+    function = p_index;
 }
 
-Index AccidentalNoise::get_eval_index() {
+Index AccidentalNoise::get_function() {
 
-    return eval_index;
+    return function;
 }
 
-Index AccidentalNoise::get_last_index() {
+Index AccidentalNoise::get_last_function() {
 
     return kernel.lastIndex().getIndex();
 }
 
 void AccidentalNoise::clear() {
 
-    eval_index = 0;
-    prev_eval_index = 0;
+    function = 0;
+    prev_function = 0;
 
     expression = String();
 
@@ -693,45 +693,45 @@ void AccidentalNoise::clear() {
 //------------------------------------------------------------------------------
 double AccidentalNoise::get_noise_2d(double x, double y) {
 
-    return vm.evaluateScalar(x, y, eval_index);
+    return vm.evaluateScalar(x, y, function);
 }
 
 double AccidentalNoise::get_noise_3d(double x, double y, double z) {
 
-    return vm.evaluateScalar(x, y, z, eval_index);
+    return vm.evaluateScalar(x, y, z, function);
 }
 
 double AccidentalNoise::get_noise_4d(double x, double y, double z, double w) {
 
-    return vm.evaluateScalar(x, y, z, w, eval_index);
+    return vm.evaluateScalar(x, y, z, w, function);
 }
 
 double AccidentalNoise::get_noise_6d(double x, double y, double z, double w, double u, double v) {
 
-    return vm.evaluateScalar(x, y, z, w, u, v, eval_index);
+    return vm.evaluateScalar(x, y, z, w, u, v, function);
 }
 
 Color AccidentalNoise::get_color_2d(double x, double y) {
 
-    anl::SRGBA c = vm.evaluateColor(x, y, eval_index);
+    anl::SRGBA c = vm.evaluateColor(x, y, function);
     return Color(c.r, c.g, c.b, c.a);
 }
 
 Color AccidentalNoise::get_color_3d(double x, double y, double z) {
 
-    anl::SRGBA c = vm.evaluateColor(x, y, z, eval_index);
+    anl::SRGBA c = vm.evaluateColor(x, y, z, function);
     return Color(c.r, c.g, c.b, c.a);
 }
 
 Color AccidentalNoise::get_color_4d(double x, double y, double z, double w) {
 
-    anl::SRGBA c = vm.evaluateColor(x, y, z, w, eval_index);
+    anl::SRGBA c = vm.evaluateColor(x, y, z, w, function);
     return Color(c.r, c.g, c.b, c.a);
 }
 
 Color AccidentalNoise::get_color_6d(double x, double y, double z, double w, double u, double v) {
 
-    anl::SRGBA c = vm.evaluateColor(x, y, z, w, u, v, eval_index);
+    anl::SRGBA c = vm.evaluateColor(x, y, z, w, u, v, function);
     return Color(c.r, c.g, c.b, c.a);
 }
 //------------------------------------------------------------------------------
@@ -750,13 +750,13 @@ Index AccidentalNoise::evaluate(const String& expression) {
 //------------------------------------------------------------------------------
 Ref<Image> AccidentalNoise::get_image(int p_width, int p_height) {
 
-    return _map_to_image(p_width, p_height, eval_index, mode, ranges, format);
+    return _map_to_image(p_width, p_height, function, mode, ranges, format);
 }
 
 Ref<Image> AccidentalNoise::get_seamless_image(int p_width, int p_height) {
 
     // Returns seamless image regardless of mapping mode
-    return _map_to_image(p_width, p_height, eval_index, anl::SEAMLESS_XY, ranges, format);
+    return _map_to_image(p_width, p_height, function, anl::SEAMLESS_XY, ranges, format);
 }
 
 Ref<Texture> AccidentalNoise::get_texture(int p_width, int p_height) {
@@ -974,15 +974,15 @@ void AccidentalNoise::_bind_methods() {
 
     // Kernel
 
-    ClassDB::bind_method(D_METHOD("set_eval_index"),&AccidentalNoise::set_eval_index);
-    ClassDB::bind_method(D_METHOD("get_eval_index"),&AccidentalNoise::get_eval_index);
+    ClassDB::bind_method(D_METHOD("set_function"),&AccidentalNoise::set_function);
+    ClassDB::bind_method(D_METHOD("get_function"),&AccidentalNoise::get_function);
 
-    ClassDB::bind_method(D_METHOD("get_last_index"),&AccidentalNoise::get_last_index);
+    ClassDB::bind_method(D_METHOD("get_last_function"),&AccidentalNoise::get_last_function);
 
     ClassDB::bind_method(D_METHOD("clear"),&AccidentalNoise::clear);
 
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "eval_index"), "set_eval_index", "get_eval_index");
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "last_index"), "", "get_last_index");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "function"), "set_function", "get_function");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "last_function"), "", "get_last_function");
 
     // NoiseExecutor methods
 

@@ -6,7 +6,7 @@ func _init():
 	var gradient = n.y()
 	var fractal = n.fbm(AccidentalNoise.BASIS_SIMPLEX, n.constant(AccidentalNoise.INTERP_LINEAR), 3, 5, randi())
 	var scale_offset = n.scale_offset(fractal, 0.5, 0)
-	n.eval_index = n.translate(gradient, scale_offset)
+	n.function = n.translate(gradient, scale_offset)
 
 	n.get_noise_2d(10.0, 15.0)
 	n.get_noise_3d(10.0, 15.0, 5.5)

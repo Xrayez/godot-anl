@@ -80,7 +80,7 @@ var select = n.select(
 	perturb, n.constant(0.5), n.zero()
 )
 
-n.eval_index = select
+n.function = select
 
 var image = Image.new()
 image.lock()
@@ -95,11 +95,12 @@ image.unlock()
 ```
 You can also map the noise to an image with dedicated method instead:
 ```gdscript
-image = n.map_to_image(size, noise.eval_index)
+image = n.get_image(width, height)
 ```
 ... or even tiled texture!
 ```gdscript
-texture = n.map_to_texture(size, noise.eval_index, AccidentalNoise.SEAMLESS_XY)
+n.mode = AccidentalNoise.SEAMLESS_XY
+texture = n.get_texture(width, height)
 ```
 
 ### Result

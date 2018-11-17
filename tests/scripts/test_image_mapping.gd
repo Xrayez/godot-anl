@@ -18,7 +18,7 @@ func _init():
 	var a = n.simplex_basis(randi())
 
 	var combine = n.combine_rgba(r,g,b,a)
-	n.eval_index = n.scale(combine, n.constant(3))
+	n.function = n.scale(combine, n.constant(3))
 
 	n.get_image(100, 100)
 	n.get_texture(100, 100)

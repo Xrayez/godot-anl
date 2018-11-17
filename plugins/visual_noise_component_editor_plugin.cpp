@@ -1165,7 +1165,7 @@ void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_DRAW) {
 
-		Index prev_eval_index;
+		Index prev_function;
 		Size2 tex_size = get_minimum_size();
 
 		Ref<VisualAccidentalNoiseNodeOutput> output = vanode;
@@ -1177,13 +1177,13 @@ void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 
 		} else {
 			// Generate preview for at each node chain
-			prev_eval_index = noise->get_eval_index();
-			noise->set_eval_index(vanode->get_output_port_value(port));
+			prev_function = noise->get_function();
+			noise->set_function(vanode->get_output_port_value(port));
 
 			preview_tex = noise->get_texture(tex_size.x, tex_size.y);
 			draw_texture_rect(preview_tex, Rect2(Vector2(), tex_size), false);
 
-			noise->set_eval_index(prev_eval_index);
+			noise->set_function(prev_function);
 		}
 	}
 }

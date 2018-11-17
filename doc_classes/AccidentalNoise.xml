@@ -415,7 +415,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_last_index">
+		<method name="get_last_function">
 			<return type="int">
 			</return>
 			<description>
