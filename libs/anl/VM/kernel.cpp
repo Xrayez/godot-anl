@@ -14,23 +14,23 @@ CKernel::CKernel()
 CKernel::CKernel(const CKernel &rhs)
 {
 	kernel_=rhs.kernel_;
-	pi_=rhs.pi_;
-	e_=rhs.e_;
-	one_=rhs.one_;
 	zero_=rhs.zero_;
 	point5_=rhs.point5_;
+	one_=rhs.one_;
 	sqrt2_=rhs.sqrt2_;
+	e_=rhs.e_;
+	pi_=rhs.pi_;
 	vars_=rhs.vars_;
 }
 
 void CKernel::initConstants()
 {
-    pi_=constant(3.14159265358979323846);
-    e_=constant(2.71828182845904523536);
-    one_=constant(1.0);
     zero_=constant(0.0);
     point5_=constant(0.5);
+    one_=constant(1.0);
     sqrt2_=constant(sqrt(2.0));
+    e_=constant(2.71828182845904523536);
+    pi_=constant(3.14159265358979323846);
 }
 
 void CKernel::clear()
