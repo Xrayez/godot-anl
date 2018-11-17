@@ -717,6 +717,9 @@ void VisualAccidentalNoiseComponentEditor::_input(const Ref<InputEvent> p_event)
 			if (component == main_comp) {
 				EditorNode::get_singleton()->push_item(noise.ptr(), "", true);
 			}
+			else {
+				EditorNode::get_singleton()->push_item(component.ptr(), "", true);
+			}
 		}
 	}
 }
