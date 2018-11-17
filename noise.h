@@ -27,11 +27,11 @@ public:
     void set_mode(anl::EMappingModes p_mode);
     anl::EMappingModes get_mode() const;
 
-    void set_ranges(const AABB &p_ranges);
-    AABB get_ranges() const;
-
     void set_format(Format p_format);
     Format get_format() const;
+
+    void set_ranges(const AABB &p_ranges);
+    AABB get_ranges() const;
 
     void set_expression(const String &p_expression);
     String get_expression() const;
@@ -251,11 +251,11 @@ private:
     Index prev_function;
 
     anl::EMappingModes mode;
-    AABB ranges;
     Format format;
+    AABB ranges;
     String expression;
 
-    Ref<Image> _map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, const AABB &p_ranges, Format p_format);
+    Ref<Image> _map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges);
 };
 
 VARIANT_ENUM_CAST(anl::InterpolationTypes);

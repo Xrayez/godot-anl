@@ -7,8 +7,8 @@ AccidentalNoise::AccidentalNoise(): vm(kernel), eb(kernel) {
     prev_function = 0;
 
     mode = anl::EMappingModes::SEAMLESS_NONE;
-    ranges = AABB(Vector3(-1, -1, -1), Vector3(2, 2, 2));
     format = FORMAT_COLOR;
+    ranges = AABB(Vector3(-1, -1, -1), Vector3(2, 2, 2));
 }
 
 void AccidentalNoise::set_mode(anl::EMappingModes p_mode) {
@@ -22,17 +22,6 @@ anl::EMappingModes AccidentalNoise::get_mode() const {
     return mode;
 }
 
-void AccidentalNoise::set_ranges(const AABB &p_ranges) {
-
-    ranges = p_ranges;
-    emit_changed();
-}
-
-AABB AccidentalNoise::get_ranges() const {
-
-    return ranges;
-}
-
 void AccidentalNoise::set_format(Format p_format) {
 
     format = p_format;
@@ -42,6 +31,17 @@ void AccidentalNoise::set_format(Format p_format) {
 AccidentalNoise::Format AccidentalNoise::get_format() const {
 
     return format;
+}
+
+void AccidentalNoise::set_ranges(const AABB &p_ranges) {
+
+    ranges = p_ranges;
+    emit_changed();
+}
+
+AABB AccidentalNoise::get_ranges() const {
+
+    return ranges;
 }
 
 void AccidentalNoise::set_expression(const String &p_expression) {
@@ -750,13 +750,13 @@ Index AccidentalNoise::evaluate(const String& expression) {
 //------------------------------------------------------------------------------
 Ref<Image> AccidentalNoise::get_image(int p_width, int p_height) {
 
-    return _map_to_image(p_width, p_height, function, mode, ranges, format);
+    return _map_to_image(p_width, p_height, function, mode, format, ranges);
 }
 
 Ref<Image> AccidentalNoise::get_seamless_image(int p_width, int p_height) {
 
     // Returns seamless image regardless of mapping mode
-    return _map_to_image(p_width, p_height, function, anl::SEAMLESS_XY, ranges, format);
+    return _map_to_image(p_width, p_height, function, anl::SEAMLESS_XY, format, ranges);
 }
 
 Ref<Texture> AccidentalNoise::get_texture(int p_width, int p_height) {
@@ -769,7 +769,7 @@ Ref<Texture> AccidentalNoise::get_texture(int p_width, int p_height) {
     return texture;
 }
 
-Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, const AABB& p_ranges, Format p_format) {
+Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB& p_ranges) {
 
     anl::SMappingRanges ranges(
         p_ranges.position.x, p_ranges.position.x + p_ranges.size.x,
@@ -828,18 +828,18 @@ void AccidentalNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_mode", "mode"),&AccidentalNoise::set_mode);
     ClassDB::bind_method(D_METHOD("get_mode"),&AccidentalNoise::get_mode);
 
-    ClassDB::bind_method(D_METHOD("set_ranges", "ranges"),&AccidentalNoise::set_ranges);
-    ClassDB::bind_method(D_METHOD("get_ranges"),&AccidentalNoise::get_ranges);
-
     ClassDB::bind_method(D_METHOD("set_format", "format"),&AccidentalNoise::set_format);
     ClassDB::bind_method(D_METHOD("get_format"),&AccidentalNoise::get_format);
+
+    ClassDB::bind_method(D_METHOD("set_ranges", "ranges"),&AccidentalNoise::set_ranges);
+    ClassDB::bind_method(D_METHOD("get_ranges"),&AccidentalNoise::get_ranges);
 
     ClassDB::bind_method(D_METHOD("set_expression", "expression"),&AccidentalNoise::set_expression);
     ClassDB::bind_method(D_METHOD("get_expression"),&AccidentalNoise::get_expression);
 
     ADD_PROPERTY(PropertyInfo(Variant::INT, "mode", PROPERTY_HINT_ENUM, "Seamless none,Seamless X,Seamless Y,Seamless Z,Seamless XY,Seamless XZ,Seamless YZ,Seamless XYZ"), "set_mode", "get_mode");
-    ADD_PROPERTY(PropertyInfo(Variant::AABB, "ranges"), "set_ranges", "get_ranges");
     ADD_PROPERTY(PropertyInfo(Variant::INT, "format", PROPERTY_HINT_ENUM, "Noise,Color"), "set_format", "get_format");
+    ADD_PROPERTY(PropertyInfo(Variant::AABB, "ranges"), "set_ranges", "get_ranges");
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "expression", PROPERTY_HINT_MULTILINE_TEXT), "set_expression", "get_expression");
 
     BIND_ENUM_CONSTANT(FORMAT_NOISE);
