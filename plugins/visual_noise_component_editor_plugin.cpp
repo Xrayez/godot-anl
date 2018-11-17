@@ -12,14 +12,14 @@
 
 ///////////////////////////////////
 
-bool VisualAccidentalNoiseNodeComponentEditor::can_edit(const Ref<VisualAccidentalNoiseNodeComponent> &p_comp) {
+bool VisualAccidentalNoiseComponentEditor::can_edit(const Ref<VisualAccidentalNoiseNodeComponent> &p_comp) {
 
 	Ref<VisualAccidentalNoiseNodeComponent> comp = p_comp;
 
 	return comp.is_valid();
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::edit(const Ref<VisualAccidentalNoiseNodeComponent> &p_component) {
+void VisualAccidentalNoiseComponentEditor::edit(const Ref<VisualAccidentalNoiseNodeComponent> &p_component) {
 
 	if (p_component.is_valid()) {
 
@@ -31,7 +31,7 @@ void VisualAccidentalNoiseNodeComponentEditor::edit(const Ref<VisualAccidentalNo
 	}
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::add_plugin(const Ref<VisualAccidentalNoiseNodePlugin> &p_plugin) {
+void VisualAccidentalNoiseComponentEditor::add_plugin(const Ref<VisualAccidentalNoiseNodePlugin> &p_plugin) {
 
 	if (plugins.find(p_plugin) != -1)
 		return;
@@ -39,12 +39,12 @@ void VisualAccidentalNoiseNodeComponentEditor::add_plugin(const Ref<VisualAccide
 	plugins.push_back(p_plugin);
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::remove_plugin(const Ref<VisualAccidentalNoiseNodePlugin> &p_plugin) {
+void VisualAccidentalNoiseComponentEditor::remove_plugin(const Ref<VisualAccidentalNoiseNodePlugin> &p_plugin) {
 
 	plugins.erase(p_plugin);
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::add_custom_type(const String &p_name, const String &p_category, const Ref<Script> &p_script) {
+void VisualAccidentalNoiseComponentEditor::add_custom_type(const String &p_name, const String &p_category, const Ref<Script> &p_script) {
 
 	for (int i = 0; i < add_options.size(); i++) {
 		ERR_FAIL_COND(add_options[i].script == p_script);
@@ -59,7 +59,7 @@ void VisualAccidentalNoiseNodeComponentEditor::add_custom_type(const String &p_n
 	_update_options_menu();
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::remove_custom_type(const Ref<Script> &p_script) {
+void VisualAccidentalNoiseComponentEditor::remove_custom_type(const Ref<Script> &p_script) {
 
 	for (int i = 0; i < add_options.size(); i++) {
 		if (add_options[i].script == p_script) {
@@ -71,7 +71,7 @@ void VisualAccidentalNoiseNodeComponentEditor::remove_custom_type(const Ref<Scri
 	_update_options_menu();
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_update_options_menu() {
+void VisualAccidentalNoiseComponentEditor::_update_options_menu() {
 
 	String prev_category;
 
@@ -90,12 +90,12 @@ void VisualAccidentalNoiseNodeComponentEditor::_update_options_menu() {
 	add_component->get_popup()->add_item(TTR("Load.."), MENU_LOAD_FILE);
 }
 
-Size2 VisualAccidentalNoiseNodeComponentEditor::get_minimum_size() const {
+Size2 VisualAccidentalNoiseComponentEditor::get_minimum_size() const {
 
 	return Size2(10, 200);
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_draw_color_over_button(Object *obj, Color p_color) {
+void VisualAccidentalNoiseComponentEditor::_draw_color_over_button(Object *obj, Color p_color) {
 
 	Button *button = Object::cast_to<Button>(obj);
 
@@ -118,7 +118,7 @@ static Ref<StyleBoxEmpty> make_empty_stylebox(float p_margin_left = -1, float p_
 	return style;
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_update_graph() {
+void VisualAccidentalNoiseComponentEditor::_update_graph() {
 
 	ERR_FAIL_COND(component.is_null());
 
@@ -355,7 +355,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_update_graph() {
 	}
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_component_renamed(const String &p_text, int p_which) {
+void VisualAccidentalNoiseComponentEditor::_component_renamed(const String &p_text, int p_which) {
 
 	Ref<VisualAccidentalNoiseNodeComponent> comp = component->get_node(p_which);
 	ERR_FAIL_COND(comp.is_null());
@@ -382,12 +382,12 @@ void VisualAccidentalNoiseNodeComponentEditor::_component_renamed(const String &
 	gn->set_size(gn->get_minimum_size());
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_component_renamed_focus_out(Node *le, int p_which) {
+void VisualAccidentalNoiseComponentEditor::_component_renamed_focus_out(Node *le, int p_which) {
 
 	_component_renamed(le->call("get_text"), p_which);
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_input_renamed(const String &p_text, int p_which) {
+void VisualAccidentalNoiseComponentEditor::_input_renamed(const String &p_text, int p_which) {
 
 	Ref<VisualAccidentalNoiseNodeInput> input = component->get_node(p_which);
 	ERR_FAIL_COND(input.is_null());
@@ -411,12 +411,12 @@ void VisualAccidentalNoiseNodeComponentEditor::_input_renamed(const String &p_te
 	gn->set_size(gn->get_minimum_size());
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_input_renamed_focus_out(Node *le, int p_which) {
+void VisualAccidentalNoiseComponentEditor::_input_renamed_focus_out(Node *le, int p_which) {
 
 	_input_renamed(le->call("get_text"), p_which);
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_preview_select_port(int p_node, int p_port) {
+void VisualAccidentalNoiseComponentEditor::_preview_select_port(int p_node, int p_port) {
 
 	if (component.is_null()) {
 		return;
@@ -440,7 +440,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_preview_select_port(int p_node, 
 	undo_redo->commit_action();
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_file_opened(const String &p_file) {
+void VisualAccidentalNoiseComponentEditor::_file_opened(const String &p_file) {
 
 	file_loaded = ResourceLoader::load(p_file);
 	if (file_loaded.is_valid()) {
@@ -448,15 +448,15 @@ void VisualAccidentalNoiseNodeComponentEditor::_file_opened(const String &p_file
 	}
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_line_edit_changed(const String &p_text, Object *line_edit, int p_node_id) {
+void VisualAccidentalNoiseComponentEditor::_line_edit_changed(const String &p_text, Object *line_edit, int p_node_id) {
 
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_line_edit_focus_out(Object *line_edit, int p_node_id) {
+void VisualAccidentalNoiseComponentEditor::_line_edit_focus_out(Object *line_edit, int p_node_id) {
 
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_port_edited() {
+void VisualAccidentalNoiseComponentEditor::_port_edited() {
 
 	if (component.is_null()) {
 		return;
@@ -476,7 +476,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_port_edited() {
 	property_editor->hide();
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_edit_port_default_input(Object *p_button, int p_node, int p_port) {
+void VisualAccidentalNoiseComponentEditor::_edit_port_default_input(Object *p_button, int p_node, int p_port) {
 
 	if (component.is_null()) {
 		return;
@@ -494,7 +494,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_edit_port_default_input(Object *
 	editing_port = p_port;
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_add_node(int p_idx) {
+void VisualAccidentalNoiseComponentEditor::_add_node(int p_idx) {
 
 	ERR_FAIL_COND(component.is_null());
 	ERR_FAIL_INDEX(p_idx, add_options.size());
@@ -526,7 +526,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_add_node(int p_idx) {
 	undo_redo->commit_action();
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_add_component(int p_option) {
+void VisualAccidentalNoiseComponentEditor::_add_component(int p_option) {
 
 	ERR_FAIL_COND(component.is_null());
 
@@ -575,7 +575,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_add_component(int p_option) {
 	undo_redo->commit_action();
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_node_dragged(const Vector2 &p_from, const Vector2 &p_to, int p_node) {
+void VisualAccidentalNoiseComponentEditor::_node_dragged(const Vector2 &p_from, const Vector2 &p_to, int p_node) {
 
 	if (component.is_null()) {
 		return;
@@ -591,7 +591,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_node_dragged(const Vector2 &p_fr
 	updating = false;
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_connection_request(const String &p_from, int p_from_index, const String &p_to, int p_to_index) {
+void VisualAccidentalNoiseComponentEditor::_connection_request(const String &p_from, int p_from_index, const String &p_to, int p_to_index) {
 
 	if (component.is_null()) {
 		return;
@@ -624,7 +624,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_connection_request(const String 
 	undo_redo->commit_action();
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_disconnection_request(const String &p_from, int p_from_index, const String &p_to, int p_to_index) {
+void VisualAccidentalNoiseComponentEditor::_disconnection_request(const String &p_from, int p_from_index, const String &p_to, int p_to_index) {
 
 	if (component.is_null()) {
 		return;
@@ -645,10 +645,10 @@ void VisualAccidentalNoiseNodeComponentEditor::_disconnection_request(const Stri
 	//updating = false;
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_connection_to_empty(const String &p_from, int p_from_slot, const Vector2 &p_release_position) {
+void VisualAccidentalNoiseComponentEditor::_connection_to_empty(const String &p_from, int p_from_slot, const Vector2 &p_release_position) {
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_delete_request(int which) {
+void VisualAccidentalNoiseComponentEditor::_delete_request(int which) {
 
 	if (component.is_null()) {
 		return;
@@ -672,7 +672,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_delete_request(int which) {
 	undo_redo->commit_action();
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_node_selected(Object *p_node) {
+void VisualAccidentalNoiseComponentEditor::_node_selected(Object *p_node) {
 
 	if (component.is_null()) {
 		return;
@@ -689,7 +689,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_node_selected(Object *p_node) {
 	EditorNode::get_singleton()->push_item(vanode.ptr(), "", true);
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_open_in_editor(int p_which) {
+void VisualAccidentalNoiseComponentEditor::_open_in_editor(int p_which) {
 
 	Ref<VisualAccidentalNoiseNodeComponent> comp = component->get_node(p_which);
 	ERR_FAIL_COND(!comp.is_valid());
@@ -697,7 +697,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_open_in_editor(int p_which) {
 	VisualAccidentalNoiseEditor::get_singleton()->enter_editor(p_which);
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_input(const Ref<InputEvent> p_event) {
+void VisualAccidentalNoiseComponentEditor::_input(const Ref<InputEvent> p_event) {
 
 	if (graph->has_focus()) {
 		Ref<InputEventMouseButton> mb = p_event;
@@ -706,10 +706,22 @@ void VisualAccidentalNoiseNodeComponentEditor::_input(const Ref<InputEvent> p_ev
 			add_node->get_popup()->set_position(get_viewport()->get_mouse_position());
 			add_node->get_popup()->show_modal();
 		}
+		else if (mb.is_valid() && mb->is_pressed() && mb->get_button_index() == BUTTON_LEFT) {
+
+			Ref<VisualAccidentalNoise> noise = VisualAccidentalNoiseEditor::get_singleton()->get_noise();
+			ERR_FAIL_COND(noise.is_null());
+
+			Ref<VisualAccidentalNoiseNodeComponent> main_comp = noise->get_component();
+			ERR_FAIL_COND(main_comp.is_null());
+
+			if (component == main_comp) {
+				EditorNode::get_singleton()->push_item(noise.ptr(), "", true);
+			}
+		}
 	}
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_notification(int p_what) {
+void VisualAccidentalNoiseComponentEditor::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_ENTER_TREE || p_what == NOTIFICATION_THEME_CHANGED) {
 
@@ -721,7 +733,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_notification(int p_what) {
 	}
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_scroll_changed(const Vector2 &p_scroll) {
+void VisualAccidentalNoiseComponentEditor::_scroll_changed(const Vector2 &p_scroll) {
 
 	if (component.is_null()) {
 		return;
@@ -735,7 +747,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_scroll_changed(const Vector2 &p_
 	updating = false;
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_node_changed(int p_id) {
+void VisualAccidentalNoiseComponentEditor::_node_changed(int p_id) {
 
 	if (updating)
 		return;
@@ -745,7 +757,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_node_changed(int p_id) {
 	}
 }
 
-void VisualAccidentalNoiseNodeComponentEditor::_duplicate_nodes() {
+void VisualAccidentalNoiseComponentEditor::_duplicate_nodes() {
 
 	if (component.is_null()) {
 		return;
@@ -816,7 +828,7 @@ void VisualAccidentalNoiseNodeComponentEditor::_duplicate_nodes() {
 	}
 }
 
-// void VisualAccidentalNoiseNodeComponentEditor::save_external_data() {
+// void VisualAccidentalNoiseComponentEditor::save_external_data() {
 
 // 	if (component.is_null())
 // 		return;
@@ -824,37 +836,37 @@ void VisualAccidentalNoiseNodeComponentEditor::_duplicate_nodes() {
 // 	ResourceSaver::save(component->get_path(), component);
 // }
 
-void VisualAccidentalNoiseNodeComponentEditor::_bind_methods() {
+void VisualAccidentalNoiseComponentEditor::_bind_methods() {
 
-	ClassDB::bind_method("_component_renamed", &VisualAccidentalNoiseNodeComponentEditor::_component_renamed);
-	ClassDB::bind_method("_component_renamed_focus_out", &VisualAccidentalNoiseNodeComponentEditor::_component_renamed_focus_out);
-	ClassDB::bind_method("_input_renamed", &VisualAccidentalNoiseNodeComponentEditor::_input_renamed);
-	ClassDB::bind_method("_input_renamed_focus_out", &VisualAccidentalNoiseNodeComponentEditor::_input_renamed_focus_out);
-	ClassDB::bind_method("_update_graph", &VisualAccidentalNoiseNodeComponentEditor::_update_graph);
-	ClassDB::bind_method("_add_node", &VisualAccidentalNoiseNodeComponentEditor::_add_node);
-	ClassDB::bind_method("_add_component", &VisualAccidentalNoiseNodeComponentEditor::_add_component);
-	ClassDB::bind_method("_node_dragged", &VisualAccidentalNoiseNodeComponentEditor::_node_dragged);
-	ClassDB::bind_method("_connection_request", &VisualAccidentalNoiseNodeComponentEditor::_connection_request);
-	ClassDB::bind_method("_disconnection_request", &VisualAccidentalNoiseNodeComponentEditor::_disconnection_request);
-	ClassDB::bind_method("_node_selected", &VisualAccidentalNoiseNodeComponentEditor::_node_selected);
-	ClassDB::bind_method("_open_in_editor", &VisualAccidentalNoiseNodeComponentEditor::_open_in_editor);
-	ClassDB::bind_method("_scroll_changed", &VisualAccidentalNoiseNodeComponentEditor::_scroll_changed);
-	ClassDB::bind_method("_delete_request", &VisualAccidentalNoiseNodeComponentEditor::_delete_request);
-	ClassDB::bind_method("_node_changed", &VisualAccidentalNoiseNodeComponentEditor::_node_changed);
-	ClassDB::bind_method("_edit_port_default_input", &VisualAccidentalNoiseNodeComponentEditor::_edit_port_default_input);
-	ClassDB::bind_method("_port_edited", &VisualAccidentalNoiseNodeComponentEditor::_port_edited);
-	ClassDB::bind_method("_connection_to_empty", &VisualAccidentalNoiseNodeComponentEditor::_connection_to_empty);
-	ClassDB::bind_method("_line_edit_focus_out", &VisualAccidentalNoiseNodeComponentEditor::_line_edit_focus_out);
-	ClassDB::bind_method("_line_edit_changed", &VisualAccidentalNoiseNodeComponentEditor::_line_edit_changed);
-	ClassDB::bind_method("_duplicate_nodes", &VisualAccidentalNoiseNodeComponentEditor::_duplicate_nodes);
-	ClassDB::bind_method("_preview_select_port", &VisualAccidentalNoiseNodeComponentEditor::_preview_select_port);
-	ClassDB::bind_method("_file_opened", &VisualAccidentalNoiseNodeComponentEditor::_file_opened);
-	ClassDB::bind_method("_input", &VisualAccidentalNoiseNodeComponentEditor::_input);
+	ClassDB::bind_method("_component_renamed", &VisualAccidentalNoiseComponentEditor::_component_renamed);
+	ClassDB::bind_method("_component_renamed_focus_out", &VisualAccidentalNoiseComponentEditor::_component_renamed_focus_out);
+	ClassDB::bind_method("_input_renamed", &VisualAccidentalNoiseComponentEditor::_input_renamed);
+	ClassDB::bind_method("_input_renamed_focus_out", &VisualAccidentalNoiseComponentEditor::_input_renamed_focus_out);
+	ClassDB::bind_method("_update_graph", &VisualAccidentalNoiseComponentEditor::_update_graph);
+	ClassDB::bind_method("_add_node", &VisualAccidentalNoiseComponentEditor::_add_node);
+	ClassDB::bind_method("_add_component", &VisualAccidentalNoiseComponentEditor::_add_component);
+	ClassDB::bind_method("_node_dragged", &VisualAccidentalNoiseComponentEditor::_node_dragged);
+	ClassDB::bind_method("_connection_request", &VisualAccidentalNoiseComponentEditor::_connection_request);
+	ClassDB::bind_method("_disconnection_request", &VisualAccidentalNoiseComponentEditor::_disconnection_request);
+	ClassDB::bind_method("_node_selected", &VisualAccidentalNoiseComponentEditor::_node_selected);
+	ClassDB::bind_method("_open_in_editor", &VisualAccidentalNoiseComponentEditor::_open_in_editor);
+	ClassDB::bind_method("_scroll_changed", &VisualAccidentalNoiseComponentEditor::_scroll_changed);
+	ClassDB::bind_method("_delete_request", &VisualAccidentalNoiseComponentEditor::_delete_request);
+	ClassDB::bind_method("_node_changed", &VisualAccidentalNoiseComponentEditor::_node_changed);
+	ClassDB::bind_method("_edit_port_default_input", &VisualAccidentalNoiseComponentEditor::_edit_port_default_input);
+	ClassDB::bind_method("_port_edited", &VisualAccidentalNoiseComponentEditor::_port_edited);
+	ClassDB::bind_method("_connection_to_empty", &VisualAccidentalNoiseComponentEditor::_connection_to_empty);
+	ClassDB::bind_method("_line_edit_focus_out", &VisualAccidentalNoiseComponentEditor::_line_edit_focus_out);
+	ClassDB::bind_method("_line_edit_changed", &VisualAccidentalNoiseComponentEditor::_line_edit_changed);
+	ClassDB::bind_method("_duplicate_nodes", &VisualAccidentalNoiseComponentEditor::_duplicate_nodes);
+	ClassDB::bind_method("_preview_select_port", &VisualAccidentalNoiseComponentEditor::_preview_select_port);
+	ClassDB::bind_method("_file_opened", &VisualAccidentalNoiseComponentEditor::_file_opened);
+	ClassDB::bind_method("_input", &VisualAccidentalNoiseComponentEditor::_input);
 }
 
-VisualAccidentalNoiseNodeComponentEditor *VisualAccidentalNoiseNodeComponentEditor::singleton = NULL;
+VisualAccidentalNoiseComponentEditor *VisualAccidentalNoiseComponentEditor::singleton = NULL;
 
-VisualAccidentalNoiseNodeComponentEditor::VisualAccidentalNoiseNodeComponentEditor() {
+VisualAccidentalNoiseComponentEditor::VisualAccidentalNoiseComponentEditor() {
 
 	singleton = this;
 	updating = false;
@@ -1008,7 +1020,7 @@ public:
 	}
 
 	void _refresh_request() {
-		VisualAccidentalNoiseNodeComponentEditor::get_singleton()->call_deferred("_update_graph");
+		VisualAccidentalNoiseComponentEditor::get_singleton()->call_deferred("_update_graph");
 	}
 
 	bool updating;
@@ -1125,7 +1137,7 @@ Size2 VisualAccidentalNoiseNodePortPreview::get_minimum_size() const {
 		return min_size;
 	}
 
-	const Ref<VisualAccidentalNoiseNodeComponent> &component = VisualAccidentalNoiseNodeComponentEditor::get_singleton()->get_component();
+	const Ref<VisualAccidentalNoiseNodeComponent> &component = VisualAccidentalNoiseComponentEditor::get_singleton()->get_component();
 	ERR_FAIL_COND_V(component.is_null(), min_size);
 
 	if(!component->has_node(node)) {
@@ -1150,7 +1162,7 @@ void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 		return;
 	}
 
-	const Ref<VisualAccidentalNoiseNodeComponent> &edited_comp = VisualAccidentalNoiseNodeComponentEditor::get_singleton()->get_component();
+	const Ref<VisualAccidentalNoiseNodeComponent> &edited_comp = VisualAccidentalNoiseComponentEditor::get_singleton()->get_component();
 	ERR_FAIL_COND(edited_comp.is_null());
 
 	const Ref<VisualAccidentalNoiseNodeComponent> &comp = VisualAccidentalNoiseEditor::get_singleton()->get_noise()->get_component();

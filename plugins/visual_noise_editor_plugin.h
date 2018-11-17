@@ -25,7 +25,7 @@ class VisualAccidentalNoiseEditor : public VBoxContainer {
 
 	Vector<int> button_path;
 	Vector<int> edited_path;
-	VisualAccidentalNoiseNodeComponentEditor *component_editor;
+	VisualAccidentalNoiseComponentEditor *component_editor;
 
 	ObjectID current_component;
 
@@ -40,8 +40,8 @@ public:
 	static VisualAccidentalNoiseEditor *get_singleton() { return singleton; }
 	Ref<VisualAccidentalNoise> get_noise() { return visual_anl_noise; }
 
-	void add_plugin(VisualAccidentalNoiseNodeComponentEditor *p_editor);
-	void remove_plugin(VisualAccidentalNoiseNodeComponentEditor *p_editor);
+	void add_plugin(VisualAccidentalNoiseComponentEditor *p_editor);
+	void remove_plugin(VisualAccidentalNoiseComponentEditor *p_editor);
 
 	bool can_edit(const Ref<VisualAccidentalNoiseNode> &p_node) const;
 

@@ -66,7 +66,7 @@ void VisualAccidentalNoiseEditor::_on_changed(Ref<VisualAccidentalNoise> p_visua
 
 	Ref<VisualAccidentalNoiseNodeComponent> comp = p_visual_anl_noise->get_component();
 
-	VisualAccidentalNoiseNodeComponentEditor::get_singleton()->edit(comp);
+	VisualAccidentalNoiseComponentEditor::get_singleton()->edit(comp);
 }
 
 void VisualAccidentalNoiseEditor::save_external_data() {
@@ -77,7 +77,7 @@ void VisualAccidentalNoiseEditor::save_external_data() {
 	ResourceSaver::save(visual_anl_noise->get_path(), visual_anl_noise);
 }
 
-void VisualAccidentalNoiseEditor::add_plugin(VisualAccidentalNoiseNodeComponentEditor *p_editor) {
+void VisualAccidentalNoiseEditor::add_plugin(VisualAccidentalNoiseComponentEditor *p_editor) {
 
 	ERR_FAIL_COND(p_editor->get_parent());
 	editor_base->add_child(p_editor);
@@ -87,7 +87,7 @@ void VisualAccidentalNoiseEditor::add_plugin(VisualAccidentalNoiseNodeComponentE
 	p_editor->hide();
 }
 
-void VisualAccidentalNoiseEditor::remove_plugin(VisualAccidentalNoiseNodeComponentEditor *p_editor) {
+void VisualAccidentalNoiseEditor::remove_plugin(VisualAccidentalNoiseComponentEditor *p_editor) {
 
 	ERR_FAIL_COND(p_editor->get_parent() != editor_base);
 	editor_base->remove_child(p_editor);
@@ -283,7 +283,7 @@ VisualAccidentalNoiseEditor::VisualAccidentalNoiseEditor() {
 	editor_base->set_v_size_flags(SIZE_EXPAND_FILL);
 	add_child(editor_base);
 
-	add_plugin(memnew(VisualAccidentalNoiseNodeComponentEditor));
+	add_plugin(memnew(VisualAccidentalNoiseComponentEditor));
 }
 
 ///////////////////////////////////
@@ -308,6 +308,7 @@ void VisualAccidentalNoiseEditorPlugin::make_visible(bool p_visible) {
 
 		visual_anl_noise_editor->set_process(true);
 		visual_anl_noise_editor->set_process_input(true);
+		VisualAccidentalNoiseComponentEditor::get_singleton()->set_process_input(true);
 	} else {
 
 		if (visual_anl_noise_editor->is_visible_in_tree())
@@ -316,6 +317,7 @@ void VisualAccidentalNoiseEditorPlugin::make_visible(bool p_visible) {
 
 		visual_anl_noise_editor->set_process(false);
 		visual_anl_noise_editor->set_process_input(false);
+		VisualAccidentalNoiseComponentEditor::get_singleton()->set_process_input(false);
 	}
 }
 

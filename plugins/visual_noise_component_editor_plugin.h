@@ -29,10 +29,10 @@ public:
 	virtual Control *create_editor(const Ref<VisualAccidentalNoiseNode> &p_node);
 };
 
-class VisualAccidentalNoiseNodeComponentEditor : public VBoxContainer {
-	GDCLASS(VisualAccidentalNoiseNodeComponentEditor, VBoxContainer);
+class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
+	GDCLASS(VisualAccidentalNoiseComponentEditor, VBoxContainer);
 
-	static VisualAccidentalNoiseNodeComponentEditor *singleton;
+	static VisualAccidentalNoiseComponentEditor *singleton;
 
 	Vector<Ref<VisualAccidentalNoiseNodePlugin> > plugins;
 
@@ -130,7 +130,7 @@ protected:
 
 public:
 
-	static VisualAccidentalNoiseNodeComponentEditor *get_singleton() { return singleton; }
+	static VisualAccidentalNoiseComponentEditor *get_singleton() { return singleton; }
 	Ref<VisualAccidentalNoiseNodeComponent> get_component() { return component; }
 
 	void add_custom_type(const String &p_name, const String &p_category, const Ref<Script> &p_script);
@@ -144,7 +144,7 @@ public:
 	bool can_edit(const Ref<VisualAccidentalNoiseNodeComponent> &p_component);
 	void edit(const Ref<VisualAccidentalNoiseNodeComponent> &p_component);
 
-	VisualAccidentalNoiseNodeComponentEditor();
+	VisualAccidentalNoiseComponentEditor();
 };
 
 class VisualAccidentalNoiseNodePortPreview : public Control {
