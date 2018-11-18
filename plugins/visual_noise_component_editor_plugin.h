@@ -51,6 +51,8 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 	int editing_node;
 	int editing_port;
 
+	static const Color type_color[2];
+
 	void _update_graph();
 
 	struct AddOption {

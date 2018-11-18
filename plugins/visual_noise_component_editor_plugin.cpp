@@ -118,6 +118,11 @@ static Ref<StyleBoxEmpty> make_empty_stylebox(float p_margin_left = -1, float p_
 	return style;
 }
 
+const Color VisualAccidentalNoiseComponentEditor::type_color[2] = {
+	Color::html("#2bc8ff"),
+	Color::html("#d43700"),
+};
+
 void VisualAccidentalNoiseComponentEditor::_update_graph() {
 
 	ERR_FAIL_COND(component.is_null());
@@ -136,11 +141,6 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 			i--;
 		}
 	}
-
-	static const Color type_color[2] = {
-		Color::html("#2bc8ff"),
-		Color::html("#d43700"),
-	};
 
 	List<VisualAccidentalNoiseNodeComponent::Connection> connections;
 	component->get_node_connections(&connections);
@@ -218,6 +218,22 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 		}
 
 		for (int i = 0; i < MAX(vanode->get_input_port_count(), vanode->get_output_port_count()); i++) {
+
+			// Slightly randomize port connection colors by port type
+			Color cs = type_color[0];
+			Color ci = type_color[1];
+
+			float cs_h = cs.get_h() * (Math::randf() * 0.25 + 0.75);
+			float ci_h = ci.get_h() * (Math::randf() * 0.25 + 0.75);
+
+			float cs_s = 0.5 + Math::randf() * 0.5;
+			float ci_s = 0.5 + Math::randf() * 0.5;
+
+			cs.set_hsv(cs_h, cs_s, cs.get_v());
+			ci.set_hsv(ci_h, ci_s, ci.get_v());
+
+			const Color type_color_var[2] = {cs, ci};
+			//
 
 			if (vanode->is_port_separator(i)) {
 				node->add_child(memnew(HSeparator));
@@ -312,7 +328,7 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 
 			node->add_child(hb);
 
-			node->set_slot(i + port_offset, valid_left, port_left, type_color[port_left], valid_right, port_right, type_color[port_right]);
+			node->set_slot(i + port_offset, valid_left, port_left, type_color_var[port_left], valid_right, port_right, type_color_var[port_right]);
 		}
 
 		if (comp.is_valid()) {
