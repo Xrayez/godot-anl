@@ -2,7 +2,7 @@
 
   Copyright (C) 2011 Joshua Tippetts
 
-  Modifications copyright (C) 2017 Andrii Doroshenko
+  Modifications copyright (C) 2017-2018 Andrii Doroshenko
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
