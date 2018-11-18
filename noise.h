@@ -18,8 +18,10 @@ protected:
 
 public:
     enum Format {
-        FORMAT_NOISE,
-        FORMAT_COLOR,
+        FORMAT_HEIGHTMAP, // grayscale image
+        FORMAT_NORMALMAP, // color normalmap
+        FORMAT_BUMPMAP,   // grayscale bumpmap
+        FORMAT_TEXTURE,   // color, suitable for textures
     };
 
     AccidentalNoise();
@@ -35,6 +37,27 @@ public:
 
     void set_expression(const String &p_expression);
     String get_expression() const;
+
+//------------------------------------------------------------------------------
+// Normal/bump map
+//------------------------------------------------------------------------------
+    void set_normalmap_spacing(double p_spacing);
+    double get_normalmap_spacing() const;
+
+    void set_normalmap_wrapped(bool p_wrapped);
+    bool is_normalmap_wrapped() const;
+
+    void set_normalmap_normalized(bool p_normalized);
+    bool is_normalmap_normalized() const;
+
+    void set_bumpmap_spacing(double p_spacing);
+    double get_bumpmap_spacing() const;
+
+    void set_bumpmap_wrapped(bool p_wrapped);
+    bool is_bumpmap_wrapped() const;
+
+    void set_bumpmap_light(const Vector3 &p_light);
+    Vector3 get_bumpmap_light() const;
 
 //------------------------------------------------------------------------------
 // Kernel noise methods
@@ -259,6 +282,14 @@ private:
     Format format;
     AABB ranges;
     String expression;
+
+    double normalmap_spacing;
+    bool normalmap_wrapped;
+    bool normalmap_normalized;
+
+    double bumpmap_spacing;
+    bool bumpmap_wrapped;
+    Vector3 bumpmap_light;
 
     Ref<Image> _map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges);
     Vector<Ref<Image>> _map_to_image_3d(int p_width, int p_height, int p_depth, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB& p_ranges);

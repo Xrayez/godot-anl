@@ -7,8 +7,16 @@ AccidentalNoise::AccidentalNoise(): vm(kernel), eb(kernel) {
     prev_function = 0;
 
     mode = anl::EMappingModes::SEAMLESS_NONE;
-    format = FORMAT_NOISE;
+    format = FORMAT_HEIGHTMAP;
     ranges = AABB(Vector3(-1, -1, -1), Vector3(2, 2, 2));
+
+    normalmap_spacing = 1.0;
+    normalmap_wrapped = true;
+    normalmap_normalized = true;
+
+    bumpmap_spacing = 1.0;
+    bumpmap_wrapped = true;
+    bumpmap_light = Vector3(1.0, 1.0, 1.0);
 }
 
 void AccidentalNoise::set_mode(anl::EMappingModes p_mode) {
@@ -66,6 +74,93 @@ void AccidentalNoise::set_expression(const String &p_expression) {
 String AccidentalNoise::get_expression() const {
 
     return expression;
+}
+
+//------------------------------------------------------------------------------
+// Normal/bump map
+//------------------------------------------------------------------------------
+void AccidentalNoise::set_normalmap_spacing(double p_spacing) {
+
+    normalmap_spacing = p_spacing;
+
+    if (format == FORMAT_NORMALMAP) {
+        emit_changed();
+    }
+}
+
+double AccidentalNoise::get_normalmap_spacing() const {
+
+    return normalmap_spacing;
+}
+
+void AccidentalNoise::set_normalmap_wrapped(bool p_wrapped) {
+
+    normalmap_wrapped = p_wrapped;
+
+    if (format == FORMAT_NORMALMAP) {
+        emit_changed();
+    }
+}
+
+bool AccidentalNoise::is_normalmap_wrapped() const {
+
+    return normalmap_wrapped;
+}
+
+void AccidentalNoise::set_normalmap_normalized(bool p_normalized) {
+
+    normalmap_normalized = p_normalized;
+
+    if (format == FORMAT_NORMALMAP) {
+        emit_changed();
+    }
+}
+
+bool AccidentalNoise::is_normalmap_normalized() const {
+
+    return normalmap_normalized;
+}
+
+void AccidentalNoise::set_bumpmap_spacing(double p_spacing) {
+
+    bumpmap_spacing = p_spacing;
+
+    if (format == FORMAT_BUMPMAP) {
+        emit_changed();
+    }
+}
+
+double AccidentalNoise::get_bumpmap_spacing() const {
+
+    return bumpmap_spacing;
+}
+
+void AccidentalNoise::set_bumpmap_wrapped(bool p_wrapped) {
+
+    bumpmap_wrapped = p_wrapped;
+
+    if (format == FORMAT_BUMPMAP) {
+        emit_changed();
+    }
+}
+
+bool AccidentalNoise::is_bumpmap_wrapped() const {
+
+    return bumpmap_wrapped;
+}
+
+void AccidentalNoise::set_bumpmap_light(const Vector3 &p_light) {
+
+    bumpmap_light = p_light;
+
+    if (format == FORMAT_BUMPMAP) {
+        emit_changed();
+    }
+}
+
+Vector3 AccidentalNoise::get_bumpmap_light() const {
+
+    return bumpmap_light;
 }
 
 //------------------------------------------------------------------------------
@@ -795,11 +890,12 @@ Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_ind
 
     switch(p_format) {
 
-        case FORMAT_NOISE: { // scalar, grayscale image
+        case FORMAT_HEIGHTMAP: {
             image_format = Image::Format::FORMAT_L8;
 
             anl::CArray2Dd img(p_width, p_height);
             anl::map2DNoZ(p_mode, img, kernel, ranges, p_index);
+
             auto src_data = img.getData();
 
             dest_data.resize(SIZE);
@@ -810,7 +906,49 @@ Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_ind
             }
         } break;
 
-        case FORMAT_COLOR: { // suitable for textures
+        case FORMAT_NORMALMAP: {
+            image_format = Image::Format::FORMAT_RGBA8;
+
+            anl::CArray2Dd img(p_width, p_height);
+            anl::map2DNoZ(p_mode, img, kernel, ranges, p_index);
+
+            anl::CArray2Drgba normal_img(p_width, p_height);
+            anl::calcNormalMap(&img, &normal_img, normalmap_spacing, normalmap_normalized, normalmap_wrapped);
+
+            auto src_data = normal_img.getData();
+
+            dest_data.resize(SIZE * 4);
+            PoolVector<uint8_t>::Write w = dest_data.write();
+
+            for(int i = 0; i < SIZE; ++i) {
+                w[i * 4 + 0] = (uint8_t)(src_data[i].r * 255);
+                w[i * 4 + 1] = (uint8_t)(src_data[i].g * 255);
+                w[i * 4 + 2] = (uint8_t)(src_data[i].b * 255);
+                w[i * 4 + 3] = 255;
+            }
+        } break;
+
+        case FORMAT_BUMPMAP: {
+            image_format = Image::Format::FORMAT_L8;
+
+            anl::CArray2Dd img(p_width, p_height);
+            anl::map2DNoZ(p_mode, img, kernel, ranges, p_index);
+
+            anl::CArray2Dd bump_img(p_width, p_height);
+            float light[3] = {bumpmap_light.x, bumpmap_light.y, bumpmap_light.z};
+            anl::calcBumpMap(&img, &bump_img, light, bumpmap_spacing, bumpmap_wrapped);
+
+            auto src_data = bump_img.getData();
+
+            dest_data.resize(SIZE);
+            PoolVector<uint8_t>::Write w = dest_data.write();
+
+            for(int i = 0; i < SIZE; ++i) {
+                w[i] = (uint8_t)(src_data[i] * 255);
+            }
+        } break;
+
+        case FORMAT_TEXTURE: {
             image_format = Image::Format::FORMAT_RGBA8;
 
             anl::CArray2Drgba img(p_width, p_height);
@@ -850,7 +988,7 @@ Vector<Ref<Image>> AccidentalNoise::_map_to_image_3d(int p_width, int p_height, 
 
     switch(p_format) {
 
-        case FORMAT_NOISE: { // scalar, grayscale image
+        case FORMAT_HEIGHTMAP: { // more like depth map?
             image_format = Image::Format::FORMAT_L8;
 
  			anl::CArray3Dd img(p_width, p_height, p_depth);
@@ -871,7 +1009,13 @@ Vector<Ref<Image>> AccidentalNoise::_map_to_image_3d(int p_width, int p_height, 
 			}
         } break;
 
-        case FORMAT_COLOR: { // suitable for textures
+        case FORMAT_NORMALMAP:
+        case FORMAT_BUMPMAP: {
+            ERR_EXPLAIN("Normal/bump 3D image mapping is not supported.");
+            ERR_FAIL_V(Vector<Ref<Image>>());
+        } break;
+
+        case FORMAT_TEXTURE: {
             image_format = Image::Format::FORMAT_RGBA8;
 
             anl::CArray3Drgba img(p_width, p_height, p_depth);
@@ -921,12 +1065,42 @@ void AccidentalNoise::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_expression"),&AccidentalNoise::get_expression);
 
     ADD_PROPERTY(PropertyInfo(Variant::INT, "mode", PROPERTY_HINT_ENUM, "Seamless none,Seamless X,Seamless Y,Seamless Z,Seamless XY,Seamless XZ,Seamless YZ,Seamless XYZ"), "set_mode", "get_mode");
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "format", PROPERTY_HINT_ENUM, "Noise,Color"), "set_format", "get_format");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "format", PROPERTY_HINT_ENUM, "Height Map,Normal Map,Bump Map,Texture"), "set_format", "get_format");
     ADD_PROPERTY(PropertyInfo(Variant::AABB, "ranges"), "set_ranges", "get_ranges");
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "expression", PROPERTY_HINT_MULTILINE_TEXT), "set_expression", "get_expression");
 
-    BIND_ENUM_CONSTANT(FORMAT_NOISE);
-    BIND_ENUM_CONSTANT(FORMAT_COLOR);
+    ClassDB::bind_method(D_METHOD("set_normalmap_spacing", "normalmap_spacing"),&AccidentalNoise::set_normalmap_spacing);
+    ClassDB::bind_method(D_METHOD("get_normalmap_spacing"),&AccidentalNoise::get_normalmap_spacing);
+
+    ClassDB::bind_method(D_METHOD("set_normalmap_wrapped", "normalmap_wrapped"),&AccidentalNoise::set_normalmap_wrapped);
+    ClassDB::bind_method(D_METHOD("is_normalmap_wrapped"),&AccidentalNoise::is_normalmap_wrapped);
+
+    ClassDB::bind_method(D_METHOD("set_normalmap_normalized", "normalmap_normalized"),&AccidentalNoise::set_normalmap_normalized);
+    ClassDB::bind_method(D_METHOD("is_normalmap_normalized"),&AccidentalNoise::is_normalmap_normalized);
+
+    ADD_GROUP("Normal Map", "normalmap_");
+    ADD_PROPERTY(PropertyInfo(Variant::REAL, "normalmap_spacing"), "set_normalmap_spacing", "get_normalmap_spacing");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "normalmap_wrapped"), "set_normalmap_wrapped", "is_normalmap_wrapped");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "normalmap_normalized"), "set_normalmap_normalized", "is_normalmap_normalized");
+
+    ClassDB::bind_method(D_METHOD("set_bumpmap_spacing", "bumpmap_spacing"),&AccidentalNoise::set_bumpmap_spacing);
+    ClassDB::bind_method(D_METHOD("get_bumpmap_spacing"),&AccidentalNoise::get_bumpmap_spacing);
+
+    ClassDB::bind_method(D_METHOD("set_bumpmap_wrapped", "bumpmap_wrapped"),&AccidentalNoise::set_bumpmap_wrapped);
+    ClassDB::bind_method(D_METHOD("is_bumpmap_wrapped"),&AccidentalNoise::is_bumpmap_wrapped);
+
+    ClassDB::bind_method(D_METHOD("set_bumpmap_light", "bumpmap_light"),&AccidentalNoise::set_bumpmap_light);
+    ClassDB::bind_method(D_METHOD("get_bumpmap_light"),&AccidentalNoise::get_bumpmap_light);
+
+    ADD_GROUP("Bump Map", "bumpmap_");
+    ADD_PROPERTY(PropertyInfo(Variant::REAL, "bumpmap_spacing"), "set_bumpmap_spacing", "get_bumpmap_spacing");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "bumpmap_wrapped"), "set_bumpmap_wrapped", "is_bumpmap_wrapped");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "bumpmap_light"), "set_bumpmap_light", "get_bumpmap_light");
+
+    BIND_ENUM_CONSTANT(FORMAT_HEIGHTMAP);
+    BIND_ENUM_CONSTANT(FORMAT_NORMALMAP);
+    BIND_ENUM_CONSTANT(FORMAT_BUMPMAP);
+    BIND_ENUM_CONSTANT(FORMAT_TEXTURE);
 
     // Kernel methods
 

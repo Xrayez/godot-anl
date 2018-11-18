@@ -20,5 +20,15 @@ func _init():
 	var combine = n.combine_rgba(r,g,b,a)
 	n.function = n.scale(combine, n.constant(3))
 
+	n.format = AccidentalNoise.FORMAT_HEIGHTMAP
 	n.get_image(100, 100)
+	n.get_texture(100, 100)
+
+	n.format = AccidentalNoise.FORMAT_NORMALMAP
+	n.get_texture(100, 100)
+
+	n.format = AccidentalNoise.FORMAT_BUMPMAP
+	n.get_texture(100, 100)
+
+	n.format = AccidentalNoise.FORMAT_TEXTURE
 	n.get_texture(100, 100)

@@ -95,14 +95,14 @@ func radial():
 
 func get_texture(n):
 	n.mode = AccidentalNoise.SEAMLESS_NONE
-	n.format = AccidentalNoise.FORMAT_NOISE
+	n.format = AccidentalNoise.FORMAT_HEIGHTMAP
 	n.ranges = mapping_ranges
-	
+
 	if not cur_method in ['x', 'y', 'radial']:
 		n.function = n.clamp(n.last_function, n.zero(), n.one())
 	else:
 		n.function = n.last_function
-		
+
 	texture = n.get_texture(size.x, size.y)
 
 func _input(event):
