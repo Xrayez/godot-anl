@@ -21,7 +21,8 @@ if env['target'] == 'release':
 else:  # release_debug, debug
     module_env.Append(CPPFLAGS=['-std=c++11'])
 
-# module_env.Append(CPPDEFINES=['ANL_LONG_PERIOD_HASHING'])
+# module_env.Append(CPPDEFINES=['ANL_LONG_PERIOD_HASHING']) # limited to 256.0 by default
+# module_env.Append(CPPDEFINES=['ANL_EXPRESSION_BUILDER_CAMELCASE']) # snake_case by default
 
 for key, value in ARGLIST:
     if key == 'define':
