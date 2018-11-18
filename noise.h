@@ -222,6 +222,11 @@ public:
     Index billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
                 unsigned int numoctaves, double frequency, unsigned int seed, bool rot = true);
 
+    // Variable
+    //-------------------------------------------------
+    void set_var(const String &p_name, double p_value);
+    Index get_var(const String &p_name);
+
     // Kernel
     // --------------------
     void set_function(Index p_index);

@@ -750,6 +750,16 @@ Index AccidentalNoise::billow(anl::BasisTypes basis, anl::InterpolationTypes int
     return billow.getIndex();
 }
 
+void AccidentalNoise::set_var(const String &p_name, double p_value) {
+
+    kernel.setVar(p_name.utf8().get_data(), p_value);
+}
+
+Index AccidentalNoise::get_var(const String &p_name) {
+
+    return kernel.getVar(p_name.utf8().get_data()).getIndex();
+}
+
 // Kernel
 
 void AccidentalNoise::set_function(Index p_index) {
@@ -1228,6 +1238,9 @@ void AccidentalNoise::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("billow", "basis_type", "interp_type",
                                   "numoctaves", "frequency", "seed", "rotation"),&AccidentalNoise::billow, DEFVAL(true));
+
+    ClassDB::bind_method(D_METHOD("set_var", "name", "value"),&AccidentalNoise::set_var);
+    ClassDB::bind_method(D_METHOD("get_var", "name"),&AccidentalNoise::get_var);
 
     // Kernel
 

@@ -139,11 +139,54 @@ But please note that the expression builder feature is a work in progress as
 stated by original author. Some functions work, some don't and will hang the
 engine in the endless loop...
 
-Here's some more examples of image/texture generation:
+## Programmable noise
+
+As exposed in 2.0, it's possible to manipulate noise parameters via special noise
+variables which are basically like `constant()` but can be set and retrieved by name:
+
+```gdscript
+var an = AccidentalNoise.new()
+
+an.set_var("random_turbulence", 0.0)
+
+var basis = an.simplex_basis(0)
+var trans = an.scale(an.simplex_basis(1), an.get_var("random_turbulence"))
+var translate = an.translate(basis, trans)
+
+an.function = an.scale(translate, an.constant(0.02))
+
+var image = Image.new()
+image.create(256, 256, 0, Image.FORMAT_RGBA8)
+image.lock()
+
+for y in range(256):
+	for x in range(256):
+		if x % 64 == 0 and y % 64 == 0:
+			# Specify noise parameters on the fly
+			an.set_var("random_turbulence", rand_range(0, 4.0))
+		var value = an.get_color_2d(x, y)
+		image.set_pixel(x, y, value)
+
+image.unlock()
+```
+
+Without setting variable:
+
+![Before](examples/images/programmable_noise_before.png)
+
+With variable:
+
+![After](examples/images/programmable_noise_after.png)
+
+<details><summary>More examples</summary>
+<p>
 
 ![Water or Smoke?](examples/images/water_smoke.png)
 ![Stones with moss?](examples/images/stone_moss.png)
 ![Lapis lazuli?](examples/images/stone_lapis.png)
+
+</p>
+</details>
 
 ## Legal considerations
 
