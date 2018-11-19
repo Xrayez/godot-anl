@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeValueBasis" inherits="VisualAccidentalNoiseNode" category="Core" version="3.1">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<demos>
+	</demos>
+	<methods>
+	</methods>
+	<members>
+		<member name="interpolation" type="int" setter="set_interpolation" getter="get_interpolation">
+		</member>
+		<member name="seed" type="int" setter="set_seed" getter="get_seed">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

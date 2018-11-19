@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="AccidentalNoise" inherits="Reference" category="Core" version="3.0">
+<class name="AccidentalNoise" inherits="Resource" category="Core" version="3.1">
 	<brief_description>
-		A noise module used for compound noise generation
+		A noise module used for compound noise generation.
 	</brief_description>
 	<description>
-	    AccidentalNoise class can be used for generating a variety of noise types in a modular way. Noise functions can be chained together to create more complex functions out of elementary ones.
+		The module can be used for generating a variety of noise types in a modular way. Noise functions can be chained together to create more complex functions out of elementary ones.
         The noise generation procedure consists of the two main steps:
         1. Adding elementary noise functions to Kernel by calling methods that return an index of the created function. The returned index can be then passed to other noise functions that can use it, building a pipeline.
         2. Using NoiseExecutor methods (e.g get_noise_2d) to obtain the noise at specified index, virtually at any point of the function chain.
@@ -54,6 +54,7 @@
 			<argument index="2" name="stride" type="int" default="1">
 			</argument>
 			<description>
+				Adds functions starting from [code]base_index[/code] to [code]base_index + number[/code] with step [code]stride[/code].
 			</description>
 		</method>
 		<method name="asin">
@@ -89,9 +90,13 @@
 			</argument>
 			<argument index="1" name="interp_type" type="int" enum="anl.InterpolationTypes">
 			</argument>
-			<argument index="2" name="params" type="PoolRealArray">
+			<argument index="2" name="numoctaves" type="int">
 			</argument>
-			<argument index="3" name="rot" type="bool" default="true">
+			<argument index="3" name="frequency" type="float">
+			</argument>
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
 			</argument>
 			<description>
 			</description>
@@ -103,11 +108,21 @@
 			</argument>
 			<argument index="1" name="interp_type_index" type="int">
 			</argument>
-			<argument index="2" name="layer_params" type="PoolRealArray">
+			<argument index="2" name="scale" type="float">
 			</argument>
-			<argument index="3" name="axis_params" type="PoolRealArray">
+			<argument index="3" name="frequency" type="float">
 			</argument>
-			<argument index="4" name="rot" type="bool" default="true">
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
+			</argument>
+			<argument index="6" name="angle" type="float" default="0.5">
+			</argument>
+			<argument index="7" name="ax" type="float" default="0.0">
+			</argument>
+			<argument index="8" name="ay" type="float" default="0.0">
+			</argument>
+			<argument index="9" name="az" type="float" default="1.0">
 			</argument>
 			<description>
 			</description>
@@ -115,13 +130,25 @@
 		<method name="cellular_basis">
 			<return type="int">
 			</return>
-			<argument index="0" name="f4_indexes" type="PoolIntArray">
+			<argument index="0" name="f1" type="int">
 			</argument>
-			<argument index="1" name="d4_indexes" type="PoolIntArray">
+			<argument index="1" name="f2" type="int">
 			</argument>
-			<argument index="2" name="distance_index" type="int">
+			<argument index="2" name="f3" type="int">
 			</argument>
-			<argument index="3" name="seed_index" type="int">
+			<argument index="3" name="f4" type="int">
+			</argument>
+			<argument index="4" name="d1" type="int">
+			</argument>
+			<argument index="5" name="d2" type="int">
+			</argument>
+			<argument index="6" name="d3" type="int">
+			</argument>
+			<argument index="7" name="d4" type="int">
+			</argument>
+			<argument index="8" name="distance_index" type="int">
+			</argument>
+			<argument index="9" name="seed_index" type="int">
 			</argument>
 			<description>
 			</description>
@@ -138,12 +165,20 @@
 			<description>
 			</description>
 		</method>
+		<method name="clear">
+			<return type="void">
+			</return>
+			<description>
+				Clears the noise kernel from all assosiated noise instruction indexes and noise variables.
+			</description>
+		</method>
 		<method name="color">
 			<return type="int">
 			</return>
 			<argument index="0" name="color" type="Color">
 			</argument>
 			<description>
+				Returns a constant color function in RGBA format.
 			</description>
 		</method>
 		<method name="combine_hsva">
@@ -201,11 +236,15 @@
 			</return>
 			<argument index="0" name="lowv_index" type="int">
 			</argument>
-			<argument index="1" name="t_indexes" type="PoolIntArray">
+			<argument index="1" name="t0_index" type="int">
 			</argument>
-			<argument index="2" name="v_indexes" type="PoolIntArray">
+			<argument index="2" name="t1_index" type="int">
 			</argument>
-			<argument index="3" name="control_index" type="int">
+			<argument index="3" name="v0_index" type="int">
+			</argument>
+			<argument index="4" name="v1_index" type="int">
+			</argument>
+			<argument index="5" name="control_index" type="int">
 			</argument>
 			<description>
 			</description>
@@ -295,6 +334,13 @@
 			<argument index="0" name="expression" type="String">
 			</argument>
 			<description>
+				Parses expression and generates a noise function from it.
+				[codeblock]
+				var an = AccidentalNoise.new()
+				var expression = "select(0, 1, scale_y(scale_x(translate(gradient_basis(2, 2), simplex_basis(3)), 5), 5), value_basis(2, 8), 0)"
+				an.function = an.evaluate(expression)
+				var noise = an.get_image()
+				[/codeblock]
 			</description>
 		</method>
 		<method name="fbm">
@@ -304,9 +350,13 @@
 			</argument>
 			<argument index="1" name="interp_type" type="int" enum="anl.InterpolationTypes">
 			</argument>
-			<argument index="2" name="params" type="PoolRealArray">
+			<argument index="2" name="numoctaves" type="int">
 			</argument>
-			<argument index="3" name="rot" type="bool" default="true">
+			<argument index="3" name="frequency" type="float">
+			</argument>
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
 			</argument>
 			<description>
 			</description>
@@ -318,7 +368,13 @@
 			</argument>
 			<argument index="1" name="layer_index" type="int">
 			</argument>
-			<argument index="2" name="params" type="PoolIntArray">
+			<argument index="2" name="persistence_index" type="int">
+			</argument>
+			<argument index="3" name="lacunarity_index" type="int">
+			</argument>
+			<argument index="4" name="numoctaves_index" type="int">
+			</argument>
+			<argument index="5" name="frequency_index" type="int">
 			</argument>
 			<description>
 			</description>
@@ -330,11 +386,21 @@
 			</argument>
 			<argument index="1" name="interp_type_index" type="int">
 			</argument>
-			<argument index="2" name="layer_params" type="PoolRealArray">
+			<argument index="2" name="scale" type="float">
 			</argument>
-			<argument index="3" name="axis_params" type="PoolRealArray">
+			<argument index="3" name="frequency" type="float">
 			</argument>
-			<argument index="4" name="rot" type="bool" default="true">
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
+			</argument>
+			<argument index="6" name="angle" type="float" default="0.5">
+			</argument>
+			<argument index="7" name="ax" type="float" default="0.0">
+			</argument>
+			<argument index="8" name="ay" type="float" default="0.0">
+			</argument>
+			<argument index="9" name="az" type="float" default="1.0">
 			</argument>
 			<description>
 			</description>
@@ -349,20 +415,6 @@
 			<description>
 			</description>
 		</method>
-		<method name="gen_texture">
-			<return type="void">
-			</return>
-			<argument index="0" name="size" type="Vector2">
-			</argument>
-			<argument index="1" name="mode" type="int" enum="anl.EMappingModes">
-			</argument>
-			<argument index="2" name="index" type="int">
-			</argument>
-			<argument index="3" name="filename" type="String">
-			</argument>
-			<description>
-			</description>
-		</method>
 		<method name="get_color_2d">
 			<return type="Color">
 			</return>
@@ -370,7 +422,13 @@
 			</argument>
 			<argument index="1" name="y" type="float">
 			</argument>
-			<argument index="2" name="index" type="int">
+			<description>
+			</description>
+		</method>
+		<method name="get_color_2dv">
+			<return type="Color">
+			</return>
+			<argument index="0" name="pos" type="Vector2">
 			</argument>
 			<description>
 			</description>
@@ -384,7 +442,13 @@
 			</argument>
 			<argument index="2" name="z" type="float">
 			</argument>
-			<argument index="3" name="index" type="int">
+			<description>
+			</description>
+		</method>
+		<method name="get_color_3dv">
+			<return type="Color">
+			</return>
+			<argument index="0" name="pos" type="Vector3">
 			</argument>
 			<description>
 			</description>
@@ -400,25 +464,37 @@
 			</argument>
 			<argument index="3" name="w" type="float">
 			</argument>
-			<argument index="4" name="index" type="int">
-			</argument>
 			<description>
 			</description>
 		</method>
 		<method name="get_color_6d">
 			<return type="Color">
 			</return>
-			<argument index="0" name="6_axis" type="PoolRealArray">
+			<argument index="0" name="x" type="float">
 			</argument>
-			<argument index="1" name="index" type="int">
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<argument index="3" name="w" type="float">
+			</argument>
+			<argument index="4" name="u" type="float">
+			</argument>
+			<argument index="5" name="v" type="float">
 			</argument>
 			<description>
 			</description>
 		</method>
-		<method name="get_last_function">
-			<return type="int">
+		<method name="get_image">
+			<return type="Image">
 			</return>
+			<argument index="0" name="width" type="int">
+			</argument>
+			<argument index="1" name="height" type="int">
+			</argument>
 			<description>
+				Maps a noise function set via [code]function[/code] property to an image.
+				Parameters are configured by setting [code]mode[/code], [code]format[/code], [code]ranges[/code] etc.
 			</description>
 		</method>
 		<method name="get_noise_2d">
@@ -428,7 +504,13 @@
 			</argument>
 			<argument index="1" name="y" type="float">
 			</argument>
-			<argument index="2" name="index" type="int">
+			<description>
+			</description>
+		</method>
+		<method name="get_noise_2dv">
+			<return type="float">
+			</return>
+			<argument index="0" name="pos" type="Vector2">
 			</argument>
 			<description>
 			</description>
@@ -440,9 +522,15 @@
 			</argument>
 			<argument index="1" name="y" type="float">
 			</argument>
-			<argument index="2" name="zindex" type="float">
+			<argument index="2" name="z" type="float">
 			</argument>
-			<argument index="3" name="arg3" type="int">
+			<description>
+			</description>
+		</method>
+		<method name="get_noise_3dv">
+			<return type="float">
+			</return>
+			<argument index="0" name="pos" type="Vector3">
 			</argument>
 			<description>
 			</description>
@@ -456,9 +544,7 @@
 			</argument>
 			<argument index="2" name="z" type="float">
 			</argument>
-			<argument index="3" name="windex" type="float">
-			</argument>
-			<argument index="4" name="arg4" type="int">
+			<argument index="3" name="w" type="float">
 			</argument>
 			<description>
 			</description>
@@ -466,11 +552,50 @@
 		<method name="get_noise_6d">
 			<return type="float">
 			</return>
-			<argument index="0" name="6_axis" type="PoolRealArray">
+			<argument index="0" name="x" type="float">
 			</argument>
-			<argument index="1" name="index" type="int">
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<argument index="3" name="w" type="float">
+			</argument>
+			<argument index="4" name="u" type="float">
+			</argument>
+			<argument index="5" name="v" type="float">
 			</argument>
 			<description>
+			</description>
+		</method>
+		<method name="get_seamless_image">
+			<return type="Image">
+			</return>
+			<argument index="0" name="width" type="int">
+			</argument>
+			<argument index="1" name="height" type="int">
+			</argument>
+			<description>
+				Same as [method get_image] but returns seamless image regardless of mapping mode. Can map image of any aspect ratio.
+			</description>
+		</method>
+		<method name="get_texture">
+			<return type="Texture">
+			</return>
+			<argument index="0" name="width" type="int">
+			</argument>
+			<argument index="1" name="height" type="int">
+			</argument>
+			<description>
+				Maps a noise function to a texture, uses [method get_image] internally.
+			</description>
+		</method>
+		<method name="get_var">
+			<return type="int">
+			</return>
+			<argument index="0" name="name" type="String">
+			</argument>
+			<description>
+				Returns a noise function previously set with [method set_var].
 			</description>
 		</method>
 		<method name="gradient_basis">
@@ -505,36 +630,6 @@
 			<argument index="1" name="high_index" type="int">
 			</argument>
 			<argument index="2" name="control_index" type="int">
-			</argument>
-			<description>
-			</description>
-		</method>
-		<method name="map_to_image">
-			<return type="Image">
-			</return>
-			<argument index="0" name="size" type="Vector2">
-			</argument>
-			<argument index="1" name="index" type="int">
-			</argument>
-			<argument index="2" name="mode" type="int" enum="anl.EMappingModes" default="0">
-			</argument>
-			<argument index="3" name="mapping_ranges" type="Rect2" default="Rect2( -1, -1, 2, 2 )">
-			</argument>
-			<description>
-			</description>
-		</method>
-		<method name="map_to_texture">
-			<return type="Texture">
-			</return>
-			<argument index="0" name="size" type="Vector2">
-			</argument>
-			<argument index="1" name="index" type="int">
-			</argument>
-			<argument index="2" name="mode" type="int" enum="anl.EMappingModes" default="0">
-			</argument>
-			<argument index="3" name="mapping_ranges" type="Rect2" default="Rect2( -1, -1, 2, 2 )">
-			</argument>
-			<argument index="4" name="flags" type="int" default="7">
 			</argument>
 			<description>
 			</description>
@@ -675,11 +770,21 @@
 			</argument>
 			<argument index="1" name="interp_type_index" type="int">
 			</argument>
-			<argument index="2" name="layer_params" type="PoolRealArray">
+			<argument index="2" name="scale" type="float">
 			</argument>
-			<argument index="3" name="axis_params" type="PoolRealArray">
+			<argument index="3" name="frequency" type="float">
 			</argument>
-			<argument index="4" name="rot" type="bool" default="true">
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
+			</argument>
+			<argument index="6" name="angle" type="float" default="0.5">
+			</argument>
+			<argument index="7" name="ax" type="float" default="0.0">
+			</argument>
+			<argument index="8" name="ay" type="float" default="0.0">
+			</argument>
+			<argument index="9" name="az" type="float" default="1.0">
 			</argument>
 			<description>
 			</description>
@@ -691,9 +796,13 @@
 			</argument>
 			<argument index="1" name="interp_type" type="int" enum="anl.InterpolationTypes">
 			</argument>
-			<argument index="2" name="params" type="PoolRealArray">
+			<argument index="2" name="numoctaves" type="int">
 			</argument>
-			<argument index="3" name="rot" type="bool" default="true">
+			<argument index="3" name="frequency" type="float">
+			</argument>
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
 			</argument>
 			<description>
 			</description>
@@ -830,14 +939,22 @@
 			<description>
 			</description>
 		</method>
+		<method name="set_var">
+			<return type="void">
+			</return>
+			<argument index="0" name="name" type="String">
+			</argument>
+			<argument index="1" name="value" type="float">
+			</argument>
+			<description>
+				Sets noise variable which are basically like [method constant] but can be set and retrieved by name.
+				Can be plugged in as argument to other functions to create programmable noise.
+			</description>
+		</method>
 		<method name="sigmoid">
 			<return type="int">
 			</return>
 			<argument index="0" name="src_index" type="int">
-			</argument>
-			<argument index="1" name="center_index" type="int">
-			</argument>
-			<argument index="2" name="ramp_index" type="int">
 			</argument>
 			<description>
 			</description>
@@ -1012,12 +1129,14 @@
 			<return type="int">
 			</return>
 			<description>
+				Generates 5th dimension gradient function.
 			</description>
 		</method>
 		<method name="v">
 			<return type="int">
 			</return>
 			<description>
+				Generates 6th dimension gradient function.
 			</description>
 		</method>
 		<method name="value_basis">
@@ -1034,24 +1153,28 @@
 			<return type="int">
 			</return>
 			<description>
+				Generates 4th dimension gradient function.
 			</description>
 		</method>
 		<method name="x">
 			<return type="int">
 			</return>
 			<description>
+				Generates horizontal gradient function.
 			</description>
 		</method>
 		<method name="y">
 			<return type="int">
 			</return>
 			<description>
+				Generates vertical gradient function.
 			</description>
 		</method>
 		<method name="z">
 			<return type="int">
 			</return>
 			<description>
+				Generates depth gradient function.
 			</description>
 		</method>
 		<method name="zero">
@@ -1062,7 +1185,66 @@
 			</description>
 		</method>
 	</methods>
+	<members>
+		<member name="bumpmap_light" type="Vector3" setter="set_bumpmap_light" getter="get_bumpmap_light">
+			Controls light direction.
+			Default value: [code]Vector3(1.0, 1.0, 1.0)[/code].
+		</member>
+		<member name="bumpmap_spacing" type="float" setter="set_bumpmap_spacing" getter="get_bumpmap_spacing">
+			Controls how far away the noise is extruded.
+			Default value: [code]1.0[/code].
+		</member>
+		<member name="bumpmap_wrapped" type="bool" setter="set_bumpmap_wrapped" getter="is_bumpmap_wrapped">
+			If set to [code]true[/code], the bump image will be wrapped which is useful for generating seamless bump maps.
+			Default value: [code]true[/code].
+		</member>
+		<member name="expression" type="String" setter="set_expression" getter="get_expression">
+			If set, this will override previously created instruction indexes and force to evaluate noise from the expression.
+			Set empty expression to use previously generated noise functions, either via code or visual noise.
+		</member>
+		<member name="format" type="int" setter="set_format" getter="get_format" enum="AccidentalNoise.Format">
+			Sets the noise format used by [method get_image] and [method get_texture] for noise mapping. See [enum Format].
+		</member>
+		<member name="function" type="int" setter="set_function" getter="get_function">
+			The index of a function from which noise is evaluated via [method get_noise_2d], [method get_image] or similar.
+		</member>
+		<member name="last_function" type="int" setter="" getter="get_last_function">
+			Returns an index of the last noise function generated.
+		</member>
+		<member name="mode" type="int" setter="set_mode" getter="get_mode" enum="anl.EMappingModes">
+			Controls seamlessness of the noise function mapped to image. See [enum EMappingModes].
+		</member>
+		<member name="normalmap_normalized" type="bool" setter="set_normalmap_normalized" getter="is_normalmap_normalized">
+			If set to [code]true[/code], normalizes normal map output.
+			Default value: [code]true[/code].
+		</member>
+		<member name="normalmap_spacing" type="float" setter="set_normalmap_spacing" getter="get_normalmap_spacing">
+			Controls how far away the noise is extruded.
+			Default value: [code]1.0[/code].
+		</member>
+		<member name="normalmap_wrapped" type="bool" setter="set_normalmap_wrapped" getter="is_normalmap_wrapped">
+			If set to [code]true[/code], the bump image will be wrapped which is useful for generating seamless bump maps.
+			Default value: [code]true[/code].
+		</member>
+		<member name="ranges" type="AABB" setter="set_ranges" getter="get_ranges">
+			Controls function's noise mapping ranges to image. Can be set to simulate scale.
+			For 2D, set as [code]AABB(Vector3(-1, -1, 0), Vector3(2, 2, 0))[/code], which corresponds to [code](-1,-1,1,1)[/code].
+			Default value: [code]AABB(Vector3(-1, -1, -1), Vector3(2, 2, 2))[/code].
+		</member>
+	</members>
 	<constants>
+		<constant name="FORMAT_HEIGHTMAP" value="0" enum="Format">
+			Format as heightmap, grayscale, scalar noise image. Suitable for terrain generation.
+		</constant>
+		<constant name="FORMAT_NORMALMAP" value="1" enum="Format">
+			Format as normal map texture, color noise image.
+		</constant>
+		<constant name="FORMAT_BUMPMAP" value="2" enum="Format">
+			Format as bump map texture, grayscale noise image.
+		</constant>
+		<constant name="FORMAT_TEXTURE" value="3" enum="Format">
+			Format colored noise image. Suitable for texture generation.
+		</constant>
 		<constant name="INTERP_NONE" value="0" enum="InterpolationTypes">
 			No interpolation applied.
 		</constant>
@@ -1070,7 +1252,7 @@
 			Applies linear interpolation. Produces basic transition.
 		</constant>
 		<constant name="INTERP_HERMITE" value="2" enum="InterpolationTypes">
-			Applies hermite interpolation. Produces moderate transition.
+			Applies hermite interpolation. Produces smooth transition.
 		</constant>
 		<constant name="INTERP_QUINTIC" value="3" enum="InterpolationTypes">
 			Applies quintic interpolation. Produces the smoothest transition.
@@ -1090,20 +1272,28 @@
 		<constant name="BASIS_SIMPLEX" value="2" enum="BasisTypes">
 		</constant>
 		<constant name="SEAMLESS_NONE" value="0" enum="EMappingModes">
+			Do not generate seamless image.
 		</constant>
 		<constant name="SEAMLESS_X" value="1" enum="EMappingModes">
+			Allows to generate a seamless image restricted to X coordinate, horizontally.
 		</constant>
 		<constant name="SEAMLESS_Y" value="2" enum="EMappingModes">
+			Allows to generate a seamless image restricted to Y coordinate, vertically.
 		</constant>
 		<constant name="SEAMLESS_Z" value="3" enum="EMappingModes">
+			Allows to generate a seamless image restricted to Z coordinate.
 		</constant>
 		<constant name="SEAMLESS_XY" value="4" enum="EMappingModes">
+			Allows to generate a seamless image restricted to XY plane, used to create seamless textures.
 		</constant>
 		<constant name="SEAMLESS_XZ" value="5" enum="EMappingModes">
+			Allows to generate a seamless image restricted to XZ plane.
 		</constant>
 		<constant name="SEAMLESS_YZ" value="6" enum="EMappingModes">
+			Allows to generate a seamless image restricted to YZ plane.
 		</constant>
 		<constant name="SEAMLESS_XYZ" value="7" enum="EMappingModes">
+			Allows to generate a seamless 3D image (TODO: 3D textures not supported yet in Godot).
 		</constant>
 	</constants>
 </class>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeComponent" inherits="VisualAccidentalNoiseNode" category="Core" version="3.1">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<demos>
+	</demos>
+	<methods>
+		<method name="add_node">
+			<return type="void">
+			</return>
+			<argument index="0" name="node" type="VisualAccidentalNoiseNode">
+			</argument>
+			<argument index="1" name="position" type="Vector2">
+			</argument>
+			<argument index="2" name="id" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="can_connect_nodes" qualifiers="const">
+			<return type="bool">
+			</return>
+			<argument index="0" name="from_node" type="int">
+			</argument>
+			<argument index="1" name="from_port" type="int">
+			</argument>
+			<argument index="2" name="to_node" type="int">
+			</argument>
+			<argument index="3" name="to_port" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="connect_nodes">
+			<return type="int" enum="Error">
+			</return>
+			<argument index="0" name="from_node" type="int">
+			</argument>
+			<argument index="1" name="from_port" type="int">
+			</argument>
+			<argument index="2" name="to_node" type="int">
+			</argument>
+			<argument index="3" name="to_port" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="disconnect_nodes">
+			<return type="void">
+			</return>
+			<argument index="0" name="from_node" type="int">
+			</argument>
+			<argument index="1" name="from_port" type="int">
+			</argument>
+			<argument index="2" name="to_node" type="int">
+			</argument>
+			<argument index="3" name="to_port" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="evaluate">
+			<return type="void">
+			</return>
+			<argument index="0" name="noise" type="VisualAccidentalNoise">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_node" qualifiers="const">
+			<return type="VisualAccidentalNoiseNode">
+			</return>
+			<argument index="0" name="id" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_node_connections" qualifiers="const">
+			<return type="Array">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="get_node_list" qualifiers="const">
+			<return type="PoolIntArray">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="get_node_position" qualifiers="const">
+			<return type="Vector2">
+			</return>
+			<argument index="0" name="id" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_valid_node_id" qualifiers="const">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="is_node_connection" qualifiers="const">
+			<return type="bool">
+			</return>
+			<argument index="0" name="from_node" type="int">
+			</argument>
+			<argument index="1" name="from_port" type="int">
+			</argument>
+			<argument index="2" name="to_node" type="int">
+			</argument>
+			<argument index="3" name="to_port" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="remove_node">
+			<return type="void">
+			</return>
+			<argument index="0" name="id" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="set_node_position">
+			<return type="void">
+			</return>
+			<argument index="0" name="id" type="int">
+			</argument>
+			<argument index="1" name="position" type="Vector2">
+			</argument>
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="graph_offset" type="Vector2" setter="set_graph_offset" getter="get_graph_offset">
+		</member>
+		<member name="name" type="String" setter="set_component_name" getter="get_component_name">
+		</member>
+	</members>
+	<constants>
+		<constant name="NODE_ID_INVALID" value="-1">
+		</constant>
+		<constant name="NODE_ID_OUTPUT" value="0">
+		</constant>
+	</constants>
+</class>

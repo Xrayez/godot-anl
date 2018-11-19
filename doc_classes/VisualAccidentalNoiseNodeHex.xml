@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeHex" inherits="VisualAccidentalNoiseNode" category="Core" version="3.1">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<demos>
+	</demos>
+	<methods>
+	</methods>
+	<members>
+		<member name="type" type="int" setter="set_type" getter="get_type" enum="VisualAccidentalNoiseNodeHex.HexType">
+		</member>
+	</members>
+	<constants>
+		<constant name="HEX_TILE" value="0" enum="HexType">
+		</constant>
+		<constant name="HEX_BUMP" value="1" enum="HexType">
+		</constant>
+	</constants>
+</class>

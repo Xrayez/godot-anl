@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeTiers" inherits="VisualAccidentalNoiseNode" category="Core" version="3.1">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<demos>
+	</demos>
+	<methods>
+	</methods>
+	<members>
+		<member name="smooth" type="int" setter="set_smooth" getter="get_smooth" enum="VisualAccidentalNoiseNodeTiers.Smoothness">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

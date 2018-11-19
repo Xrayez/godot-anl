@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeColorCombine" inherits="VisualAccidentalNoiseNode" category="Core" version="3.1">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<demos>
+	</demos>
+	<methods>
+	</methods>
+	<members>
+		<member name="type" type="int" setter="set_type" getter="get_type" enum="VisualAccidentalNoiseNodeColorCombine.CombineMode">
+		</member>
+	</members>
+	<constants>
+		<constant name="COMBINE_RGBA" value="0" enum="CombineMode">
+		</constant>
+		<constant name="COMBINE_HSVA" value="1" enum="CombineMode">
+		</constant>
+	</constants>
+</class>
