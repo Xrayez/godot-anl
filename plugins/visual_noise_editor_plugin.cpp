@@ -198,13 +198,13 @@ void VisualAccidentalNoiseEditor::edit_component(const Ref<VisualAccidentalNoise
 
 	Ref<VisualAccidentalNoiseNodeComponent> component;
 
-	if(p_component.is_null()) {
+	if (p_component.is_null()) {
 		component = visual_anl_noise->get_component();
 	} else {
 		component = p_component;
 	}
 
-	if(component.is_valid()) {
+	if (component.is_valid()) {
 
 		if (component_editor->can_edit(component)) {
 			component_editor->edit(component);

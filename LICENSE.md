@@ -2,7 +2,7 @@ MIT License
 
 Copyright (c) 2017-2018 Andrii Doroshenko
 
-Accidental Noise Library license: [libs/anl/LICENSE.md](libs/anl/LICENSE.md)
+Accidental Noise Library license: [thirdparty/anl/LICENSE.md](thirdparty/anl/LICENSE.md)
 
 VisualAccidentalNoise plugin based on Godot Engine's VisualShader and AnimationTree plugins.
 

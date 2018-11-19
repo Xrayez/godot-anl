@@ -1,6 +1,6 @@
 #include "visual_noise.h"
-#include "visual_noise_nodes.h"
 #include "plugins/visual_noise_editor_plugin.h"
+#include "visual_noise_nodes.h"
 
 #include "core/vmap.h"
 
@@ -422,8 +422,7 @@ void VisualAccidentalNoiseNodeComponent::evaluate_node(int node, Ref<VisualAccid
 			// VisualAccidentalNoiseNode::PortType out_type = from_vanode->get_output_port_type(from_port);
 
 			vanode->set_input_port_value(i, from_vanode->get_output_port_value(from_port));
-		}
-		else {
+		} else {
 			Variant default_value = vanode->get_input_port_default_value(i);
 			VisualAccidentalNoiseNode::PortType in_type = vanode->get_input_port_type(i);
 
@@ -519,18 +518,18 @@ bool VisualAccidentalNoiseNodeComponent::_get(const StringName &p_name, Variant 
 
 void VisualAccidentalNoiseNodeComponent::_get_property_list(List<PropertyInfo> *p_list) const {
 
-    for (Map<int, Node>::Element *E = graph.nodes.front(); E; E = E->next()) {
+	for (Map<int, Node>::Element *E = graph.nodes.front(); E; E = E->next()) {
 
-        String prop_name = "nodes/";
-        prop_name += itos(E->key());
+		String prop_name = "nodes/";
+		prop_name += itos(E->key());
 
-        if (E->key() != NODE_ID_OUTPUT) {
+		if (E->key() != NODE_ID_OUTPUT) {
 
-            p_list->push_back(PropertyInfo(Variant::OBJECT, prop_name + "/node", PROPERTY_HINT_RESOURCE_TYPE, "VisualAccidentalNoiseNode", PROPERTY_USAGE_NOEDITOR | PROPERTY_USAGE_DO_NOT_SHARE_ON_DUPLICATE));
-        }
-        p_list->push_back(PropertyInfo(Variant::VECTOR2, prop_name + "/position", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR));
-    }
-    p_list->push_back(PropertyInfo(Variant::POOL_INT_ARRAY, "nodes/connections", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR));
+			p_list->push_back(PropertyInfo(Variant::OBJECT, prop_name + "/node", PROPERTY_HINT_RESOURCE_TYPE, "VisualAccidentalNoiseNode", PROPERTY_USAGE_NOEDITOR | PROPERTY_USAGE_DO_NOT_SHARE_ON_DUPLICATE));
+		}
+		p_list->push_back(PropertyInfo(Variant::VECTOR2, prop_name + "/position", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR));
+	}
+	p_list->push_back(PropertyInfo(Variant::POOL_INT_ARRAY, "nodes/connections", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR));
 }
 
 void VisualAccidentalNoiseNodeComponent::_notify_changed() {
@@ -539,7 +538,6 @@ void VisualAccidentalNoiseNodeComponent::_notify_changed() {
 }
 
 void VisualAccidentalNoiseNodeComponent::_bind_methods() {
-
 
 	ClassDB::bind_method(D_METHOD("set_component_name", "name"), &VisualAccidentalNoiseNodeComponent::set_component_name);
 	ClassDB::bind_method(D_METHOD("get_component_name"), &VisualAccidentalNoiseNodeComponent::get_component_name);
@@ -577,8 +575,8 @@ void VisualAccidentalNoiseNodeComponent::_bind_methods() {
 	BIND_CONSTANT(NODE_ID_OUTPUT);
 }
 
-
-VisualAccidentalNoise::VisualAccidentalNoise() : AccidentalNoise() {
+VisualAccidentalNoise::VisualAccidentalNoise() :
+		AccidentalNoise() {
 
 	clamping_enabled = false;
 	clamp_low = 0.0;
@@ -640,7 +638,6 @@ void VisualAccidentalNoise::_queue_update() {
 
 	call_deferred("_update_noise");
 }
-
 
 void VisualAccidentalNoise::set_clamping_enabled(bool p_enable) {
 
@@ -707,7 +704,7 @@ void VisualAccidentalNoise::_bind_methods() {
 
 void VisualAccidentalNoise::set_component(const Ref<VisualAccidentalNoiseNodeComponent> &p_component) {
 
-	if(p_component.is_valid()) {
+	if (p_component.is_valid()) {
 
 		if (component.is_valid() && component->is_connected("changed", this, "_component_updated")) {
 			component->disconnect("changed", this, "_component_updated");
@@ -732,10 +729,10 @@ Ref<VisualAccidentalNoiseNodeComponent> VisualAccidentalNoise::get_component() c
 
 VisualAccidentalNoiseNodeComponent::VisualAccidentalNoiseNodeComponent() {
 
-    Ref<VisualAccidentalNoiseNodeOutput> output;
-    output.instance();
-    graph.nodes[NODE_ID_OUTPUT].node = output;
-    graph.nodes[NODE_ID_OUTPUT].position = Vector2(400, 150);
+	Ref<VisualAccidentalNoiseNodeOutput> output;
+	output.instance();
+	graph.nodes[NODE_ID_OUTPUT].node = output;
+	graph.nodes[NODE_ID_OUTPUT].position = Vector2(400, 150);
 
 	name = "component";
 }

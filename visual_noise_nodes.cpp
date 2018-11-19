@@ -64,7 +64,7 @@ Vector<StringName> VisualAccidentalNoiseNodeScalar::get_editable_properties() co
 
 	props.push_back("type");
 
-	if(type == SCALAR_CONSTANT) {
+	if (type == SCALAR_CONSTANT) {
 		props.push_back("constant");
 	}
 
@@ -73,7 +73,7 @@ Vector<StringName> VisualAccidentalNoiseNodeScalar::get_editable_properties() co
 
 void VisualAccidentalNoiseNodeScalar::evaluate(Ref<VisualAccidentalNoise> noise) {
 
-	switch(type) {
+	switch (type) {
 
 		case SCALAR_CONSTANT:
 			output_value = noise->constant(constant);
@@ -257,7 +257,6 @@ void VisualAccidentalNoiseNodeSeeder::evaluate(Ref<VisualAccidentalNoise> noise)
 }
 
 void VisualAccidentalNoiseNodeSeeder::_bind_methods() {
-
 }
 
 VisualAccidentalNoiseNodeSeeder::VisualAccidentalNoiseNodeSeeder() {
@@ -336,7 +335,7 @@ Vector<StringName> VisualAccidentalNoiseNodeScalarOp::get_editable_properties() 
 
 void VisualAccidentalNoiseNodeScalarOp::evaluate(Ref<VisualAccidentalNoise> noise) {
 
-	switch(op) {
+	switch (op) {
 
 		case OP_ADD:
 			output_value = noise->add(a, b);
@@ -470,7 +469,7 @@ Vector<StringName> VisualAccidentalNoiseNodeScalarFunc::get_editable_properties(
 
 void VisualAccidentalNoiseNodeScalarFunc::evaluate(Ref<VisualAccidentalNoise> noise) {
 
-	switch(func) {
+	switch (func) {
 
 		case FUNC_COS:
 			output_value = noise->cos(input);
@@ -1284,7 +1283,6 @@ void VisualAccidentalNoiseNodeRotate::evaluate(Ref<VisualAccidentalNoise> noise)
 }
 
 void VisualAccidentalNoiseNodeRotate::_bind_methods() {
-
 }
 
 VisualAccidentalNoiseNodeRotate::VisualAccidentalNoiseNodeRotate() {
@@ -1366,7 +1364,6 @@ void VisualAccidentalNoiseNodeClamp::evaluate(Ref<VisualAccidentalNoise> noise) 
 }
 
 void VisualAccidentalNoiseNodeClamp::_bind_methods() {
-
 }
 
 VisualAccidentalNoiseNodeClamp::VisualAccidentalNoiseNodeClamp() {
@@ -1445,7 +1442,6 @@ void VisualAccidentalNoiseNodeMix::evaluate(Ref<VisualAccidentalNoise> noise) {
 }
 
 void VisualAccidentalNoiseNodeMix::_bind_methods() {
-
 }
 
 VisualAccidentalNoiseNodeMix::VisualAccidentalNoiseNodeMix() {
@@ -1530,7 +1526,6 @@ void VisualAccidentalNoiseNodeSelect::evaluate(Ref<VisualAccidentalNoise> noise)
 }
 
 void VisualAccidentalNoiseNodeSelect::_bind_methods() {
-
 }
 
 VisualAccidentalNoiseNodeSelect::VisualAccidentalNoiseNodeSelect() {
@@ -1876,11 +1871,9 @@ void VisualAccidentalNoiseNodeRadial::evaluate(Ref<VisualAccidentalNoise> noise)
 }
 
 void VisualAccidentalNoiseNodeRadial::_bind_methods() {
-
 }
 
 VisualAccidentalNoiseNodeRadial::VisualAccidentalNoiseNodeRadial() {
-
 }
 
 ////////////// Randomize
@@ -1949,7 +1942,6 @@ void VisualAccidentalNoiseNodeRandomize::evaluate(Ref<VisualAccidentalNoise> noi
 }
 
 void VisualAccidentalNoiseNodeRandomize::_bind_methods() {
-
 }
 
 VisualAccidentalNoiseNodeRandomize::VisualAccidentalNoiseNodeRandomize() {
@@ -1969,7 +1961,6 @@ String VisualAccidentalNoiseNodeStep::get_caption() const {
 	return "Step";
 }
 
-
 void VisualAccidentalNoiseNodeStep::set_type(StepType p_type) {
 
 	type = p_type;
@@ -1980,7 +1971,6 @@ VisualAccidentalNoiseNodeStep::StepType VisualAccidentalNoiseNodeStep::get_type(
 
 	return type;
 }
-
 
 int VisualAccidentalNoiseNodeStep::get_input_port_count() const {
 
@@ -2188,7 +2178,6 @@ void VisualAccidentalNoiseNodeCurveSection::evaluate(Ref<VisualAccidentalNoise> 
 }
 
 void VisualAccidentalNoiseNodeCurveSection::_bind_methods() {
-
 }
 
 VisualAccidentalNoiseNodeCurveSection::VisualAccidentalNoiseNodeCurveSection() {
@@ -2274,7 +2263,7 @@ Vector<StringName> VisualAccidentalNoiseNodeHex::get_editable_properties() const
 
 void VisualAccidentalNoiseNodeHex::evaluate(Ref<VisualAccidentalNoise> noise) {
 
-	switch(type) {
+	switch (type) {
 
 		case HEX_TILE:
 			output_value = noise->hex_tile(seed);
@@ -2378,8 +2367,6 @@ VisualAccidentalNoiseNodeColor::VisualAccidentalNoiseNodeColor() {
 	color = Color(1, 1, 1, 1);
 }
 
-
-
 ////////////// ColorCombine
 
 String VisualAccidentalNoiseNodeColorCombine::get_caption() const {
@@ -2464,7 +2451,7 @@ Vector<StringName> VisualAccidentalNoiseNodeColorCombine::get_editable_propertie
 
 void VisualAccidentalNoiseNodeColorCombine::evaluate(Ref<VisualAccidentalNoise> noise) {
 
-	switch(type) {
+	switch (type) {
 
 		case COMBINE_RGBA:
 			output_value = noise->combine_rgba(c1, c2, c3, c4);
@@ -2711,7 +2698,7 @@ Vector<StringName> VisualAccidentalNoiseNodeFractalLayer::get_editable_propertie
 
 void VisualAccidentalNoiseNodeFractalLayer::evaluate(Ref<VisualAccidentalNoise> noise) {
 
-	switch(type) {
+	switch (type) {
 
 		case LAYER_FRACTAL:
 			output_value = noise->fractal_layer(basis, interp, scale, frequency, seed, rot, angle, ax, ay, az);
@@ -2846,7 +2833,6 @@ void VisualAccidentalNoiseNodeFractal::evaluate(Ref<VisualAccidentalNoise> noise
 }
 
 void VisualAccidentalNoiseNodeFractal::_bind_methods() {
-
 }
 
 VisualAccidentalNoiseNodeFractal::VisualAccidentalNoiseNodeFractal() {
@@ -2974,7 +2960,7 @@ Vector<StringName> VisualAccidentalNoiseNodeFractalVariant::get_editable_propert
 
 void VisualAccidentalNoiseNodeFractalVariant::evaluate(Ref<VisualAccidentalNoise> noise) {
 
-	switch(type) {
+	switch (type) {
 
 		case TYPE_FBM:
 			output_value = noise->fbm(basis, interpolation, numoctaves, frequency, seed, rot);

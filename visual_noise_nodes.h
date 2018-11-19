@@ -38,18 +38,17 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeScalar();
+	VisualAccidentalNoiseNodeScalar();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	ScalarType type;
-    real_t constant;
+	real_t constant;
 };
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeScalar::ScalarType);
-
 
 class VisualAccidentalNoiseNodeSeed : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeSeed, VisualAccidentalNoiseNode)
@@ -73,15 +72,14 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeSeed();
+	VisualAccidentalNoiseNodeSeed();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
-    unsigned int seed;
+	unsigned int seed;
 };
-
 
 class VisualAccidentalNoiseNodeSeeder : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeSeeder, VisualAccidentalNoiseNode)
@@ -101,16 +99,15 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeSeeder();
+	VisualAccidentalNoiseNodeSeeder();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
-    Index seed;
+	Index seed;
 	Index input;
 };
-
 
 class VisualAccidentalNoiseNodeScalarOp : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeScalarOp, VisualAccidentalNoiseNode)
@@ -148,10 +145,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeScalarOp();
+	VisualAccidentalNoiseNodeScalarOp();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Operator op;
@@ -159,7 +156,6 @@ private:
 };
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeScalarOp::Operator);
-
 
 class VisualAccidentalNoiseNodeScalarFunc : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeScalarFunc, VisualAccidentalNoiseNode)
@@ -196,10 +192,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeScalarFunc();
+	VisualAccidentalNoiseNodeScalarFunc();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Function func;
@@ -207,7 +203,6 @@ private:
 };
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeScalarFunc::Function);
-
 
 class VisualAccidentalNoiseNodeValueBasis : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeValueBasis, VisualAccidentalNoiseNode)
@@ -234,16 +229,15 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeValueBasis();
+	VisualAccidentalNoiseNodeValueBasis();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index interp;
 	Index seed;
 };
-
 
 class VisualAccidentalNoiseNodeGradientBasis : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeGradientBasis, VisualAccidentalNoiseNode)
@@ -270,16 +264,15 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeGradientBasis();
+	VisualAccidentalNoiseNodeGradientBasis();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index interp;
 	Index seed;
 };
-
 
 class VisualAccidentalNoiseNodeCellularBasis : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeCellularBasis, VisualAccidentalNoiseNode)
@@ -306,17 +299,16 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeCellularBasis();
+	VisualAccidentalNoiseNodeCellularBasis();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index f1, f2, f3, f4;
 	Index d1, d2, d3, d4;
 	Index distance, seed;
 };
-
 
 class VisualAccidentalNoiseNodeSimplexBasis : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeSimplexBasis, VisualAccidentalNoiseNode)
@@ -340,15 +332,14 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeSimplexBasis();
+	VisualAccidentalNoiseNodeSimplexBasis();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index seed;
 };
-
 
 class VisualAccidentalNoiseNodeExpression : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeExpression, VisualAccidentalNoiseNode)
@@ -374,15 +365,14 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeExpression();
+	VisualAccidentalNoiseNodeExpression();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	String expression;
 };
-
 
 class VisualAccidentalNoiseNodeTranslate : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeTranslate, VisualAccidentalNoiseNode)
@@ -408,18 +398,17 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeTranslate();
+	VisualAccidentalNoiseNodeTranslate();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	static const String method;
 
 	Index input, by;
-    Axis axis;
+	Axis axis;
 };
-
 
 class VisualAccidentalNoiseNodeScale : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeScale, VisualAccidentalNoiseNode)
@@ -445,18 +434,17 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeScale();
+	VisualAccidentalNoiseNodeScale();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	static const String method;
 
 	Index input, by;
-    Axis axis;
+	Axis axis;
 };
-
 
 class VisualAccidentalNoiseNodeRotate : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeRotate, VisualAccidentalNoiseNode)
@@ -476,16 +464,15 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeRotate();
+	VisualAccidentalNoiseNodeRotate();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index input, angle;
 	Index ax, ay, az;
 };
-
 
 class VisualAccidentalNoiseNodeClamp : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeClamp, VisualAccidentalNoiseNode)
@@ -505,16 +492,15 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeClamp();
+	VisualAccidentalNoiseNodeClamp();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index input;
 	Index low, high;
 };
-
 
 class VisualAccidentalNoiseNodeMix : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeMix, VisualAccidentalNoiseNode)
@@ -534,16 +520,15 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeMix();
+	VisualAccidentalNoiseNodeMix();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index low, high;
 	Index control;
 };
-
 
 class VisualAccidentalNoiseNodeSelect : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeSelect, VisualAccidentalNoiseNode)
@@ -563,10 +548,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeSelect();
+	VisualAccidentalNoiseNodeSelect();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index low, high;
@@ -574,7 +559,6 @@ private:
 	Index threshold;
 	Index falloff;
 };
-
 
 class VisualAccidentalNoiseNodeTiers : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeTiers, VisualAccidentalNoiseNode)
@@ -605,10 +589,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeTiers();
+	VisualAccidentalNoiseNodeTiers();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Smoothness smooth;
@@ -618,7 +602,6 @@ private:
 };
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeTiers::Smoothness);
-
 
 class VisualAccidentalNoiseNodeGradient : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeGradient, VisualAccidentalNoiseNode)
@@ -642,15 +625,14 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeGradient();
+	VisualAccidentalNoiseNodeGradient();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Axis axis;
 };
-
 
 class VisualAccidentalNoiseNodeDerivative : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeDerivative, VisualAccidentalNoiseNode)
@@ -676,10 +658,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeDerivative();
+	VisualAccidentalNoiseNodeDerivative();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Axis axis;
@@ -687,7 +669,6 @@ private:
 	Index input;
 	Index spacing;
 };
-
 
 class VisualAccidentalNoiseNodeRadial : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeRadial, VisualAccidentalNoiseNode)
@@ -705,12 +686,11 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeRadial();
+	VisualAccidentalNoiseNodeRadial();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 };
-
 
 class VisualAccidentalNoiseNodeRandomize : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeRandomize, VisualAccidentalNoiseNode)
@@ -730,16 +710,15 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeRandomize();
+	VisualAccidentalNoiseNodeRandomize();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index seed;
 	Index low, high;
 };
-
 
 class VisualAccidentalNoiseNodeStep : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeStep, VisualAccidentalNoiseNode)
@@ -772,10 +751,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeStep();
+	VisualAccidentalNoiseNodeStep();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	StepType type;
@@ -786,7 +765,6 @@ private:
 };
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeStep::StepType);
-
 
 class VisualAccidentalNoiseNodeCurveSection : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeCurveSection, VisualAccidentalNoiseNode)
@@ -806,17 +784,16 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeCurveSection();
+	VisualAccidentalNoiseNodeCurveSection();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index lowv;
 	Index t0, t1, v0, v1;
 	Index control;
 };
-
 
 class VisualAccidentalNoiseNodeHex : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeHex, VisualAccidentalNoiseNode)
@@ -847,10 +824,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeHex();
+	VisualAccidentalNoiseNodeHex();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	HexType type;
@@ -859,7 +836,6 @@ private:
 };
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeHex::HexType);
-
 
 class VisualAccidentalNoiseNodeColor : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeColor, VisualAccidentalNoiseNode)
@@ -883,15 +859,14 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeColor();
+	VisualAccidentalNoiseNodeColor();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Color color;
 };
-
 
 class VisualAccidentalNoiseNodeColorCombine : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeColorCombine, VisualAccidentalNoiseNode)
@@ -922,10 +897,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeColorCombine();
+	VisualAccidentalNoiseNodeColorCombine();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	CombineMode type;
@@ -934,7 +909,6 @@ private:
 };
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeColorCombine::CombineMode);
-
 
 class VisualAccidentalNoiseNodeScaleOffset : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeScaleOffset, VisualAccidentalNoiseNode)
@@ -963,18 +937,17 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeScaleOffset();
+	VisualAccidentalNoiseNodeScaleOffset();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
-    Index input;
+	Index input;
 
 	double scale;
 	double offset;
 };
-
 
 class VisualAccidentalNoiseNodeFractalLayer : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeFractalLayer, VisualAccidentalNoiseNode)
@@ -1009,10 +982,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeFractalLayer();
+	VisualAccidentalNoiseNodeFractalLayer();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	LayerType type;
@@ -1023,14 +996,13 @@ private:
 	double frequency;
 	unsigned int seed;
 	bool rot;
-    double angle = 0.5;
+	double angle = 0.5;
 	double ax = 0.0;
 	double ay = 0.0;
 	double az = 1.0;
 };
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeFractalLayer::LayerType);
-
 
 class VisualAccidentalNoiseNodeFractal : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeFractal, VisualAccidentalNoiseNode)
@@ -1050,10 +1022,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeFractal();
+	VisualAccidentalNoiseNodeFractal();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	Index seed;
@@ -1063,7 +1035,6 @@ private:
 	Index numoctaves;
 	Index frequency;
 };
-
 
 class VisualAccidentalNoiseNodeFractalVariant : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeFractalVariant, VisualAccidentalNoiseNode)
@@ -1101,10 +1072,10 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-    VisualAccidentalNoiseNodeFractalVariant();
+	VisualAccidentalNoiseNodeFractalVariant();
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 private:
 	FractalType type;

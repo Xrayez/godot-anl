@@ -38,13 +38,11 @@ struct Axis {
 
 VARIANT_ENUM_CAST(Axis::AxisType);
 
-
 class VisualAccidentalNoiseNode;
 class VisualAccidentalNoiseNodeComponent;
 
-
 class VisualAccidentalNoise : public AccidentalNoise {
-    GDCLASS(VisualAccidentalNoise, AccidentalNoise);
+	GDCLASS(VisualAccidentalNoise, AccidentalNoise);
 
 	Ref<VisualAccidentalNoiseNodeComponent> component; // default, tree root
 
@@ -83,7 +81,6 @@ private:
 
 class VisualAccidentalNoiseNode : public Resource {
 	GDCLASS(VisualAccidentalNoiseNode, Resource)
-
 
 	int port_preview;
 
@@ -140,14 +137,13 @@ public:
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNode::PortType);
 
-
 class VisualAccidentalNoiseNodeComponent : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeComponent, VisualAccidentalNoiseNode)
 
 	friend class VisualAccidentalNoise;
 
 public:
-    struct Connection {
+	struct Connection {
 		int from_node;
 		int from_port;
 		int to_node;
@@ -162,7 +158,7 @@ private:
 		Vector2 position;
 	};
 
-    struct Graph {
+	struct Graph {
 		Map<int, Node> nodes;
 		List<Connection> connections;
 	} graph;
@@ -179,11 +175,11 @@ private:
 		}
 	};
 
-    Vector2 graph_offset;
+	Vector2 graph_offset;
 
 	volatile mutable bool dirty;
 
-    Array _get_node_connections() const;
+	Array _get_node_connections() const;
 
 	void _queue_update();
 	void _notify_changed();
@@ -206,7 +202,7 @@ public:
 	void set_component_name(const String &p_name);
 	String get_component_name() const;
 
-    void add_node(const Ref<VisualAccidentalNoiseNode> &p_node, const Vector2 &p_position, int p_id);
+	void add_node(const Ref<VisualAccidentalNoiseNode> &p_node, const Vector2 &p_position, int p_id);
 	void set_node_position(int p_id, const Vector2 &p_position);
 
 	Vector2 get_node_position(int p_id) const;
@@ -234,7 +230,7 @@ public:
 
 	// String generate_preview_noise(int p_node, int p_port) const;
 
-    VisualAccidentalNoiseNodeComponent();
+	VisualAccidentalNoiseNodeComponent();
 
 public:
 	virtual String get_caption() const;
@@ -251,7 +247,6 @@ public:
 
 	virtual void evaluate(Ref<VisualAccidentalNoise> p_noise);
 };
-
 
 class VisualAccidentalNoiseNodeInput : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeInput, VisualAccidentalNoiseNode)
@@ -286,7 +281,6 @@ public:
 
 	VisualAccidentalNoiseNodeInput();
 };
-
 
 class VisualAccidentalNoiseNodeOutput : public VisualAccidentalNoiseNode {
 	GDCLASS(VisualAccidentalNoiseNodeOutput, VisualAccidentalNoiseNode)

@@ -1,5 +1,5 @@
-#include "visual_noise_editor_plugin.h"
 #include "visual_noise_component_editor_plugin.h"
+#include "visual_noise_editor_plugin.h"
 
 #include "core/io/resource_loader.h"
 #include "core/os/input.h"
@@ -187,8 +187,7 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 
 			node->add_child(memnew(HSeparator));
 			port_offset++;
-		}
-		else if (input.is_valid()) {
+		} else if (input.is_valid()) {
 			// Inputs's name
 			LineEdit *name = memnew(LineEdit);
 			name->set_text(input->get_input_name());
@@ -232,7 +231,7 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 			cs.set_hsv(cs_h, cs_s, cs.get_v());
 			ci.set_hsv(ci_h, ci_s, ci.get_v());
 
-			const Color type_color_var[2] = {cs, ci};
+			const Color type_color_var[2] = { cs, ci };
 			//
 
 			if (vanode->is_port_separator(i)) {
@@ -465,11 +464,9 @@ void VisualAccidentalNoiseComponentEditor::_file_opened(const String &p_file) {
 }
 
 void VisualAccidentalNoiseComponentEditor::_line_edit_changed(const String &p_text, Object *line_edit, int p_node_id) {
-
 }
 
 void VisualAccidentalNoiseComponentEditor::_line_edit_focus_out(Object *line_edit, int p_node_id) {
-
 }
 
 void VisualAccidentalNoiseComponentEditor::_port_edited() {
@@ -721,8 +718,7 @@ void VisualAccidentalNoiseComponentEditor::_input(const Ref<InputEvent> p_event)
 		if (mb.is_valid() && mb->is_pressed() && mb->get_button_index() == BUTTON_RIGHT) {
 			add_node->get_popup()->set_position(get_viewport()->get_mouse_position());
 			add_node->get_popup()->show_modal();
-		}
-		else if (mb.is_valid() && mb->is_pressed() && mb->get_button_index() == BUTTON_LEFT) {
+		} else if (mb.is_valid() && mb->is_pressed() && mb->get_button_index() == BUTTON_LEFT) {
 
 			Ref<VisualAccidentalNoise> noise = VisualAccidentalNoiseEditor::get_singleton()->get_noise();
 			ERR_FAIL_COND(noise.is_null());
@@ -732,8 +728,7 @@ void VisualAccidentalNoiseComponentEditor::_input(const Ref<InputEvent> p_event)
 
 			if (component == main_comp) {
 				EditorNode::get_singleton()->push_item(noise.ptr(), "", true);
-			}
-			else {
+			} else {
 				EditorNode::get_singleton()->push_item(component.ptr(), "", true);
 			}
 		}
@@ -1009,7 +1004,6 @@ void VisualAccidentalNoiseNodePlugin::_bind_methods() {
 	BIND_VMETHOD(MethodInfo(Variant::OBJECT, "create_editor", PropertyInfo(Variant::OBJECT, "for_node", PROPERTY_HINT_RESOURCE_TYPE, "VisualAccidentalNoiseNode")));
 }
 
-
 class VisualAccidentalNoiseNodePluginDefaultEditor : public VBoxContainer {
 	GDCLASS(VisualAccidentalNoiseNodePluginDefaultEditor, VBoxContainer)
 public:
@@ -1152,20 +1146,19 @@ Size2 VisualAccidentalNoiseNodePortPreview::get_minimum_size() const {
 
 	Size2 min_size = Size2(100, 100) * EDSCALE;
 
-	if(noise.is_null()) {
+	if (noise.is_null()) {
 		return min_size;
 	}
 
 	const Ref<VisualAccidentalNoiseNodeComponent> &component = VisualAccidentalNoiseComponentEditor::get_singleton()->get_component();
 	ERR_FAIL_COND_V(component.is_null(), min_size);
 
-	if(!component->has_node(node)) {
+	if (!component->has_node(node)) {
 		return min_size;
 	}
 
 	const Ref<VisualAccidentalNoiseNode> &vanode = component->get_node(node);
 	ERR_FAIL_COND_V(vanode.is_null(), min_size);
-
 
 	Ref<VisualAccidentalNoiseNodeOutput> output = vanode;
 	if (output.is_valid()) {
@@ -1177,7 +1170,7 @@ Size2 VisualAccidentalNoiseNodePortPreview::get_minimum_size() const {
 
 void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 
-	if(noise.is_null()) {
+	if (noise.is_null()) {
 		return;
 	}
 
@@ -1187,7 +1180,7 @@ void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 	const Ref<VisualAccidentalNoiseNodeComponent> &comp = VisualAccidentalNoiseEditor::get_singleton()->get_noise()->get_component();
 	ERR_FAIL_COND(comp.is_null());
 
-	if(!edited_comp->has_node(node)) {
+	if (!edited_comp->has_node(node)) {
 		return;
 	}
 

@@ -6,15 +6,15 @@ module_env = env.Clone()
 module_env.add_source_files(env.modules_sources, '*.cpp')
 module_env.add_source_files(env.modules_sources, 'plugins/*.cpp')
 
-module_env.add_source_files(env.modules_sources, 'libs/anl/VM/*.cpp')
-module_env.add_source_files(env.modules_sources, 'libs/anl/Expression/*.cpp')
-module_env.add_source_files(env.modules_sources, 'libs/anl/Imaging/*.cpp')
-module_env.add_source_files(env.modules_sources, 'libs/anl/Processing/*.cpp')
+module_env.add_source_files(env.modules_sources, 'thirdparty/anl/VM/*.cpp')
+module_env.add_source_files(env.modules_sources, 'thirdparty/anl/Expression/*.cpp')
+module_env.add_source_files(env.modules_sources, 'thirdparty/anl/Imaging/*.cpp')
+module_env.add_source_files(env.modules_sources, 'thirdparty/anl/Processing/*.cpp')
 
-module_env.Append(CPPPATH=['libs/anl/VM',
-                           'libs/anl/Expression',
-                           'libs/anl/Imaging',
-                           'libs/anl/Processing'])
+module_env.Append(CPPPATH=['thirdparty/anl/VM',
+                           'thirdparty/anl/Expression',
+                           'thirdparty/anl/Imaging',
+                           'thirdparty/anl/Processing'])
 
 if env['target'] == 'release':
     module_env.Append(CPPFLAGS=['-std=c++11', '-O3'])

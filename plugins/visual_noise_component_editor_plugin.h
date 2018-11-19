@@ -37,7 +37,7 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 	Vector<Ref<VisualAccidentalNoiseNodePlugin> > plugins;
 
 	Ref<VisualAccidentalNoiseNodeComponent> component;
-    GraphEdit *graph;
+	GraphEdit *graph;
 
 	MenuButton *add_node;
 	MenuButton *add_component;
@@ -45,7 +45,7 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 	PanelContainer *error_panel;
 	Label *error_label;
 
-    UndoRedo *undo_redo;
+	UndoRedo *undo_redo;
 
 	CustomPropertyEditor *property_editor;
 	int editing_node;
@@ -131,7 +131,6 @@ protected:
 	static void _bind_methods();
 
 public:
-
 	static VisualAccidentalNoiseComponentEditor *get_singleton() { return singleton; }
 	Ref<VisualAccidentalNoiseNodeComponent> get_component() { return component; }
 
