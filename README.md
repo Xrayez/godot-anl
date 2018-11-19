@@ -7,7 +7,7 @@ This is a wrapper for the new version of
 [Accidental Noise Library](https://github.com/JTippetts/accidental-noise-library)
 originally written by
 [Joshua Tippetts](https://sourceforge.net/u/tippettsj/profile/), modified
-to be properly compiled for [Godot 3.0+](https://github.com/godotengine/godot)
+to be properly compiled for [Godot 3.1](https://github.com/godotengine/godot)
 and be used freely in GDScript.
 
 The master branch aims to be in sync with Godot's master branch. Checkout other
