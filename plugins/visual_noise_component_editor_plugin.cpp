@@ -959,6 +959,8 @@ VisualAccidentalNoiseComponentEditor::VisualAccidentalNoiseComponentEditor() {
 	add_options.push_back(AddOption("CurveSection", "Other", "VisualAccidentalNoiseNodeCurveSection"));
 	add_options.push_back(AddOption("ScaleOffset", "Other", "VisualAccidentalNoiseNodeScaleOffset"));
 
+	add_options.push_back(AddOption("SetVar", "Misc", "VisualAccidentalNoiseNodeSetVar"));
+	add_options.push_back(AddOption("GetVar", "Misc", "VisualAccidentalNoiseNodeGetVar"));
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAccidentalNoiseNodeExpression"));
 
 	_update_options_menu();

@@ -3012,3 +3012,178 @@ VisualAccidentalNoiseNodeFractalVariant::VisualAccidentalNoiseNodeFractalVariant
 	seed = 0;
 	rot = true;
 }
+
+////////////// SetVar
+
+String VisualAccidentalNoiseNodeSetVar::get_caption() const {
+
+	return "SetVar";
+}
+
+void VisualAccidentalNoiseNodeSetVar::set_var(const String &p_var) {
+
+	var = p_var;
+	emit_changed();
+}
+
+String VisualAccidentalNoiseNodeSetVar::get_var() const {
+
+	return var;
+}
+
+void VisualAccidentalNoiseNodeSetVar::set_value(double p_value) {
+
+	value = p_value;
+	emit_changed();
+}
+
+double VisualAccidentalNoiseNodeSetVar::get_value() const {
+
+	return value;
+}
+
+void VisualAccidentalNoiseNodeSetVar::set_input_port_value(int p_port, const Variant &p_value) {
+
+	value = p_value;
+}
+
+Variant VisualAccidentalNoiseNodeSetVar::get_input_port_value(int p_port) const {
+
+	return value;
+}
+
+int VisualAccidentalNoiseNodeSetVar::get_input_port_count() const {
+
+	return 0;
+}
+
+VisualAccidentalNoiseNodeSetVar::PortType VisualAccidentalNoiseNodeSetVar::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_SCALAR;
+}
+
+String VisualAccidentalNoiseNodeSetVar::get_input_port_name(int p_port) const {
+
+	return "value";
+}
+
+int VisualAccidentalNoiseNodeSetVar::get_output_port_count() const {
+
+	return 0;
+}
+
+VisualAccidentalNoiseNodeSetVar::PortType VisualAccidentalNoiseNodeSetVar::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAccidentalNoiseNodeSetVar::get_output_port_name(int p_port) const {
+	return "";
+}
+
+Vector<StringName> VisualAccidentalNoiseNodeSetVar::get_editable_properties() const {
+
+	Vector<StringName> props;
+
+	props.push_back("var");
+	props.push_back("value");
+
+	return props;
+}
+
+void VisualAccidentalNoiseNodeSetVar::evaluate(Ref<VisualAccidentalNoise> noise) {
+
+	noise->set_var(var, value);
+}
+
+void VisualAccidentalNoiseNodeSetVar::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_var", "var"), &VisualAccidentalNoiseNodeSetVar::set_var);
+	ClassDB::bind_method(D_METHOD("get_var"), &VisualAccidentalNoiseNodeSetVar::get_var);
+
+	ClassDB::bind_method(D_METHOD("set_value", "value"), &VisualAccidentalNoiseNodeSetVar::set_value);
+	ClassDB::bind_method(D_METHOD("get_value"), &VisualAccidentalNoiseNodeSetVar::get_value);
+
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "var"), "set_var", "get_var");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "value"), "set_value", "get_value");
+}
+
+VisualAccidentalNoiseNodeSetVar::VisualAccidentalNoiseNodeSetVar() {
+
+	var = "name";
+	value = 0.0;
+}
+
+////////////// GetVar
+
+String VisualAccidentalNoiseNodeGetVar::get_caption() const {
+
+	return "GetVar";
+}
+
+void VisualAccidentalNoiseNodeGetVar::set_var(const String &p_var) {
+
+	var = p_var;
+	emit_changed();
+}
+
+String VisualAccidentalNoiseNodeGetVar::get_var() const {
+
+	return var;
+}
+
+int VisualAccidentalNoiseNodeGetVar::get_input_port_count() const {
+
+	return 0;
+}
+
+VisualAccidentalNoiseNodeGetVar::PortType VisualAccidentalNoiseNodeGetVar::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_SCALAR;
+}
+
+String VisualAccidentalNoiseNodeGetVar::get_input_port_name(int p_port) const {
+
+	return "value";
+}
+
+int VisualAccidentalNoiseNodeGetVar::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAccidentalNoiseNodeGetVar::PortType VisualAccidentalNoiseNodeGetVar::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAccidentalNoiseNodeGetVar::get_output_port_name(int p_port) const {
+	return "";
+}
+
+Vector<StringName> VisualAccidentalNoiseNodeGetVar::get_editable_properties() const {
+
+	Vector<StringName> props;
+
+	props.push_back("var");
+
+	return props;
+}
+
+void VisualAccidentalNoiseNodeGetVar::evaluate(Ref<VisualAccidentalNoise> noise) {
+
+	output_value = noise->get_var(var);
+}
+
+void VisualAccidentalNoiseNodeGetVar::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_var", "var"), &VisualAccidentalNoiseNodeGetVar::set_var);
+	ClassDB::bind_method(D_METHOD("get_var"), &VisualAccidentalNoiseNodeGetVar::get_var);
+
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "var"), "set_var", "get_var");
+}
+
+VisualAccidentalNoiseNodeGetVar::VisualAccidentalNoiseNodeGetVar() {
+
+	var = "name";
+}

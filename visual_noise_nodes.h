@@ -1090,4 +1090,72 @@ private:
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeFractalVariant::FractalType);
 
+class VisualAccidentalNoiseNodeSetVar : public VisualAccidentalNoiseNode {
+	GDCLASS(VisualAccidentalNoiseNodeSetVar, VisualAccidentalNoiseNode)
+
+public:
+	void set_var(const String &p_var);
+	String get_var() const;
+
+	void set_value(double p_value);
+	double get_value() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
+
+	VisualAccidentalNoiseNodeSetVar();
+
+protected:
+	static void _bind_methods();
+
+private:
+	String var;
+	double value;
+};
+
+class VisualAccidentalNoiseNodeGetVar : public VisualAccidentalNoiseNode {
+	GDCLASS(VisualAccidentalNoiseNodeGetVar, VisualAccidentalNoiseNode)
+
+public:
+	void set_var(const String &p_var);
+	String get_var() const;
+
+public:
+	virtual String get_caption() const;
+
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual Vector<StringName> get_editable_properties() const;
+
+	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
+
+	VisualAccidentalNoiseNodeGetVar();
+
+protected:
+	static void _bind_methods();
+
+private:
+	String var;
+};
+
 #endif
