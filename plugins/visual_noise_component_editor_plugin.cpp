@@ -715,21 +715,24 @@ void VisualAccidentalNoiseComponentEditor::_input(const Ref<InputEvent> p_event)
 	if (graph->has_focus()) {
 		Ref<InputEventMouseButton> mb = p_event;
 
-		if (mb.is_valid() && mb->is_pressed() && mb->get_button_index() == BUTTON_RIGHT) {
-			add_node->get_popup()->set_position(get_viewport()->get_mouse_position());
-			add_node->get_popup()->show_modal();
-		} else if (mb.is_valid() && mb->is_pressed() && mb->get_button_index() == BUTTON_LEFT) {
+		if (mb.is_valid() && graph->has_point(mb->get_position())) {
 
-			Ref<VisualAccidentalNoise> noise = VisualAccidentalNoiseEditor::get_singleton()->get_noise();
-			ERR_FAIL_COND(noise.is_null());
+			if (mb->is_pressed() && mb->get_button_index() == BUTTON_RIGHT) {
+				add_node->get_popup()->set_position(get_viewport()->get_mouse_position());
+				add_node->get_popup()->show_modal();
+			} else if (mb->is_pressed() && mb->get_button_index() == BUTTON_LEFT) {
 
-			Ref<VisualAccidentalNoiseNodeComponent> main_comp = noise->get_component();
-			ERR_FAIL_COND(main_comp.is_null());
+				Ref<VisualAccidentalNoise> noise = VisualAccidentalNoiseEditor::get_singleton()->get_noise();
+				ERR_FAIL_COND(noise.is_null());
 
-			if (component == main_comp) {
-				EditorNode::get_singleton()->push_item(noise.ptr(), "", true);
-			} else {
-				EditorNode::get_singleton()->push_item(component.ptr(), "", true);
+				Ref<VisualAccidentalNoiseNodeComponent> main_comp = noise->get_component();
+				ERR_FAIL_COND(main_comp.is_null());
+
+				if (component == main_comp) {
+					EditorNode::get_singleton()->push_item(noise.ptr(), "", true);
+				} else {
+					EditorNode::get_singleton()->push_item(component.ptr(), "", true);
+				}
 			}
 		}
 	}
