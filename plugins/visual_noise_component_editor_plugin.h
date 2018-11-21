@@ -117,13 +117,16 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 
 	EditorFileDialog *open_file;
 	Ref<VisualAccidentalNoiseNodeComponent> file_loaded;
+	bool load_file_duplicated;
 	void _file_opened(const String &p_file);
+	void _popup_file_load();
 
 	enum {
 		MENU_CREATE_NEW,
 		MENU_LOAD_FILE,
-		MENU_PASTE,
+		MENU_DUPLICATE_FILE,
 		MENU_LOAD_FILE_CONFIRM,
+		MENU_PASTE,
 	};
 
 protected:

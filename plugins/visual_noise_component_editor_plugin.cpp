@@ -88,6 +88,7 @@ void VisualAccidentalNoiseComponentEditor::_update_options_menu() {
 	add_component->get_popup()->add_item(TTR("New"), MENU_CREATE_NEW);
 	add_component->get_popup()->add_separator();
 	add_component->get_popup()->add_item(TTR("Load.."), MENU_LOAD_FILE);
+	add_component->get_popup()->add_item(TTR("Duplicate.."), MENU_DUPLICATE_FILE);
 }
 
 Size2 VisualAccidentalNoiseComponentEditor::get_minimum_size() const {
@@ -539,6 +540,17 @@ void VisualAccidentalNoiseComponentEditor::_add_node(int p_idx) {
 	undo_redo->commit_action();
 }
 
+void VisualAccidentalNoiseComponentEditor::_popup_file_load() {
+
+	open_file->clear_filters();
+	List<String> filters;
+	ResourceLoader::get_recognized_extensions_for_type("VisualAccidentalNoiseNodeComponent", &filters);
+	for (List<String>::Element *E = filters.front(); E; E = E->next()) {
+		open_file->add_filter("*." + E->get());
+	}
+	open_file->popup_centered_ratio();
+}
+
 void VisualAccidentalNoiseComponentEditor::_add_component(int p_option) {
 
 	ERR_FAIL_COND(component.is_null());
@@ -553,22 +565,24 @@ void VisualAccidentalNoiseComponentEditor::_add_component(int p_option) {
 		} break;
 
 		case MENU_LOAD_FILE: {
+			_popup_file_load();
 
-			open_file->clear_filters();
-			List<String> filters;
-			ResourceLoader::get_recognized_extensions_for_type("VisualAccidentalNoiseNodeComponent", &filters);
-			for (List<String>::Element *E = filters.front(); E; E = E->next()) {
-				open_file->add_filter("*." + E->get());
-			}
-			open_file->popup_centered_ratio();
+		} break;
+
+		case MENU_DUPLICATE_FILE: {
+			load_file_duplicated = true;
+			_popup_file_load();
 
 		} break;
 
 		case MENU_LOAD_FILE_CONFIRM: {
 
-			comp = file_loaded;
-			// file_loaded.unref();
-
+			if (load_file_duplicated) {
+				comp = file_loaded->duplicate(true);
+				load_file_duplicated = false;
+			} else {
+				comp = file_loaded;
+			}
 		} break;
 
 		case MENU_PASTE: {
@@ -988,6 +1002,8 @@ VisualAccidentalNoiseComponentEditor::VisualAccidentalNoiseComponentEditor() {
 	open_file->set_title(TTR("Open Component Node"));
 	open_file->set_mode(EditorFileDialog::MODE_OPEN_FILE);
 	open_file->connect("file_selected", this, "_file_opened");
+
+	load_file_duplicated = false;
 
 	undo_redo = EditorNode::get_singleton()->get_undo_redo();
 }
