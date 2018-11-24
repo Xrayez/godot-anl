@@ -142,6 +142,14 @@ void VisualAccidentalNoiseNodeComponent::add_node(const Ref<VisualAccidentalNois
 
 	n.node->connect("changed", this, "_notify_changed");
 
+	Ref<VisualAccidentalNoiseNodeInput> input = n.node;
+	if (input.is_valid()) {
+		const int input_idx = get_input_port_count();
+		if (get_input_port_default_value(input_idx).get_type() == Variant::NIL) {
+			set_input_port_default_value(input_idx, 0);
+		}
+	}
+
 	graph.nodes[p_id] = n;
 
 	_notify_changed();
