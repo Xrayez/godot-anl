@@ -284,6 +284,11 @@ VisualAccidentalNoiseEditor::VisualAccidentalNoiseEditor() {
 	add_child(editor_base);
 
 	add_plugin(memnew(VisualAccidentalNoiseComponentEditor));
+
+	EDITOR_DEF("editors/visual_accidental_noise/preview_size", Vector2(100, 100));
+	EDITOR_DEF("editors/visual_accidental_noise/output_preview_size", Vector2(200, 200));
+
+	// EditorSettings::get_singleton()->connect("settings_changed", this, "_on_settings_changed");
 }
 
 ///////////////////////////////////

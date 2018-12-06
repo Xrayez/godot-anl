@@ -1165,7 +1165,8 @@ void VisualAccidentalNoiseNodePortPreview::setup(const Ref<VisualAccidentalNoise
 
 Size2 VisualAccidentalNoiseNodePortPreview::get_minimum_size() const {
 
-	Size2 min_size = Size2(100, 100) * EDSCALE;
+	Size2 prev_size = EDITOR_GET("editors/visual_accidental_noise/preview_size");
+	Size2 min_size = prev_size * EDSCALE;
 
 	if (noise.is_null()) {
 		return min_size;
@@ -1183,7 +1184,8 @@ Size2 VisualAccidentalNoiseNodePortPreview::get_minimum_size() const {
 
 	Ref<VisualAccidentalNoiseNodeOutput> output = vanode;
 	if (output.is_valid()) {
-		min_size *= 4;
+		Size2 output_prev_size = EDITOR_GET("editors/visual_accidental_noise/output_preview_size");
+		min_size = output_prev_size * EDSCALE;
 	}
 
 	return min_size;
