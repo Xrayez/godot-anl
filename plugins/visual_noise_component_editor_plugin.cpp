@@ -1210,16 +1210,24 @@ void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 	const Ref<VisualAccidentalNoiseNode> &vanode = edited_comp->get_node(node);
 	ERR_FAIL_COND(vanode.is_null());
 
+	real_t quality = EDITOR_GET("editors/visual_accidental_noise/preview_quality");
+
 	if (p_what == NOTIFICATION_DRAW) {
 
 		Index prev_function;
 		Size2 tex_size = get_minimum_size();
+		Size2 map_size = tex_size * quality;
+
+		if ((map_size.x * map_size.y) <= 0.0) {
+			ERR_EXPLAIN("Could not generate noise preview, please configure preview quality in editor settings.");
+			ERR_FAIL();
+		}
 
 		Ref<VisualAccidentalNoiseNodeOutput> output = vanode;
 
 		if (edited_comp == comp && output.is_valid()) {
 			// Make preview from noise directly for this output node (possibly clamped)
-			preview_tex = noise->get_texture(tex_size.x, tex_size.y);
+			preview_tex = noise->get_texture(map_size.x, map_size.y);
 			draw_texture_rect(preview_tex, Rect2(Vector2(), tex_size), false);
 
 		} else {
@@ -1227,7 +1235,7 @@ void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 			prev_function = noise->get_function();
 			noise->set_function(vanode->get_output_port_value(port));
 
-			preview_tex = noise->get_texture(tex_size.x, tex_size.y);
+			preview_tex = noise->get_texture(map_size.x, map_size.y);
 			draw_texture_rect(preview_tex, Rect2(Vector2(), tex_size), false);
 
 			noise->set_function(prev_function);
