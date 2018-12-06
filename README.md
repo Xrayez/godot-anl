@@ -13,14 +13,15 @@ and be used freely in GDScript.
 The master branch aims to be in sync with Godot's master branch. Checkout other
 branches and/or releases for compatible versions.
 
-## WIP features:
+## Notable features:
 
+* generate height, normal and bump maps from noise directly;
 * ability to construct noise from visual nodes in editor;
 * make custom modular noise as components from base nodes.
 
 ![Visual Accidental Noise Workbench](examples/images/visual_noise.png)
 
-The code structure is somewhat established for visual noise but can't be considered stable. Feel free to report bugs and contribute!
+[2.0 Alpha] The code structure is established for the visual noise but can't be considered stable. Feel free to report bugs and contribute!
 
 ## Overview
 
@@ -86,19 +87,19 @@ scons platform=linux target=release_debug bits=64 define=ANL_EXPRESSION_BUILDER_
 ```gdscript
 var n = AccidentalNoise.new()
 
-var gradient = n.y()
+var gradient = noise.y()
 
-var fractal = n.fbm(AccidentalNoise.BASIS_GRADIENT, AccidentalNoise.INTERP_QUINTIC, 4, 3, randi())
-var scale_offset = n.scale_offset(fractal, 0.5, 0)
+var fractal = noise.fbm(AccidentalNoise.BASIS_GRADIENT AccidentalNoise.INTERP_QUINTIC, 4, 3, randi())
+var scale_offset = noise.scale_offset(fractal, 0.5, 0)
 
-var perturb = n.translate(gradient, scale_offset)
+var perturb = noise.translate(gradient, scale_offset)
 
-var select = n.select(
-	n.zero(), n.one(),
-	perturb, n.constant(0.5), n.zero()
+var select = noise.select(
+	noise.zero(), noise.one(),
+	perturb, noise.constant(0.5), noise.zero()
 )
 
-n.function = select
+noise.function = select
 
 var image = Image.new()
 image.lock()
@@ -106,19 +107,19 @@ image.lock()
 # Draw evaluated function
 for y in range(HEIGHT):
 	for x in range(WIDTH):
-		var value = n.get_color_2d(x, y)
+		var value = noise.get_color_2d(x, y)
 		image.set_pixel(x, y, value)
 
 image.unlock()
 ```
 You can also map the noise to an image with dedicated method instead:
 ```gdscript
-image = n.get_image(width, height)
+image = noise.get_image(width, height)
 ```
 ... or even tiled texture!
 ```gdscript
-n.mode = AccidentalNoise.SEAMLESS_XY
-texture = n.get_texture(width, height)
+noise.mode = AccidentalNoise.SEAMLESS_XY
+texture = noise.get_texture(width, height)
 ```
 
 ### Result
@@ -131,8 +132,8 @@ functions together to one-liners, something like this:
 var n = AccidentalNoise.new()
 
 var expression = "translate(select(0, 1, (x + y), 0.5, 0), 10)"
-var function = n.evaluate(expression)
-var value = n.color_2d(x, y, function)
+var function = noise.evaluate(expression)
+var value = noise.color_2d(x, y, function)
 ```
 
 But please note that the expression builder feature is a work in progress as
