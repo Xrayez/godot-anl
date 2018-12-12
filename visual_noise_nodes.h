@@ -1145,8 +1145,6 @@ public:
 	virtual PortType get_output_port_type(int p_port) const;
 	virtual String get_output_port_name(int p_port) const;
 
-	virtual Vector<StringName> get_editable_properties() const;
-
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
 	VisualAccidentalNoiseNodeGetVar();

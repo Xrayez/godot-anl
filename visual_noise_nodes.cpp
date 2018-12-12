@@ -3085,7 +3085,6 @@ Vector<StringName> VisualAccidentalNoiseNodeSetVar::get_editable_properties() co
 
 	Vector<StringName> props;
 
-	props.push_back("var");
 	props.push_back("value");
 
 	return props;
@@ -3159,15 +3158,6 @@ VisualAccidentalNoiseNodeGetVar::PortType VisualAccidentalNoiseNodeGetVar::get_o
 
 String VisualAccidentalNoiseNodeGetVar::get_output_port_name(int p_port) const {
 	return "";
-}
-
-Vector<StringName> VisualAccidentalNoiseNodeGetVar::get_editable_properties() const {
-
-	Vector<StringName> props;
-
-	props.push_back("var");
-
-	return props;
 }
 
 void VisualAccidentalNoiseNodeGetVar::evaluate(Ref<VisualAccidentalNoise> noise) {

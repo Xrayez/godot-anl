@@ -1,5 +1,6 @@
 #include "visual_noise_component_editor_plugin.h"
 #include "visual_noise_editor_plugin.h"
+#include "../visual_noise_nodes.h"
 
 #include "core/io/resource_loader.h"
 #include "core/os/input.h"
@@ -158,6 +159,8 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 		Ref<VisualAccidentalNoiseNodeInput> input = vanode; // may be input
 		Ref<VisualAccidentalNoiseNodeOutput> output = vanode; // may be output
 		Ref<VisualAccidentalNoiseNodeComponent> comp = vanode; // may be component
+		Ref<VisualAccidentalNoiseNodeSetVar> setvar = vanode; // may be var
+		Ref<VisualAccidentalNoiseNodeGetVar> getvar = vanode;
 
 		GraphNode *node = memnew(GraphNode);
 		graph->add_child(node);
@@ -167,6 +170,27 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 		node->set_name(itos(nodes[n_i]));
 
 		int port_offset = 0;
+
+		if (setvar.is_valid()) {
+
+			LineEdit *var_name = memnew(LineEdit);
+			var_name->set_text(setvar->get_var());
+			node->add_child(var_name);
+			var_name->connect("text_entered", this, "_line_edit_changed", varray(var_name, nodes[n_i]));
+			var_name->connect("focus_exited", this, "_line_edit_focus_out", varray(var_name, nodes[n_i]));
+
+			port_offset++;
+
+		} else if (getvar.is_valid()) {
+
+			LineEdit *var_name = memnew(LineEdit);
+			var_name->set_text(getvar->get_var());
+			node->add_child(var_name);
+			var_name->connect("text_entered", this, "_line_edit_changed", varray(var_name, nodes[n_i]));
+			var_name->connect("focus_exited", this, "_line_edit_focus_out", varray(var_name, nodes[n_i]));
+
+			port_offset++;
+		}
 
 		if (nodes[n_i] >= 2) {
 			node->set_show_close_button(true);
@@ -188,6 +212,7 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 
 			node->add_child(memnew(HSeparator));
 			port_offset++;
+
 		} else if (input.is_valid()) {
 			// Inputs's name
 			LineEdit *name = memnew(LineEdit);
@@ -465,9 +490,45 @@ void VisualAccidentalNoiseComponentEditor::_file_opened(const String &p_file) {
 }
 
 void VisualAccidentalNoiseComponentEditor::_line_edit_changed(const String &p_text, Object *line_edit, int p_node_id) {
+
+	// TODO: better inherit from Var node...
+
+	Ref<VisualAccidentalNoiseNode> vanode = component->get_node(p_node_id);
+	Ref<VisualAccidentalNoiseNodeSetVar> setvar = vanode;
+	Ref<VisualAccidentalNoiseNodeGetVar> getvar = vanode;
+
+	String name = p_text; // may need to validate
+
+	if (setvar.is_valid()) {
+
+		updating = true;
+		undo_redo->create_action("Set Var Name");
+		undo_redo->add_do_method(setvar.ptr(), "set_var", name);
+		undo_redo->add_undo_method(setvar.ptr(), "set_var", setvar->get_var());
+		undo_redo->add_do_method(this, "_update_graph");
+		undo_redo->add_undo_method(this, "_update_graph");
+		undo_redo->commit_action();
+		updating = false;
+
+	} else if (getvar.is_valid()) {
+
+		updating = true;
+		undo_redo->create_action("Set Var Name");
+		undo_redo->add_do_method(getvar.ptr(), "set_var", name);
+		undo_redo->add_undo_method(getvar.ptr(), "set_var", getvar->get_var());
+		undo_redo->add_do_method(this, "_update_graph");
+		undo_redo->add_undo_method(this, "_update_graph");
+		undo_redo->commit_action();
+		updating = false;
+
+	}
+	Object::cast_to<LineEdit>(line_edit)->set_text(name);
 }
 
 void VisualAccidentalNoiseComponentEditor::_line_edit_focus_out(Object *line_edit, int p_node_id) {
+
+	String text = Object::cast_to<LineEdit>(line_edit)->get_text();
+	_line_edit_changed(text, line_edit, p_node_id);
 }
 
 void VisualAccidentalNoiseComponentEditor::_port_edited() {
@@ -1043,7 +1104,7 @@ public:
 		UndoRedo *undo_redo = EditorNode::get_singleton()->get_undo_redo();
 
 		updating = true;
-		undo_redo->create_action("Edit Visual AccidentalNoise Property: " + prop, UndoRedo::MERGE_ENDS);
+		undo_redo->create_action("Edit Visual Accidental Noise Property: " + prop, UndoRedo::MERGE_ENDS);
 		undo_redo->add_do_property(node.ptr(), prop, p_value);
 		undo_redo->add_undo_property(node.ptr(), prop, node->get(prop));
 		undo_redo->commit_action();
@@ -1132,6 +1193,7 @@ Control *VisualAccidentalNoiseNodePluginDefault::create_editor(const Ref<VisualA
 
 		if (Object::cast_to<EditorPropertyFloat>(prop)) {
 			prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
+
 		} else if (Object::cast_to<EditorPropertyEnum>(prop)) {
 			prop->set_custom_minimum_size(Size2(100 * EDSCALE, 0));
 			Object::cast_to<EditorPropertyEnum>(prop)->set_option_button_clip(false);
