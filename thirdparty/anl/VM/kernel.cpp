@@ -35,10 +35,23 @@ void CKernel::initConstants()
 
 void CKernel::clear()
 {
+    std::map<std::string, double> vars;
+
+    // Copy the actual values from kernel
+    for(const auto &var : vars_) {
+        unsigned s = var.second.index_;
+        vars.insert(std::pair<std::string, double>(var.first, kernel_[s].outfloat_));
+    }
+
     kernel_.clear();
+    vars_.clear();
+
     initConstants();
 
-    vars_.clear();
+    // Now we can reinitialize variables
+    for(const auto &var : vars) {
+        setVar(var.first, var.second);
+    }
 }
 
 CInstructionIndex CKernel::pi()

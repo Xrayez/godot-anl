@@ -595,7 +595,7 @@
 			<argument index="0" name="name" type="String">
 			</argument>
 			<description>
-				Returns a noise function previously set with [method set_var].
+				Returns a noise function previously set with [method set_var], either via code or corresponding visual noise node.
 			</description>
 		</method>
 		<method name="gradient_basis">
@@ -947,8 +947,8 @@
 			<argument index="1" name="value" type="float">
 			</argument>
 			<description>
-				Sets noise variable which are basically like [method constant] but can be set and retrieved by name.
-				Can be plugged in as argument to other functions to create programmable noise.
+				Sets noise variable which are basically like [method constant] but can be set and retrieved by name. Can be plugged in as argument to other functions to create programmable noise. Resembles uniforms in visual shader.
+				For instance, you can define a variable with [code]noise.set_var('seed', 100)[/code] and retrieve it in visual noise via `GetVar` node. Any variable defined via `SetVar` node in visual noise will be overriden. Calling [method VisualAccidentalNoise.generate] will not clear the variables.
 			</description>
 		</method>
 		<method name="sigmoid">
