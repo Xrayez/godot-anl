@@ -576,7 +576,7 @@ void VisualAccidentalNoiseNodeComponent::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("_notify_changed"), &VisualAccidentalNoiseNodeComponent::_notify_changed);
 
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "name", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "set_component_name", "get_component_name");
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "name"), "set_component_name", "get_component_name");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "graph_offset", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NOEDITOR), "set_graph_offset", "get_graph_offset");
 
 	BIND_CONSTANT(NODE_ID_INVALID);
