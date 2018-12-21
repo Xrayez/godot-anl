@@ -63,6 +63,7 @@
 			<argument index="0" name="src_index" type="int">
 			</argument>
 			<description>
+				Returns an index to the arcsine of the [code]src_index[/code] function.
 			</description>
 		</method>
 		<method name="atan">
@@ -71,6 +72,7 @@
 			<argument index="0" name="src_index" type="int">
 			</argument>
 			<description>
+				Returns an index to the arctangent of the [code]src_index[/code] function.
 			</description>
 		</method>
 		<method name="bias">
@@ -81,6 +83,9 @@
 			<argument index="1" name="src2_index" type="int">
 			</argument>
 			<description>
+				Bias has the effect of applying the following function to the output of its source:
+				[code]f(x)=pow(x, log(b)/log(0.5))[/code]
+				When applied to a function in the range of (0,1), this has the effect of "pushing" the values of the function toward 1 if b is greater than 0.5, or pushing them toward 0 if b is less than 0.5. In effect, it "biases" the function toward one end of the range or the other.
 			</description>
 		</method>
 		<method name="billow">
@@ -99,6 +104,7 @@
 			<argument index="5" name="rotation" type="bool" default="true">
 			</argument>
 			<description>
+				Generates "billowy" noise suitable for clouds and rocks.
 			</description>
 		</method>
 		<method name="billow_layer">
@@ -125,6 +131,7 @@
 			<argument index="9" name="az" type="float" default="1.0">
 			</argument>
 			<description>
+				Generates "billowy" noise suitable for clouds and rocks, with ability to rotate the base. Can be combined to generate complex billow function.
 			</description>
 		</method>
 		<method name="cellular_basis">
@@ -151,6 +158,7 @@
 			<argument index="9" name="seed_index" type="int">
 			</argument>
 			<description>
+				Generates cellular noise based on the function originally written by Steve Worley. The function calculates F1,F2,F3 and F4 as distances to the first, second, third and fourth nearest seed points, applies the specified coefficients to the distances and sums them together, returning the result.
 			</description>
 		</method>
 		<method name="clamp">
@@ -163,6 +171,8 @@
 			<argument index="2" name="high_index" type="int">
 			</argument>
 			<description>
+				Clamps the noise function [code]src_index[/code] in the range of [code]low_index[/code] function and [code]high_index[/code] function.
+				Clamp is useful for ensuring that the output of a function does not go beyond a specified range. And values beyond the given range will be clipped.
 			</description>
 		</method>
 		<method name="clear">
@@ -229,6 +239,7 @@
 			<argument index="0" name="src_index" type="int">
 			</argument>
 			<description>
+				Returns an index to the cosine of the [code]src_index[/code] function.
 			</description>
 		</method>
 		<method name="curve_section">
@@ -269,6 +280,7 @@
 			<argument index="1" name="spacing_index" type="int">
 			</argument>
 			<description>
+				Returns a derivative of [code]u[/code] dimension.
 			</description>
 		</method>
 		<method name="dv">
@@ -279,6 +291,7 @@
 			<argument index="1" name="spacing_index" type="int">
 			</argument>
 			<description>
+				Returns a derivative of [code]v[/code] dimension.
 			</description>
 		</method>
 		<method name="dw">
@@ -289,6 +302,7 @@
 			<argument index="1" name="spacing_index" type="int">
 			</argument>
 			<description>
+				Returns a derivative of [code]w[/code] dimension.
 			</description>
 		</method>
 		<method name="dx">
@@ -299,6 +313,7 @@
 			<argument index="1" name="spacing_index" type="int">
 			</argument>
 			<description>
+				Returns a derivative of [code]x[/code] dimension.
 			</description>
 		</method>
 		<method name="dy">
@@ -309,6 +324,7 @@
 			<argument index="1" name="spacing_index" type="int">
 			</argument>
 			<description>
+				Returns a derivative of [code]y[/code] dimension.
 			</description>
 		</method>
 		<method name="dz">
@@ -319,6 +335,7 @@
 			<argument index="1" name="spacing_index" type="int">
 			</argument>
 			<description>
+				Returns a derivative of [code]z[/code] dimension.
 			</description>
 		</method>
 		<method name="e">
@@ -359,6 +376,7 @@
 			<argument index="5" name="rotation" type="bool" default="true">
 			</argument>
 			<description>
+				Generates Fractal Brownian Motion function.
 			</description>
 		</method>
 		<method name="fractal">
@@ -377,6 +395,7 @@
 			<argument index="5" name="frequency_index" type="int">
 			</argument>
 			<description>
+				Generates generic fractal function.
 			</description>
 		</method>
 		<method name="fractal_layer">
@@ -403,6 +422,7 @@
 			<argument index="9" name="az" type="float" default="1.0">
 			</argument>
 			<description>
+				Generates generic fractal function, with ability to rotate the base. Can be combined to generate complex fractals.
 			</description>
 		</method>
 		<method name="gain">
@@ -413,6 +433,7 @@
 			<argument index="1" name="src2_index" type="int">
 			</argument>
 			<description>
+				Similar to [method bias]. This function has the effect of pushing the values of the input either toward the ends and away from the middle if bias is > 0.5 or pushing values toward the middle and away from the ends if bias is < 0.5.
 			</description>
 		</method>
 		<method name="get_color_2d">
@@ -423,6 +444,7 @@
 			<argument index="1" name="y" type="float">
 			</argument>
 			<description>
+				Evaluates the noise function at [code](x,y)[/code] coordinates and returns a color value.
 			</description>
 		</method>
 		<method name="get_color_2dv">
@@ -431,6 +453,7 @@
 			<argument index="0" name="pos" type="Vector2">
 			</argument>
 			<description>
+				Convenience method, takes a Vector2 as coordinates and calls [method get_color_2d] internally.
 			</description>
 		</method>
 		<method name="get_color_3d">
@@ -443,6 +466,7 @@
 			<argument index="2" name="z" type="float">
 			</argument>
 			<description>
+				Evaluates the noise function at [code](x,y,z)[/code] coordinates and returns a color value.
 			</description>
 		</method>
 		<method name="get_color_3dv">
@@ -451,6 +475,7 @@
 			<argument index="0" name="pos" type="Vector3">
 			</argument>
 			<description>
+				Convenience method, takes a Vector3 as coordinates and calls [method get_color_3d] internally.
 			</description>
 		</method>
 		<method name="get_color_4d">
@@ -465,6 +490,7 @@
 			<argument index="3" name="w" type="float">
 			</argument>
 			<description>
+				Evaluates the noise function at [code](x,y,z,w)[/code] coordinates and returns a color value.
 			</description>
 		</method>
 		<method name="get_color_6d">
@@ -483,6 +509,7 @@
 			<argument index="5" name="v" type="float">
 			</argument>
 			<description>
+				Evaluates the noise function at [code](x,y,z,w,u,v)[/code] coordinates and returns a color value.
 			</description>
 		</method>
 		<method name="get_image">
@@ -505,6 +532,7 @@
 			<argument index="1" name="y" type="float">
 			</argument>
 			<description>
+				Evaluates the noise function at [code](x,y)[/code] coordinates and returns a scalar value.
 			</description>
 		</method>
 		<method name="get_noise_2dv">
@@ -513,6 +541,7 @@
 			<argument index="0" name="pos" type="Vector2">
 			</argument>
 			<description>
+				Convenience method, takes a Vector2 as coordinates and calls [method get_noise_2d] internally.
 			</description>
 		</method>
 		<method name="get_noise_3d">
@@ -525,6 +554,7 @@
 			<argument index="2" name="z" type="float">
 			</argument>
 			<description>
+				Evaluates the noise function at [code](x,y,z)[/code] coordinates and returns a scalar value.
 			</description>
 		</method>
 		<method name="get_noise_3dv">
@@ -533,6 +563,7 @@
 			<argument index="0" name="pos" type="Vector3">
 			</argument>
 			<description>
+				Convenience method, takes a Vector3 as coordinates and calls [method get_noise_3d] internally.
 			</description>
 		</method>
 		<method name="get_noise_4d">
@@ -547,6 +578,7 @@
 			<argument index="3" name="w" type="float">
 			</argument>
 			<description>
+				Evaluates the noise function at [code](x,y,z,w)[/code] coordinates and returns a scalar value.
 			</description>
 		</method>
 		<method name="get_noise_6d">
@@ -565,6 +597,7 @@
 			<argument index="5" name="v" type="float">
 			</argument>
 			<description>
+				Evaluates the noise function at [code](x,y,z,w,u,v)[/code] coordinates and returns a scalar value.
 			</description>
 		</method>
 		<method name="get_seamless_image">
@@ -606,12 +639,15 @@
 			<argument index="1" name="seed_index" type="int">
 			</argument>
 			<description>
+				Generates gradient noise function as basis, with [enum InterpolationTypes] applied.
+				Notice that the first argument takes an index to a function. In order to set interpolation globally and not for each value, use [code]constant(InterpolationTypes.INTERP_QUINTIC)[/code], for instance.
 			</description>
 		</method>
 		<method name="hex_bump">
 			<return type="int">
 			</return>
 			<description>
+				Return as noise function with hex bump pattern.
 			</description>
 		</method>
 		<method name="hex_tile">
@@ -620,6 +656,7 @@
 			<argument index="0" name="seed_index" type="int">
 			</argument>
 			<description>
+				Return as noise function with hex tile pattern.
 			</description>
 		</method>
 		<method name="linear_step">
@@ -644,6 +681,7 @@
 			<argument index="2" name="stride" type="int" default="1">
 			</argument>
 			<description>
+				Generates a noise function with maximum value for each funtion starting from [code]base_index[/code] to [code]number[/code] with step [code]stride[/code].
 			</description>
 		</method>
 		<method name="maximum">
@@ -654,6 +692,7 @@
 			<argument index="1" name="src2_index" type="int">
 			</argument>
 			<description>
+				Returns a noise maximum function of [code]src1_index[/code] and [code]src2_index[/code].
 			</description>
 		</method>
 		<method name="min_sequence">
@@ -666,6 +705,7 @@
 			<argument index="2" name="stride" type="int" default="1">
 			</argument>
 			<description>
+				Generates a noise function with minimum value for each funtion starting from [code]base_index[/code] to [code]number[/code] with step [code]stride[/code].
 			</description>
 		</method>
 		<method name="minimum">
@@ -676,6 +716,7 @@
 			<argument index="1" name="src2_index" type="int">
 			</argument>
 			<description>
+				Returns a noise minimum function of [code]src1_index[/code] and [code]src2_index[/code].
 			</description>
 		</method>
 		<method name="mix">
@@ -688,6 +729,7 @@
 			<argument index="2" name="control_index" type="int">
 			</argument>
 			<description>
+				Mix has the effect of blending the value from [code]low_index[/code] with the value of [code]high_index[/code] by linearly interpolating from one to the other using the value of [code]control_index[/code]. For best results, [code]control_index[/code] should output in the range of (0,1). All three inputs are scalar parameters that may accept either a constant value or a functional input as a source.
 			</description>
 		</method>
 		<method name="multiply">
@@ -712,6 +754,7 @@
 			<argument index="2" name="stride" type="int" default="1">
 			</argument>
 			<description>
+				Generates a noise function by multiplying each funtion starting from [code]base_index[/code] to [code]number[/code] with step [code]stride[/code].
 			</description>
 		</method>
 		<method name="one">
@@ -743,12 +786,14 @@
 			<argument index="1" name="src2_index" type="int">
 			</argument>
 			<description>
+				Return a noise function as a result of [code]src1_index[/code] raised to the power of [code]src2_index[/code].
 			</description>
 		</method>
 		<method name="radial">
 			<return type="int">
 			</return>
 			<description>
+				Generates a radial function. Radius can be controlled by scaling.
 			</description>
 		</method>
 		<method name="randomize">
@@ -761,6 +806,7 @@
 			<argument index="2" name="high_index" type="int">
 			</argument>
 			<description>
+				Returns a random noise function in the range of [code]low_index[/code] to [code]high_index[/code].
 			</description>
 		</method>
 		<method name="ridged_layer">
@@ -787,6 +833,7 @@
 			<argument index="9" name="az" type="float" default="1.0">
 			</argument>
 			<description>
+				Generates ridged noise, with the ability to rotate the base. See [method ridged_multifractal].
 			</description>
 		</method>
 		<method name="ridged_multifractal">
@@ -805,6 +852,7 @@
 			<argument index="5" name="rotation" type="bool" default="true">
 			</argument>
 			<description>
+				Ridged-multifractal noise is generated in much of the same way as Perlin noise, except the output of each octave is modified by an absolute-value function. Modifying the octave values in this way produces ridge-like formations.
 			</description>
 		</method>
 		<method name="rotate">
@@ -821,6 +869,7 @@
 			<argument index="4" name="az_index" type="int">
 			</argument>
 			<description>
+				Rotates a noise function.
 			</description>
 		</method>
 		<method name="scale">
@@ -831,6 +880,7 @@
 			<argument index="1" name="scale_index" type="int">
 			</argument>
 			<description>
+				Scales a noise function (zoom).
 			</description>
 		</method>
 		<method name="scale_offset">
@@ -853,6 +903,7 @@
 			<argument index="1" name="scale_index" type="int">
 			</argument>
 			<description>
+				Scales a noise function by [code]u[/code] dimension.
 			</description>
 		</method>
 		<method name="scale_v">
@@ -863,6 +914,7 @@
 			<argument index="1" name="scale_index" type="int">
 			</argument>
 			<description>
+				Scales a noise function by [code]v[/code] dimension.
 			</description>
 		</method>
 		<method name="scale_w">
@@ -873,6 +925,7 @@
 			<argument index="1" name="scale_index" type="int">
 			</argument>
 			<description>
+				Scales a noise function by [code]w[/code] dimension.
 			</description>
 		</method>
 		<method name="scale_x">
@@ -883,6 +936,7 @@
 			<argument index="1" name="scale_index" type="int">
 			</argument>
 			<description>
+				Scales a noise function by [code]x[/code] dimension.
 			</description>
 		</method>
 		<method name="scale_y">
@@ -893,6 +947,7 @@
 			<argument index="1" name="scale_index" type="int">
 			</argument>
 			<description>
+				Scales a noise function by [code]y[/code] dimension.
 			</description>
 		</method>
 		<method name="scale_z">
@@ -903,6 +958,7 @@
 			<argument index="1" name="scale_index" type="int">
 			</argument>
 			<description>
+				Scales a noise function by [code]z[/code] dimension.
 			</description>
 		</method>
 		<method name="seed">
@@ -937,6 +993,7 @@
 			<argument index="4" name="falloff_index" type="int">
 			</argument>
 			<description>
+				Select is used to choose between one function or another based on the output value of a third control function. Two parameters control how the select is performed, threshold and falloff. Threshold determines where the dividing line is; values on one side of threshold are taken from one source, while values on the other side are taken from the second source. Falloff defines the width of a soft "blend" zone that straddles threshold, helping to smooth the transition between the two functions.
 			</description>
 		</method>
 		<method name="set_var">
@@ -957,6 +1014,7 @@
 			<argument index="0" name="src_index" type="int">
 			</argument>
 			<description>
+				Returns a sigmoid function.
 			</description>
 		</method>
 		<method name="simplex_basis">
@@ -965,6 +1023,7 @@
 			<argument index="0" name="seed_index" type="int">
 			</argument>
 			<description>
+				Generates simplex function as basis, with [enum InterpolationTypes.INTERP_QUINTIC] applied.
 			</description>
 		</method>
 		<method name="sin">
@@ -973,6 +1032,7 @@
 			<argument index="0" name="src_index" type="int">
 			</argument>
 			<description>
+				Returns an index to the sine of the [code]src_index[/code] function.
 			</description>
 		</method>
 		<method name="smooth_step">
@@ -1013,6 +1073,7 @@
 			<return type="int">
 			</return>
 			<description>
+				Returns square root of 2 as a constant function.
 			</description>
 		</method>
 		<method name="step">
@@ -1043,6 +1104,7 @@
 			<argument index="0" name="src_index" type="int">
 			</argument>
 			<description>
+				Returns an index to the tangent of the [code]src_index[/code] function.
 			</description>
 		</method>
 		<method name="tiers">
@@ -1063,6 +1125,7 @@
 			<argument index="1" name="translate_index" type="int">
 			</argument>
 			<description>
+				Translate a noise function (move).
 			</description>
 		</method>
 		<method name="translate_u">
@@ -1073,6 +1136,7 @@
 			<argument index="1" name="translate_index" type="int">
 			</argument>
 			<description>
+				Translates a noise function by [code]u[/code] dimension.
 			</description>
 		</method>
 		<method name="translate_v">
@@ -1083,6 +1147,7 @@
 			<argument index="1" name="translate_index" type="int">
 			</argument>
 			<description>
+				Translates a noise function by [code]v[/code] dimension.
 			</description>
 		</method>
 		<method name="translate_w">
@@ -1093,6 +1158,7 @@
 			<argument index="1" name="translate_index" type="int">
 			</argument>
 			<description>
+				Translates a noise function by [code]w[/code] dimension.
 			</description>
 		</method>
 		<method name="translate_x">
@@ -1103,6 +1169,7 @@
 			<argument index="1" name="translate_index" type="int">
 			</argument>
 			<description>
+				Translates a noise function by [code]x[/code] dimension.
 			</description>
 		</method>
 		<method name="translate_y">
@@ -1113,6 +1180,7 @@
 			<argument index="1" name="translate_index" type="int">
 			</argument>
 			<description>
+				Translates a noise function by [code]y[/code] dimension.
 			</description>
 		</method>
 		<method name="translate_z">
@@ -1123,6 +1191,7 @@
 			<argument index="1" name="translate_index" type="int">
 			</argument>
 			<description>
+				Translates a noise function by [code]z[/code] dimension.
 			</description>
 		</method>
 		<method name="u">
@@ -1147,6 +1216,8 @@
 			<argument index="1" name="seed_index" type="int">
 			</argument>
 			<description>
+				Generates value noise function as basis, with [enum InterpolationTypes] applied.
+				Notice that the first argument takes an index to a function. In order to set interpolation globally and not for each value, use [code]constant(InterpolationTypes.INTERP_QUINTIC)[/code], for instance.
 			</description>
 		</method>
 		<method name="w">
@@ -1266,10 +1337,13 @@
 		<constant name="DISTANCE_GREATESTAXIS" value="3" enum="DistanceTypes">
 		</constant>
 		<constant name="BASIS_VALUE" value="0" enum="BasisTypes">
+			Use value noise as basis for noise generation.
 		</constant>
 		<constant name="BASIS_GRADIENT" value="1" enum="BasisTypes">
+			Use gradient noise as basis for noise generation.
 		</constant>
 		<constant name="BASIS_SIMPLEX" value="2" enum="BasisTypes">
+			Use simplex noise as basis for noise generation.
 		</constant>
 		<constant name="SEAMLESS_NONE" value="0" enum="EMappingModes">
 			Do not generate seamless image.
