@@ -140,7 +140,9 @@ void VisualAccidentalNoiseNodeComponent::add_node(const Ref<VisualAccidentalNois
 	n.node = p_node;
 	n.position = p_position;
 
-	n.node->connect("changed", this, "_notify_changed");
+	if (!n.node->is_connected("changed", this, "_notify_changed")) {
+		n.node->connect("changed", this, "_notify_changed");
+	}
 
 	Ref<VisualAccidentalNoiseNodeInput> input = n.node;
 	if (input.is_valid()) {
