@@ -383,6 +383,18 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 			error_label->set_text(error);
 			node->add_child(error_label);
 		}
+
+		if (EditorSettings::get_singleton()->get("interface/theme/use_graph_node_headers")) {
+			Ref<StyleBoxFlat> sb = node->get_stylebox("frame", "GraphNode");
+			Color c = sb->get_border_color(MARGIN_TOP);
+			Color mono_color = ((c.r + c.g + c.b) / 3) < 0.7 ? Color(1.0, 1.0, 1.0) : Color(0.0, 0.0, 0.0);
+			mono_color.a = 0.85;
+			c = mono_color;
+
+			node->add_color_override("title_color", c);
+			c.a = 0.7;
+			node->add_color_override("close_color", c);
+		}
 	}
 
 	for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *E = connections.front(); E; E = E->next()) {
@@ -415,8 +427,6 @@ void VisualAccidentalNoiseComponentEditor::_component_renamed(const String &p_te
 	undo_redo->add_undo_method(comp.ptr(), "set_component_name", prev_name);
 	undo_redo->add_do_method(this, "_update_graph");
 	undo_redo->add_undo_method(this, "_update_graph");
-	undo_redo->add_do_method(VisualAccidentalNoiseEditor::get_singleton(), "_update_path"); // FIXME: should update button path
-	undo_redo->add_undo_method(VisualAccidentalNoiseEditor::get_singleton(), "_update_path");
 	undo_redo->commit_action();
 	updating = false;
 
@@ -793,8 +803,10 @@ void VisualAccidentalNoiseComponentEditor::_input(const Ref<InputEvent> p_event)
 		if (mb.is_valid() && graph->has_point(mb->get_position())) {
 
 			if (mb->is_pressed() && mb->get_button_index() == BUTTON_RIGHT) {
+
 				add_node->get_popup()->set_position(get_viewport()->get_mouse_position());
 				add_node->get_popup()->show_modal();
+
 			} else if (mb->is_pressed() && mb->get_button_index() == BUTTON_LEFT) {
 
 				Ref<VisualAccidentalNoise> noise = VisualAccidentalNoiseEditor::get_singleton()->get_noise();
@@ -819,6 +831,10 @@ void VisualAccidentalNoiseComponentEditor::_notification(int p_what) {
 
 		error_panel->add_style_override("panel", get_stylebox("bg", "Tree"));
 		error_label->add_color_override("font_color", get_color("error_color", "Editor"));
+
+		if (p_what == NOTIFICATION_THEME_CHANGED && is_visible_in_tree()) {
+			_update_graph();
+		}
 	}
 
 	if (p_what == NOTIFICATION_PROCESS) {

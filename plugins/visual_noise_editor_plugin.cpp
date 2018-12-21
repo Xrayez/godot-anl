@@ -101,8 +101,8 @@ void VisualAccidentalNoiseEditor::_update_path() {
 		return;
 	}
 
-	while (path_hb->get_child_count()) {
-		memdelete(path_hb->get_child(0));
+	while (path_hb->get_child_count() > 1) {
+		memdelete(path_hb->get_child(1));
 	}
 
 	Ref<ButtonGroup> group;
@@ -175,23 +175,11 @@ void VisualAccidentalNoiseEditor::edit_path(const Vector<int> &p_path) {
 
 void VisualAccidentalNoiseEditor::_path_button_pressed(int p_path) {
 
-	Ref<VisualAccidentalNoiseNodeComponent> node = visual_anl_noise->get_component();
-
-	if (node.is_null())
-		return;
-
 	edited_path.clear();
 
-	if (p_path >= 0) {
-		for (int i = 0; i <= p_path; i++) {
-			Ref<VisualAccidentalNoiseNodeComponent> child = node->get_node(button_path[i]);
-			ERR_BREAK(child.is_null());
-			node = child;
-			edited_path.push_back(button_path[i]);
-		}
+	for (int i = 0; i <= p_path; i++) {
+		edited_path.push_back(button_path[i]);
 	}
-
-	edit_component(node);
 }
 
 void VisualAccidentalNoiseEditor::edit_component(const Ref<VisualAccidentalNoiseNodeComponent> &p_component) {
@@ -252,6 +240,10 @@ void VisualAccidentalNoiseEditor::_notification(int p_what) {
 		if (component != current_component) {
 			edit_path(Vector<int>());
 		}
+
+		if (button_path.size() != edited_path.size()) {
+			edit_path(edited_path);
+		}
 	}
 }
 
@@ -276,6 +268,9 @@ VisualAccidentalNoiseEditor::VisualAccidentalNoiseEditor() {
 	path_edit->set_enable_v_scroll(false);
 	path_hb = memnew(HBoxContainer);
 	path_edit->add_child(path_hb);
+	path_hb->add_child(memnew(Label(TTR("Path:"))));
+
+	add_child(memnew(HSeparator));
 
 	current_component = 0;
 	singleton = this;
