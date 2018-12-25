@@ -7,12 +7,13 @@
 - License: zlib
 
 ### Changes:
-  - converted header-only library back to source/header;
+  - removed source unrelated to noise generation (Bindings, Framework, Thirdparty etc);
+  - converted header-only library back to source/header (adapted to Scons build system);
   - separated camelCase and snake_case in expression builder using static string tokens;
   - allow to retrieve instruction index as integer;
   - add method to clear the kernel;
   - reorder noise constants from smallest to largest when initializing;
-  - make the library to be more exception-safe for Godot Engine;
+  - make the library to be more exception-safe for Godot Engine (required for some platforms);
   - some compiler warning fixes.
 
 An actual diff for these changes can be found in [thirdparty/anl/changes.diff](/thirdparty/anl/changes.diff).
