@@ -16,21 +16,19 @@ branches and/or releases for compatible versions.
 ## Notable features:
 
 * generate height, normal and bump maps from noise directly;
-* ability to construct noise from visual nodes in editor;
+* ability to construct noise from visual nodes in editor and via code;
 * make custom modular noise as components from base nodes.
 
 ![Visual Accidental Noise Workbench](examples/images/visual_noise.png)
 
-[2.0 Alpha] The code structure is established for the visual noise but can't be considered stable. Feel free to report bugs and contribute!
-
 ## Overview
 
 The AccidentalNoise class encapsulates the two main classes required for noise
-generation: CKernel, CNoiseExecutor
+generation: `CKernel` and `CNoiseExecutor`.
 
 The kernel holds any amount of noise functions together creating compound noise
 function. The noise executor then evaluates the function chain at any point of
-the "pipeline"
+the pipeline.
 
 The library is full of features compared to other noise generation libraries with
 a drawback of poorer performance.
@@ -56,7 +54,7 @@ following statement in `SCsub` to use a long-period hash instead in exchange for
 decrease in performance:
 
 ```python
-# module_env.Append(CPPDEFINES=['ANL_LONG_PERIOD_HASHING'])
+module_env.Append(CPPDEFINES=['ANL_LONG_PERIOD_HASHING'])
 ```
 
 Alternatively, you can enable long-period hashing by defining the given preprocessor
@@ -73,7 +71,7 @@ yet the module uses `snake_case` to confirm to Godot's naming convention. If you
 still want to use `camelCase` style, uncomment following statement in `SCsub`:
 
 ```python
-# module_env.Append(CPPDEFINES=['ANL_EXPRESSION_BUILDER_CAMELCASE'])
+module_env.Append(CPPDEFINES=['ANL_EXPRESSION_BUILDER_CAMELCASE'])
 ```
 
 Or before build:
