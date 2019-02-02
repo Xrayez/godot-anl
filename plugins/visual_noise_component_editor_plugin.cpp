@@ -1112,7 +1112,7 @@ void VisualAccidentalNoiseNodePlugin::_bind_methods() {
 class VisualAccidentalNoiseNodePluginDefaultEditor : public VBoxContainer {
 	GDCLASS(VisualAccidentalNoiseNodePluginDefaultEditor, VBoxContainer)
 public:
-	void _property_changed(const String &prop, const Variant &p_value, bool p_changing = false) {
+	void _property_changed(const String &prop, const Variant &p_value, const String &p_field, bool p_changing = false) {
 
 		if (p_changing)
 			return;
@@ -1164,7 +1164,7 @@ public:
 	}
 
 	static void _bind_methods() {
-		ClassDB::bind_method("_property_changed", &VisualAccidentalNoiseNodePluginDefaultEditor::_property_changed, DEFVAL(false));
+		ClassDB::bind_method("_property_changed", &VisualAccidentalNoiseNodePluginDefaultEditor::_property_changed, DEFVAL(String()), DEFVAL(false));
 		ClassDB::bind_method("_node_changed", &VisualAccidentalNoiseNodePluginDefaultEditor::_node_changed);
 		ClassDB::bind_method("_refresh_request", &VisualAccidentalNoiseNodePluginDefaultEditor::_refresh_request);
 	}
