@@ -21,6 +21,9 @@ branches and/or releases for compatible versions.
 
 ![Visual Accidental Noise Workbench](examples/images/visual_noise.png)
 
+See [wiki](https://github.com/Xrayez/godot-anl/wiki#visual-noise) on how to get started
+creating noise with visual nodes.
+
 ## Overview
 
 The AccidentalNoise class encapsulates the two main classes required for noise
@@ -32,6 +35,7 @@ the pipeline.
 
 The library is full of features compared to other noise generation libraries with
 a drawback of poorer performance.
+
 
 ## Installation
 

@@ -1,6 +1,6 @@
 #include "visual_noise_component_editor_plugin.h"
-#include "visual_noise_editor_plugin.h"
 #include "../visual_noise_nodes.h"
+#include "visual_noise_editor_plugin.h"
 
 #include "core/io/resource_loader.h"
 #include "core/os/input.h"
@@ -530,7 +530,6 @@ void VisualAccidentalNoiseComponentEditor::_line_edit_changed(const String &p_te
 		undo_redo->add_undo_method(this, "_update_graph");
 		undo_redo->commit_action();
 		updating = false;
-
 	}
 	Object::cast_to<LineEdit>(line_edit)->set_text(name);
 }
