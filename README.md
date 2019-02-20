@@ -86,35 +86,15 @@ scons platform=linux target=release_debug bits=64 define=ANL_EXPRESSION_BUILDER_
 
 ## Usage example
 
-```gdscript
-var n = AccidentalNoise.new()
+### Generating 2D landscape:
 
-var gradient = noise.y()
+See [landscape.gd](examples/landscape_2d/landscape.gd).
 
-var fractal = noise.fbm(AccidentalNoise.BASIS_GRADIENT AccidentalNoise.INTERP_QUINTIC, 4, 3, randi())
-var scale_offset = noise.scale_offset(fractal, 0.5, 0)
+### Result
+![Simple 2D terrain](examples/landscape_2d/landscape.png)
 
-var perturb = noise.translate(gradient, scale_offset)
-
-var select = noise.select(
-	noise.zero(), noise.one(),
-	perturb, noise.constant(0.5), noise.zero()
-)
-
-noise.function = select
-
-var image = Image.new()
-image.lock()
-
-# Draw evaluated function
-for y in range(HEIGHT):
-	for x in range(WIDTH):
-		var value = noise.get_color_2d(x, y)
-		image.set_pixel(x, y, value)
-
-image.unlock()
-```
-You can also map the noise to an image with dedicated method instead:
+You can also map the noise to an image with dedicated method instead to simplify
+the above example:
 ```gdscript
 image = noise.get_image(width, height)
 ```
@@ -124,11 +104,8 @@ noise.mode = AccidentalNoise.SEAMLESS_XY
 texture = noise.get_texture(width, height)
 ```
 
-### Result
-![Simple terrain](examples/images/terrain_binary.png)
-
-You can also use the expression builder to simplify the process of chaining
-functions together to one-liners, something like this:
+Expression builder can be used to simplify the process of chaining
+functions together to one-liners:
 
 ```gdscript
 var n = AccidentalNoise.new()
@@ -139,49 +116,23 @@ var value = noise.color_2d(x, y, function)
 ```
 
 But please note that the expression builder feature is a work in progress as
-stated by original author. Some functions work, some don't and will hang the
-engine in the endless loop...
+stated by original author. Some functions work, some don't and might crash the
+engine.
 
 ## Programmable noise
 
 As exposed in 2.0, it's possible to manipulate noise parameters via special noise
-variables which are basically like `constant()` but can be set and retrieved by name:
+variables which are basically like `constant()` but can be set and retrieved by name.
 
-```gdscript
-var an = AccidentalNoise.new()
+See [random_noise.gd](examples/programmable_noise/random_noise.gd).
 
-an.set_var("random_turbulence", 0.0)
-
-var basis = an.simplex_basis(0)
-var trans = an.scale(an.simplex_basis(1), an.get_var("random_turbulence"))
-var translate = an.translate(basis, trans)
-
-an.function = an.scale(translate, an.constant(0.02))
-
-var image = Image.new()
-image.create(256, 256, 0, Image.FORMAT_RGBA8)
-image.lock()
-
-for y in range(256):
-	for x in range(256):
-		if x % 64 == 0 and y % 64 == 0:
-			# Specify noise parameters on the fly
-			an.set_var("random_turbulence", rand_range(0, 4.0))
-		var value = an.get_color_2d(x, y)
-		image.set_pixel(x, y, value)
-
-image.unlock()
-```
-
-Without setting variable:
-
+### Result
 ![Before](examples/images/programmable_noise_before.png)
-
-With variable:
-
 ![After](examples/images/programmable_noise_after.png)
 
-<details><summary>More examples</summary>
+
+## Other examples
+<details><summary>Texture synthesis</summary>
 <p>
 
 ![Water or Smoke?](examples/images/water_smoke.png)
