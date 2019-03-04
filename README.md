@@ -20,6 +20,7 @@ branches and/or releases for compatible versions.
 * make custom modular noise as components from base nodes.
 
 ![Visual Accidental Noise Workbench](examples/images/visual_noise.png)
+![Visual Accidental Noise Normalmap](examples/images/visual_noise_normalmap.png)
 
 See [wiki](https://github.com/Xrayez/godot-anl/wiki#visual-noise) on how to get started
 creating noise with visual nodes.

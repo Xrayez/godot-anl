@@ -682,6 +682,18 @@ double VisualAccidentalNoise::get_clamp_high() const {
 	return clamp_high;
 }
 
+void VisualAccidentalNoise::_validate_property(PropertyInfo &property) const {
+
+	AccidentalNoise::_validate_property(property);
+
+	if (format == FORMAT_TEXTURE) {
+		if (property.name.begins_with("clamp")) {
+			// This will spoil color texture into grayscale, disallow it in editor at least
+			property.usage = PROPERTY_USAGE_NOEDITOR;
+		}
+	}
+}
+
 void VisualAccidentalNoise::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("set_clamping_enabled", "enabled"), &VisualAccidentalNoise::set_clamping_enabled);

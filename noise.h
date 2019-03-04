@@ -15,6 +15,7 @@ class AccidentalNoise : public Resource {
 
 protected:
 	static void _bind_methods();
+	virtual void _validate_property(PropertyInfo &property) const;
 
 public:
 	enum Format {
@@ -39,7 +40,7 @@ public:
 	String get_expression() const;
 
 	//------------------------------------------------------------------------------
-	// Normal/bump map
+	// Normal/bump map according to format
 	//------------------------------------------------------------------------------
 	void set_normalmap_spacing(double p_spacing);
 	double get_normalmap_spacing() const;
@@ -280,6 +281,10 @@ private:
 	anl::CNoiseExecutor vm;
 	anl::CExpressionBuilder eb;
 
+	Ref<Image> _map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges);
+	Vector<Ref<Image> > _map_to_image_3d(int p_width, int p_height, int p_depth, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges);
+
+protected:
 	Index function;
 	Index prev_function;
 
@@ -295,9 +300,6 @@ private:
 	double bumpmap_spacing;
 	bool bumpmap_wrapped;
 	Vector3 bumpmap_light;
-
-	Ref<Image> _map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges);
-	Vector<Ref<Image> > _map_to_image_3d(int p_width, int p_height, int p_depth, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges);
 };
 
 VARIANT_ENUM_CAST(anl::InterpolationTypes);

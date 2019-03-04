@@ -36,6 +36,7 @@ void AccidentalNoise::set_format(Format p_format) {
 
 	format = p_format;
 	emit_changed();
+	_change_notify();
 }
 
 AccidentalNoise::Format AccidentalNoise::get_format() const {
@@ -1042,6 +1043,19 @@ Vector<Ref<Image> > AccidentalNoise::_map_to_image_3d(int p_width, int p_height,
 	return noise;
 }
 
+void AccidentalNoise::_validate_property(PropertyInfo &property) const {
+
+	if (property.name.begins_with("normalmap") && format != FORMAT_NORMALMAP) {
+		property.usage = PROPERTY_USAGE_NOEDITOR;
+	}
+	if (property.name.begins_with("bumpmap") && format != FORMAT_BUMPMAP) {
+		property.usage = PROPERTY_USAGE_NOEDITOR;
+	}
+	if (property.name == "function" || property.name == "last_function") {
+		property.usage = PROPERTY_USAGE_NOEDITOR;
+	}
+}
+
 void AccidentalNoise::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("set_mode", "mode"), &AccidentalNoise::set_mode);
@@ -1061,6 +1075,7 @@ void AccidentalNoise::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::AABB, "ranges"), "set_ranges", "get_ranges");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "expression", PROPERTY_HINT_MULTILINE_TEXT), "set_expression", "get_expression");
 
+	// Normalmap / Bumpmap -----------------------------------------------------
 	ClassDB::bind_method(D_METHOD("set_normalmap_spacing", "normalmap_spacing"), &AccidentalNoise::set_normalmap_spacing);
 	ClassDB::bind_method(D_METHOD("get_normalmap_spacing"), &AccidentalNoise::get_normalmap_spacing);
 
@@ -1088,6 +1103,7 @@ void AccidentalNoise::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "bumpmap_spacing"), "set_bumpmap_spacing", "get_bumpmap_spacing");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "bumpmap_wrapped"), "set_bumpmap_wrapped", "is_bumpmap_wrapped");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "bumpmap_light"), "set_bumpmap_light", "get_bumpmap_light");
+	//--------------------------------------------------------------------------
 
 	BIND_ENUM_CONSTANT(FORMAT_HEIGHTMAP);
 	BIND_ENUM_CONSTANT(FORMAT_NORMALMAP);
