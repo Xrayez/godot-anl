@@ -37,7 +37,6 @@ the pipeline.
 The library is full of features compared to other noise generation libraries with
 a drawback of poorer performance.
 
-
 ## Installation
 
 ```bash
