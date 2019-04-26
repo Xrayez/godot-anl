@@ -1,6 +1,9 @@
 #ifndef VISUAL_ACCIDENTAL_NOISE_H
 #define VISUAL_ACCIDENTAL_NOISE_H
 
+#include "core/io/resource_loader.h"
+#include "core/io/resource_saver.h"
+
 #include "noise.h"
 
 struct Axis {
@@ -229,8 +232,6 @@ public:
 	void set_graph_offset(const Vector2 &p_offset);
 	Vector2 get_graph_offset() const;
 
-	// String generate_preview_noise(int p_node, int p_port) const;
-
 	VisualAccidentalNoiseNodeComponent();
 
 public:
@@ -304,6 +305,23 @@ public:
 	virtual String get_caption() const;
 
 	VisualAccidentalNoiseNodeOutput();
+};
+
+class VisualAccidentalNoiseResourceLoader : public ResourceFormatLoader {
+	GDCLASS(VisualAccidentalNoiseResourceLoader, ResourceFormatLoader)
+public:
+	// virtual RES load(const String &p_path, const String &p_original_path, Error *r_error);
+	virtual void get_recognized_extensions(List<String> *p_extensions) const;
+	virtual bool handles_type(const String &p_type) const;
+	virtual String get_resource_type(const String &p_path) const;
+};
+
+class VisualAccidentalNoiseResourceSaver : public ResourceFormatSaver {
+	GDCLASS(VisualAccidentalNoiseResourceSaver, ResourceFormatSaver)
+public:
+	virtual Error save(const String &p_path, const RES &p_resource, uint32_t p_flags);
+	virtual bool recognize(const RES &p_resource) const;
+	virtual void get_recognized_extensions(const RES &p_resource, List<String> *p_extensions) const;
 };
 
 #endif

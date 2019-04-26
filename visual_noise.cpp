@@ -961,3 +961,45 @@ VisualAccidentalNoiseNodeOutput::VisualAccidentalNoiseNodeOutput() {
 
 	set_input_port_default_value(0, 0);
 }
+
+// Resource loader/savers
+
+void VisualAccidentalNoiseResourceLoader::get_recognized_extensions(List<String> *p_extensions) const {
+
+	p_extensions->push_back("vacn");
+}
+
+bool VisualAccidentalNoiseResourceLoader::handles_type(const String &p_type) const {
+
+	return p_type == "VisualAccidentalNoise";
+}
+
+String VisualAccidentalNoiseResourceLoader::get_resource_type(const String &p_path) const {
+
+	String ext = p_path.get_extension().to_lower();
+	if (ext == "vacn")
+		return "VisualAccidentalNoise";
+	return "";
+}
+
+Error VisualAccidentalNoiseResourceSaver::save(const String &p_path, const RES &p_resource, uint32_t p_flags) {
+
+	Ref<VisualAccidentalNoise> vacn = p_resource;
+	ERR_FAIL_COND_V(vacn.is_null(), ERR_UNCONFIGURED);
+
+	Error res = ResourceSaver::save(p_path, vacn, p_flags); // nope
+
+	return res;
+}
+
+bool VisualAccidentalNoiseResourceSaver::recognize(const RES &p_resource) const {
+
+	return Object::cast_to<VisualAccidentalNoise>(*p_resource) != NULL;
+}
+
+void VisualAccidentalNoiseResourceSaver::get_recognized_extensions(const RES &p_resource, List<String> *p_extensions) const {
+
+	if (Object::cast_to<VisualAccidentalNoise>(*p_resource) != NULL) {
+		p_extensions->push_back("vacn");
+	}
+}

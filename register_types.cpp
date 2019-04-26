@@ -5,6 +5,9 @@
 #include "visual_noise.h"
 #include "visual_noise_nodes.h"
 
+Ref<VisualAccidentalNoiseResourceLoader> resource_loader_vacn;
+Ref<VisualAccidentalNoiseResourceSaver> resource_saver_vacn;
+
 void register_anl_types() {
 
 	ClassDB::register_class<AccidentalNoise>();
@@ -73,6 +76,13 @@ void register_anl_types() {
 	ClassDB::register_class<VisualAccidentalNoiseNodeGetVar>();
 	ClassDB::register_class<VisualAccidentalNoiseNodeExpression>();
 
+	// Register loaders/savers
+	resource_loader_vacn.instance();
+	ResourceLoader::add_resource_format_loader(resource_loader_vacn);
+
+	resource_saver_vacn.instance();
+	ResourceSaver::add_resource_format_saver(resource_saver_vacn);
+
 #ifdef TOOLS_ENABLED
 	EditorPlugins::add_by_type<VisualAccidentalNoiseEditorPlugin>();
 #endif
@@ -80,5 +90,9 @@ void register_anl_types() {
 
 void unregister_anl_types() {
 
-	// nothing to do here
+	ResourceLoader::remove_resource_format_loader(resource_loader_vacn);
+	resource_loader_vacn.unref();
+
+	ResourceSaver::remove_resource_format_saver(resource_saver_vacn);
+	resource_saver_vacn.unref();
 }
