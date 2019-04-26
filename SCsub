@@ -3,7 +3,6 @@ Import('env')
 
 env_module = env.Clone()
 
-# ANL sources
 thirdparty_dir = 'thirdparty/anl/'
 thirdparty_dirs = [
     thirdparty_dir + 'VM/',
@@ -13,14 +12,20 @@ thirdparty_dirs = [
 ]
 env_module.Append(CPPPATH=thirdparty_dirs)
 
+# Configure
+
+# Upstream uses C++11
+if (not env.msvc):
+    env_module.Append(CXXFLAGS=['-std=c++11'])
+
+if env['target'] == 'release':
+    env_module.Append(CPPFLAGS=['-O3'])
+
+# ANL sources
 env_thirdparty = env_module.Clone()
 for d in thirdparty_dirs:
     env_thirdparty.add_source_files(env.modules_sources, d + '*.cpp')
 env_thirdparty.disable_warnings()
-
-# Configure
-if env['target'] == 'release':
-    env_module.Append(CPPFLAGS=['-O3'])
 
 # Optional, the following defines can be included from command line like so:
 # scons define=ANL_LONG_PERIOD_HASHING
