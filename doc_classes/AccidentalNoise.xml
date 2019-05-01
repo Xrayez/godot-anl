@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="AccidentalNoise" inherits="Resource" category="Core" version="3.1">
+<class name="AccidentalNoise" inherits="Resource" category="Core" version="3.2">
 	<brief_description>
 		A noise module used for compound noise generation.
 	</brief_description>
@@ -11,8 +11,6 @@
 	</description>
 	<tutorials>
 	</tutorials>
-	<demos>
-	</demos>
 	<methods>
 		<method name="abs">
 			<return type="int">
@@ -1294,7 +1292,7 @@
 			Default value: [code]1.0[/code].
 		</member>
 		<member name="normalmap_wrapped" type="bool" setter="set_normalmap_wrapped" getter="is_normalmap_wrapped">
-			If set to [code]true[/code], the bump image will be wrapped which is useful for generating seamless bump maps.
+			If set to [code]true[/code], the bump image will be wrapped which is useful for generating seamless normal maps.
 			Default value: [code]true[/code].
 		</member>
 		<member name="ranges" type="AABB" setter="set_ranges" getter="get_ranges">
@@ -1367,7 +1365,7 @@
 			Allows to generate a seamless image restricted to YZ plane.
 		</constant>
 		<constant name="SEAMLESS_XYZ" value="7" enum="EMappingModes">
-			Allows to generate a seamless 3D image (TODO: 3D textures not supported yet in Godot).
+			Allows to generate a seamless 3D image (not fully supported yet).
 		</constant>
 	</constants>
 </class>
