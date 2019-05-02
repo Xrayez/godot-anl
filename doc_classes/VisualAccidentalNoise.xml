@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="VisualAccidentalNoise" inherits="AccidentalNoise" category="Core" version="3.2">
 	<brief_description>
+		Accidental Noise visual interface.
 	</brief_description>
 	<description>
+		Provides a convenient way to build the noise with visual nodes. The interface is very similar to [VisualShader] editor and allows to combine many nodes into components with the interface based on [AnimationTree] editor.
 	</description>
 	<tutorials>
+		<link>https://github.com/Xrayez/godot-anl/wiki/Setting-Up-Visual-Noise</link>
 	</tutorials>
 	<methods>
 		<method name="generate">

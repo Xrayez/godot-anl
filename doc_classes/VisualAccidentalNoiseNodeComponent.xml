@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="VisualAccidentalNoiseNodeComponent" inherits="VisualAccidentalNoiseNode" category="Core" version="3.2">
 	<brief_description>
+		Component noise node.
 	</brief_description>
 	<description>
+		Component node acts both as a graph that contains other [VisualAccidentalNoiseNode] derived nodes and as a regular node with inputs and output, so they can be nested. This allows to build the noise chain by encapsulating common or repeated logic that can be reused in other [VisualAccidentalNoise] instances, or simplify the existing chains to improve usability.
 	</description>
 	<tutorials>
+		<link>https://github.com/Xrayez/godot-anl/wiki/Creating-and-Editing-Component-Nodes</link>
 	</tutorials>
 	<methods>
 		<method name="add_node">
