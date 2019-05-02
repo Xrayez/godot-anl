@@ -91,7 +91,7 @@ before_script:
   # - export MINGW64_PREFIX=$(pwd)/mxe/usr/bin/x86_64-w64-mingw32.static-
 
   - cd
-  - git clone --depth=1 "$GODOT_REPO_URL"
+  - git clone --depth=1 "$GODOT_REPO_URL" -b 3.1 --single-branch
   - cd "godot/"
   - ln -s $TRAVIS_BUILD_DIR "modules/anl"
 
