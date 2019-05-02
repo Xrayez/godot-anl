@@ -9,6 +9,7 @@ def get_doc_classes():
     return [
         "AccidentalNoise",
         "VisualAccidentalNoise",
+        "VisualAccidentalNoiseNode",
         "VisualAccidentalNoiseNodeComponent",
         "VisualAccidentalNoiseNodeInput",
         "VisualAccidentalNoiseNodeOutput",
@@ -43,6 +44,7 @@ def get_doc_classes():
         "VisualAccidentalNoiseNodeScaleOffset",
         "VisualAccidentalNoiseNodeSetVar",
         "VisualAccidentalNoiseNodeGetVar",
+        "VisualAccidentalNoiseNodeReroute",
         "VisualAccidentalNoiseNodeExpression",
     ]
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeReroute" inherits="VisualAccidentalNoiseNode" category="Core" version="3.2">
+	<brief_description>
+		A reroute noise node.
+	</brief_description>
+	<description>
+		A noise node which allows to break and duplicate the connections between other nodes for convenience. Multiple reroute nodes can also be chained together and previewed at any node.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+	</methods>
+	<constants>
+	</constants>
+</class>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNode" inherits="Resource" category="Core" version="3.2">
+	<brief_description>
+		Base noise node.
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_input_port_default_value" qualifiers="const">
+			<return type="Variant">
+			</return>
+			<argument index="0" name="port" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="set_input_port_default_value">
+			<return type="void">
+			</return>
+			<argument index="0" name="port" type="int">
+			</argument>
+			<argument index="1" name="value" type="Variant">
+			</argument>
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="default_input_values" type="Array" setter="_set_default_input_values" getter="_get_default_input_values">
+		</member>
+		<member name="output_port_for_preview" type="int" setter="set_output_port_for_preview" getter="get_output_port_for_preview">
+		</member>
+	</members>
+	<signals>
+		<signal name="editor_refresh_request">
+			<description>
+			</description>
+		</signal>
+	</signals>
+	<constants>
+		<constant name="Axis::AXIS_DOMAIN" value="0" enum="AxisType">
+		</constant>
+		<constant name="Axis::AXIS_X" value="1" enum="AxisType">
+		</constant>
+		<constant name="Axis::AXIS_Y" value="2" enum="AxisType">
+		</constant>
+		<constant name="Axis::AXIS_Z" value="3" enum="AxisType">
+		</constant>
+		<constant name="Axis::AXIS_W" value="4" enum="AxisType">
+		</constant>
+		<constant name="Axis::AXIS_U" value="5" enum="AxisType">
+		</constant>
+		<constant name="Axis::AXIS_V" value="6" enum="AxisType">
+		</constant>
+	</constants>
+</class>

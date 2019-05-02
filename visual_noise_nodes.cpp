@@ -3177,3 +3177,62 @@ VisualAccidentalNoiseNodeGetVar::VisualAccidentalNoiseNodeGetVar() {
 
 	var = "name";
 }
+
+////////////// Reroute
+
+String VisualAccidentalNoiseNodeReroute::get_caption() const {
+
+	return "Reroute";
+}
+
+void VisualAccidentalNoiseNodeReroute::set_input_port_value(int p_port, const Variant &p_value) {
+
+	input = p_value;
+}
+
+Variant VisualAccidentalNoiseNodeReroute::get_input_port_value(int p_port) const {
+
+	return input;
+}
+
+int VisualAccidentalNoiseNodeReroute::get_input_port_count() const {
+
+	return 1;
+}
+
+VisualAccidentalNoiseNodeReroute::PortType VisualAccidentalNoiseNodeReroute::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAccidentalNoiseNodeReroute::get_input_port_name(int p_port) const {
+
+	return "";
+}
+
+int VisualAccidentalNoiseNodeReroute::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAccidentalNoiseNodeReroute::PortType VisualAccidentalNoiseNodeReroute::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAccidentalNoiseNodeReroute::get_output_port_name(int p_port) const {
+	return "";
+}
+
+void VisualAccidentalNoiseNodeReroute::evaluate(Ref<VisualAccidentalNoise> noise) {
+
+	output_value = input;
+}
+
+void VisualAccidentalNoiseNodeReroute::_bind_methods() {
+}
+
+VisualAccidentalNoiseNodeReroute::VisualAccidentalNoiseNodeReroute() {
+
+	input = 0;
+}

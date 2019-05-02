@@ -1156,4 +1156,31 @@ private:
 	String var;
 };
 
+class VisualAccidentalNoiseNodeReroute : public VisualAccidentalNoiseNode {
+	GDCLASS(VisualAccidentalNoiseNodeReroute, VisualAccidentalNoiseNode)
+
+public:
+	virtual String get_caption() const;
+
+	virtual void set_input_port_value(int p_port, const Variant &p_value);
+	virtual Variant get_input_port_value(int p_port) const;
+	virtual int get_input_port_count() const;
+	virtual PortType get_input_port_type(int p_port) const;
+	virtual String get_input_port_name(int p_port) const;
+
+	virtual int get_output_port_count() const;
+	virtual PortType get_output_port_type(int p_port) const;
+	virtual String get_output_port_name(int p_port) const;
+
+	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
+
+	VisualAccidentalNoiseNodeReroute();
+
+protected:
+	static void _bind_methods();
+
+private:
+	Index input;
+};
+
 #endif
