@@ -384,17 +384,18 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 			node->add_child(error_label);
 		}
 
-		if (EditorSettings::get_singleton()->get("interface/theme/use_graph_node_headers")) {
-			Ref<StyleBoxFlat> sb = node->get_stylebox("frame", "GraphNode");
-			Color c = sb->get_border_color();
-			Color mono_color = ((c.r + c.g + c.b) / 3) < 0.7 ? Color(1.0, 1.0, 1.0) : Color(0.0, 0.0, 0.0);
-			mono_color.a = 0.85;
-			c = mono_color;
+		// [TODO] BREAKS COMPAT (line 3)
+		// if (EditorSettings::get_singleton()->get("interface/theme/use_graph_node_headers")) {
+		// 	Ref<StyleBoxFlat> sb = node->get_stylebox("frame", "GraphNode");
+		// 	Color c = sb->get_border_color();
+		// 	Color mono_color = ((c.r + c.g + c.b) / 3) < 0.7 ? Color(1.0, 1.0, 1.0) : Color(0.0, 0.0, 0.0);
+		// 	mono_color.a = 0.85;
+		// 	c = mono_color;
 
-			node->add_color_override("title_color", c);
-			c.a = 0.7;
-			node->add_color_override("close_color", c);
-		}
+		// 	node->add_color_override("title_color", c);
+		// 	c.a = 0.7;
+		// 	node->add_color_override("close_color", c);
+		// }
 	}
 
 	for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *E = connections.front(); E; E = E->next()) {
