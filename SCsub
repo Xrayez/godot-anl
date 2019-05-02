@@ -1,31 +1,47 @@
 #!/usr/bin/env python
 Import('env')
 
-module_env = env.Clone()
+env_module = env.Clone()
 
-module_env.add_source_files(env.modules_sources, '*.cpp')
-module_env.add_source_files(env.modules_sources, 'plugins/*.cpp')
+thirdparty_dir = 'thirdparty/anl/'
+thirdparty_dirs = [
+    thirdparty_dir + 'VM/',
+    thirdparty_dir + 'Expression/',
+    thirdparty_dir + 'Imaging/',
+    thirdparty_dir + 'Processing/',
+]
+env_module.Append(CPPPATH=thirdparty_dirs)
 
-module_env.add_source_files(env.modules_sources, 'thirdparty/anl/VM/*.cpp')
-module_env.add_source_files(env.modules_sources, 'thirdparty/anl/Expression/*.cpp')
-module_env.add_source_files(env.modules_sources, 'thirdparty/anl/Imaging/*.cpp')
-module_env.add_source_files(env.modules_sources, 'thirdparty/anl/Processing/*.cpp')
+# Configure
 
-module_env.Append(CPPPATH=['thirdparty/anl/VM',
-                           'thirdparty/anl/Expression',
-                           'thirdparty/anl/Imaging',
-                           'thirdparty/anl/Processing'])
+# Upstream uses C++11
+if (not env.msvc):
+    env_module.Append(CXXFLAGS=['-std=c++11'])
 
 if env['target'] == 'release':
-    module_env.Append(CPPFLAGS=['-std=c++11', '-O3'])
-else:  # release_debug, debug
-    module_env.Append(CPPFLAGS=['-std=c++11'])
+    env_module.Append(CPPFLAGS=['-O3'])
 
-# module_env.Append(CPPDEFINES=['ANL_LONG_PERIOD_HASHING']) # limited to 256.0 by default
-# module_env.Append(CPPDEFINES=['ANL_EXPRESSION_BUILDER_CAMELCASE']) # snake_case by default
+# ANL sources
+env_thirdparty = env_module.Clone()
+for d in thirdparty_dirs:
+    env_thirdparty.add_source_files(env.modules_sources, d + '*.cpp')
+env_thirdparty.disable_warnings()
+
+# Optional, the following defines can be included from command line like so:
+# scons define=ANL_LONG_PERIOD_HASHING
+
+# ANL_LONG_PERIOD_HASHING
+#   limited to 256.0 by default
+
+# ANL_EXPRESSION_BUILDER_CAMELCASE
+#   use camelCase by default instead of snake_case for noise expressions
 
 for key, value in ARGLIST:
     if key == 'define':
-        module_env.Append(CPPDEFINES=[value])
+        env_module.Append(CPPDEFINES=[value])
 
-Export('module_env')
+# Module sources
+env_module.add_source_files(env.modules_sources, '*.cpp')
+env_module.add_source_files(env.modules_sources, 'plugins/*.cpp')
+
+Export('env_module')
