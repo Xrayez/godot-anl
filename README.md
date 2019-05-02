@@ -3,15 +3,26 @@
 [![Build Status](https://travis-ci.com/Xrayez/godot-anl.svg?branch=master)](https://travis-ci.com/Xrayez/godot-anl)
 [![Build status](https://ci.appveyor.com/api/projects/status/n6b4hvlk7pxu6dk0/branch/master?svg=true)](https://ci.appveyor.com/project/Xrayez/godot-anl/branch/master)
 
-This is a wrapper for the new version of
+This is a wrapper for the
 [Accidental Noise Library](https://github.com/JTippetts/accidental-noise-library)
 originally written by
 [Joshua Tippetts](https://sourceforge.net/u/tippettsj/profile/), modified
-to be properly compiled for [Godot 3.1](https://github.com/godotengine/godot)
+to be properly compiled for [Godot Engine](https://github.com/godotengine/godot)
 and be used freely in GDScript.
 
 The master branch aims to be in sync with Godot's master branch. Checkout other
-branches and/or releases for compatible versions.
+branches and/or releases for compatible versions. You can decide which version you need based on the following compatibility table:
+
+### Compatibility table (ANL/Godot)
+
+|     | 3.0 | 3.1 | 3.2 |
+| --: |:---:|:---:|:---:|
+| 1.0 |  👍 |  👎 |  👎 |
+| 2.0 |  👎 |  👍 |  👎 |
+| 2.1 |  👎 |  👍 |  🤞 |
+
+*Note: the latests versions may not be released yet and are kept for reference,
+but expect them to be compatible.*
 
 ## Notable features:
 
