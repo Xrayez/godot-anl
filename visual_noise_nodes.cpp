@@ -3236,3 +3236,101 @@ VisualAccidentalNoiseNodeReroute::VisualAccidentalNoiseNodeReroute() {
 
 	input = 0;
 }
+////////////// Selector
+
+String VisualAccidentalNoiseNodeSelector::get_caption() const {
+
+	return "Selector";
+}
+
+void VisualAccidentalNoiseNodeSelector::set_option_count(int p_option_count) {
+
+	option_count = CLAMP(p_option_count, 0, MAX_OPTIONS);
+	emit_changed();
+}
+
+int VisualAccidentalNoiseNodeSelector::get_option_count() const {
+
+	return option_count;
+}
+
+void VisualAccidentalNoiseNodeSelector::set_enabled_option(int p_option) {
+
+	enabled_option = p_option;
+	emit_changed();
+}
+
+int VisualAccidentalNoiseNodeSelector::get_enabled_option() {
+
+	return enabled_option;
+}
+
+void VisualAccidentalNoiseNodeSelector::set_input_port_value(int p_port, const Variant &p_value) {
+
+	int idx = CLAMP(p_port, 0, MAX_OPTIONS - 1);
+	options[idx] = p_value;
+}
+
+Variant VisualAccidentalNoiseNodeSelector::get_input_port_value(int p_port) const {
+
+	int idx = CLAMP(p_port, 0, MAX_OPTIONS - 1);
+	return options[idx];
+}
+
+int VisualAccidentalNoiseNodeSelector::get_input_port_count() const {
+
+	return option_count;
+}
+
+VisualAccidentalNoiseNodeSelector::PortType VisualAccidentalNoiseNodeSelector::get_input_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAccidentalNoiseNodeSelector::get_input_port_name(int p_port) const {
+
+	return itos(p_port);
+}
+
+int VisualAccidentalNoiseNodeSelector::get_output_port_count() const {
+
+	return 1;
+}
+
+VisualAccidentalNoiseNodeSelector::PortType VisualAccidentalNoiseNodeSelector::get_output_port_type(int p_port) const {
+
+	return PORT_TYPE_INDEX;
+}
+
+String VisualAccidentalNoiseNodeSelector::get_output_port_name(int p_port) const {
+
+	return itos(enabled_option);
+}
+
+void VisualAccidentalNoiseNodeSelector::evaluate(Ref<VisualAccidentalNoise> noise) {
+
+	output_value = options[enabled_option];
+}
+
+void VisualAccidentalNoiseNodeSelector::_bind_methods() {
+
+	ClassDB::bind_method(D_METHOD("set_option_count", "option_count"), &VisualAccidentalNoiseNodeSelector::set_option_count);
+	ClassDB::bind_method(D_METHOD("get_option_count"), &VisualAccidentalNoiseNodeSelector::get_option_count);
+
+	ClassDB::bind_method(D_METHOD("set_enabled_option", "enabled_option"), &VisualAccidentalNoiseNodeSelector::set_enabled_option);
+	ClassDB::bind_method(D_METHOD("get_enabled_option"), &VisualAccidentalNoiseNodeSelector::get_enabled_option);
+
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "option_count"), "set_option_count", "get_option_count");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "enabled_option"), "set_enabled_option", "get_enabled_option");
+}
+
+VisualAccidentalNoiseNodeSelector::VisualAccidentalNoiseNodeSelector() {
+
+	option_count = 1;
+	enabled_option = 0;
+
+	for (int i = 0; i < MAX_OPTIONS; i++) {
+		options[i] = 0;
+		set_input_port_default_value(i, 0);
+	}
+}

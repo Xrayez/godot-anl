@@ -72,6 +72,7 @@ void register_anl_types() {
 	ClassDB::register_class<VisualAccidentalNoiseNodeSetVar>();
 	ClassDB::register_class<VisualAccidentalNoiseNodeGetVar>();
 	ClassDB::register_class<VisualAccidentalNoiseNodeReroute>();
+	ClassDB::register_class<VisualAccidentalNoiseNodeSelector>();
 	ClassDB::register_class<VisualAccidentalNoiseNodeExpression>();
 
 #ifdef TOOLS_ENABLED
