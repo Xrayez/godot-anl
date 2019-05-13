@@ -3236,101 +3236,131 @@ VisualAccidentalNoiseNodeReroute::VisualAccidentalNoiseNodeReroute() {
 
 	input = 0;
 }
-////////////// Selector
+////////////// Sequence
 
-String VisualAccidentalNoiseNodeSelector::get_caption() const {
+String VisualAccidentalNoiseNodeSequence::get_caption() const {
 
-	return "Selector";
+	return "Sequence";
 }
 
-void VisualAccidentalNoiseNodeSelector::set_option_count(int p_option_count) {
+void VisualAccidentalNoiseNodeSequence::set_operator(Operator p_op) {
 
-	option_count = CLAMP(p_option_count, 0, MAX_OPTIONS);
+	op = p_op;
 	emit_changed();
 }
 
-int VisualAccidentalNoiseNodeSelector::get_option_count() const {
+VisualAccidentalNoiseNodeSequence::Operator VisualAccidentalNoiseNodeSequence::get_operator() const {
 
-	return option_count;
+	return op;
 }
 
-void VisualAccidentalNoiseNodeSelector::set_enabled_option(int p_option) {
+void VisualAccidentalNoiseNodeSequence::set_input_count(int p_input_count) {
 
-	enabled_option = p_option;
+	input_count = CLAMP(p_input_count, 1, MAX_INPUTS);
 	emit_changed();
 }
 
-int VisualAccidentalNoiseNodeSelector::get_enabled_option() {
+int VisualAccidentalNoiseNodeSequence::get_input_count() const {
 
-	return enabled_option;
+	return input_count;
 }
 
-void VisualAccidentalNoiseNodeSelector::set_input_port_value(int p_port, const Variant &p_value) {
+void VisualAccidentalNoiseNodeSequence::set_enabled_input(int p_input) {
 
-	int idx = CLAMP(p_port, 0, MAX_OPTIONS - 1);
-	options[idx] = p_value;
+	enabled_input = CLAMP(p_input, 1, input_count);
+	emit_changed();
 }
 
-Variant VisualAccidentalNoiseNodeSelector::get_input_port_value(int p_port) const {
+int VisualAccidentalNoiseNodeSequence::get_enabled_input() {
 
-	int idx = CLAMP(p_port, 0, MAX_OPTIONS - 1);
-	return options[idx];
+	return enabled_input;
 }
 
-int VisualAccidentalNoiseNodeSelector::get_input_port_count() const {
+void VisualAccidentalNoiseNodeSequence::set_input_port_value(int p_port, const Variant &p_value) {
 
-	return option_count;
+	int idx = CLAMP(p_port, 0, MAX_INPUTS - 1);
+	inputs[idx] = p_value;
 }
 
-VisualAccidentalNoiseNodeSelector::PortType VisualAccidentalNoiseNodeSelector::get_input_port_type(int p_port) const {
+Variant VisualAccidentalNoiseNodeSequence::get_input_port_value(int p_port) const {
+
+	int idx = CLAMP(p_port, 0, MAX_INPUTS - 1);
+	return inputs[idx];
+}
+
+int VisualAccidentalNoiseNodeSequence::get_input_port_count() const {
+
+	return input_count;
+}
+
+VisualAccidentalNoiseNodeSequence::PortType VisualAccidentalNoiseNodeSequence::get_input_port_type(int p_port) const {
 
 	return PORT_TYPE_INDEX;
 }
 
-String VisualAccidentalNoiseNodeSelector::get_input_port_name(int p_port) const {
+String VisualAccidentalNoiseNodeSequence::get_input_port_name(int p_port) const {
 
-	return itos(p_port);
+	return itos(p_port + 1);
 }
 
-int VisualAccidentalNoiseNodeSelector::get_output_port_count() const {
+int VisualAccidentalNoiseNodeSequence::get_output_port_count() const {
 
 	return 1;
 }
 
-VisualAccidentalNoiseNodeSelector::PortType VisualAccidentalNoiseNodeSelector::get_output_port_type(int p_port) const {
+VisualAccidentalNoiseNodeSequence::PortType VisualAccidentalNoiseNodeSequence::get_output_port_type(int p_port) const {
 
 	return PORT_TYPE_INDEX;
 }
 
-String VisualAccidentalNoiseNodeSelector::get_output_port_name(int p_port) const {
+String VisualAccidentalNoiseNodeSequence::get_output_port_name(int p_port) const {
 
-	return itos(enabled_option);
+	String name;
+	if (op == OP_SELECT) {
+		name = itos(enabled_input);
+	}
+	return name;
 }
 
-void VisualAccidentalNoiseNodeSelector::evaluate(Ref<VisualAccidentalNoise> noise) {
+void VisualAccidentalNoiseNodeSequence::evaluate(Ref<VisualAccidentalNoise> noise) {
 
-	output_value = options[enabled_option];
+	output_value = inputs[enabled_input - 1];
 }
 
-void VisualAccidentalNoiseNodeSelector::_bind_methods() {
+Vector<StringName> VisualAccidentalNoiseNodeSequence::get_editable_properties() const {
 
-	ClassDB::bind_method(D_METHOD("set_option_count", "option_count"), &VisualAccidentalNoiseNodeSelector::set_option_count);
-	ClassDB::bind_method(D_METHOD("get_option_count"), &VisualAccidentalNoiseNodeSelector::get_option_count);
+	Vector<StringName> props;
 
-	ClassDB::bind_method(D_METHOD("set_enabled_option", "enabled_option"), &VisualAccidentalNoiseNodeSelector::set_enabled_option);
-	ClassDB::bind_method(D_METHOD("get_enabled_option"), &VisualAccidentalNoiseNodeSelector::get_enabled_option);
+	props.push_back("operator");
+	props.push_back("input_count");
+	props.push_back("enabled_input");
 
-	ADD_PROPERTY(PropertyInfo(Variant::REAL, "option_count"), "set_option_count", "get_option_count");
-	ADD_PROPERTY(PropertyInfo(Variant::REAL, "enabled_option"), "set_enabled_option", "get_enabled_option");
+	return props;
 }
 
-VisualAccidentalNoiseNodeSelector::VisualAccidentalNoiseNodeSelector() {
+void VisualAccidentalNoiseNodeSequence::_bind_methods() {
 
-	option_count = 1;
-	enabled_option = 0;
+	ClassDB::bind_method(D_METHOD("set_operator", "operator"), &VisualAccidentalNoiseNodeSequence::set_operator);
+	ClassDB::bind_method(D_METHOD("get_operator"), &VisualAccidentalNoiseNodeSequence::get_operator);
 
-	for (int i = 0; i < MAX_OPTIONS; i++) {
-		options[i] = 0;
+	ClassDB::bind_method(D_METHOD("set_input_count", "input_count"), &VisualAccidentalNoiseNodeSequence::set_input_count);
+	ClassDB::bind_method(D_METHOD("get_input_count"), &VisualAccidentalNoiseNodeSequence::get_input_count);
+
+	ClassDB::bind_method(D_METHOD("set_enabled_input", "enabled_input"), &VisualAccidentalNoiseNodeSequence::set_enabled_input);
+	ClassDB::bind_method(D_METHOD("get_enabled_input"), &VisualAccidentalNoiseNodeSequence::get_enabled_input);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "operator", PROPERTY_HINT_ENUM, "Select,Add,Sub,Multiply,Divide,Power,Max,Min,Bias,Gain"), "set_operator", "get_operator");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "input_count"), "set_input_count", "get_input_count");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "enabled_input"), "set_enabled_input", "get_enabled_input");
+}
+
+VisualAccidentalNoiseNodeSequence::VisualAccidentalNoiseNodeSequence() {
+
+	input_count = 1;
+	enabled_input = 1;
+
+	for (int i = 0; i < MAX_INPUTS; i++) {
+		inputs[i] = 0;
 		set_input_port_default_value(i, 0);
 	}
 }

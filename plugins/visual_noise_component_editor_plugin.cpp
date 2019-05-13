@@ -943,14 +943,6 @@ void VisualAccidentalNoiseComponentEditor::_duplicate_nodes() {
 	}
 }
 
-// void VisualAccidentalNoiseComponentEditor::save_external_data() {
-
-// 	if (component.is_null())
-// 		return;
-
-// 	ResourceSaver::save(component->get_path(), component);
-// }
-
 void VisualAccidentalNoiseComponentEditor::_bind_methods() {
 
 	ClassDB::bind_method("_component_renamed", &VisualAccidentalNoiseComponentEditor::_component_renamed);
@@ -1059,11 +1051,11 @@ VisualAccidentalNoiseComponentEditor::VisualAccidentalNoiseComponentEditor() {
 	add_options.push_back(AddOption("Step", "Other", "VisualAccidentalNoiseNodeStep"));
 	add_options.push_back(AddOption("CurveSection", "Other", "VisualAccidentalNoiseNodeCurveSection"));
 	add_options.push_back(AddOption("ScaleOffset", "Other", "VisualAccidentalNoiseNodeScaleOffset"));
+	add_options.push_back(AddOption("Sequence", "Other", "VisualAccidentalNoiseNodeSequence"));
 
 	add_options.push_back(AddOption("SetVar", "Misc", "VisualAccidentalNoiseNodeSetVar"));
 	add_options.push_back(AddOption("GetVar", "Misc", "VisualAccidentalNoiseNodeGetVar"));
 	add_options.push_back(AddOption("Reroute", "Misc", "VisualAccidentalNoiseNodeReroute"));
-	add_options.push_back(AddOption("Selector", "Misc", "VisualAccidentalNoiseNodeSelector"));
 	add_options.push_back(AddOption("Expression", "Misc", "VisualAccidentalNoiseNodeExpression"));
 
 	_update_options_menu();

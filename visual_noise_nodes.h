@@ -1183,18 +1183,34 @@ private:
 	Index input;
 };
 
-class VisualAccidentalNoiseNodeSelector : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeSelector, VisualAccidentalNoiseNode)
+class VisualAccidentalNoiseNodeSequence : public VisualAccidentalNoiseNode {
+	GDCLASS(VisualAccidentalNoiseNodeSequence, VisualAccidentalNoiseNode)
 
 public:
-	enum {
-		MAX_OPTIONS = 32
+	enum Operator {
+		OP_SELECT, // acts like selector
+		OP_ADD,
+		OP_SUB,
+		OP_MUL,
+		OP_DIV,
+		OP_POW,
+		OP_MAX,
+		OP_MIN,
+		OP_BIAS,
+		OP_GAIN,
 	};
-	void set_option_count(int p_option_count);
-	int get_option_count() const;
 
-	void set_enabled_option(int p_option);
-	int get_enabled_option();
+	void set_operator(Operator p_op);
+	Operator get_operator() const;
+
+	enum {
+		MAX_INPUTS = 32
+	};
+	void set_input_count(int p_input_count);
+	int get_input_count() const;
+
+	void set_enabled_input(int p_input);
+	int get_enabled_input();
 
 public:
 	virtual String get_caption() const;
@@ -1209,17 +1225,22 @@ public:
 	virtual PortType get_output_port_type(int p_port) const;
 	virtual String get_output_port_name(int p_port) const;
 
+	virtual Vector<StringName> get_editable_properties() const;
+
 	virtual void evaluate(Ref<VisualAccidentalNoise> noise);
 
-	VisualAccidentalNoiseNodeSelector();
+	VisualAccidentalNoiseNodeSequence();
 
 protected:
 	static void _bind_methods();
 
 private:
-	Index options[MAX_OPTIONS];
-	int option_count;
-	int enabled_option;
+	Operator op;
+	Index inputs[MAX_INPUTS];
+	int input_count;
+	int enabled_input;
 };
+
+VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeSequence::Operator);
 
 #endif

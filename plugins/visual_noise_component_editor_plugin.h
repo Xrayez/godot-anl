@@ -110,8 +110,6 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 
 	void _duplicate_nodes();
 
-	// void save_external_data();
-
 	void _preview_select_port(int p_node, int p_port);
 	void _input(const Ref<InputEvent> p_event);
 
