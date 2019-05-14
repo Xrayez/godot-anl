@@ -108,7 +108,8 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 	void _line_edit_changed(const String &p_text, Object *line_edit, int p_node_id);
 	void _line_edit_focus_out(Object *line_edit, int p_node_id);
 
-	void _duplicate_nodes(bool p_make_component = false);
+	void _duplicate_nodes();
+	void _make_component_from_nodes(const Vector2 &p_ofs);
 
 	void _preview_select_port(int p_node, int p_port);
 	void _input(const Ref<InputEvent> p_event);

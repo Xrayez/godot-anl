@@ -300,7 +300,7 @@ Error VisualAccidentalNoiseNodeComponent::connect_nodes(int p_from_node, int p_f
 	for (List<Connection>::Element *E = graph.connections.front(); E; E = E->next()) {
 
 		if (E->get().from_node == p_from_node && E->get().from_port == p_from_port && E->get().to_node == p_to_node && E->get().to_port == p_to_port) {
-			ERR_FAIL_V(ERR_ALREADY_EXISTS);
+			return ERR_ALREADY_EXISTS;
 		}
 	}
 
