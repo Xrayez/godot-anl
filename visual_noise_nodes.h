@@ -1209,8 +1209,8 @@ public:
 	void set_input_count(int p_input_count);
 	int get_input_count() const;
 
-	void set_enabled_input(int p_input);
-	int get_enabled_input();
+	void set_selected_input(int p_input);
+	int get_selected_input();
 
 public:
 	virtual String get_caption() const;
@@ -1238,7 +1238,7 @@ private:
 	Operator op;
 	Index inputs[MAX_INPUTS];
 	int input_count;
-	int enabled_input;
+	int selected_input;
 };
 
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeSequence::Operator);

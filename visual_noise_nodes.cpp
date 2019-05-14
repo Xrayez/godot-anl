@@ -3257,6 +3257,11 @@ VisualAccidentalNoiseNodeSequence::Operator VisualAccidentalNoiseNodeSequence::g
 void VisualAccidentalNoiseNodeSequence::set_input_count(int p_input_count) {
 
 	input_count = CLAMP(p_input_count, 1, MAX_INPUTS);
+
+	// Can be inconvenient...
+	// if (input_count == 1) {
+		// op = OP_SELECT; // reset
+	// }
 	emit_changed();
 }
 
@@ -3265,15 +3270,15 @@ int VisualAccidentalNoiseNodeSequence::get_input_count() const {
 	return input_count;
 }
 
-void VisualAccidentalNoiseNodeSequence::set_enabled_input(int p_input) {
+void VisualAccidentalNoiseNodeSequence::set_selected_input(int p_input) {
 
-	enabled_input = CLAMP(p_input, 1, input_count);
+	selected_input = CLAMP(p_input, 1, input_count);
 	emit_changed();
 }
 
-int VisualAccidentalNoiseNodeSequence::get_enabled_input() {
+int VisualAccidentalNoiseNodeSequence::get_selected_input() {
 
-	return enabled_input;
+	return selected_input;
 }
 
 void VisualAccidentalNoiseNodeSequence::set_input_port_value(int p_port, const Variant &p_value) {
@@ -3317,14 +3322,38 @@ String VisualAccidentalNoiseNodeSequence::get_output_port_name(int p_port) const
 
 	String name;
 	if (op == OP_SELECT) {
-		name = itos(enabled_input);
+		name = itos(selected_input);
 	}
 	return name;
 }
 
 void VisualAccidentalNoiseNodeSequence::evaluate(Ref<VisualAccidentalNoise> noise) {
 
-	output_value = inputs[enabled_input - 1];
+	String op_func;
+
+	switch (op) {
+		case OP_SELECT: output_value = inputs[selected_input - 1]; return; // no op
+		case OP_ADD: op_func = "add"; break;
+		case OP_SUB: op_func = "subtract"; break;
+		case OP_MUL: op_func = "multiply"; break;
+		case OP_DIV: op_func = "divide"; break;
+		case OP_POW: op_func = "pow"; break;
+		case OP_MAX: op_func = "max"; break;
+		case OP_MIN: op_func = "min"; break;
+		case OP_BIAS: op_func = "bias"; break;
+		case OP_GAIN: op_func = "gain"; break;
+	}
+
+	if (input_count < 2) {
+		output_value = 0;
+		return;
+	}
+	output_value = inputs[0];
+
+	for (int i = 1; i < input_count; i++) {
+		Index next = inputs[i];
+		output_value = noise->call(op_func, output_value, next);
+	}
 }
 
 Vector<StringName> VisualAccidentalNoiseNodeSequence::get_editable_properties() const {
@@ -3333,8 +3362,10 @@ Vector<StringName> VisualAccidentalNoiseNodeSequence::get_editable_properties() 
 
 	props.push_back("operator");
 	props.push_back("input_count");
-	props.push_back("enabled_input");
 
+	if (op == OP_SELECT && input_count > 1) {
+		props.push_back("selected_input");
+	}
 	return props;
 }
 
@@ -3346,18 +3377,19 @@ void VisualAccidentalNoiseNodeSequence::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_input_count", "input_count"), &VisualAccidentalNoiseNodeSequence::set_input_count);
 	ClassDB::bind_method(D_METHOD("get_input_count"), &VisualAccidentalNoiseNodeSequence::get_input_count);
 
-	ClassDB::bind_method(D_METHOD("set_enabled_input", "enabled_input"), &VisualAccidentalNoiseNodeSequence::set_enabled_input);
-	ClassDB::bind_method(D_METHOD("get_enabled_input"), &VisualAccidentalNoiseNodeSequence::get_enabled_input);
+	ClassDB::bind_method(D_METHOD("set_selected_input", "selected_input"), &VisualAccidentalNoiseNodeSequence::set_selected_input);
+	ClassDB::bind_method(D_METHOD("get_selected_input"), &VisualAccidentalNoiseNodeSequence::get_selected_input);
 
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "operator", PROPERTY_HINT_ENUM, "Select,Add,Sub,Multiply,Divide,Power,Max,Min,Bias,Gain"), "set_operator", "get_operator");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "input_count"), "set_input_count", "get_input_count");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "enabled_input"), "set_enabled_input", "get_enabled_input");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "selected_input"), "set_selected_input", "get_selected_input");
 }
 
 VisualAccidentalNoiseNodeSequence::VisualAccidentalNoiseNodeSequence() {
 
+	op = OP_SELECT;
 	input_count = 1;
-	enabled_input = 1;
+	selected_input = 1;
 
 	for (int i = 0; i < MAX_INPUTS; i++) {
 		inputs[i] = 0;
