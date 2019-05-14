@@ -258,8 +258,8 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 			ci.set_hsv(ci_h, ci_s, ci.get_v());
 
 			const Color type_color_var[2] = { cs, ci };
-			//
 
+			// Check left and right ports
 			if (vanode->is_port_separator(i)) {
 				node->add_child(memnew(HSeparator));
 				port_offset++;
@@ -278,13 +278,24 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 					}
 				}
 			}
-
 			bool valid_right = i < vanode->get_output_port_count();
 			VisualAccidentalNoiseNode::PortType port_right = VisualAccidentalNoiseNode::PORT_TYPE_SCALAR;
 			String name_right;
 			if (valid_right) {
 				name_right = vanode->get_output_port_name(i);
 				port_right = vanode->get_output_port_type(i);
+			}
+
+			Color port_left_color = type_color_var[port_left];
+			Color port_right_color = type_color_var[port_right];
+
+			Ref<VisualAccidentalNoiseNodeSequence> seq = vanode;
+			if (seq.is_valid()) {
+				int selected_port = seq->get_selected_input() - 1;
+				VisualAccidentalNoiseNodeSequence::Operator op = seq->get_operator();
+				if (i == selected_port && op == VisualAccidentalNoiseNodeSequence::OP_SELECT) {
+					port_left_color = Color(1, 1, 0);
+				}
 			}
 
 			HBoxContainer *hb = memnew(HBoxContainer);
@@ -353,7 +364,7 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 
 			node->add_child(hb);
 
-			node->set_slot(i + port_offset, valid_left, port_left, type_color_var[port_left], valid_right, port_right, type_color_var[port_right]);
+			node->set_slot(i + port_offset, valid_left, port_left, port_left_color, valid_right, port_right, port_right_color);
 		}
 
 		if (comp.is_valid()) {
