@@ -156,11 +156,13 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 		Vector2 position = component->get_node_position(nodes[n_i]);
 		Ref<VisualAccidentalNoiseNode> vanode = component->get_node(nodes[n_i]);
 
-		Ref<VisualAccidentalNoiseNodeInput> input = vanode; // may be input
-		Ref<VisualAccidentalNoiseNodeOutput> output = vanode; // may be output
-		Ref<VisualAccidentalNoiseNodeComponent> comp = vanode; // may be component
-		Ref<VisualAccidentalNoiseNodeSetVar> setvar = vanode; // may be var
+		// TODO: this probably needs refactoring
+		Ref<VisualAccidentalNoiseNodeInput> input = vanode;
+		Ref<VisualAccidentalNoiseNodeOutput> output = vanode;
+		Ref<VisualAccidentalNoiseNodeComponent> comp = vanode;
+		Ref<VisualAccidentalNoiseNodeSetVar> setvar = vanode;
 		Ref<VisualAccidentalNoiseNodeGetVar> getvar = vanode;
+		Ref<VisualAccidentalNoiseNodeSequence> seq = vanode;
 
 		GraphNode *node = memnew(GraphNode);
 		graph->add_child(node);
@@ -289,7 +291,6 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 			Color port_left_color = type_color_var[port_left];
 			Color port_right_color = type_color_var[port_right];
 
-			Ref<VisualAccidentalNoiseNodeSequence> seq = vanode;
 			if (seq.is_valid()) {
 				int selected_port = seq->get_selected_input() - 1;
 				VisualAccidentalNoiseNodeSequence::Operator op = seq->get_operator();
@@ -416,7 +417,9 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 		int to = E->get().to_node;
 		int to_idx = E->get().to_port;
 
-		graph->connect_node(itos(from), from_idx, itos(to), to_idx);
+		if (component->is_node_connection(from, from_idx, to, to_idx)) {
+			graph->connect_node(itos(from), from_idx, itos(to), to_idx);
+		}
 	}
 }
 

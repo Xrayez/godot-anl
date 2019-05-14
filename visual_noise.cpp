@@ -228,14 +228,26 @@ void VisualAccidentalNoiseNodeComponent::remove_node(int p_id) {
 
 bool VisualAccidentalNoiseNodeComponent::is_node_connection(int p_from_node, int p_from_port, int p_to_node, int p_to_port) const {
 
+	bool is_connected = false;
+
 	for (const List<Connection>::Element *E = graph.connections.front(); E; E = E->next()) {
 
-		if (E->get().from_node == p_from_node && E->get().from_port == p_from_port && E->get().to_node == p_to_node && E->get().to_port == p_to_port) {
-			return true;
+		const Connection &con = E->get();
+
+		if (con.from_node == p_from_node && con.from_port == p_from_port && con.to_node == p_to_node && con.to_port == p_to_port) {
+			is_connected = true;
+		}
+		if (is_connected) {
+
+			Ref<VisualAccidentalNoiseNode> to_vanode = get_node(con.to_node);
+
+			if (p_to_port > to_vanode->get_input_port_count() - 1) {
+				is_connected = false;
+			}
+			break;
 		}
 	}
-
-	return false;
+	return is_connected;
 }
 
 bool VisualAccidentalNoiseNodeComponent::can_connect_nodes(int p_from_node, int p_from_port, int p_to_node, int p_to_port) const {
