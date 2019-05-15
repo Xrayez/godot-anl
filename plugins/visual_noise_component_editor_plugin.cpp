@@ -1005,19 +1005,23 @@ void VisualAccidentalNoiseComponentEditor::_make_component_from_nodes(const Vect
 			base_id = selected[0];
 			base_node = component->get_node(base_id);
 		}
-		List<int> to_check;
-		to_check.push_back(base_id);
+		Set<int> to_check;
+		to_check.insert(base_id);
 		excluded.erase(base_id);
 
 		while (!to_check.empty()) {
 
 			int id = to_check.back()->get();
-			to_check.pop_back();
+			to_check.erase(id);
 
 			for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *E = conns.front(); E; E = E->next()) {
+				int from_id = E->get().from_node;
+
 				if (id == E->get().to_node) {
-					selected.push_back(E->get().from_node);
-					to_check.push_back(E->get().from_node);
+					if (!to_check.has(from_id)) {
+						selected.push_back(from_id);
+						to_check.insert(from_id);
+					}
 				}
 				if (excluded.has(id)) {
 					excluded.erase(id);
