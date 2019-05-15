@@ -969,6 +969,10 @@ void VisualAccidentalNoiseComponentEditor::_make_component_from_nodes(const Vect
 	if (component.is_null()) {
 		return;
 	}
+	if (component->get_valid_node_id() <= 2) {
+		EditorNode::get_singleton()->show_warning(TTR("Nothing to make a component from."));
+		return;
+	}
 	List<int> nodes;
 
 	for (int i = 0; i < graph->get_child_count(); i++) {
@@ -987,17 +991,18 @@ void VisualAccidentalNoiseComponentEditor::_make_component_from_nodes(const Vect
 			}
 		}
 	}
-	if (nodes.empty())
-		return;
-
 	List<VisualAccidentalNoiseNodeComponent::Connection> conns;
 	component->get_node_connections(&conns);
 
-	if (nodes.size() == 1) {
+	if (nodes.size() <= 1) {
 		// Recursively fetch all the connected nodes to this one
 		List<int> to_check;
-		to_check.push_back(nodes[0]);
-
+		if (nodes.empty()) {
+			// If nothing is selected, make component from all nodes connected to output
+			to_check.push_back(VisualAccidentalNoiseNodeComponent::NODE_ID_OUTPUT);
+		} else {
+			to_check.push_back(nodes[0]);
+		}
 		while (!to_check.empty()) {
 
 			int id = to_check.back()->get();
@@ -1015,33 +1020,34 @@ void VisualAccidentalNoiseComponentEditor::_make_component_from_nodes(const Vect
 	int id_from = base_id;
 	Map<int, int> connection_remap;
 
-	Ref<VisualAccidentalNoiseNodeComponent> comp;
-	comp.instance();
+	Ref<VisualAccidentalNoiseNodeComponent> new_comp;
+	new_comp.instance();
 
 	undo_redo->create_action("Make Component From Nodes");
-	undo_redo->add_do_method(component.ptr(), "add_node", comp, p_ofs, id_from);
+	undo_redo->add_do_method(component.ptr(), "add_node", new_comp, p_ofs, id_from);
 	undo_redo->add_undo_method(component.ptr(), "remove_node", id_from);
 	id_from++;
 
+	// Duplicate existing nodes and put them into a new component
 	for (List<int>::Element *E = nodes.front(); E; E = E->next()) {
 
 		connection_remap[E->get()] = id_from;
-		Ref<VisualAccidentalNoiseNode> node = component->get_node(E->get());
 
+		Ref<VisualAccidentalNoiseNode> node = component->get_node(E->get());
 		Ref<VisualAccidentalNoiseNode> dnode = node->duplicate();
 
-		undo_redo->add_do_method(comp.ptr(), "add_node", dnode, component->get_node_position(E->get()), id_from);
-		undo_redo->add_undo_method(comp.ptr(), "remove_node", id_from);
+		undo_redo->add_do_method(new_comp.ptr(), "add_node", dnode, component->get_node_position(E->get()), id_from);
+		undo_redo->add_undo_method(new_comp.ptr(), "remove_node", id_from);
 
 		id_from++;
 	}
 	// Connect duplicated nodes
 	for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *E = conns.front(); E; E = E->next()) {
 		if (connection_remap.has(E->get().from_node) && connection_remap.has(E->get().to_node)) {
-			undo_redo->add_do_method(comp.ptr(), "connect_nodes", connection_remap[E->get().from_node], E->get().from_port, connection_remap[E->get().to_node], E->get().to_port);
+			undo_redo->add_do_method(new_comp.ptr(), "connect_nodes", connection_remap[E->get().from_node], E->get().from_port, connection_remap[E->get().to_node], E->get().to_port);
 		}
 	}
-	// Delete original nodes as they were moved to new component
+	// Remove original nodes as they were moved to a new component
 	for (List<int>::Element *E = nodes.front(); E; E = E->next()) {
 
 		Ref<VisualAccidentalNoiseNode> node = component->get_node(E->get());
