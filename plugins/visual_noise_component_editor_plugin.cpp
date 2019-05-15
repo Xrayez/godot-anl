@@ -996,15 +996,15 @@ void VisualAccidentalNoiseComponentEditor::_make_component_from_nodes(const Vect
 	List<VisualAccidentalNoiseNodeComponent::Connection> conns;
 	component->get_node_connections(&conns);
 
+	Ref<VisualAccidentalNoiseNode> base_node;
 	int base_id = output_id;
 
-	Ref<VisualAccidentalNoiseNode> base_node;
-	if (selected.size() == 1) {
-		base_id = selected[0];
-		base_node = component->get_node(base_id);
-	}
 	if (selected.size() <= 1) {
 		// Recursively fetch all the connected nodes to this one
+		if (selected.size() == 1) {
+			base_id = selected[0];
+			base_node = component->get_node(base_id);
+		}
 		List<int> to_check;
 		to_check.push_back(base_id);
 		excluded.erase(base_id);
@@ -1048,6 +1048,18 @@ void VisualAccidentalNoiseComponentEditor::_make_component_from_nodes(const Vect
 		undo_redo->add_do_method(new_comp.ptr(), "remove_node", id);
 		undo_redo->add_undo_method(new_comp.ptr(), "add_node", node, new_comp->get_node_position(id), id);
 	}
+	// Restore possible output connections
+	if (base_node.is_valid()) {
+		int to_node = output_id;
+		for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *E = conns.front(); E; E = E->next()) {
+			if (base_id == E->get().from_node) {
+				undo_redo->add_do_method(component.ptr(), "connect_nodes", new_comp_id, E->get().from_port, E->get().to_node, E->get().to_port);
+				// Also connect duplicated node (from base one) to output in new component
+				// The id should be the same because we cloned this component completely
+				undo_redo->add_do_method(new_comp.ptr(), "connect_nodes", base_id, E->get().from_port, output_id, 0);
+			}
+		}
+	}
 	// Remove original nodes as they were "moved" into a new component
 	for (List<int>::Element *E = selected.front(); E; E = E->next()) {
 
@@ -1057,8 +1069,8 @@ void VisualAccidentalNoiseComponentEditor::_make_component_from_nodes(const Vect
 		undo_redo->add_do_method(component.ptr(), "remove_node", id);
 		undo_redo->add_undo_method(component.ptr(), "add_node", node, component->get_node_position(id), id);
 	}
-	for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *F = conns.front(); F; F = F->next()) {
-		undo_redo->add_undo_method(component.ptr(), "connect_nodes", F->get().from_node, F->get().from_port, F->get().to_node, F->get().to_port);
+	for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *E = conns.front(); E; E = E->next()) {
+		undo_redo->add_undo_method(component.ptr(), "connect_nodes", E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 	}
 
 	undo_redo->add_do_method(this, "_update_graph");
