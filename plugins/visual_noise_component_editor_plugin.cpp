@@ -996,17 +996,18 @@ void VisualAccidentalNoiseComponentEditor::_make_component_from_nodes(const Vect
 	List<VisualAccidentalNoiseNodeComponent::Connection> conns;
 	component->get_node_connections(&conns);
 
-	bool is_making_from_output = selected.empty();
+	int base_id = output_id;
 
+	Ref<VisualAccidentalNoiseNode> base_node;
+	if (selected.size() == 1) {
+		base_id = selected[0];
+		base_node = component->get_node(base_id);
+	}
 	if (selected.size() <= 1) {
 		// Recursively fetch all the connected nodes to this one
 		List<int> to_check;
-		if (is_making_from_output) {
-			to_check.push_back(output_id);
-		} else {
-			to_check.push_back(selected[0]);
-		}
-		excluded.erase(to_check[0]);
+		to_check.push_back(base_id);
+		excluded.erase(base_id);
 
 		while (!to_check.empty()) {
 
@@ -1030,12 +1031,14 @@ void VisualAccidentalNoiseComponentEditor::_make_component_from_nodes(const Vect
 
 	// Add new component to this one
 	undo_redo->create_action("Make Component From Nodes");
-	undo_redo->add_do_method(component.ptr(), "add_node", new_comp, p_ofs, new_comp_id);
+
+	Vector2 ofs = p_ofs;
+	if (base_node.is_valid()) {
+		ofs = component->get_node_position(base_id);
+	}
+	undo_redo->add_do_method(component.ptr(), "add_node", new_comp, ofs, new_comp_id);
 	undo_redo->add_undo_method(component.ptr(), "remove_node", new_comp_id);
 
-	// if (is_making_from_output) {
-		// undo_redo->add_do_method(component.ptr(), "connect_nodes", new_comp_id, 0, output_id, 0);
-	// }
 	// Remove unselected nodes from new component
 	for (Set<int>::Element *E = excluded.front(); E; E = E->next()) {
 
