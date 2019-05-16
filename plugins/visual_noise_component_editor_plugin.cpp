@@ -1510,51 +1510,51 @@ VisualAccidentalNoiseComponentEditor::VisualAccidentalNoiseComponentEditor() {
 	add_child(alert);
 
 	// Add node options
-	add_options.push_back(AddOption("Input", "Inputs", "VisualAccidentalNoiseNodeInput"));
-	add_options.push_back(AddOption("Seed", "Inputs", "VisualAccidentalNoiseNodeSeed"));
-	add_options.push_back(AddOption("Seeder", "Inputs", "VisualAccidentalNoiseNodeSeeder"));
-	add_options.push_back(AddOption("Randomize", "Inputs", "VisualAccidentalNoiseNodeRandomize"));
+	add_options.push_back(AddOption("Input", "Inputs", "VisualAccidentalNoiseNodeInput", TTR("Adds a named input for a component node.")));
+	add_options.push_back(AddOption("Seed", "Inputs", "VisualAccidentalNoiseNodeSeed", TTR("Initializes a seed value for nodes.")));
+	add_options.push_back(AddOption("Seeder", "Inputs", "VisualAccidentalNoiseNodeSeeder", TTR("Initializes a seed value for nodes based on input.")));
+	add_options.push_back(AddOption("Randomize", "Inputs", "VisualAccidentalNoiseNodeRandomize", TTR("Returns seeded random noise in range.")));
 
-	add_options.push_back(AddOption("Scalar", "Scalar", "VisualAccidentalNoiseNodeScalar"));
-	add_options.push_back(AddOption("ScalarOp", "Scalar", "VisualAccidentalNoiseNodeScalarOp"));
-	add_options.push_back(AddOption("ScalarFunc", "Scalar", "VisualAccidentalNoiseNodeScalarFunc"));
+	add_options.push_back(AddOption("Scalar", "Scalar", "VisualAccidentalNoiseNodeScalar", TTR("Provides common math constants (PI, E, 1.0, 0.0, 0.5, Sqrt2).")));
+	add_options.push_back(AddOption("ScalarOp", "Scalar", "VisualAccidentalNoiseNodeScalarOp", TTR("Performs common math operations (arithmetic, power, max/min, gain/bias).")));
+	add_options.push_back(AddOption("ScalarFunc", "Scalar", "VisualAccidentalNoiseNodeScalarFunc", TTR("Applies math functions (trigonometric, abs, sigmoid).")));
 
-	add_options.push_back(AddOption("Translate", "Transform", "VisualAccidentalNoiseNodeTranslate"));
-	add_options.push_back(AddOption("Scale", "Transform", "VisualAccidentalNoiseNodeScale"));
-	add_options.push_back(AddOption("Rotate", "Transform", "VisualAccidentalNoiseNodeRotate"));
+	add_options.push_back(AddOption("Translate", "Transform", "VisualAccidentalNoiseNodeTranslate", TTR("Translates/shifts noise function coordinates.")));
+	add_options.push_back(AddOption("Scale", "Transform", "VisualAccidentalNoiseNodeScale", TTR("Scales/resizes noise function coordinates.")));
+	add_options.push_back(AddOption("Rotate", "Transform", "VisualAccidentalNoiseNodeRotate", TTR("Rotates/shears noise function coordinates")));
 
-	add_options.push_back(AddOption("Value", "Basis", "VisualAccidentalNoiseNodeValueBasis"));
-	add_options.push_back(AddOption("Gradient", "Basis", "VisualAccidentalNoiseNodeGradientBasis"));
-	add_options.push_back(AddOption("Simplex", "Basis", "VisualAccidentalNoiseNodeSimplexBasis"));
-	add_options.push_back(AddOption("Cellular", "Basis", "VisualAccidentalNoiseNodeCellularBasis"));
+	add_options.push_back(AddOption("Value", "Basis", "VisualAccidentalNoiseNodeValueBasis", TTR("Generates value noise function.")));
+	add_options.push_back(AddOption("Gradient", "Basis", "VisualAccidentalNoiseNodeGradientBasis", TTR("Generates gradient noise function.")));
+	add_options.push_back(AddOption("Simplex", "Basis", "VisualAccidentalNoiseNodeSimplexBasis", TTR("Generates simplex noise function.")));
+	add_options.push_back(AddOption("Cellular", "Basis", "VisualAccidentalNoiseNodeCellularBasis", TTR("Generates cellular (Worley) noise function.")));
 
-	add_options.push_back(AddOption("Mix", "Filter", "VisualAccidentalNoiseNodeMix"));
-	add_options.push_back(AddOption("Select", "Filter", "VisualAccidentalNoiseNodeSelect"));
-	add_options.push_back(AddOption("Clamp", "Filter", "VisualAccidentalNoiseNodeClamp"));
+	add_options.push_back(AddOption("Mix", "Filter", "VisualAccidentalNoiseNodeMix", TTR("Linearly interpolates noise functions.")));
+	add_options.push_back(AddOption("Select", "Filter", "VisualAccidentalNoiseNodeSelect", TTR("Chooses between one function or another based on the output value of a third control function.")));
+	add_options.push_back(AddOption("Clamp", "Filter", "VisualAccidentalNoiseNodeClamp", TTR("Constrains a noise function to specified range of other functions.")));
 
-	add_options.push_back(AddOption("Gradient", "Axis", "VisualAccidentalNoiseNodeGradient"));
-	add_options.push_back(AddOption("Derivative", "Axis", "VisualAccidentalNoiseNodeDerivative"));
+	add_options.push_back(AddOption("Gradient", "Axis", "VisualAccidentalNoiseNodeGradient", TTR("Generates smooth gradient in any dimension.")));
+	add_options.push_back(AddOption("Derivative", "Axis", "VisualAccidentalNoiseNodeDerivative", TTR("Returns a derivative of a noise function.")));
 
-	add_options.push_back(AddOption("Hex", "Patterns", "VisualAccidentalNoiseNodeHex"));
+	add_options.push_back(AddOption("Hex", "Patterns", "VisualAccidentalNoiseNodeHex", TTR("Generates a hex tile or hex bump pattern.")));
 
-	add_options.push_back(AddOption("Color", "Color", "VisualAccidentalNoiseNodeColor"));
-	add_options.push_back(AddOption("ColorCombine", "Color", "VisualAccidentalNoiseNodeColorCombine"));
+	add_options.push_back(AddOption("Color", "Color", "VisualAccidentalNoiseNodeColor", TTR("Produces a constant color.")));
+	add_options.push_back(AddOption("ColorCombine", "Color", "VisualAccidentalNoiseNodeColorCombine", TTR("Combines VisualAccidentalNoiseNodeColor nodes to produces color noise function.")));
 
-	add_options.push_back(AddOption("Fractal", "Fractal", "VisualAccidentalNoiseNodeFractal"));
-	add_options.push_back(AddOption("FractalVariant", "Fractal", "VisualAccidentalNoiseNodeFractalVariant"));
-	add_options.push_back(AddOption("Layer", "Fractal", "VisualAccidentalNoiseNodeFractalLayer"));
+	add_options.push_back(AddOption("Fractal", "Fractal", "VisualAccidentalNoiseNodeFractal", TTR("Generates generic FBM function.")));
+	add_options.push_back(AddOption("FractalVariant", "Fractal", "VisualAccidentalNoiseNodeFractalVariant", TTR("Generates several specific types of fractal noise (FBM, ridged, billow).")));
+	add_options.push_back(AddOption("Layer", "Fractal", "VisualAccidentalNoiseNodeFractalLayer", TTR("Generates fractal noise from basis functions.")));
 
-	add_options.push_back(AddOption("Tiers", "Other", "VisualAccidentalNoiseNodeTiers"));
-	add_options.push_back(AddOption("Radial", "Other", "VisualAccidentalNoiseNodeRadial"));
-	add_options.push_back(AddOption("Step", "Other", "VisualAccidentalNoiseNodeStep"));
-	add_options.push_back(AddOption("CurveSection", "Other", "VisualAccidentalNoiseNodeCurveSection"));
-	add_options.push_back(AddOption("ScaleOffset", "Other", "VisualAccidentalNoiseNodeScaleOffset"));
-	add_options.push_back(AddOption("Sequence", "Other", "VisualAccidentalNoiseNodeSequence"));
+	add_options.push_back(AddOption("Tiers", "Other", "VisualAccidentalNoiseNodeTiers", TTR("Produces a number of distinct height tiers.")));
+	add_options.push_back(AddOption("Radial", "Other", "VisualAccidentalNoiseNodeRadial", TTR("Generates radial gradient function.")));
+	add_options.push_back(AddOption("Step", "Other", "VisualAccidentalNoiseNodeStep", TTR("Pushes noise function values to either end based on a threshold.")));
+	add_options.push_back(AddOption("CurveSection", "Other", "VisualAccidentalNoiseNodeCurveSection", TTR("Selects curve ranges.")));
+	add_options.push_back(AddOption("ScaleOffset", "Other", "VisualAccidentalNoiseNodeScaleOffset", TTR("Applies a scaling and translation factor to the output of its source function, as v*scale+offset.")));
+	add_options.push_back(AddOption("Sequence", "Other", "VisualAccidentalNoiseNodeSequence", TTR("Select or perform operations on a sequence of noise functions.")));
 
-	add_options.push_back(AddOption("SetVar", "Misc", "VisualAccidentalNoiseNodeSetVar"));
-	add_options.push_back(AddOption("GetVar", "Misc", "VisualAccidentalNoiseNodeGetVar"));
-	add_options.push_back(AddOption("Reroute", "Misc", "VisualAccidentalNoiseNodeReroute"));
-	add_options.push_back(AddOption("Expression", "Misc", "VisualAccidentalNoiseNodeExpression"));
+	add_options.push_back(AddOption("SetVar", "Misc", "VisualAccidentalNoiseNodeSetVar", TTR("Sets a variable noise function to be used by other nodes via GetVar (or via code).")));
+	add_options.push_back(AddOption("GetVar", "Misc", "VisualAccidentalNoiseNodeGetVar", TTR("Retrieves a variable noise functions previously set with SetVar (or via code).")));
+	add_options.push_back(AddOption("Reroute", "Misc", "VisualAccidentalNoiseNodeReroute", TTR("Rearranges node connections for convenience.")));
+	add_options.push_back(AddOption("Expression", "Misc", "VisualAccidentalNoiseNodeExpression", TTR("Evaluate noise function from expression (experimental).")));
 
 	_update_options_menu();
 
