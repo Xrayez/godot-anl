@@ -3256,12 +3256,7 @@ VisualAccidentalNoiseNodeSequence::Operator VisualAccidentalNoiseNodeSequence::g
 
 void VisualAccidentalNoiseNodeSequence::set_input_count(int p_input_count) {
 
-	input_count = CLAMP(p_input_count, 1, MAX_INPUTS);
-
-	// Can be inconvenient...
-	// if (input_count == 1) {
-		// op = OP_SELECT; // reset
-	// }
+	input_count = CLAMP(p_input_count, MIN_INPUTS, MAX_INPUTS);
 	emit_changed();
 }
 
@@ -3388,8 +3383,8 @@ void VisualAccidentalNoiseNodeSequence::_bind_methods() {
 VisualAccidentalNoiseNodeSequence::VisualAccidentalNoiseNodeSequence() {
 
 	op = OP_SELECT;
-	input_count = 1;
-	selected_input = 1;
+	input_count = MIN_INPUTS;
+	selected_input = 1; // not based on zero index
 
 	for (int i = 0; i < MAX_INPUTS; i++) {
 		inputs[i] = 0;

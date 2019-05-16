@@ -1204,6 +1204,7 @@ public:
 	Operator get_operator() const;
 
 	enum {
+		MIN_INPUTS = 2,
 		MAX_INPUTS = 32
 	};
 	void set_input_count(int p_input_count);
