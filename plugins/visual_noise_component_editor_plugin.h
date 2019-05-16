@@ -39,13 +39,31 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 	Ref<VisualAccidentalNoiseNodeComponent> component;
 	GraphEdit *graph;
 
-	MenuButton *add_node;
+	ToolButton *add_node;
 	MenuButton *add_component;
 
 	PanelContainer *error_panel;
 	Label *error_label;
 
 	UndoRedo *undo_redo;
+	Point2 saved_node_pos;
+	bool saved_node_pos_dirty;
+
+	ConfirmationDialog *members_dialog;
+	MenuButton *tools;
+
+	enum ToolsMenuOptions {
+		EXPAND_ALL,
+		COLLAPSE_ALL
+	};
+
+	Tree *members;
+	AcceptDialog *alert;
+	LineEdit *node_filter;
+	RichTextLabel *node_desc;
+
+	void _tools_menu_option(int p_idx);
+	void _show_members_dialog(bool at_mouse_pos);
 
 	CustomPropertyEditor *property_editor;
 	int editing_node;
@@ -59,11 +77,16 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 		String name;
 		String category;
 		String type;
+		String description;
 		Ref<Script> script;
-		AddOption(const String &p_name = String(), const String &p_category = String(), const String &p_type = String()) {
+		AddOption(const String &p_name = String(), const String &p_category = String(), const String &p_type = String(), const String &p_description = String()) {
 			name = p_name;
 			type = p_type;
 			category = p_category;
+			if (p_description.empty())
+				description = TTR("No description provided.");
+			else
+				description = p_description;
 		}
 	};
 
@@ -89,6 +112,7 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 	void _open_in_editor(int p_which);
 
 	void _delete_request(int);
+	void _on_nodes_delete();
 
 	void _removed_from_graph();
 
@@ -112,7 +136,19 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 	void _make_component_from_nodes(const Vector2 &p_ofs);
 
 	void _preview_select_port(int p_node, int p_port);
-	void _input(const Ref<InputEvent> p_event);
+	void _graph_gui_input(const Ref<InputEvent> p_event);
+
+	void _member_filter_changed(const String &p_text);
+	void _sbox_input(const Ref<InputEvent> &p_ie);
+	void _member_selected();
+	void _member_unselected();
+	void _member_create();
+
+	Variant get_drag_data_fw(const Point2 &p_point, Control *p_from);
+	bool can_drop_data_fw(const Point2 &p_point, const Variant &p_data, Control *p_from) const;
+	void drop_data_fw(const Point2 &p_point, const Variant &p_data, Control *p_from);
+
+	void _update_created_node(GraphNode *node);
 
 	EditorFileDialog *open_file;
 	Ref<VisualAccidentalNoiseNodeComponent> file_loaded;

@@ -264,6 +264,9 @@ bool VisualAccidentalNoiseNodeComponent::can_connect_nodes(int p_from_node, int 
 	if (p_to_port < 0 || p_to_port >= graph.nodes[p_to_node].node->get_input_port_count())
 		return false;
 
+	if (p_from_node == p_to_node)
+		return false;
+
 	VisualAccidentalNoiseNode::PortType from_port_type = graph.nodes[p_from_node].node->get_output_port_type(p_from_port);
 	VisualAccidentalNoiseNode::PortType to_port_type = graph.nodes[p_to_node].node->get_input_port_type(p_to_port);
 

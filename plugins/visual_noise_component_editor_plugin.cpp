@@ -68,21 +68,59 @@ void VisualAccidentalNoiseComponentEditor::remove_custom_type(const Ref<Script> 
 			return;
 		}
 	}
-
 	_update_options_menu();
 }
 
 void VisualAccidentalNoiseComponentEditor::_update_options_menu() {
 
+	node_desc->set_text("");
+	members_dialog->get_ok()->set_disabled(true);
+
 	String prev_category;
 
-	add_node->get_popup()->clear();
-	for (int i = 0; i < add_options.size(); i++) {
-		if (prev_category != add_options[i].category) {
-			add_node->get_popup()->add_separator(add_options[i].category);
+	members->clear();
+	TreeItem *root = members->create_item();
+	TreeItem *category = NULL;
+
+	String filter = node_filter->get_text().strip_edges();
+	bool use_filter = !filter.empty();
+
+	Vector<String> categories;
+
+	int item_count = 0;
+	bool is_first_item = true;
+
+	for (int i = 0; i < add_options.size() + 1; i++) {
+
+		if (i == add_options.size()) {
+			if (category != NULL && item_count == 0) {
+				memdelete(category);
+			}
+			break;
 		}
-		add_node->get_popup()->add_item(add_options[i].name, i);
-		prev_category = add_options[i].category;
+		if (!use_filter || add_options[i].name.findn(filter) != -1) {
+
+			if (prev_category != add_options[i].category) {
+				if (category != NULL && item_count == 0) {
+					memdelete(category);
+				}
+
+				item_count = 0;
+				category = members->create_item(root);
+				category->set_text(0, add_options[i].category);
+				category->set_selectable(0, false);
+				if (!use_filter)
+					category->set_collapsed(true);
+			}
+			if (category != NULL) {
+				++item_count;
+				TreeItem *item = members->create_item(category);
+				item->set_text(0, add_options[i].name);
+				item->set_icon(0, EditorNode::get_singleton()->get_gui_base()->get_icon("int", "EditorIcons"));
+				item->set_meta("id", i);
+			}
+			prev_category = add_options[i].category;
+		}
 	}
 
 	add_component->get_popup()->clear();
@@ -121,6 +159,22 @@ static Ref<StyleBoxEmpty> make_empty_stylebox(float p_margin_left = -1, float p_
 
 	return style;
 }
+
+// [TODO] BREAKS COMPAT (line 3)
+// void VisualAccidentalNoiseComponentEditor::_update_created_node(GraphNode *node) {
+
+// 	if (EditorSettings::get_singleton()->get("interface/theme/use_graph_node_headers")) {
+// 		Ref<StyleBoxFlat> sb = node->get_stylebox("frame", "GraphNode");
+// 		Color c = sb->get_border_color();
+// 		Color mono_color = ((c.r + c.g + c.b) / 3) < 0.7 ? Color(1.0, 1.0, 1.0) : Color(0.0, 0.0, 0.0);
+// 		mono_color.a = 0.85;
+// 		c = mono_color;
+
+// 		node->add_color_override("title_color", c);
+// 		c.a = 0.7;
+// 		node->add_color_override("close_color", c);
+// 	}
+// }
 
 const Color VisualAccidentalNoiseComponentEditor::type_color[2] = {
 	Color::html("#2bc8ff"),
@@ -397,19 +451,8 @@ void VisualAccidentalNoiseComponentEditor::_update_graph() {
 			error_label->set_text(error);
 			node->add_child(error_label);
 		}
-
-		// [TODO] BREAKS COMPAT (line 3)
-		// if (EditorSettings::get_singleton()->get("interface/theme/use_graph_node_headers")) {
-		// 	Ref<StyleBoxFlat> sb = node->get_stylebox("frame", "GraphNode");
-		// 	Color c = sb->get_border_color();
-		// 	Color mono_color = ((c.r + c.g + c.b) / 3) < 0.7 ? Color(1.0, 1.0, 1.0) : Color(0.0, 0.0, 0.0);
-		// 	mono_color.a = 0.85;
-		// 	c = mono_color;
-
-		// 	node->add_color_override("title_color", c);
-		// 	c.a = 0.7;
-		// 	node->add_color_override("close_color", c);
-		// }
+		// [TODO] BREAKS COMPAT
+		// _update_created_node(node);
 	}
 
 	for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *E = connections.front(); E; E = E->next()) {
@@ -615,7 +658,15 @@ void VisualAccidentalNoiseComponentEditor::_add_node(int p_idx) {
 		vanode->set_script(add_options[p_idx].script.get_ref_ptr());
 	}
 
-	Point2 position = (graph->get_scroll_ofs() + graph->get_size() * 0.5) / EDSCALE;
+	Point2 position = graph->get_scroll_ofs();
+
+	if (saved_node_pos_dirty) {
+		position += saved_node_pos;
+	} else {
+		position += graph->get_size() * 0.5;
+		position /= EDSCALE;
+	}
+	saved_node_pos_dirty = false;
 
 	int id_to_use = component->get_valid_node_id();
 
@@ -716,7 +767,6 @@ void VisualAccidentalNoiseComponentEditor::_connection_request(const String &p_f
 	int to = p_to.to_int();
 
 	if (!component->can_connect_nodes(from, p_from_index, to, p_to_index)) {
-		EditorNode::get_singleton()->show_warning(TTR("Unable to connect, port may be in use or connection may be invalid."));
 		return;
 	}
 
@@ -812,7 +862,7 @@ void VisualAccidentalNoiseComponentEditor::_open_in_editor(int p_which) {
 	VisualAccidentalNoiseEditor::get_singleton()->enter_editor(p_which);
 }
 
-void VisualAccidentalNoiseComponentEditor::_input(const Ref<InputEvent> p_event) {
+void VisualAccidentalNoiseComponentEditor::_graph_gui_input(const Ref<InputEvent> p_event) {
 
 	if (!graph->has_focus())
 		return;
@@ -827,6 +877,7 @@ void VisualAccidentalNoiseComponentEditor::_input(const Ref<InputEvent> p_event)
 		int mbi = mb->get_button_index();
 
 		if (mbi == BUTTON_RIGHT) {
+			// _show_members_dialog(true);
 
 			add_component->get_popup()->set_position(get_viewport()->get_mouse_position());
 			add_component->get_popup()->show_modal();
@@ -848,19 +899,86 @@ void VisualAccidentalNoiseComponentEditor::_input(const Ref<InputEvent> p_event)
 	}
 }
 
+void VisualAccidentalNoiseComponentEditor::_show_members_dialog(bool at_mouse_pos) {
+
+	members_dialog->popup();
+
+	if (at_mouse_pos) {
+		saved_node_pos_dirty = true;
+		saved_node_pos = graph->get_local_mouse_position();
+
+		Point2 gpos = Input::get_singleton()->get_mouse_position();
+		members_dialog->popup();
+		members_dialog->set_position(gpos);
+	} else {
+		saved_node_pos_dirty = false;
+		members_dialog->set_position(graph->get_global_position() + Point2(5 * EDSCALE, 65 * EDSCALE));
+	}
+
+	// keep dialog within window bounds
+	Size2 window_size = OS::get_singleton()->get_window_size();
+	Rect2 dialog_rect = members_dialog->get_global_rect();
+	if (dialog_rect.position.y + dialog_rect.size.y > window_size.y) {
+		int difference = dialog_rect.position.y + dialog_rect.size.y - window_size.y;
+		members_dialog->set_position(members_dialog->get_position() - Point2(0, difference));
+	}
+	if (dialog_rect.position.x + dialog_rect.size.x > window_size.x) {
+		int difference = dialog_rect.position.x + dialog_rect.size.x - window_size.x;
+		members_dialog->set_position(members_dialog->get_position() - Point2(difference, 0));
+	}
+
+	node_filter->call_deferred("grab_focus"); // still not visible
+	node_filter->select_all();
+}
+
+void VisualAccidentalNoiseComponentEditor::_sbox_input(const Ref<InputEvent> &p_ie) {
+	Ref<InputEventKey> ie = p_ie;
+	if (ie.is_valid() && (ie->get_scancode() == KEY_UP ||
+								 ie->get_scancode() == KEY_DOWN ||
+								 ie->get_scancode() == KEY_ENTER ||
+								 ie->get_scancode() == KEY_KP_ENTER)) {
+
+		members->call("_gui_input", ie);
+		node_filter->accept_event();
+	}
+}
+
 void VisualAccidentalNoiseComponentEditor::_notification(int p_what) {
+
+	if (p_what == NOTIFICATION_ENTER_TREE) {
+
+		node_filter->set_clear_button_enabled(true);
+
+		// collapse by default
+
+		TreeItem *category = members->get_root()->get_children();
+		while (category) {
+			category->set_collapsed(true);
+			category = category->get_next();
+		}
+	}
+
+	if (p_what == NOTIFICATION_DRAG_BEGIN) {
+		Dictionary dd = get_viewport()->gui_get_drag_data();
+		if (members->is_visible_in_tree() && dd.has("id")) {
+			members->set_drop_mode_flags(Tree::DROP_MODE_ON_ITEM);
+		}
+	} else if (p_what == NOTIFICATION_DRAG_END) {
+		members->set_drop_mode_flags(0);
+	}
 
 	if (p_what == NOTIFICATION_ENTER_TREE || p_what == NOTIFICATION_THEME_CHANGED) {
 
 		error_panel->add_style_override("panel", get_stylebox("bg", "Tree"));
 		error_label->add_color_override("font_color", get_color("error_color", "Editor"));
 
+		node_filter->set_right_icon(Control::get_icon("Search", "EditorIcons"));
+
+		tools->set_icon(EditorNode::get_singleton()->get_gui_base()->get_icon("Tools", "EditorIcons"));
+
 		if (p_what == NOTIFICATION_THEME_CHANGED && is_visible_in_tree()) {
 			_update_graph();
 		}
-	}
-
-	if (p_what == NOTIFICATION_PROCESS) {
 	}
 }
 
@@ -960,6 +1078,161 @@ void VisualAccidentalNoiseComponentEditor::_duplicate_nodes() {
 			} else {
 				gn->set_selected(false);
 			}
+		}
+	}
+}
+
+void VisualAccidentalNoiseComponentEditor::_on_nodes_delete() {
+
+	List<int> to_erase;
+
+	for (int i = 0; i < graph->get_child_count(); i++) {
+		GraphNode *gn = Object::cast_to<GraphNode>(graph->get_child(i));
+		if (gn) {
+			if (gn->is_selected() && gn->is_close_button_visible()) {
+				to_erase.push_back(gn->get_name().operator String().to_int());
+			}
+		}
+	}
+
+	if (to_erase.empty())
+		return;
+
+	undo_redo->create_action(TTR("Delete Nodes"));
+
+	for (List<int>::Element *F = to_erase.front(); F; F = F->next()) {
+		undo_redo->add_do_method(component.ptr(), "remove_node", F->get());
+		undo_redo->add_undo_method(component.ptr(), "add_node", component->get_node(F->get()), component->get_node_position(F->get()), F->get());
+	}
+
+	List<VisualAccidentalNoiseNodeComponent::Connection> conns;
+	component->get_node_connections(&conns);
+
+	List<VisualAccidentalNoiseNodeComponent::Connection> used_conns;
+	for (List<int>::Element *F = to_erase.front(); F; F = F->next()) {
+		for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *E = conns.front(); E; E = E->next()) {
+			if (E->get().from_node == F->get() || E->get().to_node == F->get()) {
+
+				bool cancel = false;
+				for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *R = used_conns.front(); R; R = R->next()) {
+					if (R->get().from_node == E->get().from_node && R->get().from_port == E->get().from_port && R->get().to_node == E->get().to_node && R->get().to_port == E->get().to_port) {
+						cancel = true; // to avoid ERR_ALREADY_EXISTS warning
+						break;
+					}
+				}
+				if (!cancel) {
+					undo_redo->add_undo_method(component.ptr(), "connect_nodes", E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+					used_conns.push_back(E->get());
+				}
+			}
+		}
+	}
+
+	undo_redo->add_do_method(this, "_update_graph");
+	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->commit_action();
+}
+
+void VisualAccidentalNoiseComponentEditor::_member_filter_changed(const String &p_text) {
+	_update_options_menu();
+}
+
+void VisualAccidentalNoiseComponentEditor::_member_selected() {
+	TreeItem *item = members->get_selected();
+
+	if (item != NULL && item->has_meta("id")) {
+		members_dialog->get_ok()->set_disabled(false);
+		node_desc->set_text(add_options[item->get_meta("id")].description);
+	} else {
+		members_dialog->get_ok()->set_disabled(true);
+		node_desc->set_text("");
+	}
+}
+
+void VisualAccidentalNoiseComponentEditor::_member_unselected() {
+}
+
+void VisualAccidentalNoiseComponentEditor::_member_create() {
+	TreeItem *item = members->get_selected();
+	if (item != NULL && item->has_meta("id")) {
+		int idx = members->get_selected()->get_meta("id");
+		_add_node(idx);
+		members_dialog->hide();
+	}
+}
+
+void VisualAccidentalNoiseComponentEditor::_tools_menu_option(int p_idx) {
+
+	TreeItem *category = members->get_root()->get_children();
+
+	switch (p_idx) {
+		case EXPAND_ALL:
+
+			while (category) {
+				category->set_collapsed(false);
+				category = category->get_next();
+			}
+			break;
+
+		case COLLAPSE_ALL:
+
+			while (category) {
+				category->set_collapsed(true);
+				category = category->get_next();
+			}
+			break;
+		default:
+			break;
+	}
+}
+
+Variant VisualAccidentalNoiseComponentEditor::get_drag_data_fw(const Point2 &p_point, Control *p_from) {
+
+	if (p_from == members) {
+		TreeItem *it = members->get_item_at_position(p_point);
+		if (!it)
+			return Variant();
+		if (!it->has_meta("id"))
+			return Variant();
+
+		int id = it->get_meta("id");
+		AddOption op = add_options[id];
+
+		Dictionary d;
+		d["id"] = id;
+
+		Label *label = memnew(Label);
+		label->set_text(it->get_text(0));
+		set_drag_preview(label);
+		return d;
+	}
+	return Variant();
+}
+
+bool VisualAccidentalNoiseComponentEditor::can_drop_data_fw(const Point2 &p_point, const Variant &p_data, Control *p_from) const {
+
+	if (p_from == graph) {
+
+		Dictionary d = p_data;
+
+		if (d.has("id")) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void VisualAccidentalNoiseComponentEditor::drop_data_fw(const Point2 &p_point, const Variant &p_data, Control *p_from) {
+
+	if (p_from == graph) {
+
+		Dictionary d = p_data;
+
+		if (d.has("id")) {
+			int idx = d["id"];
+			saved_node_pos = p_point;
+			saved_node_pos_dirty = true;
+			_add_node(idx);
 		}
 	}
 }
@@ -1090,6 +1363,7 @@ void VisualAccidentalNoiseComponentEditor::_bind_methods() {
 	ClassDB::bind_method("_input_renamed", &VisualAccidentalNoiseComponentEditor::_input_renamed);
 	ClassDB::bind_method("_input_renamed_focus_out", &VisualAccidentalNoiseComponentEditor::_input_renamed_focus_out);
 	ClassDB::bind_method("_update_graph", &VisualAccidentalNoiseComponentEditor::_update_graph);
+	ClassDB::bind_method("_update_options_menu", &VisualAccidentalNoiseComponentEditor::_update_options_menu);
 	ClassDB::bind_method("_add_node", &VisualAccidentalNoiseComponentEditor::_add_node);
 	ClassDB::bind_method("_add_component", &VisualAccidentalNoiseComponentEditor::_add_component);
 	ClassDB::bind_method("_node_dragged", &VisualAccidentalNoiseComponentEditor::_node_dragged);
@@ -1099,6 +1373,7 @@ void VisualAccidentalNoiseComponentEditor::_bind_methods() {
 	ClassDB::bind_method("_open_in_editor", &VisualAccidentalNoiseComponentEditor::_open_in_editor);
 	ClassDB::bind_method("_scroll_changed", &VisualAccidentalNoiseComponentEditor::_scroll_changed);
 	ClassDB::bind_method("_delete_request", &VisualAccidentalNoiseComponentEditor::_delete_request);
+	ClassDB::bind_method("_on_nodes_delete", &VisualAccidentalNoiseComponentEditor::_on_nodes_delete);
 	ClassDB::bind_method("_node_changed", &VisualAccidentalNoiseComponentEditor::_node_changed);
 	ClassDB::bind_method("_edit_port_default_input", &VisualAccidentalNoiseComponentEditor::_edit_port_default_input);
 	ClassDB::bind_method("_port_edited", &VisualAccidentalNoiseComponentEditor::_port_edited);
@@ -1108,7 +1383,19 @@ void VisualAccidentalNoiseComponentEditor::_bind_methods() {
 	ClassDB::bind_method("_duplicate_nodes", &VisualAccidentalNoiseComponentEditor::_duplicate_nodes);
 	ClassDB::bind_method("_preview_select_port", &VisualAccidentalNoiseComponentEditor::_preview_select_port);
 	ClassDB::bind_method("_file_opened", &VisualAccidentalNoiseComponentEditor::_file_opened);
-	ClassDB::bind_method("_input", &VisualAccidentalNoiseComponentEditor::_input);
+	ClassDB::bind_method("_graph_gui_input", &VisualAccidentalNoiseComponentEditor::_graph_gui_input);
+
+	ClassDB::bind_method(D_METHOD("get_drag_data_fw"), &VisualAccidentalNoiseComponentEditor::get_drag_data_fw);
+	ClassDB::bind_method(D_METHOD("can_drop_data_fw"), &VisualAccidentalNoiseComponentEditor::can_drop_data_fw);
+	ClassDB::bind_method(D_METHOD("drop_data_fw"), &VisualAccidentalNoiseComponentEditor::drop_data_fw);
+
+	ClassDB::bind_method("_tools_menu_option", &VisualAccidentalNoiseComponentEditor::_tools_menu_option);
+	ClassDB::bind_method("_show_members_dialog", &VisualAccidentalNoiseComponentEditor::_show_members_dialog);
+	ClassDB::bind_method("_sbox_input", &VisualAccidentalNoiseComponentEditor::_sbox_input);
+	ClassDB::bind_method("_member_filter_changed", &VisualAccidentalNoiseComponentEditor::_member_filter_changed);
+	ClassDB::bind_method("_member_selected", &VisualAccidentalNoiseComponentEditor::_member_selected);
+	ClassDB::bind_method("_member_unselected", &VisualAccidentalNoiseComponentEditor::_member_unselected);
+	ClassDB::bind_method("_member_create", &VisualAccidentalNoiseComponentEditor::_member_create);
 }
 
 VisualAccidentalNoiseComponentEditor *VisualAccidentalNoiseComponentEditor::singleton = NULL;
@@ -1118,8 +1405,12 @@ VisualAccidentalNoiseComponentEditor::VisualAccidentalNoiseComponentEditor() {
 	singleton = this;
 	updating = false;
 
+	saved_node_pos_dirty = false;
+	saved_node_pos = Point2(0, 0);
+
 	graph = memnew(GraphEdit);
 	add_child(graph);
+	graph->set_drag_forwarding(this);
 
 	graph->add_valid_right_disconnect_type(VisualAccidentalNoiseNode::PORT_TYPE_SCALAR);
 	graph->add_valid_right_disconnect_type(VisualAccidentalNoiseNode::PORT_TYPE_INDEX);
@@ -1131,6 +1422,8 @@ VisualAccidentalNoiseComponentEditor::VisualAccidentalNoiseComponentEditor() {
 	graph->connect("node_selected", this, "_node_selected");
 	graph->connect("scroll_offset_changed", this, "_scroll_changed");
 	graph->connect("duplicate_nodes_request", this, "_duplicate_nodes");
+	graph->connect("delete_nodes_request", this, "_on_nodes_delete");
+	graph->connect("gui_input", this, "_graph_gui_input");
 
 	graph->add_valid_connection_type(VisualAccidentalNoiseNode::PORT_TYPE_SCALAR, VisualAccidentalNoiseNode::PORT_TYPE_SCALAR);
 	graph->add_valid_connection_type(VisualAccidentalNoiseNode::PORT_TYPE_SCALAR, VisualAccidentalNoiseNode::PORT_TYPE_SCALAR);
@@ -1139,17 +1432,82 @@ VisualAccidentalNoiseComponentEditor::VisualAccidentalNoiseComponentEditor() {
 	graph->get_zoom_hbox()->add_child(vs);
 	graph->get_zoom_hbox()->move_child(vs, 0);
 
-	add_node = memnew(MenuButton);
+	add_node = memnew(ToolButton);
 	graph->get_zoom_hbox()->add_child(add_node);
 	add_node->set_text(TTR("Add Node.."));
 	graph->get_zoom_hbox()->move_child(add_node, 0);
-	add_node->get_popup()->connect("id_pressed", this, "_add_node");
+	add_node->connect("pressed", this, "_show_members_dialog", varray(false));
 
 	add_component = memnew(MenuButton);
 	graph->get_zoom_hbox()->add_child(add_component);
 	add_component->set_text(TTR("Add Component.."));
 	graph->get_zoom_hbox()->move_child(add_component, 1);
 	add_component->get_popup()->connect("id_pressed", this, "_add_component");
+
+	///////////////////////////////////////
+	// NOISE NODES TREE
+	///////////////////////////////////////
+
+	VBoxContainer *members_vb = memnew(VBoxContainer);
+	members_vb->set_v_size_flags(SIZE_EXPAND_FILL);
+
+	HBoxContainer *filter_hb = memnew(HBoxContainer);
+	members_vb->add_child(filter_hb);
+
+	node_filter = memnew(LineEdit);
+	filter_hb->add_child(node_filter);
+	node_filter->connect("text_changed", this, "_member_filter_changed");
+	node_filter->connect("gui_input", this, "_sbox_input");
+	node_filter->set_h_size_flags(SIZE_EXPAND_FILL);
+	node_filter->set_placeholder(TTR("Search"));
+
+	tools = memnew(MenuButton);
+	filter_hb->add_child(tools);
+	tools->set_tooltip(TTR("Options"));
+	tools->get_popup()->connect("id_pressed", this, "_tools_menu_option");
+	tools->get_popup()->add_item(TTR("Expand All"), EXPAND_ALL);
+	tools->get_popup()->add_item(TTR("Collapse All"), COLLAPSE_ALL);
+
+	members = memnew(Tree);
+	members_vb->add_child(members);
+	members->set_drag_forwarding(this);
+	members->set_h_size_flags(SIZE_EXPAND_FILL);
+	members->set_v_size_flags(SIZE_EXPAND_FILL);
+	members->set_hide_root(true);
+	members->set_allow_reselect(true);
+	members->set_hide_folding(false);
+	members->set_custom_minimum_size(Size2(180 * EDSCALE, 200 * EDSCALE));
+	members->connect("item_activated", this, "_member_create");
+	members->connect("item_selected", this, "_member_selected");
+	members->connect("nothing_selected", this, "_member_unselected");
+
+	Label *desc_label = memnew(Label);
+	members_vb->add_child(desc_label);
+	desc_label->set_text(TTR("Description:"));
+
+	node_desc = memnew(RichTextLabel);
+	members_vb->add_child(node_desc);
+	node_desc->set_h_size_flags(SIZE_EXPAND_FILL);
+	node_desc->set_v_size_flags(SIZE_FILL);
+	node_desc->set_custom_minimum_size(Size2(0, 70 * EDSCALE));
+
+	members_dialog = memnew(ConfirmationDialog);
+	members_dialog->set_title(TTR("Create Noise Node"));
+	members_dialog->add_child(members_vb);
+	members_dialog->get_ok()->set_text(TTR("Create"));
+	members_dialog->get_ok()->connect("pressed", this, "_member_create");
+	members_dialog->get_ok()->set_disabled(true);
+	members_dialog->set_resizable(true);
+	members_dialog->set_as_minsize();
+	add_child(members_dialog);
+
+	alert = memnew(AcceptDialog);
+	alert->set_as_minsize();
+	alert->get_label()->set_autowrap(true);
+	alert->get_label()->set_align(Label::ALIGN_CENTER);
+	alert->get_label()->set_valign(Label::VALIGN_CENTER);
+	alert->get_label()->set_custom_minimum_size(Size2(400, 60) * EDSCALE);
+	add_child(alert);
 
 	// Add node options
 	add_options.push_back(AddOption("Input", "Inputs", "VisualAccidentalNoiseNodeInput"));
