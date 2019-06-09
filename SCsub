@@ -18,9 +18,6 @@ env_module.Append(CPPPATH=thirdparty_dirs)
 if (not env.msvc):
     env_module.Append(CXXFLAGS=['-std=c++11'])
 
-if env['target'] == 'release':
-    env_module.Append(CPPFLAGS=['-O3'])
-
 # ANL sources
 env_thirdparty = env_module.Clone()
 for d in thirdparty_dirs:
