@@ -880,20 +880,6 @@ void VisualAccidentalNoiseComponentEditor::_graph_gui_input(const Ref<InputEvent
 
 			add_component->get_popup()->set_position(get_viewport()->get_mouse_position());
 			add_component->get_popup()->show_modal();
-
-		} else if (mbi == BUTTON_LEFT) {
-
-			Ref<VisualAccidentalNoise> noise = VisualAccidentalNoiseEditor::get_singleton()->get_noise();
-			ERR_FAIL_COND(noise.is_null());
-
-			Ref<VisualAccidentalNoiseNodeComponent> root_comp = noise->get_component();
-			ERR_FAIL_COND(root_comp.is_null());
-
-			if (component == root_comp) {
-				EditorNode::get_singleton()->push_item(noise.ptr(), "", true);
-			} else {
-				EditorNode::get_singleton()->push_item(component.ptr(), "", true);
-			}
 		}
 	}
 }

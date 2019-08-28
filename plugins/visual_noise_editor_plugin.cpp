@@ -102,6 +102,7 @@ void VisualAccidentalNoiseEditor::_update_path() {
 	b->set_pressed(true);
 	b->set_focus_mode(FOCUS_NONE);
 	b->connect("pressed", this, "_path_button_pressed", varray(-1));
+	b->set_icon(get_icon("Edit", "EditorIcons"));
 	path_hb->add_child(b);
 
 	Ref<VisualAccidentalNoiseNodeComponent> comp;
@@ -161,7 +162,14 @@ void VisualAccidentalNoiseEditor::edit_path(const Vector<int> &p_path) {
 }
 
 void VisualAccidentalNoiseEditor::_path_button_pressed(int p_path) {
+	
+	if (p_path == -1) {
+		// Got root component, push edited noise instead
+		Ref<VisualAccidentalNoise> noise = VisualAccidentalNoiseEditor::get_singleton()->get_noise();
+		ERR_FAIL_COND(noise.is_null());
 
+		EditorNode::get_singleton()->push_item(noise.ptr(), "", true);
+	}
 	edited_path.clear();
 
 	for (int i = 0; i <= p_path; i++) {
