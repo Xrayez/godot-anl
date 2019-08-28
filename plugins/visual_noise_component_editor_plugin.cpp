@@ -967,6 +967,9 @@ void VisualAccidentalNoiseComponentEditor::_notification(int p_what) {
 		node_filter->set_right_icon(Control::get_icon("Search", "EditorIcons"));
 
 		tools->set_icon(EditorNode::get_singleton()->get_gui_base()->get_icon("Tools", "EditorIcons"));
+		
+		add_node->set_icon(get_icon("Add", "EditorIcons"));
+		add_component->set_icon(get_icon("Add", "EditorIcons"));
 
 		if (p_what == NOTIFICATION_THEME_CHANGED && is_visible_in_tree()) {
 			_update_graph();
