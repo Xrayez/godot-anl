@@ -158,9 +158,9 @@ class VisualAccidentalNoiseComponentEditor : public VBoxContainer {
 
 	enum {
 		MENU_CREATE_NEW,
-		MENU_LOAD_FILE,
-		MENU_DUPLICATE_FILE,
-		MENU_LOAD_FILE_CONFIRM,
+		MENU_LOAD,
+		MENU_LOAD_UNIQUE,
+		MENU_LOAD_CONFIRM,
 		MENU_MAKE_FROM_NODES,
 	};
 

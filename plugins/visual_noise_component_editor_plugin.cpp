@@ -89,6 +89,8 @@ void VisualAccidentalNoiseComponentEditor::_update_options_menu() {
 	int item_count = 0;
 	bool is_first_item = true;
 
+	Control *gui_base = EditorNode::get_singleton()->get_gui_base();
+
 	for (int i = 0; i < add_options.size() + 1; i++) {
 
 		if (i == add_options.size()) {
@@ -115,20 +117,25 @@ void VisualAccidentalNoiseComponentEditor::_update_options_menu() {
 				++item_count;
 				TreeItem *item = members->create_item(category);
 				item->set_text(0, add_options[i].name);
-				item->set_icon(0, EditorNode::get_singleton()->get_gui_base()->get_icon("int", "EditorIcons"));
+				item->set_icon(0, gui_base->get_icon("int", "EditorIcons"));
 				item->set_meta("id", i);
 			}
 			prev_category = add_options[i].category;
 		}
 	}
+	PopupMenu *menu = add_component->get_popup();
+	menu->clear();
+	menu->add_item(TTR("New Component"), MENU_CREATE_NEW);
+	menu->add_separator();
+	menu->add_item(TTR("Load Component..."), MENU_LOAD);
+	menu->add_item(TTR("Load Component (Unique)..."), MENU_LOAD_UNIQUE);
+	menu->add_separator();
+	menu->add_item(TTR("Make Component From Node(s)"), MENU_MAKE_FROM_NODES);
 
-	add_component->get_popup()->clear();
-	add_component->get_popup()->add_item(TTR("New Component"), MENU_CREATE_NEW);
-	add_component->get_popup()->add_separator();
-	add_component->get_popup()->add_item(TTR("Load Component..."), MENU_LOAD_FILE);
-	add_component->get_popup()->add_item(TTR("Duplicate Component..."), MENU_DUPLICATE_FILE);
-	add_component->get_popup()->add_separator();
-	add_component->get_popup()->add_item(TTR("Make Component From Node(s)"), MENU_MAKE_FROM_NODES);
+	menu->set_item_icon(menu->get_item_index(MENU_CREATE_NEW), gui_base->get_icon("New", "EditorIcons"));
+	menu->set_item_icon(menu->get_item_index(MENU_LOAD), gui_base->get_icon("Load", "EditorIcons"));
+	menu->set_item_icon(menu->get_item_index(MENU_LOAD_UNIQUE), gui_base->get_icon("Load", "EditorIcons"));
+	menu->set_item_icon(menu->get_item_index(MENU_MAKE_FROM_NODES), gui_base->get_icon("ReparentToNewNode", "EditorIcons"));
 }
 
 Size2 VisualAccidentalNoiseComponentEditor::get_minimum_size() const {
@@ -554,7 +561,7 @@ void VisualAccidentalNoiseComponentEditor::_file_opened(const String &p_file) {
 
 	file_loaded = ResourceLoader::load(p_file);
 	if (file_loaded.is_valid()) {
-		_add_component(MENU_LOAD_FILE_CONFIRM);
+		_add_component(MENU_LOAD_CONFIRM);
 	}
 }
 
@@ -702,18 +709,18 @@ void VisualAccidentalNoiseComponentEditor::_add_component(int p_option) {
 
 		} break;
 
-		case MENU_LOAD_FILE: {
+		case MENU_LOAD: {
 			_popup_file_load();
 
 		} break;
 
-		case MENU_DUPLICATE_FILE: {
+		case MENU_LOAD_UNIQUE: {
 			load_file_duplicated = true;
 			_popup_file_load();
 
 		} break;
 
-		case MENU_LOAD_FILE_CONFIRM: {
+		case MENU_LOAD_CONFIRM: {
 
 			if (load_file_duplicated) {
 				comp = file_loaded->duplicate(true);
