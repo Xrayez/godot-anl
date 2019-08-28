@@ -57,8 +57,8 @@ public:
 
 	void edit(const Ref<VisualAccidentalNoise> &p_visual_anl_noise);
 
-	void _connect_changed(const Ref<VisualAccidentalNoise> &p_visual_anl_noise);
-	void _disconnect_changed(const Ref<VisualAccidentalNoise> &p_visual_anl_noise);
+	void _connect_changed(Ref<VisualAccidentalNoise> p_visual_anl_noise);
+	void _disconnect_changed(Ref<VisualAccidentalNoise> p_visual_anl_noise);
 	void _on_changed(Ref<VisualAccidentalNoise> p_visual_anl_noise);
 
 	void save_external_data();

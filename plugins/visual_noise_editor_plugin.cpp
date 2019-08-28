@@ -12,51 +12,38 @@
 
 ///////////////////////////////////
 
-void VisualAccidentalNoiseEditor::edit(const Ref<VisualAccidentalNoise> &p_visual_anl_noise) {
-
-	if (visual_anl_noise == p_visual_anl_noise) {
-		return;
-	} else {
-		hide();
-		component_editor->hide();
-	}
+void VisualAccidentalNoiseEditor::edit(const Ref<VisualAccidentalNoise> &p_to_edit) {
 
 	if (visual_anl_noise.is_valid()) {
-		_disconnect_changed(p_visual_anl_noise);
+		_disconnect_changed(visual_anl_noise);
 	}
-
-	if (p_visual_anl_noise.is_valid()) {
-		visual_anl_noise = p_visual_anl_noise;
-
-		_connect_changed(p_visual_anl_noise);
+	if (p_to_edit.is_valid()) {
+		visual_anl_noise = p_to_edit;
+		_connect_changed(visual_anl_noise);
 		edit_component();
 
 	} else {
 		visual_anl_noise.unref();
 	}
+}
 
-	if (visual_anl_noise.is_null()) {
-		hide();
+void VisualAccidentalNoiseEditor::_connect_changed(Ref<VisualAccidentalNoise> p_visual_anl_noise) {
+
+	if (!p_visual_anl_noise->is_connected("component_changed", this, "_on_component_changed")) {
+		p_visual_anl_noise->connect("component_changed", this, "_on_component_changed");
+	}
+	if (!p_visual_anl_noise->is_connected("changed", this, "_on_changed")) {
+		p_visual_anl_noise->connect("changed", this, "_on_changed", varray(p_visual_anl_noise), CONNECT_DEFERRED);
 	}
 }
 
-void VisualAccidentalNoiseEditor::_connect_changed(const Ref<VisualAccidentalNoise> &p_visual_anl_noise) {
+void VisualAccidentalNoiseEditor::_disconnect_changed(Ref<VisualAccidentalNoise> p_visual_anl_noise) {
 
-	if (!visual_anl_noise->is_connected("component_changed", this, "_on_component_changed")) {
-		visual_anl_noise->connect("component_changed", this, "_on_component_changed");
+	if (p_visual_anl_noise->is_connected("component_changed", this, "_on_component_changed")) {
+		p_visual_anl_noise->disconnect("component_changed", this, "_on_component_changed");
 	}
-	if (!visual_anl_noise->is_connected("changed", this, "_on_changed")) {
-		visual_anl_noise->connect("changed", this, "_on_changed", varray(p_visual_anl_noise), CONNECT_DEFERRED);
-	}
-}
-
-void VisualAccidentalNoiseEditor::_disconnect_changed(const Ref<VisualAccidentalNoise> &p_visual_anl_noise) {
-
-	if (visual_anl_noise->is_connected("component_changed", this, "_on_component_changed")) {
-		visual_anl_noise->disconnect("component_changed", this, "_on_component_changed");
-	}
-	if (visual_anl_noise->is_connected("changed", this, "_on_changed")) {
-		visual_anl_noise->disconnect("changed", this, "_on_changed");
+	if (p_visual_anl_noise->is_connected("changed", this, "_on_changed")) {
+		p_visual_anl_noise->disconnect("changed", this, "_on_changed");
 	}
 }
 
@@ -196,10 +183,8 @@ void VisualAccidentalNoiseEditor::edit_component(const Ref<VisualAccidentalNoise
 
 		if (component_editor->can_edit(component)) {
 			component_editor->edit(component);
-			component_editor->show();
 		} else {
 			component_editor->edit(Ref<VisualAccidentalNoiseNode>());
-			component_editor->hide();
 		}
 	}
 }
@@ -319,6 +304,14 @@ void VisualAccidentalNoiseEditorPlugin::make_visible(bool p_visible) {
 		visual_anl_noise_editor->set_process(false);
 		visual_anl_noise_editor->set_process_input(false);
 		VisualAccidentalNoiseComponentEditor::get_singleton()->set_process_input(false);
+	}
+	Ref<VisualAccidentalNoiseNodeComponent> comp = VisualAccidentalNoiseEditor::get_singleton()->get_noise()->get_component();
+	VisualAccidentalNoiseComponentEditor *component_editor = VisualAccidentalNoiseComponentEditor::get_singleton();
+
+	if (comp.is_valid()) {
+		component_editor->show();
+	} else {
+		component_editor->hide();
 	}
 }
 

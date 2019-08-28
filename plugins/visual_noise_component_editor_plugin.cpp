@@ -22,13 +22,12 @@ bool VisualAccidentalNoiseComponentEditor::can_edit(const Ref<VisualAccidentalNo
 
 void VisualAccidentalNoiseComponentEditor::edit(const Ref<VisualAccidentalNoiseNodeComponent> &p_component) {
 
+	if (component == p_component) {
+		return;
+	}
 	if (p_component.is_valid()) {
-
 		component = p_component;
 		_update_graph();
-
-	} else {
-		hide();
 	}
 }
 
