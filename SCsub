@@ -22,7 +22,12 @@ if (not env.msvc):
 env_thirdparty = env_module.Clone()
 for d in thirdparty_dirs:
     env_thirdparty.add_source_files(env.modules_sources, d + '*.cpp')
+    
+# Suppress warnings
 env_thirdparty.disable_warnings()
+if env.msvc:
+    suppress_multiple_copy_constructors = '/wd4521'
+    env_thirdparty.Append(CXXFLAGS=[suppress_multiple_copy_constructors])
 
 # Optional, the following defines can be included from command line like so:
 # scons define=ANL_LONG_PERIOD_HASHING
