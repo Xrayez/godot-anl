@@ -20,10 +20,10 @@
 	</methods>
 	<members>
 		<member name="clamp_high" type="float" setter="set_clamp_high" getter="get_clamp_high">
-			Sets the maximum value by which the noise is clamped when generated. Default value: [code]1.0[/code].
+			Sets the maximum value by which the noise is clamped when generated.
 		</member>
 		<member name="clamp_low" type="float" setter="set_clamp_low" getter="get_clamp_low">
-			Sets the minimum value by which the noise is clamped when generated. Default value: [code]0.0[/code].
+			Sets the minimum value by which the noise is clamped when generated.
 		</member>
 		<member name="clamp_output" type="bool" setter="set_clamping_enabled" getter="is_clamping_enabled">
 			If set to [code]true[/code], the last instruction index generated from visual noise nodes will get clamped by [member clamp_low] and [member clamp_high].

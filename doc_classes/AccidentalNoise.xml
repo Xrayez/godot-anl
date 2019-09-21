@@ -1257,15 +1257,12 @@
 	<members>
 		<member name="bumpmap_light" type="Vector3" setter="set_bumpmap_light" getter="get_bumpmap_light">
 			Controls light direction.
-			Default value: [code]Vector3(1.0, 1.0, 1.0)[/code].
 		</member>
 		<member name="bumpmap_spacing" type="float" setter="set_bumpmap_spacing" getter="get_bumpmap_spacing">
 			Controls how far away the noise is extruded.
-			Default value: [code]1.0[/code].
 		</member>
 		<member name="bumpmap_wrapped" type="bool" setter="set_bumpmap_wrapped" getter="is_bumpmap_wrapped">
 			If set to [code]true[/code], the bump image will be wrapped which is useful for generating seamless bump maps.
-			Default value: [code]true[/code].
 		</member>
 		<member name="expression" type="String" setter="set_expression" getter="get_expression">
 			If set, this will override previously created instruction indexes and force to evaluate noise from the expression.
@@ -1285,20 +1282,16 @@
 		</member>
 		<member name="normalmap_normalized" type="bool" setter="set_normalmap_normalized" getter="is_normalmap_normalized">
 			If set to [code]true[/code], normalizes normal map output.
-			Default value: [code]true[/code].
 		</member>
 		<member name="normalmap_spacing" type="float" setter="set_normalmap_spacing" getter="get_normalmap_spacing">
 			Controls how far away the noise is extruded.
-			Default value: [code]1.0[/code].
 		</member>
 		<member name="normalmap_wrapped" type="bool" setter="set_normalmap_wrapped" getter="is_normalmap_wrapped">
 			If set to [code]true[/code], the bump image will be wrapped which is useful for generating seamless normal maps.
-			Default value: [code]true[/code].
 		</member>
 		<member name="ranges" type="AABB" setter="set_ranges" getter="get_ranges">
 			Controls function's noise mapping ranges to image. Can be set to simulate scale.
 			For 2D, set as [code]AABB(Vector3(-1, -1, 0), Vector3(2, 2, 0))[/code], which corresponds to [code](-1,-1,1,1)[/code].
-			Default value: [code]AABB(Vector3(-1, -1, -1), Vector3(2, 2, 2))[/code].
 		</member>
 	</members>
 	<constants>
