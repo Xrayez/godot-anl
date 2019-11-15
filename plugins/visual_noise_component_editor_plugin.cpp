@@ -1791,8 +1791,7 @@ void VisualAccidentalNoiseNodePortPreview::_notification(int p_what) {
 		Size2 map_size = tex_size * quality;
 
 		if ((map_size.x * map_size.y) <= 0.0) {
-			ERR_EXPLAIN("Could not generate noise preview, please configure preview quality in editor settings.");
-			ERR_FAIL();
+			ERR_FAIL_MSG("Could not generate noise preview, please configure preview quality in editor settings.");
 		}
 
 		Ref<VisualAccidentalNoiseNodeOutput> output = vanode;

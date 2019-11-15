@@ -1004,8 +1004,7 @@ Vector<Ref<Image> > AccidentalNoise::_map_to_image_3d(int p_width, int p_height,
 
 		case FORMAT_NORMALMAP:
 		case FORMAT_BUMPMAP: {
-			ERR_EXPLAIN("Normal/bump 3D image mapping is not supported.");
-			ERR_FAIL_V(Vector<Ref<Image> >());
+			ERR_FAIL_V_MSG(Vector<Ref<Image> >(), "Normal/bump 3D image mapping is not supported.");
 		} break;
 
 		case FORMAT_TEXTURE: {

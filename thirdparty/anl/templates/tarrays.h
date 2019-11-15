@@ -838,16 +838,14 @@ public:
 
     void set(int x, int y, int z, T val)
     {
-        ERR_EXPLAIN("Array index out of range");
-        ERR_FAIL_COND(x>=m_width || y>=m_height || z>=m_depth);
+        ERR_FAIL_COND_MSG(x>=m_width || y>=m_height || z>=m_depth, "Array index out of range");
 
         m_array[z*(m_width*m_height)+y*m_width+x]=val;
     }
 
     T get(int x, int y, int z)
     {
-        ERR_EXPLAIN("Array index out of range");
-        ERR_FAIL_COND(x>=m_width || y>=m_height || z>=m_depth);
+        ERR_FAIL_COND_MSG(x>=m_width || y>=m_height || z>=m_depth, "Array index out of range");
 
         return m_array[z*(m_width*m_height)+y*m_width+x];
     }

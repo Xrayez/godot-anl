@@ -295,9 +295,7 @@ Error VisualAccidentalNoiseNodeComponent::connect_nodes(int p_from_node, int p_f
 	VisualAccidentalNoiseNode::PortType to_port_type = graph.nodes[p_to_node].node->get_input_port_type(p_to_port);
 
 	if (MAX(0, from_port_type - 1) != (MAX(0, to_port_type - 1))) {
-		ERR_EXPLAIN("Incompatible port types (scalar/index");
-		ERR_FAIL_V(ERR_INVALID_PARAMETER)
-		return ERR_INVALID_PARAMETER;
+		ERR_FAIL_V_MSG(ERR_INVALID_PARAMETER, "Incompatible port types (scalar/index)");
 	}
 
 	for (List<Connection>::Element *E = graph.connections.front(); E; E = E->next()) {
