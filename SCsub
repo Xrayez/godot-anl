@@ -12,12 +12,6 @@ thirdparty_dirs = [
 ]
 env_module.Append(CPPPATH=thirdparty_dirs)
 
-# Configure
-
-# Upstream uses C++11
-if (not env.msvc):
-    env_module.Append(CXXFLAGS=['-std=c++11'])
-
 # ANL sources
 env_thirdparty = env_module.Clone()
 for d in thirdparty_dirs:
