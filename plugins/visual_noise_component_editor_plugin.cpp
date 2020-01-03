@@ -7,6 +7,7 @@
 #include "core/os/keyboard.h"
 #include "core/project_settings.h"
 #include "editor/editor_properties.h"
+#include "editor/editor_scale.h"
 #include "scene/gui/menu_button.h"
 #include "scene/gui/panel.h"
 #include "scene/main/viewport.h"
@@ -967,7 +968,7 @@ void VisualAccidentalNoiseComponentEditor::_notification(int p_what) {
 		node_filter->set_right_icon(Control::get_icon("Search", "EditorIcons"));
 
 		tools->set_icon(EditorNode::get_singleton()->get_gui_base()->get_icon("Tools", "EditorIcons"));
-		
+
 		add_node->set_icon(get_icon("Add", "EditorIcons"));
 		add_component->set_icon(get_icon("Add", "EditorIcons"));
 
