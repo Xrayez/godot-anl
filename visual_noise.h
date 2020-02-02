@@ -87,11 +87,11 @@ class VisualAccidentalNoiseNode : public Resource {
 
 	Map<int, Variant> default_input_values;
 
-	Array _get_default_input_values() const;
-	void _set_default_input_values(const Array &p_values);
-
 protected:
 	Variant output_value;
+	
+	Array get_default_input_values() const;
+	void set_default_input_values(const Array &p_values);
 
 	static void _bind_methods();
 
