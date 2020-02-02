@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="VisualAccidentalNoiseNodeColorCombine" inherits="VisualAccidentalNoiseNode" category="Core" version="3.2">
+<class name="VisualAccidentalNoiseNodeColorCombine" inherits="VisualAccidentalNoiseNode" version="3.2">
 	<brief_description>
 	</brief_description>
 	<description>
@@ -9,7 +9,7 @@
 	<methods>
 	</methods>
 	<members>
-		<member name="type" type="int" setter="set_type" getter="get_type" enum="VisualAccidentalNoiseNodeColorCombine.CombineMode">
+		<member name="type" type="int" setter="set_type" getter="get_type" enum="VisualAccidentalNoiseNodeColorCombine.CombineMode" default="0">
 		</member>
 	</members>
 	<constants>

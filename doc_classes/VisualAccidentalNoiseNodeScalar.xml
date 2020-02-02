@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="VisualAccidentalNoiseNodeScalar" inherits="VisualAccidentalNoiseNode" category="Core" version="3.2">
+<class name="VisualAccidentalNoiseNodeScalar" inherits="VisualAccidentalNoiseNode" version="3.2">
 	<brief_description>
 	</brief_description>
 	<description>
@@ -9,9 +9,9 @@
 	<methods>
 	</methods>
 	<members>
-		<member name="constant" type="float" setter="set_constant" getter="get_constant">
+		<member name="constant" type="float" setter="set_constant" getter="get_constant" default="0.0">
 		</member>
-		<member name="type" type="int" setter="set_type" getter="get_type" enum="VisualAccidentalNoiseNodeScalar.ScalarType">
+		<member name="type" type="int" setter="set_type" getter="get_type" enum="VisualAccidentalNoiseNodeScalar.ScalarType" default="0">
 		</member>
 	</members>
 	<constants>

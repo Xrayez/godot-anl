@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="AccidentalNoise" inherits="Resource" category="Core" version="3.2">
+<class name="AccidentalNoise" inherits="Resource" version="3.2">
 	<brief_description>
 		A noise module used for compound noise generation.
 	</brief_description>
@@ -431,7 +431,6 @@
 			<argument index="1" name="src2_index" type="int">
 			</argument>
 			<description>
-				Similar to [method bias]. This function has the effect of pushing the values of the input either toward the ends and away from the middle if bias is > 0.5 or pushing values toward the middle and away from the ends if bias is < 0.5.
 			</description>
 		</method>
 		<method name="get_color_2d">
@@ -442,7 +441,6 @@
 			<argument index="1" name="y" type="float">
 			</argument>
 			<description>
-				Evaluates the noise function at [code](x,y)[/code] coordinates and returns a color value.
 			</description>
 		</method>
 		<method name="get_color_2dv">
@@ -1255,41 +1253,41 @@
 		</method>
 	</methods>
 	<members>
-		<member name="bumpmap_light" type="Vector3" setter="set_bumpmap_light" getter="get_bumpmap_light">
+		<member name="bumpmap_light" type="Vector3" setter="set_bumpmap_light" getter="get_bumpmap_light" default="Vector3( 1, 1, 1 )">
 			Controls light direction.
 		</member>
-		<member name="bumpmap_spacing" type="float" setter="set_bumpmap_spacing" getter="get_bumpmap_spacing">
+		<member name="bumpmap_spacing" type="float" setter="set_bumpmap_spacing" getter="get_bumpmap_spacing" default="1.0">
 			Controls how far away the noise is extruded.
 		</member>
-		<member name="bumpmap_wrapped" type="bool" setter="set_bumpmap_wrapped" getter="is_bumpmap_wrapped">
+		<member name="bumpmap_wrapped" type="bool" setter="set_bumpmap_wrapped" getter="is_bumpmap_wrapped" default="true">
 			If set to [code]true[/code], the bump image will be wrapped which is useful for generating seamless bump maps.
 		</member>
-		<member name="expression" type="String" setter="set_expression" getter="get_expression">
+		<member name="expression" type="String" setter="set_expression" getter="get_expression" default="&quot;&quot;">
 			If set, this will override previously created instruction indexes and force to evaluate noise from the expression.
 			Set empty expression to use previously generated noise functions, either via code or visual noise.
 		</member>
-		<member name="format" type="int" setter="set_format" getter="get_format" enum="AccidentalNoise.Format">
+		<member name="format" type="int" setter="set_format" getter="get_format" enum="AccidentalNoise.Format" default="0">
 			Sets the noise format used by [method get_image] and [method get_texture] for noise mapping. See [enum Format].
 		</member>
-		<member name="function" type="int" setter="set_function" getter="get_function">
+		<member name="function" type="int" setter="set_function" getter="get_function" default="0">
 			The index of a function from which noise is evaluated via [method get_noise_2d], [method get_image] or similar.
 		</member>
-		<member name="last_function" type="int" setter="" getter="get_last_function">
+		<member name="last_function" type="int" setter="" getter="get_last_function" default="5">
 			Returns an index of the last noise function generated.
 		</member>
-		<member name="mode" type="int" setter="set_mode" getter="get_mode" enum="anl.EMappingModes">
+		<member name="mode" type="int" setter="set_mode" getter="get_mode" enum="anl.EMappingModes" default="0">
 			Controls seamlessness of the noise function mapped to image. See [enum EMappingModes].
 		</member>
-		<member name="normalmap_normalized" type="bool" setter="set_normalmap_normalized" getter="is_normalmap_normalized">
+		<member name="normalmap_normalized" type="bool" setter="set_normalmap_normalized" getter="is_normalmap_normalized" default="true">
 			If set to [code]true[/code], normalizes normal map output.
 		</member>
-		<member name="normalmap_spacing" type="float" setter="set_normalmap_spacing" getter="get_normalmap_spacing">
+		<member name="normalmap_spacing" type="float" setter="set_normalmap_spacing" getter="get_normalmap_spacing" default="1.0">
 			Controls how far away the noise is extruded.
 		</member>
-		<member name="normalmap_wrapped" type="bool" setter="set_normalmap_wrapped" getter="is_normalmap_wrapped">
+		<member name="normalmap_wrapped" type="bool" setter="set_normalmap_wrapped" getter="is_normalmap_wrapped" default="true">
 			If set to [code]true[/code], the bump image will be wrapped which is useful for generating seamless normal maps.
 		</member>
-		<member name="ranges" type="AABB" setter="set_ranges" getter="get_ranges">
+		<member name="ranges" type="AABB" setter="set_ranges" getter="get_ranges" default="AABB( -1, -1, -1, 2, 2, 2 )">
 			Controls function's noise mapping ranges to image. Can be set to simulate scale.
 			For 2D, set as [code]AABB(Vector3(-1, -1, 0), Vector3(2, 2, 0))[/code], which corresponds to [code](-1,-1,1,1)[/code].
 		</member>

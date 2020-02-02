@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="VisualAccidentalNoiseNodeComponent" inherits="VisualAccidentalNoiseNode" category="Core" version="3.2">
+<class name="VisualAccidentalNoiseNodeComponent" inherits="VisualAccidentalNoiseNode" version="3.2">
 	<brief_description>
 		Component noise node.
 	</brief_description>
@@ -140,9 +140,9 @@
 		</method>
 	</methods>
 	<members>
-		<member name="graph_offset" type="Vector2" setter="set_graph_offset" getter="get_graph_offset">
+		<member name="graph_offset" type="Vector2" setter="set_graph_offset" getter="get_graph_offset" default="Vector2( 0, 0 )">
 		</member>
-		<member name="name" type="String" setter="set_component_name" getter="get_component_name">
+		<member name="name" type="String" setter="set_component_name" getter="get_component_name" default="&quot;component&quot;">
 		</member>
 	</members>
 	<constants>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="VisualAccidentalNoiseNodeScaleOffset" inherits="VisualAccidentalNoiseNode" category="Core" version="3.2">
+<class name="VisualAccidentalNoiseNodeScaleOffset" inherits="VisualAccidentalNoiseNode" version="3.2">
 	<brief_description>
 	</brief_description>
 	<description>
@@ -9,9 +9,9 @@
 	<methods>
 	</methods>
 	<members>
-		<member name="offset" type="float" setter="set_offset" getter="get_offset">
+		<member name="offset" type="float" setter="set_offset" getter="get_offset" default="0.0">
 		</member>
-		<member name="scale" type="float" setter="set_scale" getter="get_scale">
+		<member name="scale" type="float" setter="set_scale" getter="get_scale" default="1.0">
 		</member>
 	</members>
 	<constants>

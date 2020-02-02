@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="VisualAccidentalNoiseNodeFractalVariant" inherits="VisualAccidentalNoiseNode" category="Core" version="3.2">
+<class name="VisualAccidentalNoiseNodeFractalVariant" inherits="VisualAccidentalNoiseNode" version="3.2">
 	<brief_description>
 	</brief_description>
 	<description>
@@ -9,11 +9,11 @@
 	<methods>
 	</methods>
 	<members>
-		<member name="basis" type="int" setter="set_basis" getter="get_basis" enum="anl.BasisTypes">
+		<member name="basis" type="int" setter="set_basis" getter="get_basis" enum="anl.BasisTypes" default="2">
 		</member>
-		<member name="interpolation" type="int" setter="set_interpolation" getter="get_interpolation" enum="anl.InterpolationTypes">
+		<member name="interpolation" type="int" setter="set_interpolation" getter="get_interpolation" enum="anl.InterpolationTypes" default="3">
 		</member>
-		<member name="type" type="int" setter="set_type" getter="get_type" enum="VisualAccidentalNoiseNodeFractalVariant.FractalType">
+		<member name="type" type="int" setter="set_type" getter="get_type" enum="VisualAccidentalNoiseNodeFractalVariant.FractalType" default="0">
 		</member>
 	</members>
 	<constants>

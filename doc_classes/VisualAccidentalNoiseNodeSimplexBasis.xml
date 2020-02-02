@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="VisualAccidentalNoiseNodeSimplexBasis" inherits="VisualAccidentalNoiseNode" category="Core" version="3.2">
+<class name="VisualAccidentalNoiseNodeSimplexBasis" inherits="VisualAccidentalNoiseNode" version="3.2">
 	<brief_description>
 	</brief_description>
 	<description>
@@ -9,7 +9,7 @@
 	<methods>
 	</methods>
 	<members>
-		<member name="seed" type="int" setter="set_seed" getter="get_seed">
+		<member name="seed" type="int" setter="set_seed" getter="get_seed" default="0">
 		</member>
 	</members>
 	<constants>
