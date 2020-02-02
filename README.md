@@ -16,11 +16,12 @@ you need based on the following compatibility table:
 
 ### Compatibility table (ANL/Godot)
 
-|     | 3.0 | 3.1 | 3.2 |
-| --: |:---:|:---:|:---:|
-| 1.0 |  👍 |  👎 |  👎 |
-| 2.0 |  👎 |  👍 |  👎 |
-| 2.1 |  👎 |  👍 |  👍 |
+|     | 3.0 | 3.1 | 3.2 | 4.0 |
+| --: |:---:|:---:|:---:|:---:|
+| 1.0 |  👍 |  👎 |  👎 | 👎  |
+| 2.0 |  👎 |  👍 |  👎 | 👎  |
+| 2.1 |  👎 |  👍 |  👍 | 🤞  |
+| 2.2 |  👎 |  ❓ |  ❓  | 🤞  |
 
 *Note: the latests versions may not be released yet and are kept for reference,
 but expect them to be compatible.*
