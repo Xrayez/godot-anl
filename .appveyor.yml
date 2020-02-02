@@ -25,7 +25,7 @@ install:
 before_build:
   # Get Godot source and install the module
   - cd %APPVEYOR_BUILD_FOLDER%\..
-  - git clone --depth=1 %GODOT_REPO_URL% && cd godot
+  - git clone --depth=1 %GODOT_REPO_URL% -b 3.2 --single-branch && cd godot
   - mklink /d modules\anl %APPVEYOR_BUILD_FOLDER%
 
   - echo %GD_PLATFORM%

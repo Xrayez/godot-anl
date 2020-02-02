@@ -110,7 +110,7 @@ before_script:
     fi
 
   - cd
-  - git clone --depth=1 "$GODOT_REPO_URL"
+  - git clone --depth=1 "$GODOT_REPO_URL" -b 3.2 --single-branch
   - cd "godot/"
   - ln -s $TRAVIS_BUILD_DIR "modules/anl"
 
