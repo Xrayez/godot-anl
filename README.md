@@ -11,7 +11,8 @@ to be properly compiled for [Godot Engine](https://github.com/godotengine/godot)
 and be used freely in GDScript.
 
 The master branch aims to be in sync with Godot's master branch. Checkout other
-branches and/or releases for compatible versions. You can decide which version you need based on the following compatibility table:
+branches and/or releases for compatible versions. You can decide which version 
+you need based on the following compatibility table:
 
 ### Compatibility table (ANL/Godot)
 
@@ -19,7 +20,7 @@ branches and/or releases for compatible versions. You can decide which version y
 | --: |:---:|:---:|:---:|
 | 1.0 |  👍 |  👎 |  👎 |
 | 2.0 |  👎 |  👍 |  👎 |
-| 2.1 |  👎 |  👍 |  🤞 |
+| 2.1 |  👎 |  👍 |  👍 |
 
 *Note: the latests versions may not be released yet and are kept for reference,
 but expect them to be compatible.*

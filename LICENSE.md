@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2017-2019 Andrii Doroshenko and contributors
+Copyright (c) 2017-2020 Andrii Doroshenko and contributors
 
 Accidental Noise Library license: [thirdparty/anl/LICENSE.md](thirdparty/anl/LICENSE.md)
 
