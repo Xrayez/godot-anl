@@ -486,7 +486,7 @@ void VisualAccidentalNoiseComponentEditor::_component_renamed(const String &p_te
 	ERR_FAIL_COND(prev_name == String());
 
 	String new_name = p_text;
-	ERR_FAIL_COND(new_name == "" || new_name.find(".") != -1 || new_name.find("/") != -1)
+	ERR_FAIL_COND(new_name == "" || new_name.find(".") != -1 || new_name.find("/") != -1);
 
 	updating = true;
 	undo_redo->create_action("Component Renamed");
@@ -515,7 +515,7 @@ void VisualAccidentalNoiseComponentEditor::_input_renamed(const String &p_text, 
 	String prev_name = input->get_input_name();
 
 	String new_name = p_text;
-	ERR_FAIL_COND(new_name == "" || new_name.find(".") != -1 || new_name.find("/") != -1)
+	ERR_FAIL_COND(new_name == "" || new_name.find(".") != -1 || new_name.find("/") != -1);
 
 	updating = true;
 	undo_redo->create_action("Input Node Renamed");
