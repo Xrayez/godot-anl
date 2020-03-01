@@ -1598,7 +1598,7 @@ void VisualAccidentalNoiseNodePlugin::_bind_methods() {
 }
 
 class VisualAccidentalNoiseNodePluginDefaultEditor : public VBoxContainer {
-	GDCLASS(VisualAccidentalNoiseNodePluginDefaultEditor, VBoxContainer)
+	GDCLASS(VisualAccidentalNoiseNodePluginDefaultEditor, VBoxContainer);
 public:
 	void _property_changed(const String &prop, const Variant &p_value, const String &p_field, bool p_changing = false) {
 

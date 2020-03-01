@@ -4,7 +4,7 @@
 #include "visual_noise.h"
 
 class VisualAccidentalNoiseNodeScalar : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeScalar, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeScalar, VisualAccidentalNoiseNode);
 
 public:
 	enum ScalarType {
@@ -51,7 +51,7 @@ private:
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeScalar::ScalarType);
 
 class VisualAccidentalNoiseNodeSeed : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeSeed, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeSeed, VisualAccidentalNoiseNode);
 
 public:
 	void set_seed(unsigned int p_value);
@@ -82,7 +82,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeSeeder : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeSeeder, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeSeeder, VisualAccidentalNoiseNode);
 
 public:
 	virtual String get_caption() const;
@@ -110,7 +110,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeScalarOp : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeScalarOp, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeScalarOp, VisualAccidentalNoiseNode);
 
 public:
 	enum Operator {
@@ -158,7 +158,7 @@ private:
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeScalarOp::Operator);
 
 class VisualAccidentalNoiseNodeScalarFunc : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeScalarFunc, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeScalarFunc, VisualAccidentalNoiseNode);
 
 public:
 	enum Function {
@@ -205,7 +205,7 @@ private:
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeScalarFunc::Function);
 
 class VisualAccidentalNoiseNodeValueBasis : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeValueBasis, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeValueBasis, VisualAccidentalNoiseNode);
 
 public:
 	void set_interpolation(Index p_idx);
@@ -240,7 +240,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeGradientBasis : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeGradientBasis, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeGradientBasis, VisualAccidentalNoiseNode);
 
 public:
 	void set_interpolation(Index p_idx);
@@ -275,7 +275,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeCellularBasis : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeCellularBasis, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeCellularBasis, VisualAccidentalNoiseNode);
 
 public:
 	void set_distance(Index p_idx);
@@ -311,7 +311,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeSimplexBasis : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeSimplexBasis, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeSimplexBasis, VisualAccidentalNoiseNode);
 
 public:
 	void set_seed(Index p_idx);
@@ -342,7 +342,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeExpression : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeExpression, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeExpression, VisualAccidentalNoiseNode);
 
 public:
 	void set_expression(const String &p_expression);
@@ -375,7 +375,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeTranslate : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeTranslate, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeTranslate, VisualAccidentalNoiseNode);
 
 public:
 	void set_axis(Axis::AxisType p_type);
@@ -411,7 +411,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeScale : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeScale, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeScale, VisualAccidentalNoiseNode);
 
 public:
 	void set_axis(Axis::AxisType p_type);
@@ -447,7 +447,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeRotate : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeRotate, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeRotate, VisualAccidentalNoiseNode);
 
 public:
 	virtual String get_caption() const;
@@ -475,7 +475,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeClamp : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeClamp, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeClamp, VisualAccidentalNoiseNode);
 
 public:
 	virtual String get_caption() const;
@@ -503,7 +503,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeMix : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeMix, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeMix, VisualAccidentalNoiseNode);
 
 public:
 	virtual String get_caption() const;
@@ -531,7 +531,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeSelect : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeSelect, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeSelect, VisualAccidentalNoiseNode);
 
 public:
 	virtual String get_caption() const;
@@ -561,7 +561,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeTiers : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeTiers, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeTiers, VisualAccidentalNoiseNode);
 
 public:
 	enum Smoothness {
@@ -604,7 +604,7 @@ private:
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeTiers::Smoothness);
 
 class VisualAccidentalNoiseNodeGradient : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeGradient, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeGradient, VisualAccidentalNoiseNode);
 
 public:
 	void set_axis(Axis::AxisType p_type);
@@ -635,7 +635,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeDerivative : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeDerivative, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeDerivative, VisualAccidentalNoiseNode);
 
 public:
 	void set_axis(Axis::AxisType p_type);
@@ -671,7 +671,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeRadial : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeRadial, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeRadial, VisualAccidentalNoiseNode);
 
 public:
 	virtual String get_caption() const;
@@ -693,7 +693,7 @@ protected:
 };
 
 class VisualAccidentalNoiseNodeRandomize : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeRandomize, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeRandomize, VisualAccidentalNoiseNode);
 
 public:
 	virtual String get_caption() const;
@@ -721,7 +721,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeStep : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeStep, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeStep, VisualAccidentalNoiseNode);
 
 public:
 	enum StepType {
@@ -767,7 +767,7 @@ private:
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeStep::StepType);
 
 class VisualAccidentalNoiseNodeCurveSection : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeCurveSection, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeCurveSection, VisualAccidentalNoiseNode);
 
 public:
 	virtual String get_caption() const;
@@ -796,7 +796,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeHex : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeHex, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeHex, VisualAccidentalNoiseNode);
 
 public:
 	enum HexType {
@@ -838,7 +838,7 @@ private:
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeHex::HexType);
 
 class VisualAccidentalNoiseNodeColor : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeColor, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeColor, VisualAccidentalNoiseNode);
 
 public:
 	void set_color(const Color &p_color);
@@ -869,7 +869,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeColorCombine : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeColorCombine, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeColorCombine, VisualAccidentalNoiseNode);
 
 public:
 	enum CombineMode {
@@ -911,7 +911,7 @@ private:
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeColorCombine::CombineMode);
 
 class VisualAccidentalNoiseNodeScaleOffset : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeScaleOffset, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeScaleOffset, VisualAccidentalNoiseNode);
 
 public:
 	void set_scale(double p_value);
@@ -950,7 +950,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeFractalLayer : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeFractalLayer, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeFractalLayer, VisualAccidentalNoiseNode);
 
 public:
 	enum LayerType {
@@ -1005,7 +1005,7 @@ private:
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeFractalLayer::LayerType);
 
 class VisualAccidentalNoiseNodeFractal : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeFractal, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeFractal, VisualAccidentalNoiseNode);
 
 public:
 	virtual String get_caption() const;
@@ -1037,7 +1037,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeFractalVariant : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeFractalVariant, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeFractalVariant, VisualAccidentalNoiseNode);
 
 public:
 	enum FractalType {
@@ -1091,7 +1091,7 @@ private:
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNodeFractalVariant::FractalType);
 
 class VisualAccidentalNoiseNodeSetVar : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeSetVar, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeSetVar, VisualAccidentalNoiseNode);
 
 public:
 	void set_var(const String &p_var);
@@ -1128,7 +1128,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeGetVar : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeGetVar, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeGetVar, VisualAccidentalNoiseNode);
 
 public:
 	void set_var(const String &p_var);
@@ -1157,7 +1157,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeReroute : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeReroute, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeReroute, VisualAccidentalNoiseNode);
 
 public:
 	virtual String get_caption() const;
@@ -1184,7 +1184,7 @@ private:
 };
 
 class VisualAccidentalNoiseNodeSequence : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeSequence, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeSequence, VisualAccidentalNoiseNode);
 
 public:
 	enum Operator {
