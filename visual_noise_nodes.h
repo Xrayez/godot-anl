@@ -962,8 +962,8 @@ public:
 	void set_type(LayerType p_type);
 	LayerType get_type() const;
 
-	void set_basis(anl::BasisTypes p_basis);
-	anl::BasisTypes get_basis() const;
+	void set_basis(AccidentalNoise::BasisTypes p_basis);
+	AccidentalNoise::BasisTypes get_basis() const;
 
 public:
 	virtual String get_caption() const;
@@ -989,7 +989,7 @@ protected:
 
 private:
 	LayerType type;
-	anl::BasisTypes basis;
+	AccidentalNoise::BasisTypes basis;
 
 	Index interp;
 	double scale;
@@ -1049,11 +1049,11 @@ public:
 	void set_type(FractalType p_type);
 	FractalType get_type() const;
 
-	void set_basis(anl::BasisTypes p_basis);
-	anl::BasisTypes get_basis() const;
+	void set_basis(AccidentalNoise::BasisTypes p_basis);
+	AccidentalNoise::BasisTypes get_basis() const;
 
-	void set_interpolation(anl::InterpolationTypes p_interpolation);
-	anl::InterpolationTypes get_interpolation() const;
+	void set_interpolation(AccidentalNoise::InterpolationTypes p_interpolation);
+	AccidentalNoise::InterpolationTypes get_interpolation() const;
 
 public:
 	virtual String get_caption() const;
@@ -1079,8 +1079,8 @@ protected:
 
 private:
 	FractalType type;
-	anl::BasisTypes basis;
-	anl::InterpolationTypes interpolation;
+	AccidentalNoise::BasisTypes basis;
+	AccidentalNoise::InterpolationTypes interpolation;
 
 	unsigned int numoctaves;
 	double frequency = 1.0;

@@ -617,7 +617,7 @@ void VisualAccidentalNoiseNodeValueBasis::_bind_methods() {
 
 VisualAccidentalNoiseNodeValueBasis::VisualAccidentalNoiseNodeValueBasis() {
 
-	set_input_port_default_value(0, anl::INTERP_QUINTIC);
+	set_input_port_default_value(0, AccidentalNoise::INTERP_QUINTIC);
 	set_input_port_default_value(1, 0);
 
 	interp = 0;
@@ -712,7 +712,7 @@ void VisualAccidentalNoiseNodeGradientBasis::_bind_methods() {
 
 VisualAccidentalNoiseNodeGradientBasis::VisualAccidentalNoiseNodeGradientBasis() {
 
-	set_input_port_default_value(0, anl::INTERP_QUINTIC);
+	set_input_port_default_value(0, AccidentalNoise::INTERP_QUINTIC);
 	set_input_port_default_value(1, 0);
 
 	interp = 0;
@@ -852,7 +852,7 @@ VisualAccidentalNoiseNodeCellularBasis::VisualAccidentalNoiseNodeCellularBasis()
 	set_input_port_default_value(6, 0);
 	set_input_port_default_value(7, 0);
 
-	set_input_port_default_value(8, anl::DISTANCE_EUCLID);
+	set_input_port_default_value(8, AccidentalNoise::DISTANCE_EUCLID);
 	set_input_port_default_value(9, 0);
 
 	f1 = f2 = f3 = f4 = 0;
@@ -2676,13 +2676,13 @@ VisualAccidentalNoiseNodeFractalLayer::LayerType VisualAccidentalNoiseNodeFracta
 	return type;
 }
 
-void VisualAccidentalNoiseNodeFractalLayer::set_basis(anl::BasisTypes p_basis) {
+void VisualAccidentalNoiseNodeFractalLayer::set_basis(AccidentalNoise::BasisTypes p_basis) {
 
 	basis = p_basis;
 	emit_changed();
 }
 
-anl::BasisTypes VisualAccidentalNoiseNodeFractalLayer::get_basis() const {
+AccidentalNoise::BasisTypes VisualAccidentalNoiseNodeFractalLayer::get_basis() const {
 
 	return basis;
 }
@@ -2733,9 +2733,9 @@ void VisualAccidentalNoiseNodeFractalLayer::_bind_methods() {
 VisualAccidentalNoiseNodeFractalLayer::VisualAccidentalNoiseNodeFractalLayer() {
 
 	type = LAYER_FRACTAL;
-	basis = anl::BASIS_SIMPLEX;
+	basis = AccidentalNoise::BASIS_SIMPLEX;
 
-	set_input_port_default_value(0, anl::INTERP_QUINTIC);
+	set_input_port_default_value(0, AccidentalNoise::INTERP_QUINTIC);
 	set_input_port_default_value(1, 1.0);
 	set_input_port_default_value(2, 1.0);
 	set_input_port_default_value(3, 0);
@@ -2926,24 +2926,24 @@ VisualAccidentalNoiseNodeFractalVariant::FractalType VisualAccidentalNoiseNodeFr
 	return type;
 }
 
-void VisualAccidentalNoiseNodeFractalVariant::set_basis(anl::BasisTypes p_basis) {
+void VisualAccidentalNoiseNodeFractalVariant::set_basis(AccidentalNoise::BasisTypes p_basis) {
 
 	basis = p_basis;
 	emit_changed();
 }
 
-anl::BasisTypes VisualAccidentalNoiseNodeFractalVariant::get_basis() const {
+AccidentalNoise::BasisTypes VisualAccidentalNoiseNodeFractalVariant::get_basis() const {
 
 	return basis;
 }
 
-void VisualAccidentalNoiseNodeFractalVariant::set_interpolation(anl::InterpolationTypes p_interpolation) {
+void VisualAccidentalNoiseNodeFractalVariant::set_interpolation(AccidentalNoise::InterpolationTypes p_interpolation) {
 
 	interpolation = p_interpolation;
 	emit_changed();
 }
 
-anl::InterpolationTypes VisualAccidentalNoiseNodeFractalVariant::get_interpolation() const {
+AccidentalNoise::InterpolationTypes VisualAccidentalNoiseNodeFractalVariant::get_interpolation() const {
 
 	return interpolation;
 }
@@ -2999,8 +2999,8 @@ void VisualAccidentalNoiseNodeFractalVariant::_bind_methods() {
 VisualAccidentalNoiseNodeFractalVariant::VisualAccidentalNoiseNodeFractalVariant() {
 
 	type = TYPE_FBM;
-	basis = anl::BASIS_SIMPLEX;
-	interpolation = anl::INTERP_QUINTIC;
+	basis = AccidentalNoise::BASIS_SIMPLEX;
+	interpolation = AccidentalNoise::INTERP_QUINTIC;
 
 	set_input_port_default_value(0, 1);
 	set_input_port_default_value(1, 1.0);
