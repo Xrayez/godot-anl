@@ -89,9 +89,9 @@
 		<method name="billow">
 			<return type="int">
 			</return>
-			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
 			</argument>
-			<argument index="1" name="interp_type" type="int" enum="anl.InterpolationTypes">
+			<argument index="1" name="interp_type" type="int" enum="AccidentalNoise.InterpolationTypes">
 			</argument>
 			<argument index="2" name="numoctaves" type="int">
 			</argument>
@@ -108,7 +108,7 @@
 		<method name="billow_layer">
 			<return type="int">
 			</return>
-			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
 			</argument>
 			<argument index="1" name="interp_type_index" type="int">
 			</argument>
@@ -361,9 +361,9 @@
 		<method name="fbm">
 			<return type="int">
 			</return>
-			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
 			</argument>
-			<argument index="1" name="interp_type" type="int" enum="anl.InterpolationTypes">
+			<argument index="1" name="interp_type" type="int" enum="AccidentalNoise.InterpolationTypes">
 			</argument>
 			<argument index="2" name="numoctaves" type="int">
 			</argument>
@@ -399,7 +399,7 @@
 		<method name="fractal_layer">
 			<return type="int">
 			</return>
-			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
 			</argument>
 			<argument index="1" name="interp_type_index" type="int">
 			</argument>
@@ -636,7 +636,7 @@
 			</argument>
 			<description>
 				Generates gradient noise function as basis, with [enum InterpolationTypes] applied.
-				Notice that the first argument takes an index to a function. In order to set interpolation globally and not for each value, use [code]constant(InterpolationTypes.INTERP_QUINTIC)[/code], for instance.
+				Notice that the first argument takes an index to a function. In order to set interpolation globally and not for each value, use [constant INTERP_QUINTIC], for instance.
 			</description>
 		</method>
 		<method name="hex_bump">
@@ -808,7 +808,7 @@
 		<method name="ridged_layer">
 			<return type="int">
 			</return>
-			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
 			</argument>
 			<argument index="1" name="interp_type_index" type="int">
 			</argument>
@@ -835,9 +835,9 @@
 		<method name="ridged_multifractal">
 			<return type="int">
 			</return>
-			<argument index="0" name="basis_type" type="int" enum="anl.BasisTypes">
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
 			</argument>
-			<argument index="1" name="interp_type" type="int" enum="anl.InterpolationTypes">
+			<argument index="1" name="interp_type" type="int" enum="AccidentalNoise.InterpolationTypes">
 			</argument>
 			<argument index="2" name="numoctaves" type="int">
 			</argument>
@@ -1019,7 +1019,7 @@
 			<argument index="0" name="seed_index" type="int">
 			</argument>
 			<description>
-				Generates simplex function as basis, with [enum InterpolationTypes.INTERP_QUINTIC] applied.
+				Generates simplex function as basis, with [constant INTERP_QUINTIC] applied.
 			</description>
 		</method>
 		<method name="sin">
@@ -1213,7 +1213,7 @@
 			</argument>
 			<description>
 				Generates value noise function as basis, with [enum InterpolationTypes] applied.
-				Notice that the first argument takes an index to a function. In order to set interpolation globally and not for each value, use [code]constant(InterpolationTypes.INTERP_QUINTIC)[/code], for instance.
+				Notice that the first argument takes an index to a function. In order to set interpolation globally and not for each value, use [constant INTERP_QUINTIC], for instance.
 			</description>
 		</method>
 		<method name="w">
@@ -1275,8 +1275,8 @@
 		<member name="last_function" type="int" setter="" getter="get_last_function" default="5">
 			Returns an index of the last noise function generated.
 		</member>
-		<member name="mode" type="int" setter="set_mode" getter="get_mode" enum="anl.EMappingModes" default="0">
-			Controls seamlessness of the noise function mapped to image. See [enum EMappingModes].
+		<member name="mode" type="int" setter="set_mode" getter="get_mode" enum="AccidentalNoise.MappingModes" default="0">
+			Controls seamlessness of the noise function mapped to image. See [enum MappingModes].
 		</member>
 		<member name="normalmap_normalized" type="bool" setter="set_normalmap_normalized" getter="is_normalmap_normalized" default="true">
 			If set to [code]true[/code], normalizes normal map output.
@@ -1334,28 +1334,28 @@
 		<constant name="BASIS_SIMPLEX" value="2" enum="BasisTypes">
 			Use simplex noise as basis for noise generation.
 		</constant>
-		<constant name="SEAMLESS_NONE" value="0" enum="EMappingModes">
+		<constant name="SEAMLESS_NONE" value="0" enum="MappingModes">
 			Do not generate seamless image.
 		</constant>
-		<constant name="SEAMLESS_X" value="1" enum="EMappingModes">
+		<constant name="SEAMLESS_X" value="1" enum="MappingModes">
 			Allows to generate a seamless image restricted to X coordinate, horizontally.
 		</constant>
-		<constant name="SEAMLESS_Y" value="2" enum="EMappingModes">
+		<constant name="SEAMLESS_Y" value="2" enum="MappingModes">
 			Allows to generate a seamless image restricted to Y coordinate, vertically.
 		</constant>
-		<constant name="SEAMLESS_Z" value="3" enum="EMappingModes">
+		<constant name="SEAMLESS_Z" value="3" enum="MappingModes">
 			Allows to generate a seamless image restricted to Z coordinate.
 		</constant>
-		<constant name="SEAMLESS_XY" value="4" enum="EMappingModes">
+		<constant name="SEAMLESS_XY" value="4" enum="MappingModes">
 			Allows to generate a seamless image restricted to XY plane, used to create seamless textures.
 		</constant>
-		<constant name="SEAMLESS_XZ" value="5" enum="EMappingModes">
+		<constant name="SEAMLESS_XZ" value="5" enum="MappingModes">
 			Allows to generate a seamless image restricted to XZ plane.
 		</constant>
-		<constant name="SEAMLESS_YZ" value="6" enum="EMappingModes">
+		<constant name="SEAMLESS_YZ" value="6" enum="MappingModes">
 			Allows to generate a seamless image restricted to YZ plane.
 		</constant>
-		<constant name="SEAMLESS_XYZ" value="7" enum="EMappingModes">
+		<constant name="SEAMLESS_XYZ" value="7" enum="MappingModes">
 			Allows to generate a seamless 3D image (not fully supported yet).
 		</constant>
 	</constants>

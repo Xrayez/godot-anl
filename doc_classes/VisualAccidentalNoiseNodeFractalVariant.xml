@@ -9,9 +9,9 @@
 	<methods>
 	</methods>
 	<members>
-		<member name="basis" type="int" setter="set_basis" getter="get_basis" enum="anl.BasisTypes" default="2">
+		<member name="basis" type="int" setter="set_basis" getter="get_basis" enum="AccidentalNoise.BasisTypes" default="2">
 		</member>
-		<member name="interpolation" type="int" setter="set_interpolation" getter="get_interpolation" enum="anl.InterpolationTypes" default="3">
+		<member name="interpolation" type="int" setter="set_interpolation" getter="get_interpolation" enum="AccidentalNoise.InterpolationTypes" default="3">
 		</member>
 		<member name="type" type="int" setter="set_type" getter="get_type" enum="VisualAccidentalNoiseNodeFractalVariant.FractalType" default="0">
 		</member>

@@ -81,7 +81,7 @@ private:
 };
 
 class VisualAccidentalNoiseNode : public Resource {
-	GDCLASS(VisualAccidentalNoiseNode, Resource)
+	GDCLASS(VisualAccidentalNoiseNode, Resource);
 
 	int port_preview;
 
@@ -139,7 +139,7 @@ public:
 VARIANT_ENUM_CAST(VisualAccidentalNoiseNode::PortType);
 
 class VisualAccidentalNoiseNodeComponent : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeComponent, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeComponent, VisualAccidentalNoiseNode);
 
 	friend class VisualAccidentalNoise;
 
@@ -250,7 +250,7 @@ public:
 };
 
 class VisualAccidentalNoiseNodeInput : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeInput, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeInput, VisualAccidentalNoiseNode);
 
 private:
 	String input_name;
@@ -284,7 +284,7 @@ public:
 };
 
 class VisualAccidentalNoiseNodeOutput : public VisualAccidentalNoiseNode {
-	GDCLASS(VisualAccidentalNoiseNodeOutput, VisualAccidentalNoiseNode)
+	GDCLASS(VisualAccidentalNoiseNodeOutput, VisualAccidentalNoiseNode);
 
 public:
 	friend class VisualAccidentalNoise;
