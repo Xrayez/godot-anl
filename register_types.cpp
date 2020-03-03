@@ -9,6 +9,7 @@ void register_anl_types() {
 
 	ClassDB::register_class<AccidentalNoise>();
 	ClassDB::register_class<VisualAccidentalNoise>();
+	ClassDB::register_virtual_class<VisualAccidentalNoiseNode>();
 
 	////// Component
 	ClassDB::register_class<VisualAccidentalNoiseNodeComponent>();

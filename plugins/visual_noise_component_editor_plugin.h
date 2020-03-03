@@ -12,7 +12,7 @@
 
 class VisualAccidentalNoiseNodePlugin : public Reference {
 
-	GDCLASS(VisualAccidentalNoiseNodePlugin, Reference)
+	GDCLASS(VisualAccidentalNoiseNodePlugin, Reference);
 
 protected:
 	static void _bind_methods();
@@ -23,7 +23,7 @@ public:
 
 class VisualAccidentalNoiseNodePluginDefault : public VisualAccidentalNoiseNodePlugin {
 
-	GDCLASS(VisualAccidentalNoiseNodePluginDefault, VisualAccidentalNoiseNodePlugin)
+	GDCLASS(VisualAccidentalNoiseNodePluginDefault, VisualAccidentalNoiseNodePlugin);
 
 public:
 	virtual Control *create_editor(const Ref<VisualAccidentalNoiseNode> &p_node);
@@ -187,7 +187,7 @@ public:
 };
 
 class VisualAccidentalNoiseNodePortPreview : public Control {
-	GDCLASS(VisualAccidentalNoiseNodePortPreview, Control)
+	GDCLASS(VisualAccidentalNoiseNodePortPreview, Control);
 
 	Ref<VisualAccidentalNoise> noise;
 	Ref<Texture> preview_tex;

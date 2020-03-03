@@ -8,7 +8,7 @@ AccidentalNoise::AccidentalNoise() :
 	function = 0;
 	prev_function = 0;
 
-	mode = anl::EMappingModes::SEAMLESS_NONE;
+	mode = SEAMLESS_NONE;
 	format = FORMAT_HEIGHTMAP;
 	ranges = AABB(Vector3(-1, -1, -1), Vector3(2, 2, 2));
 
@@ -21,13 +21,13 @@ AccidentalNoise::AccidentalNoise() :
 	bumpmap_light = Vector3(1.0, 1.0, 1.0);
 }
 
-void AccidentalNoise::set_mode(anl::EMappingModes p_mode) {
+void AccidentalNoise::set_mode(MappingModes p_mode) {
 
 	mode = p_mode;
 	emit_changed();
 }
 
-anl::EMappingModes AccidentalNoise::get_mode() const {
+AccidentalNoise::MappingModes AccidentalNoise::get_mode() const {
 
 	return mode;
 }
@@ -675,7 +675,7 @@ Index AccidentalNoise::scale_offset(Index src, double scale, double offset) {
 	return scale_offset.getIndex();
 }
 
-Index AccidentalNoise::fractal_layer(anl::BasisTypes basis, Index interp_type,
+Index AccidentalNoise::fractal_layer(BasisTypes basis, Index interp_type,
 		double scale, double frequency, unsigned int seed, bool rot,
 		double angle, double ax, double ay, double az) {
 
@@ -686,7 +686,7 @@ Index AccidentalNoise::fractal_layer(anl::BasisTypes basis, Index interp_type,
 	return fractal_layer.getIndex();
 }
 
-Index AccidentalNoise::ridged_layer(anl::BasisTypes basis, Index interp_type,
+Index AccidentalNoise::ridged_layer(BasisTypes basis, Index interp_type,
 		double scale, double frequency, unsigned int seed, bool rot,
 		double angle, double ax, double ay, double az) {
 
@@ -697,7 +697,7 @@ Index AccidentalNoise::ridged_layer(anl::BasisTypes basis, Index interp_type,
 	return ridged_layer.getIndex();
 }
 
-Index AccidentalNoise::billow_layer(anl::BasisTypes basis, Index interp_type,
+Index AccidentalNoise::billow_layer(BasisTypes basis, Index interp_type,
 		double scale, double frequency, unsigned int seed, bool rot,
 		double angle, double ax, double ay, double az) {
 
@@ -708,7 +708,7 @@ Index AccidentalNoise::billow_layer(anl::BasisTypes basis, Index interp_type,
 	return billow_layer.getIndex();
 }
 
-Index AccidentalNoise::fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
+Index AccidentalNoise::fbm(BasisTypes basis, InterpolationTypes interp,
 		unsigned int numoctaves, double frequency, unsigned int seed, bool rot) {
 
 	auto fbm = kernel.simplefBm(
@@ -717,7 +717,7 @@ Index AccidentalNoise::fbm(anl::BasisTypes basis, anl::InterpolationTypes interp
 	return fbm.getIndex();
 }
 
-Index AccidentalNoise::ridged_multifractal(anl::BasisTypes basis, anl::InterpolationTypes interp,
+Index AccidentalNoise::ridged_multifractal(BasisTypes basis, InterpolationTypes interp,
 		unsigned int numoctaves, double frequency, unsigned int seed, bool rot) {
 
 	auto ridged_multifractal = kernel.simpleRidgedMultifractal(
@@ -726,7 +726,7 @@ Index AccidentalNoise::ridged_multifractal(anl::BasisTypes basis, anl::Interpola
 	return ridged_multifractal.getIndex();
 }
 
-Index AccidentalNoise::billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
+Index AccidentalNoise::billow(BasisTypes basis, InterpolationTypes interp,
 		unsigned int numoctaves, double frequency, unsigned int seed, bool rot) {
 
 	auto billow = kernel.simpleBillow(
@@ -846,7 +846,7 @@ Ref<Image> AccidentalNoise::get_image(int p_width, int p_height) {
 Ref<Image> AccidentalNoise::get_seamless_image(int p_width, int p_height) {
 
 	// Returns seamless image regardless of mapping mode
-	return _map_to_image(p_width, p_height, function, anl::SEAMLESS_XY, format, ranges);
+	return _map_to_image(p_width, p_height, function, SEAMLESS_XY, format, ranges);
 }
 
 Ref<Texture> AccidentalNoise::get_texture(int p_width, int p_height) {
@@ -867,10 +867,10 @@ Vector<Ref<Image> > AccidentalNoise::get_image_3d(int p_width, int p_height, int
 Vector<Ref<Image> > AccidentalNoise::get_seamless_image_3d(int p_width, int p_height, int p_depth) {
 
 	// Returns seamless 3D image regardless of mapping mode
-	return _map_to_image_3d(p_width, p_height, p_depth, function, anl::SEAMLESS_XY, format, ranges);
+	return _map_to_image_3d(p_width, p_height, p_depth, function, SEAMLESS_XY, format, ranges);
 }
 
-Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges) {
+Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_index, MappingModes p_mode, Format p_format, const AABB &p_ranges) {
 
 	anl::SMappingRanges ranges(
 			p_ranges.position.x, p_ranges.position.x + p_ranges.size.x,
@@ -967,7 +967,7 @@ Ref<Image> AccidentalNoise::_map_to_image(int p_width, int p_height, Index p_ind
 	return noise;
 }
 
-Vector<Ref<Image> > AccidentalNoise::_map_to_image_3d(int p_width, int p_height, int p_depth, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges) {
+Vector<Ref<Image> > AccidentalNoise::_map_to_image_3d(int p_width, int p_height, int p_depth, Index p_index, MappingModes p_mode, Format p_format, const AABB &p_ranges) {
 
 	anl::SMappingRanges ranges(
 			p_ranges.position.x, p_ranges.position.x + p_ranges.size.x,
@@ -1286,9 +1286,6 @@ void AccidentalNoise::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("get_texture", "width", "height"), &AccidentalNoise::get_texture);
 
-	using namespace anl;
-	// Use namespace declaration to avoid having
-	// prepended namespace name in enum constants
 	BIND_ENUM_CONSTANT(INTERP_NONE);
 	BIND_ENUM_CONSTANT(INTERP_LINEAR);
 	BIND_ENUM_CONSTANT(INTERP_HERMITE);

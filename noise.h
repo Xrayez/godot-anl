@@ -24,11 +24,42 @@ public:
 		FORMAT_BUMPMAP, // grayscale bumpmap
 		FORMAT_TEXTURE, // color, suitable for textures
 	};
+	enum InterpolationTypes
+	{
+		INTERP_NONE,
+		INTERP_LINEAR,
+		INTERP_HERMITE,
+		INTERP_QUINTIC
+	};
+	enum DistanceTypes
+	{
+		DISTANCE_EUCLID,
+		DISTANCE_MANHATTAN,
+		DISTANCE_LEASTAXIS,
+		DISTANCE_GREATESTAXIS
+	};
+	enum BasisTypes
+	{
+		BASIS_VALUE,
+		BASIS_GRADIENT,
+		BASIS_SIMPLEX
+	};
+	enum MappingModes
+	{
+		SEAMLESS_NONE,
+		SEAMLESS_X,
+		SEAMLESS_Y,
+		SEAMLESS_Z,
+		SEAMLESS_XY,
+		SEAMLESS_XZ,
+		SEAMLESS_YZ,
+		SEAMLESS_XYZ
+	};
 
 	AccidentalNoise();
 
-	void set_mode(anl::EMappingModes p_mode);
-	anl::EMappingModes get_mode() const;
+	void set_mode(MappingModes p_mode);
+	MappingModes get_mode() const;
 
 	void set_format(Format p_format);
 	Format get_format() const;
@@ -197,15 +228,15 @@ public:
 
 	// Layers
 	// ----------------------------------------------------------------------------------------
-	Index fractal_layer(anl::BasisTypes basis, Index interp_type,
+	Index fractal_layer(BasisTypes basis, Index interp_type,
 			double scale, double frequency, unsigned int seed, bool rot = true,
 			double angle = 0.5, double ax = 0.0, double ay = 0.0, double az = 1.0);
 
-	Index ridged_layer(anl::BasisTypes basis, Index interp_type,
+	Index ridged_layer(BasisTypes basis, Index interp_type,
 			double scale, double frequency, unsigned int seed, bool rot = true,
 			double angle = 0.5, double ax = 0.0, double ay = 0.0, double az = 1.0);
 
-	Index billow_layer(anl::BasisTypes basis, Index interp_type,
+	Index billow_layer(BasisTypes basis, Index interp_type,
 			double scale, double frequency, unsigned int seed, bool rot = true,
 			double angle = 0.5, double ax = 0.0, double ay = 0.0, double az = 1.0);
 
@@ -214,13 +245,13 @@ public:
 	Index fractal(Index seed, Index layer,
 			Index persistence, Index lacunarity, Index numoctaves, Index frequency);
 
-	Index fbm(anl::BasisTypes basis, anl::InterpolationTypes interp,
+	Index fbm(BasisTypes basis, InterpolationTypes interp,
 			unsigned int numoctaves, double frequency, unsigned int seed, bool rot = true);
 
-	Index ridged_multifractal(anl::BasisTypes basis, anl::InterpolationTypes interp,
+	Index ridged_multifractal(BasisTypes basis, InterpolationTypes interp,
 			unsigned int numoctaves, double frequency, unsigned int seed, bool rot = true);
 
-	Index billow(anl::BasisTypes basis, anl::InterpolationTypes interp,
+	Index billow(BasisTypes basis, InterpolationTypes interp,
 			unsigned int numoctaves, double frequency, unsigned int seed, bool rot = true);
 
 	// Variable
@@ -281,14 +312,14 @@ private:
 	anl::CNoiseExecutor vm;
 	anl::CExpressionBuilder eb;
 
-	Ref<Image> _map_to_image(int p_width, int p_height, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges);
-	Vector<Ref<Image> > _map_to_image_3d(int p_width, int p_height, int p_depth, Index p_index, anl::EMappingModes p_mode, Format p_format, const AABB &p_ranges);
+	Ref<Image> _map_to_image(int p_width, int p_height, Index p_index, MappingModes p_mode, Format p_format, const AABB &p_ranges);
+	Vector<Ref<Image> > _map_to_image_3d(int p_width, int p_height, int p_depth, Index p_index, MappingModes p_mode, Format p_format, const AABB &p_ranges);
 
 protected:
 	Index function;
 	Index prev_function;
 
-	anl::EMappingModes mode;
+	MappingModes mode;
 	Format format;
 	AABB ranges;
 	String expression;
@@ -302,10 +333,10 @@ protected:
 	Vector3 bumpmap_light;
 };
 
-VARIANT_ENUM_CAST(anl::InterpolationTypes);
-VARIANT_ENUM_CAST(anl::DistanceTypes);
-VARIANT_ENUM_CAST(anl::BasisTypes);
-VARIANT_ENUM_CAST(anl::EMappingModes);
+VARIANT_ENUM_CAST(AccidentalNoise::InterpolationTypes);
+VARIANT_ENUM_CAST(AccidentalNoise::DistanceTypes);
+VARIANT_ENUM_CAST(AccidentalNoise::BasisTypes);
+VARIANT_ENUM_CAST(AccidentalNoise::MappingModes);
 VARIANT_ENUM_CAST(AccidentalNoise::Format);
 
 #endif
