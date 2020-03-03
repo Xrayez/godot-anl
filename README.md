@@ -101,7 +101,9 @@ Or before build:
 scons platform=linux target=release_debug bits=64 define=ANL_EXPRESSION_BUILDER_CAMELCASE
 ```
 
-## Usage example
+# Usage examples
+
+## GDScript
 
 ### Generating 2D landscape:
 
@@ -135,6 +137,30 @@ var value = noise.color_2d(x, y, function)
 But please note that the expression builder feature is a work in progress as
 stated by original author. Some functions work, some don't and might crash the
 engine.
+
+## C#
+
+See demo project: [AnlTest.cs](examples/mono/AnlTest.cs).
+
+```csharp
+using Godot;
+using System;
+
+public class AnlTest : Godot.Node2D
+{
+	public override void _Ready()
+	{
+		AccidentalNoise an = new Godot.AccidentalNoise();
+		AccidentalNoise.InterpolationTypes interp = AccidentalNoise.InterpolationTypes.Linear;
+		int seed = 37;
+		an.Function = an.GradientBasis(an.Constant((double)interp), an.Constant(seed));
+		an.Function = an.Scale(an.Function, an.Constant(5.0));
+		an.Mode = AccidentalNoise.MappingModes.Xy;
+		ImageTexture noise = an.GetTexture(128, 128) as ImageTexture;
+		GetNode<TextureRect>("Noise").Texture = noise;
+	}
+}
+```
 
 ## Programmable noise
 
