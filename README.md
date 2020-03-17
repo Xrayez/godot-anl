@@ -65,40 +65,28 @@ git clone https://github.com/Xrayez/godot-anl.git anl && cd ..
 scons platform=windows target=release_debug bits=64
 ```
 
-## Building notes
+## Configuring the build
 
-### Configuring noise period
+### Extending the noise period
 
 Noise functions will have a period of 256; with coordinates higher than that,
-the patterns will repeat. If a larger period is required, uncomment the
-following statement in `SCsub` to use a long-period hash instead in exchange for a slight
-decrease in performance:
-
-```python
-module_env.Append(CPPDEFINES=['ANL_LONG_PERIOD_HASHING'])
-```
-
-Alternatively, you can enable long-period hashing by defining the given preprocessor
-variable before build:
+the patterns will repeat. If a larger period is required, build with 
+`anl_use_expressions_camelcase` command line option to use a long-period hash 
+instead in exchange for a slight decrease in performance:
 
 ```bash
-scons platform=linux target=release_debug bits=64 define=ANL_LONG_PERIOD_HASHING
+scons target=release_debug anl_use_long_period=yes
 ```
 
 ### Expression naming convention
 
 The original library uses `camelCase` to parse function tokens in an expression,
 yet the module uses `snake_case` to confirm to Godot's naming convention. If you
-still want to use `camelCase` style, uncomment following statement in `SCsub`:
-
-```python
-module_env.Append(CPPDEFINES=['ANL_EXPRESSION_BUILDER_CAMELCASE'])
-```
-
-Or before build:
+still want to use `camelCase` style, build with `anl_use_expressions_camelcase`
+command line option:
 
 ```bash
-scons platform=linux target=release_debug bits=64 define=ANL_EXPRESSION_BUILDER_CAMELCASE
+scons target=release_debug anl_use_expressions_camelcase=yes
 ```
 
 # Usage examples

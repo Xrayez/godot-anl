@@ -22,19 +22,12 @@ env_thirdparty.disable_warnings()
 if env.msvc:
     suppress_multiple_copy_constructors = '/wd4521'
     env_thirdparty.Append(CXXFLAGS=[suppress_multiple_copy_constructors])
+    
+if env["anl_use_long_period"]:
+    env_module.Append(CPPDEFINES=["ANL_LONG_PERIOD_HASHING"])
 
-# Optional, the following defines can be included from command line like so:
-# scons define=ANL_LONG_PERIOD_HASHING
-
-# ANL_LONG_PERIOD_HASHING
-#   limited to 256.0 by default
-
-# ANL_EXPRESSION_BUILDER_CAMELCASE
-#   use camelCase by default instead of snake_case for noise expressions
-
-for key, value in ARGLIST:
-    if key == 'define':
-        env_module.Append(CPPDEFINES=[value])
+if env["anl_use_expressions_camelcase"]:
+    env_module.Append(CPPDEFINES=["ANL_EXPRESSION_BUILDER_CAMELCASE"])
 
 # Module sources
 env_module.add_source_files(env.modules_sources, '*.cpp')
