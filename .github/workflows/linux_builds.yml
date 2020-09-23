@@ -108,7 +108,7 @@ jobs:
 
       - name: Run tests
         run: |
-          tests/run.sh ${{github.workspace}}/godot/bin/godot_server.x11.tools.64
+          tests/run.sh ${{github.workspace}}/${{env.MODULE_NAME}}/godot/bin/godot_server.x11.tools.64.${{env.MODULE_NAME}}
 
   linux-template:
     runs-on: "ubuntu-20.04"
