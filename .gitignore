@@ -36,6 +36,7 @@ export_presets.cfg
 
 # Godot repository
 /godot
+/logs
 
 # Imported translations (automatically generated from CSV files)
 *.translation
