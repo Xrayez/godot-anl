@@ -1,0 +1,99 @@
+name: 🎨 Windows
+on: 
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - 'gd3'
+
+env:
+  BASE_BRANCH: gd3
+  MODULE_NAME: anl
+  GODOT_BUILTIN_MODULES: disabled
+  SCONS_CACHE_MSVC_CONFIG: true
+  SCONS_CACHE_LIMIT: 4096
+
+jobs:
+  windows-editor:
+    runs-on: "windows-latest"
+    name: Editor (target=release_debug, tools=yes)
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: ${{env.MODULE_NAME}}
+
+    # Editing this is pretty dangerous for Windows since it can break.
+    # Needs to be properly tested with a fresh cache.
+    - name: Load .scons_cache directory
+      id: windows-editor-cache
+      uses: RevoluPowered/cache@v2.1
+      with:
+        path: /.scons_cache/
+        key: ${{github.job}}-${{env.BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
+        restore-keys: |
+          ${{github.job}}-${{env.BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
+          ${{github.job}}-${{env.BASE_BRANCH}}-${{github.ref}}
+          ${{github.job}}-${{env.BASE_BRANCH}}
+
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        architecture: 'x64'
+
+    - name: Configuring Python packages
+      run: |
+        python -c "import sys; print(sys.version)"
+        python -m pip install scons pywin32
+        python --version
+        scons --version
+
+    - name: Compilation
+      env:
+        SCONS_CACHE: /.scons_cache/
+      run: |
+        scons -j2 verbose=yes warnings=all werror=yes platform=windows tools=yes target=release_debug
+      working-directory: ${{github.workspace}}/${{env.MODULE_NAME}}
+
+  windows-template:
+    runs-on: "windows-latest"
+    name: Template (target=release, tools=no)
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: ${{env.MODULE_NAME}}
+
+    # Editing this is pretty dangerous for Windows since it can break.
+    # Needs to be properly tested with a fresh cache.
+    - name: Load .scons_cache directory
+      id: windows-template-cache
+      uses: RevoluPowered/cache@v2.1
+      with:
+        path: /.scons_cache/
+        key: ${{github.job}}-${{env.BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
+        restore-keys: |
+          ${{github.job}}-${{env.BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
+          ${{github.job}}-${{env.BASE_BRANCH}}-${{github.ref}}
+          ${{github.job}}-${{env.BASE_BRANCH}}
+
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        architecture: 'x64'
+
+    - name: Configuring Python packages
+      run: |
+        python -c "import sys; print(sys.version)"
+        python -m pip install scons pywin32
+        python --version
+        scons --version
+
+    - name: Compilation
+      env:
+        SCONS_CACHE: /.scons_cache/
+      run: |
+        scons -j2 verbose=yes warnings=all werror=yes platform=windows target=release tools=no
+      working-directory: ${{github.workspace}}/${{env.MODULE_NAME}}

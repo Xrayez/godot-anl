@@ -1,14 +1,18 @@
-# Godot Accidental Noise Library module
+# Accidental Noise Library in Godot Engine
 
-[![Build Status](https://travis-ci.com/Xrayez/godot-anl.svg?branch=master)](https://travis-ci.com/Xrayez/godot-anl)
-[![Build status](https://ci.appveyor.com/api/projects/status/n6b4hvlk7pxu6dk0/branch/master?svg=true)](https://ci.appveyor.com/project/Xrayez/godot-anl/branch/master)
+![🐧 Linux](https://github.com/Xrayez/godot-anl/workflows/%F0%9F%90%A7%20Linux/badge.svg)
+![🍎 macOS](https://github.com/Xrayez/godot-anl/workflows/%F0%9F%8D%8E%20macOS/badge.svg)
+![🎨 Windows](https://github.com/Xrayez/godot-anl/workflows/%F0%9F%8E%A8%20Windows/badge.svg)
+![🤖 Android](https://github.com/Xrayez/godot-anl/workflows/%F0%9F%A4%96%20Android/badge.svg)
+![🍏 iOS](https://github.com/Xrayez/godot-anl/workflows/%F0%9F%8D%8F%20iOS/badge.svg)
+![🌐 JavaScript](https://github.com/Xrayez/godot-anl/workflows/%F0%9F%8C%90%20JavaScript/badge.svg)
 
 This is a wrapper for the
 [Accidental Noise Library](https://github.com/JTippetts/accidental-noise-library)
 originally written by
 [Joshua Tippetts](https://sourceforge.net/u/tippettsj/profile/), modified
 to be properly compiled for [Godot Engine](https://github.com/godotengine/godot)
-and be used freely in GDScript.
+and be used freely in both GDScript and C#.
 
 The master branch aims to be in sync with Godot's master branch. Checkout other
 branches and/or releases for compatible versions. You can decide which version 
@@ -50,20 +54,23 @@ the pipeline.
 The library is full of features compared to other noise generation libraries with
 a drawback of poorer performance.
 
-## Installation
+## Compiling
 
-Before installing, you must be able to 
-[compile Godot Engine](https://docs.godotengine.org/en/latest/development/compiling/) 
-from source.
+If you'd like to try out or develop the module:
 
 ```bash
-# Change directory to `modules` subfolder of Godot repository
-cd godot/modules/
-# Clone the module under directory named `anl`
-git clone https://github.com/Xrayez/godot-anl.git anl && cd ..
-# Compile the engine manually, for instance:
-scons platform=windows target=release_debug bits=64
+git clone https://github.com/Xrayez/godot-anl anl
+scons
 ```
+
+Note that `scons` will clone Godot Engine repository and compile the engine with
+the module for you. Make sure that the module's directory name is exactly
+`anl`. Once the compilation is done, the resulting binaries should be available
+under `godot/bin` directory.
+
+If you'd like to compile the module the traditional way, please refer to
+[Godot Engine: Compiling](https://docs.godotengine.org/en/latest/development/compiling/)
+documentation.
 
 ## Configuring the build
 
@@ -75,7 +82,7 @@ the patterns will repeat. If a larger period is required, build with
 instead in exchange for a slight decrease in performance:
 
 ```bash
-scons target=release_debug anl_use_long_period=yes
+scons anl_use_long_period=yes
 ```
 
 ### Expression naming convention
@@ -86,7 +93,7 @@ still want to use `camelCase` style, build with `anl_use_expressions_camelcase`
 command line option:
 
 ```bash
-scons target=release_debug anl_use_expressions_camelcase=yes
+scons anl_use_expressions_camelcase=yes
 ```
 
 # Usage examples
@@ -152,8 +159,8 @@ public class AnlTest : Godot.Node2D
 
 ## Programmable noise
 
-As exposed in 2.0, it's possible to manipulate noise parameters via special noise
-variables which are basically like `constant()` but can be set and retrieved by name.
+It's possible to modify noise parameters via special noise variables which are
+like `constant()` but can be set and retrieved by name.
 
 See [random_noise.gd](examples/programmable_noise/random_noise.gd).
 

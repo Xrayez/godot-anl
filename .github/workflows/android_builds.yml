@@ -1,0 +1,70 @@
+name: 🤖 Android
+on: 
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - 'gd3'
+
+env:
+  BASE_BRANCH: gd3
+  MODULE_NAME: anl
+  GODOT_BUILTIN_MODULES: disabled
+  SCONS_CACHE_LIMIT: 4096
+
+jobs:
+  android-template:
+    runs-on: "ubuntu-20.04"
+
+    name: Template (target=release, tools=no)
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ${{env.MODULE_NAME}}
+
+      - name: Configure dependencies
+        run: |
+         sudo apt-get install openjdk-8-jdk
+         echo "::set-env name=JAVA_HOME::usr/lib/jvm/java-8-openjdk-amd64"
+
+      - name: Install Android SDK and NDK
+        run: |
+          echo "::set-env name=PATH::/usr/lib/jvm/java-8-openjdk-amd64/jre/bin:${PATH}"
+          java -version
+          echo "::set-env name=ANDROID_HOME::$(pwd)/godot-dev/build-tools/android-sdk"
+          echo "::set-env name=ANDROID_NDK_ROOT::$(pwd)/godot-dev/build-tools/android-ndk"
+          ${{github.workspace}}/${{env.MODULE_NAME}}/misc/ci/android-tools-linux.sh
+          source ~/.bashrc
+
+      - name: Load .scons_cache directory
+        id: android-template-cache
+        uses: actions/cache@v2
+        with:
+          path: ${{github.workspace}}/.scons_cache/
+          key: ${{github.job}}-${{env.BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            ${{github.job}}-${{env.BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
+            ${{github.job}}-${{env.BASE_BRANCH}}-${{github.ref}}
+            ${{github.job}}-${{env.BASE_BRANCH}}
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+
+      - name: Configuring Python packages
+        run: |
+          python -c "import sys; print(sys.version)"
+          python -m pip install scons
+          python --version
+          scons --version
+
+      - name: Compilation
+        env:
+          SCONS_CACHE: ${{github.workspace}}/.scons_cache/
+        run: |
+          scons -j2 verbose=yes warnings=all werror=yes platform=android target=release tools=no
+        working-directory: ${{github.workspace}}/${{env.MODULE_NAME}}
