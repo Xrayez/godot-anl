@@ -35,7 +35,7 @@ jobs:
           java -version
           echo "::set-env name=ANDROID_HOME::$(pwd)/godot-dev/build-tools/android-sdk"
           echo "::set-env name=ANDROID_NDK_ROOT::$(pwd)/godot-dev/build-tools/android-ndk"
-          misc/ci/android-tools-linux.sh
+          ${{github.workspace}}/${{env.MODULE_NAME}}/misc/ci/android-tools-linux.sh
           source ~/.bashrc
 
       - name: Load .scons_cache directory
