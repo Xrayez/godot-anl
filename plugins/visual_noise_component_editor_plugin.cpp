@@ -88,7 +88,6 @@ void VisualAccidentalNoiseComponentEditor::_update_options_menu() {
 	Vector<String> categories;
 
 	int item_count = 0;
-	bool is_first_item = true;
 
 	Control *gui_base = EditorNode::get_singleton()->get_gui_base();
 
@@ -1323,7 +1322,6 @@ void VisualAccidentalNoiseComponentEditor::_make_component_from_nodes(const Vect
 	}
 	// Restore possible output connections
 	if (base_node.is_valid()) {
-		int to_node = output_id;
 		for (List<VisualAccidentalNoiseNodeComponent::Connection>::Element *E = conns.front(); E; E = E->next()) {
 			if (base_id == E->get().from_node) {
 				undo_redo->add_do_method(component.ptr(), "connect_nodes", new_comp_id, E->get().from_port, E->get().to_node, E->get().to_port);
