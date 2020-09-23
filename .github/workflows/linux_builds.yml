@@ -106,9 +106,10 @@ jobs:
           scons -j2 verbose=yes warnings=all werror=yes platform=server tools=yes target=debug
         working-directory: ${{github.workspace}}/${{env.MODULE_NAME}}
 
-      - name: Run tests
-        run: |
-          tests/run.sh ${{github.workspace}}/${{env.MODULE_NAME}}/godot/bin/godot_server.x11.tools.64.${{env.MODULE_NAME}}
+      # Disabled for now, need to switch to GUT.
+      # - name: Run tests
+      #   run: |
+      #     tests/run.sh ${{github.workspace}}/${{env.MODULE_NAME}}/godot/bin/godot_server.x11.tools.64.${{env.MODULE_NAME}}
 
   linux-template:
     runs-on: "ubuntu-20.04"
