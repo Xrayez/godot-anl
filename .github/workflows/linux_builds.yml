@@ -9,6 +9,7 @@ on:
 
 env:
   BASE_BRANCH: gd3
+  MODULE_NAME: anl
   GODOT_BUILTIN_MODULES: disabled
   SCONS_CACHE_LIMIT: 4096
 
@@ -19,13 +20,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      # Azure repositories are not reliable, prevent azure giving packages.
-      - name: Make apt sources.list use the default Ubuntu repositories
-        run: |
-          sudo rm -f /etc/apt/sources.list.d/*
-          sudo cp -f misc/ci/sources.list /etc/apt/sources.list
-          sudo apt-get update
+        with:
+          path: ${{env.MODULE_NAME}}
 
       # Install all packages except SCons
       - name: Configure dependencies
@@ -62,6 +58,7 @@ jobs:
           SCONS_CACHE: ${{github.workspace}}/.scons_cache/
         run: |
           scons -j2 verbose=yes warnings=all werror=yes platform=linuxbsd tools=yes target=release_debug module_mono_enabled=yes mono_glue=no
+        working-directory: ${{github.workspace}}/${{env.MODULE_NAME}}
 
   linux-server:
     runs-on: "ubuntu-20.04"
@@ -69,13 +66,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      # Azure repositories are not reliable, prevent azure giving packages.
-      - name: Make apt sources.list use the default Ubuntu repositories
-        run: |
-          sudo rm -f /etc/apt/sources.list.d/*
-          sudo cp -f misc/ci/sources.list /etc/apt/sources.list
-          sudo apt-get update
+        with:
+          path: ${{env.MODULE_NAME}}
 
       # Install all packages except SCons.
       - name: Configure dependencies
@@ -112,6 +104,7 @@ jobs:
           SCONS_CACHE: ${{github.workspace}}/.scons_cache/
         run: |
           scons -j2 verbose=yes warnings=all werror=yes platform=server tools=yes target=debug
+        working-directory: ${{github.workspace}}/${{env.MODULE_NAME}}
 
       - name: Run tests
         run: |
@@ -123,13 +116,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      # Azure repositories are not reliable, prevent azure giving packages.
-      - name: Make apt sources.list use the default Ubuntu repositories
-        run: |
-          sudo rm -f /etc/apt/sources.list.d/*
-          sudo cp -f misc/ci/sources.list /etc/apt/sources.list
-          sudo apt-get update
+        with:
+          path: ${{env.MODULE_NAME}}
 
       # Install all packages except SCons.
       - name: Configure dependencies
@@ -166,3 +154,4 @@ jobs:
           SCONS_CACHE: ${{github.workspace}}/.scons_cache/
         run: |
           scons -j2 verbose=yes warnings=all werror=yes platform=linuxbsd target=release tools=no module_mono_enabled=yes mono_glue=no
+        working-directory: ${{github.workspace}}/${{env.MODULE_NAME}}

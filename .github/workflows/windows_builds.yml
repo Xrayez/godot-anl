@@ -9,6 +9,7 @@ on:
 
 env:
   BASE_BRANCH: gd3
+  MODULE_NAME: anl
   GODOT_BUILTIN_MODULES: disabled
   SCONS_CACHE_MSVC_CONFIG: true
   SCONS_CACHE_LIMIT: 4096
@@ -19,6 +20,8 @@ jobs:
     name: Editor (target=release_debug, tools=yes)
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: ${{env.MODULE_NAME}}
 
     # Editing this is pretty dangerous for Windows since it can break.
     # Needs to be properly tested with a fresh cache.
@@ -51,6 +54,7 @@ jobs:
         SCONS_CACHE: /.scons_cache/
       run: |
         scons -j2 verbose=yes warnings=all werror=yes platform=windows tools=yes target=release_debug
+      working-directory: ${{github.workspace}}/${{env.MODULE_NAME}}
 
   windows-template:
     runs-on: "windows-latest"
@@ -58,6 +62,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: ${{env.MODULE_NAME}}
 
     # Editing this is pretty dangerous for Windows since it can break.
     # Needs to be properly tested with a fresh cache.
@@ -90,3 +96,4 @@ jobs:
         SCONS_CACHE: /.scons_cache/
       run: |
         scons -j2 verbose=yes warnings=all werror=yes platform=windows target=release tools=no
+      working-directory: ${{github.workspace}}/${{env.MODULE_NAME}}

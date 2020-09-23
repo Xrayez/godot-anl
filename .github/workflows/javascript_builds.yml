@@ -9,6 +9,7 @@ on:
 
 env:
   BASE_BRANCH: gd3
+  MODULE_NAME: anl
   GODOT_BUILTIN_MODULES: disabled
   SCONS_CACHE_LIMIT: 4096
   EM_VERSION: 1.39.20
@@ -21,13 +22,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      # Azure repositories are not reliable, prevent azure giving packages.
-      - name: Make apt sources.list use the default Ubuntu repositories
-        run: |
-          sudo rm -f /etc/apt/sources.list.d/*
-          sudo cp -f misc/ci/sources.list /etc/apt/sources.list
-          sudo apt-get update
+        with:
+          path: ${{env.MODULE_NAME}}
 
       - name: Load .scons_cache directory
         id: javascript-template-cache
@@ -75,3 +71,4 @@ jobs:
           SCONS_CACHE: ${{github.workspace}}/.scons_cache/
         run: |
           scons -j2 verbose=yes warnings=all werror=yes platform=javascript target=release tools=no use_closure_compiler=yes
+        working-directory: ${{github.workspace}}/${{env.MODULE_NAME}}
