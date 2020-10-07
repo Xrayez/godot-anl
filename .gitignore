@@ -34,10 +34,11 @@
 export.cfg
 export_presets.cfg
 
-# For projects that use SCons for building: http://http://www.scons.org/
+# SCons
 .sconf_temp
 .sconsign*.dblite
 .scons_cache
+custom.py
 
 # Godot repository
 /godot
