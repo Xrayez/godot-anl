@@ -26,8 +26,9 @@ jobs:
 
       - name: Configure dependencies
         run: |
-         sudo apt-get install openjdk-8-jdk
-         echo "::set-env name=JAVA_HOME::usr/lib/jvm/java-8-openjdk-amd64"
+          sudo apt-get update
+          sudo apt-get install openjdk-8-jdk
+          echo "::set-env name=JAVA_HOME::usr/lib/jvm/java-8-openjdk-amd64"
 
       - name: Install Android SDK and NDK
         run: |
