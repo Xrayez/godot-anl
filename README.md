@@ -179,11 +179,3 @@ See [random_noise.gd](examples/programmable_noise/random_noise.gd).
 
 </p>
 </details>
-
-## Legal considerations
-
-The original Accidental Noise Library uses Simplex noise for some of the noise
-generation methods, implementation of which might be patented for uses in 3D and
-higher for textured image synthesis. I'm not a lawyer, but I think using 2D
-implementation of Simplex noise should be safe. I need to find that out someday.
-I might look into integrating OpenSimplex noise instead, if this is the case.
